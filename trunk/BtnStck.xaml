@@ -1,0 +1,10 @@
+﻿<Window x:Class="Power8.BtnStck"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BtnStck0" Topmost="True" Closing="Window_Closing" WindowStyle="None" Deactivated="Window_Deactivated" ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="WidthAndHeight">
+    <StackPanel>
+        <Button Content="Shutdown"></Button>
+        <Button Content="Restart"></Button>
+        <Button Content="Sleep"></Button>
+    </StackPanel>
+</Window>
