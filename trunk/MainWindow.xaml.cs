@@ -41,14 +41,24 @@ namespace Power8
             BtnStck.Instance.Show();
             var screenPoint = PointToScreen(Mouse.GetPosition(this));
             var screen = Screen.FromPoint(new System.Drawing.Point((int)screenPoint.X, (int)screenPoint.Y));
+
+            if (screen.WorkingArea.X > screen.Bounds.X || screen.WorkingArea.Width == screen.Bounds.Width)  //vertical @ left or horizontal
+                screenPoint.X = screen.WorkingArea.X;
+            else                                                                                            //vertical @ right
+                screenPoint.X = screen.WorkingArea.Width + screen.WorkingArea.X - BtnStck.Instance.Width;
+            if (screen.WorkingArea.Y > screen.Bounds.Y || screen.WorkingArea.Height == screen.Bounds.Height)//horizontal @ top or vertical
+                screenPoint.Y = screen.WorkingArea.Y;
+            else                                                                                            //horizontal @ bottom
+                screenPoint.Y = screen.WorkingArea.Height + screen.WorkingArea.Y - BtnStck.Instance.Height;
+
             if (screenPoint.X + BtnStck.Instance.Width > screen.Bounds.Width + screen.Bounds.Left)
                 screenPoint.X -= BtnStck.Instance.Width;
             if (screenPoint.Y + BtnStck.Instance.Height > screen.Bounds.Height + screen.Bounds.Top)
                 screenPoint.Y -= BtnStck.Instance.Height;
+
             BtnStck.Instance.Left = screenPoint.X;
             BtnStck.Instance.Top = screenPoint.Y;
             BtnStck.Instance.Focus();
-
         }
 
         private void Window_Closed(object sender, EventArgs e)
