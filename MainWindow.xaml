@@ -4,8 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         Title="Power8" 
-        Closed="Window_Closed" Loaded="Window_Loaded"
+        Closed="WindowClosed" Loaded="WindowLoaded"
         WindowStyle="None"  ResizeMode="NoResize"  Topmost="True"
         AllowsTransparency="False" Background="Transparent" Opacity="1" SizeToContent="WidthAndHeight">
-        <Button Name="b1" Style="{DynamicResource TransparentButtonStyle}"  Click="button1_Click"></Button>
+        <Button Name="b1" Style="{DynamicResource TransparentButtonStyle}"  Click="Button1Click"></Button>
 </Window>
