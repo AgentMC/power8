@@ -1,11 +1,74 @@
 ﻿<Window x:Class="Power8.BtnStck"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        AllowsTransparency="True"
-        Title="BtnStck0" Background="Transparent" Topmost="True" Closing="WindowClosing" WindowStyle="None" Deactivated="WindowDeactivated" ResizeMode="NoResize" ShowInTaskbar="False" SizeToContent="WidthAndHeight">
-    <StackPanel>
-        <Button Content="Shutdown"></Button>
-        <Button Content="Restart"></Button>
-        <Button Content="Sleep"></Button>
-    </StackPanel>
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        AllowsTransparency="False" Background="Transparent" 
+        Title="BtnStck0" Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
+        Closing="WindowClosing" Deactivated="WindowDeactivated" Loaded="WindowLoaded"
+        mc:Ignorable="d" d:DesignHeight="407" d:DesignWidth="494">
+    <Grid Name="LayoutRoot" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="16" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0" x:Name="LeftPane" Grid.RowSpan="3">
+            <MenuItem Name="AllPrograms" Header="All programs">All items</MenuItem>
+            <DataGrid Height="Auto">
+                <!--make it Fill the space somehow-->
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Pin" MinWidth="16" />
+                    <DataGridTemplateColumn Header="Icon" MinWidth="16">
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate />
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate />
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Item" MinWidth="40" />
+                    <DataGridTemplateColumn Header="Recent>" MinWidth="16">
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate />
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate />
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                1;2;3;4;
+                
+            </DataGrid>
+            <TextBox Name="SearchBox" Text="Search..."></TextBox>
+        </StackPanel>
+        <StackPanel x:Name="folderButtons" Grid.Column="1" >
+            <!--Button with dropdown... maybe a styled combobox??
+            maybe we can get rid of 4th column in datagrid?-->
+            <Button Name="MyComputer" HorizontalContentAlignment="Left">Computer ></Button>
+            <Button Name="Libraries" HorizontalContentAlignment="Left">Libraries ></Button>
+            <Button Name="ControlPanel" HorizontalContentAlignment="Left">Control Panel ></Button>
+            <Button Name="AdminTools" HorizontalContentAlignment="Left">Administrative tools ></Button>
+            <Button Name="NetItems" HorizontalContentAlignment="Left">Network ></Button>
+            
+        </StackPanel>
+        <StackPanel x:Name="powerButtons" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom">
+            <!--Completely different design here-->
+            <StackPanel x:Name="ShutdownPanel">
+                <Button Content="Shutdown"></Button>
+                <Button Content="Restart"></Button>
+                <Button Content="Sleep"></Button>
+                <Button Content="Hibernate"></Button>
+            </StackPanel>
+            <StackPanel x:Name="LogoffPanel">
+                <Button Content="Log off"></Button>
+                <Button Content="Start screensaver"></Button>
+                <Button Content="Lock PC"></Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
 </Window>

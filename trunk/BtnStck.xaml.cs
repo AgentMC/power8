@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace Power8
 {
@@ -11,10 +14,7 @@ namespace Power8
         public static BtnStck Instance
         {
             get { return _instance ?? (_instance = new BtnStck()); }
-        	private set
-            {
-                _instance = value;
-            }
+            private set { _instance = value; }
         }
 
         public BtnStck()
@@ -34,6 +34,17 @@ namespace Power8
         private void WindowDeactivated(object sender, EventArgs e)
         {
             Hide();
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            var hlpr = new WindowInteropHelper(this);
+            HwndSource.FromHwnd(hlpr.Handle).CompositionTarget.BackgroundColor = Colors.Transparent;
+            API.MakeGlass(hlpr.Handle);
+            MinHeight = Height;
+            MaxHeight = MinHeight;
+            MinWidth = Width;
+            MaxWidth = MinWidth;
         }
     }
 }
