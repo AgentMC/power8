@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Diagnostics;
 
 namespace Power8
 {
@@ -45,6 +46,54 @@ namespace Power8
             MaxHeight = MinHeight;
             MinWidth = Width;
             MaxWidth = MinWidth;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Hibernate, true, false);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+        }
+
+        private void LaunchShForced(string arg)
+        {
+            StartConsoleHidden("shutdown.exe", arg + " -f -t 0");
+        }
+
+        private void StartConsoleHidden(string exe, string args)
+        {
+            var si = new ProcessStartInfo(exe, args);
+            si.CreateNoWindow=true;
+            si.WindowStyle=ProcessWindowStyle.Hidden;
+            Process.Start(si);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            LaunchShForced("-s");
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            LaunchShForced("-r");
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            LaunchShForced("-l");
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            StartConsoleHidden(@"C:\WINDOWS\system32\rundll32.exe", "user32.dll,LockWorkStation");
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            API.SendMessage(API.GetDesktopWindow(), API.WM_SYSCOMMAND, API.SC_SCREENSAVE, 0);
         }
     }
 }

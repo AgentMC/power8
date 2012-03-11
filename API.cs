@@ -60,5 +60,14 @@ namespace Power8
 			DwmExtendFrameIntoClientArea(hWnd, new Margins { cxLeftWidth = -1, cxRightWidth = 0, cyTopHeight = 0, cyBottomHeight = 0 });
 		}
 
+        [DllImport("user32.dll", EntryPoint = "GetDesktopWindow")]
+        internal static extern IntPtr GetDesktopWindow();
+
+        [DllImport("user32.dll")]
+        internal static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+
+        public const int SC_SCREENSAVE = 0xF140;
+        public const int WM_SYSCOMMAND = 0x0112;
+
 	}
 }
