@@ -59,15 +59,15 @@
         <StackPanel x:Name="powerButtons" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom">
             <!--Completely different design here-->
             <StackPanel x:Name="ShutdownPanel">
-                <Button Content="Shutdown"></Button>
-                <Button Content="Restart"></Button>
-                <Button Content="Sleep"></Button>
-                <Button Content="Hibernate"></Button>
+                <Button Content="Shutdown" Click="Button_Click_2"></Button>
+                <Button Content="Restart" Click="Button_Click_3"></Button>
+                <Button Content="Sleep" Click="Button_Click_1"></Button>
+                <Button Content="Hibernate" Click="Button_Click"></Button>
             </StackPanel>
             <StackPanel x:Name="LogoffPanel">
-                <Button Content="Log off"></Button>
-                <Button Content="Start screensaver"></Button>
-                <Button Content="Lock PC"></Button>
+                <Button Content="Log off" Click="Button_Click_4"></Button>
+                <Button Content="Start screensaver" Click="Button_Click_6"></Button>
+                <Button Content="Lock PC" Click="Button_Click_5"></Button>
             </StackPanel>
         </StackPanel>
     </Grid>
