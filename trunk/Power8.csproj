@@ -86,6 +86,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PowerItem.cs" />
+    <Compile Include="PowerItemTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

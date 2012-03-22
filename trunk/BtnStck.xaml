@@ -6,7 +6,7 @@
         AllowsTransparency="False" Background="Transparent" 
         Title="BtnStck0" Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated" Loaded="WindowLoaded"
-        mc:Ignorable="d" d:DesignHeight="407" d:DesignWidth="494">
+        mc:Ignorable="d" d:DesignHeight="407" d:DesignWidth="494" Name="Mnu">
     <Grid Name="LayoutRoot" >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -18,8 +18,8 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" x:Name="LeftPane" Grid.RowSpan="3">
-            <MenuItem Name="AllPrograms" Header="All programs">All items</MenuItem>
-            <DataGrid Height="Auto">
+            <MenuItem Name="AllPrograms" Header="All programs" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}"></MenuItem>
+            <DataGrid Height="Auto" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}">
                 <!--make it Fill the space somehow-->
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Pin" MinWidth="16" />
@@ -41,7 +41,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
-                1;2;3;4;
+                
                 
             </DataGrid>
             <TextBox Name="SearchBox" Text="Search..."></TextBox>
@@ -59,15 +59,15 @@
         <StackPanel x:Name="powerButtons" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom">
             <!--Completely different design here-->
             <StackPanel x:Name="ShutdownPanel">
-                <Button Content="Shutdown" Click="Button_Click_2"></Button>
-                <Button Content="Restart" Click="Button_Click_3"></Button>
-                <Button Content="Sleep" Click="Button_Click_1"></Button>
-                <Button Content="Hibernate" Click="Button_Click"></Button>
+                <Button Content="Shutdown" Click="ButtonShutdownClick" Name="ButtonShutdown"></Button>
+                <Button Content="Restart" Click="ButtonRestartClick" Name="ButtonRestart"></Button>
+                <Button Content="Sleep" Click="ButtonSleepClick" Name="ButtonSleep"></Button>
+                <Button Content="Hibernate" Click="ButtonHibernateClick" Name="ButtonHibernate"></Button>
             </StackPanel>
-            <StackPanel x:Name="LogoffPanel">
-                <Button Content="Log off" Click="Button_Click_4"></Button>
-                <Button Content="Start screensaver" Click="Button_Click_6"></Button>
-                <Button Content="Lock PC" Click="Button_Click_5"></Button>
+            <StackPanel x:Name="LogoffPanel" Margin="0,4,0,0">
+                <Button Content="Log off" Click="ButtonLogOffClick" Name="ButtonLogOff"></Button>
+                <Button Content="Start screensaver" Click="ButtonScreensaveClick" Name="ButtonScreensave"></Button>
+                <Button Content="Lock PC" Click="ButtonLockClick" Name="ButtonLock"></Button>
             </StackPanel>
         </StackPanel>
     </Grid>

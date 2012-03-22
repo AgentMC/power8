@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Threading;
+using System.Windows;
 using System;
 
 namespace Power8
@@ -10,8 +11,11 @@ namespace Power8
     {
         public App()
         {
-            if (Environment.OSVersion.Version.Major >= 6) 
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                new Thread(PowerItemTree.InitTree).Start();
                 return;
+            }
             MessageBox.Show("Launched under XP or below won't work", "Power8", MessageBoxButton.OK, MessageBoxImage.Error);
             Environment.Exit(-1);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -11,6 +12,7 @@ namespace Power8
     /// </summary>
     public partial class BtnStck
     {
+        #region Load, Unload, Show, Hide
         private static BtnStck _instance;
         public static BtnStck Instance
         {
@@ -47,53 +49,61 @@ namespace Power8
             MinWidth = Width;
             MaxWidth = MinWidth;
         }
+        #endregion
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        #region Buttons handlers
+        private void ButtonHibernateClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Hibernate, true, false);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ButtonSleepClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
         }
 
-        private void LaunchShForced(string arg)
-        {
-            StartConsoleHidden("shutdown.exe", arg + " -f -t 0");
-        }
-
-        private void StartConsoleHidden(string exe, string args)
-        {
-            var si = new ProcessStartInfo(exe, args);
-            si.CreateNoWindow=true;
-            si.WindowStyle=ProcessWindowStyle.Hidden;
-            Process.Start(si);
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void ButtonShutdownClick(object sender, RoutedEventArgs e)
         {
             LaunchShForced("-s");
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void ButtonRestartClick(object sender, RoutedEventArgs e)
         {
             LaunchShForced("-r");
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void ButtonLogOffClick(object sender, RoutedEventArgs e)
         {
             LaunchShForced("-l");
         }
 
-        private void Button_Click_5(object sender, RoutedEventArgs e)
+        private void ButtonLockClick(object sender, RoutedEventArgs e)
         {
             StartConsoleHidden(@"C:\WINDOWS\system32\rundll32.exe", "user32.dll,LockWorkStation");
         }
 
-        private void Button_Click_6(object sender, RoutedEventArgs e)
+        private void ButtonScreensaveClick(object sender, RoutedEventArgs e)
         {
             API.SendMessage(API.GetDesktopWindow(), API.WM_SYSCOMMAND, API.SC_SCREENSAVE, 0);
         }
+        #endregion
+
+        public ObservableCollection<PowerItem> Items
+        {
+            get { return PowerItemTree.ItemsRoot; }
+        } 
+
+        #region Helpers
+        private static void LaunchShForced(string arg)
+        {
+            StartConsoleHidden("shutdown.exe", arg + " -f -t 0");
+        }
+
+        private static void StartConsoleHidden(string exe, string args)
+        {
+            var si = new ProcessStartInfo(exe, args) {CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden};
+            Process.Start(si);
+        }
+        #endregion
     }
 }
