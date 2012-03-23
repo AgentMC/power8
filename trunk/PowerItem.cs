@@ -26,7 +26,7 @@ namespace Power8
 
         public override string ToString()
         {
-            return Path.GetFileNameWithoutExtension(Argument);
+            return string.IsNullOrEmpty(Argument) ? "All Programs" : Path.GetFileNameWithoutExtension(Argument);
         }
     }
 }

@@ -17,7 +17,10 @@ namespace Power8
 
         private static readonly PowerItem RootItem = new PowerItem();
 
-        public static ObservableCollection<PowerItem> ItemsRoot { get { return RootItem.Items; } }  
+        private static readonly ObservableCollection<PowerItem> ItemsRootCollection =
+            new ObservableCollection<PowerItem> {RootItem};
+
+        public static ObservableCollection<PowerItem> ItemsRoot { get { return ItemsRootCollection; } }  
 
         static PowerItemTree()
         {
