@@ -21,7 +21,7 @@
             <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}" >
                 <Menu.ItemContainerStyle>
                     <Style TargetType="MenuItem">
-                        <Setter Property="Icon" Value="{Binding Icon, BindsDirectlyToSource=True, Mode=OneWay}"></Setter>
+                        <Setter Property="Icon" Value="{Binding Path=Icon, Converter={StaticResource SourceImageConverter}}"/>
                         <Setter Property="Header" Value="{Binding FriendlyName}"/>
                         <Setter Property="ItemsSource" Value="{Binding Items}"/>
                     </Style>
@@ -29,12 +29,7 @@
                 <!--<Menu.ItemTemplate>
                     <HierarchicalDataTemplate  ItemsSource="{Binding Items}">
                         <Grid MouseUp="MenuItemClick">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="16"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="1" Text="{Binding FriendlyName}"/>
+                            <Image Name="Proxy" Source="{Binding Icon}" Visibility="Hidden"/>
                         </Grid>
                     </HierarchicalDataTemplate>
                 </Menu.ItemTemplate>-->
