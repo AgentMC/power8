@@ -109,9 +109,9 @@ namespace Power8
         #endregion
 
 
-        private void MenuItemClick(object sender, MouseButtonEventArgs e)
+        private void MenuItemClick(object sender, EventArgs e)
         {
-            var powerItem = ((PowerItem) ((Grid) sender).DataContext);
+            var powerItem = ((PowerItem) ((FrameworkElement) sender).DataContext);
             if (powerItem.Parent != null && (!powerItem.IsFolder || (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))))
             {
                 powerItem.Invoke();
