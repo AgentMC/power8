@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Media.Imaging;
 
@@ -27,6 +28,11 @@ namespace Power8
         public override string ToString()
         {
             return string.IsNullOrEmpty(Argument) ? "All Programs" : Path.GetFileNameWithoutExtension(Argument);
+        }
+
+        public void Invoke()
+        {
+            Process.Start(PowerItemTree.ResolveItem(this));
         }
     }
 }

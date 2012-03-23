@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -91,9 +92,15 @@ namespace Power8
         private static void ScanFolder(PowerItem item, string basePath)
         {
             foreach (var directory in Directory.GetDirectories(basePath + item.Argument))
-                ScanFolder(AddSubItem(item, basePath, directory, true), basePath);
+            {
+                if(!(File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
+                    ScanFolder(AddSubItem(item, basePath, directory, true), basePath);
+            }
             foreach (var file in Directory.GetFiles(basePath + item.Argument))
-                AddSubItem(item, basePath, file, false);
+            {
+                if (!(File.GetAttributes(file).HasFlag(FileAttributes.Hidden)))
+                    AddSubItem(item, basePath, file, false);
+            }
         }
 
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder)
@@ -106,6 +113,40 @@ namespace Power8
                 item.Items.Add(child);
             }
             return child;
+        }
+
+
+        public static ProcessStartInfo ResolveItem(PowerItem item)
+        {
+            var psi = new ProcessStartInfo();
+            var arg1 = PathRoot + item.Argument;
+            var arg2 = PathCommonRoot + item.Argument;
+            if (item.IsFolder)
+            {
+                psi.FileName = "explorer.exe";
+                if (Directory.Exists(arg1))
+                    psi.Arguments = arg1;
+                else
+                {
+                    if (Directory.Exists(arg2))
+                        psi.Arguments = arg2;
+                    else
+                        throw new IOException("Directory not found for " + item.Argument);
+                }
+            }
+            else
+            {
+                if (File.Exists(arg1))
+                    psi.FileName = arg1;
+                else
+                {
+                    if (File.Exists(arg2))
+                        psi.FileName = arg2;
+                    else
+                        throw new IOException("File not found for " + item.Argument);
+                }
+            }
+            return psi;
         }
     }
 }
