@@ -18,25 +18,26 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" x:Name="LeftPane" Grid.RowSpan="3">
-            <!--<Menu>
-                <MenuItem  Name="AllPrograms" Header="All programs" ItemsSource="{Binding ElementName=Mnu, Path=Items}">
-
-                </MenuItem>
-            </Menu>-->
-            <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}">
-                <Menu.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Items}" > 
+            <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}" >
+                <Menu.ItemContainerStyle>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Icon" Value="{Binding Icon, BindsDirectlyToSource=True, Mode=OneWay}"></Setter>
+                        <Setter Property="Header" Value="{Binding FriendlyName}"/>
+                        <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                    </Style>
+                </Menu.ItemContainerStyle>
+                <!--<Menu.ItemTemplate>
+                    <HierarchicalDataTemplate  ItemsSource="{Binding Items}">
                         <Grid MouseUp="MenuItemClick">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="16"/>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="16"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="{Binding Icon}"/>
                             <TextBlock Grid.Column="1" Text="{Binding FriendlyName}"/>
                         </Grid>
                     </HierarchicalDataTemplate>
-                </Menu.ItemTemplate>
+                </Menu.ItemTemplate>-->
             </Menu>
             <!--<DataGrid Height="Auto" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}">-->
                 <!--make it Fill the space somehow-->

@@ -9,6 +9,7 @@ namespace Power8
     /// </summary>
     public partial class App
     {
+        
         public App()
         {
             if (Environment.OSVersion.Version.Major >= 6)
