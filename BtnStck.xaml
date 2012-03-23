@@ -18,10 +18,29 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" x:Name="LeftPane" Grid.RowSpan="3">
-            <MenuItem Name="AllPrograms" Header="All programs" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}"></MenuItem>
-            <DataGrid Height="Auto" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}">
+            <!--<Menu>
+                <MenuItem  Name="AllPrograms" Header="All programs" ItemsSource="{Binding ElementName=Mnu, Path=Items}">
+
+                </MenuItem>
+            </Menu>-->
+            <Menu  ItemsSource="{Binding ElementName=Mnu, Path=Items}">
+                <Menu.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="24"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding Icon}"/>
+                            <TextBlock Grid.Column="1" Text="{Binding FriendlyName}"/>
+                        </Grid>
+                    </HierarchicalDataTemplate>
+                </Menu.ItemTemplate>
+            </Menu>
+            <!--<DataGrid Height="Auto" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}">-->
                 <!--make it Fill the space somehow-->
-                <DataGrid.Columns>
+                <!--<DataGrid.Columns>
                     <DataGridCheckBoxColumn Header="Pin" MinWidth="16" />
                     <DataGridTemplateColumn Header="Icon" MinWidth="16">
                         <DataGridTemplateColumn.CellEditingTemplate>
@@ -43,7 +62,7 @@
                 </DataGrid.Columns>
                 
                 
-            </DataGrid>
+            </DataGrid>-->
             <TextBox Name="SearchBox" Text="Search..."></TextBox>
         </StackPanel>
         <StackPanel x:Name="folderButtons" Grid.Column="1" >
