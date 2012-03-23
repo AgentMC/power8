@@ -7,18 +7,17 @@
         Title="BtnStck0" Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated" Loaded="WindowLoaded"
         mc:Ignorable="d" d:DesignHeight="407" d:DesignWidth="494" Name="Mnu">
-    <Grid Name="LayoutRoot" >
+    <Grid Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="16" />
-            <RowDefinition Height="*" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" x:Name="LeftPane" Grid.RowSpan="3">
-            <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}"  >
+        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}" Margin="3">
                 <Menu.ItemContainerStyle>
                     <Style TargetType="MenuItem">
                         <Setter Property="Icon" Value="{Binding Path=Icon, Converter={StaticResource SourceImageConverter}}"/>
@@ -26,66 +25,49 @@
                         <Setter Property="ItemsSource" Value="{Binding Items}"/>
                         <Setter Property="Command" Value="{Binding ClickCommand, ElementName=Mnu}"/>
                         <Setter Property="CommandParameter" Value="{Binding}"/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="Height" Value="18"/>
+                        <Setter Property="Padding" Value="1"/>
+                        <!--<Setter Property="MinWidth" Value="280"/>-->
                     </Style>    
                 </Menu.ItemContainerStyle>
-                <!--<Menu.ItemTemplate>
-                    <HierarchicalDataTemplate  ItemsSource="{Binding Items}">
-                        <Grid MouseUp="MenuItemClick">
-                            <Image Name="Proxy" Source="{Binding Icon}" Visibility="Hidden"/>
-                        </Grid>
-                    </HierarchicalDataTemplate>
-                </Menu.ItemTemplate>-->
             </Menu>
-            <!--<DataGrid Height="Auto" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}">-->
+            <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600">
                 <!--make it Fill the space somehow-->
-                <!--<DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="Pin" MinWidth="16" />
+                <DataGrid.Columns>
+                    <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                     <DataGridTemplateColumn Header="Icon" MinWidth="16">
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate />
-                        </DataGridTemplateColumn.CellEditingTemplate>
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate />
+                            <DataTemplate >
+                                <Image Source="{Binding Icon}" />
+                            </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Item" MinWidth="40" />
-                    <DataGridTemplateColumn Header="Recent>" MinWidth="16">
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate />
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate />
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Item" Width="*" Binding="{Binding Path=FriendlyName}"/>
+                    <!--<DataGridTemplateColumn Header="Recent>" Width="0">
+                    </DataGridTemplateColumn>-->
                 </DataGrid.Columns>
                 
                 
-            </DataGrid>-->
-            <TextBox Name="SearchBox" Text="Search..."></TextBox>
-        </StackPanel>
-        <StackPanel x:Name="folderButtons" Grid.Column="1" >
+            </DataGrid>
+            <TextBox Grid.Row="2" Name="SearchBox" Text="Search..." Margin="3"></TextBox>
+        <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
             <!--Button with dropdown... maybe a styled combobox??
             maybe we can get rid of 4th column in datagrid?-->
-            <Button Name="MyComputer" HorizontalContentAlignment="Left">Computer ></Button>
+            <Button Name="MyComputer" HorizontalContentAlignment="Left" Margin="3,0,3,3">Computer ></Button>
             <Button Name="Libraries" HorizontalContentAlignment="Left">Libraries ></Button>
             <Button Name="ControlPanel" HorizontalContentAlignment="Left">Control Panel ></Button>
             <Button Name="AdminTools" HorizontalContentAlignment="Left">Administrative tools ></Button>
             <Button Name="NetItems" HorizontalContentAlignment="Left">Network ></Button>
-            
-        </StackPanel>
-        <StackPanel x:Name="powerButtons" Grid.Column="1" Grid.Row="2" VerticalAlignment="Bottom">
+            <Separator Margin="0,5"/>
             <!--Completely different design here-->
-            <StackPanel x:Name="ShutdownPanel">
                 <Button Content="Shutdown" Click="ButtonShutdownClick" Name="ButtonShutdown"></Button>
                 <Button Content="Restart" Click="ButtonRestartClick" Name="ButtonRestart"></Button>
                 <Button Content="Sleep" Click="ButtonSleepClick" Name="ButtonSleep"></Button>
                 <Button Content="Hibernate" Click="ButtonHibernateClick" Name="ButtonHibernate"></Button>
-            </StackPanel>
-            <StackPanel x:Name="LogoffPanel" Margin="0,4,0,0">
                 <Button Content="Log off" Click="ButtonLogOffClick" Name="ButtonLogOff"></Button>
                 <Button Content="Start screensaver" Click="ButtonScreensaveClick" Name="ButtonScreensave"></Button>
-                <Button Content="Lock PC" Click="ButtonLockClick" Name="ButtonLock"></Button>
+                <Button Content="Lock PC" Click="ButtonLockClick" Name="ButtonLock"  Margin="3,3,0,3"></Button>
             </StackPanel>
-        </StackPanel>
     </Grid>
 </Window>
