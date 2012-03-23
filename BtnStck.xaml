@@ -18,13 +18,15 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" x:Name="LeftPane" Grid.RowSpan="3">
-            <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}" >
+            <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}"  >
                 <Menu.ItemContainerStyle>
                     <Style TargetType="MenuItem">
                         <Setter Property="Icon" Value="{Binding Path=Icon, Converter={StaticResource SourceImageConverter}}"/>
                         <Setter Property="Header" Value="{Binding FriendlyName}"/>
                         <Setter Property="ItemsSource" Value="{Binding Items}"/>
-                    </Style>
+                        <Setter Property="Command" Value="{Binding ClickCommand, ElementName=Mnu}"/>
+                        <Setter Property="CommandParameter" Value="{Binding}"/>
+                    </Style>    
                 </Menu.ItemContainerStyle>
                 <!--<Menu.ItemTemplate>
                     <HierarchicalDataTemplate  ItemsSource="{Binding Items}">

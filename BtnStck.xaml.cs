@@ -108,17 +108,32 @@ namespace Power8
         }
         #endregion
 
-
-        private void MenuItemClick(object sender, EventArgs e)
+        private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
+        public MenuItemClickCommand ClickCommand
         {
-            var powerItem = ((PowerItem) ((FrameworkElement) sender).DataContext);
+            get { return _cmd; }
+        }
+        
+
+    }
+
+    public class MenuItemClickCommand : ICommand
+    {
+        public void Execute(object parameter)
+        {
+            var powerItem = parameter as PowerItem;
             if (powerItem.Parent != null && (!powerItem.IsFolder || (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))))
             {
                 powerItem.Invoke();
-                Hide();
+                BtnStck.Instance.Hide();
             }
-
         }
 
+        public bool CanExecute(object parameter)
+        {
+            return true;
+        }
+
+        public event EventHandler CanExecuteChanged;
     }
 }
