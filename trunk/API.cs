@@ -26,6 +26,7 @@ namespace Power8
 			public int Right;
 			public int Bottom;
 		}
+
 		[DllImport("dwmapi.dll")]
 		public static extern void DwmEnableBlurBehindWindow (IntPtr hWnd, DwmBlurbehind pBlurBehind);
 
@@ -68,6 +69,38 @@ namespace Power8
 
         public const int SC_SCREENSAVE = 0xF140;
         public const int WM_SYSCOMMAND = 0x0112;
+
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct SHFILEINFO
+        {
+            public IntPtr hIcon;
+            public IntPtr iIcon;
+            public uint dwAttributes;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string szDisplayName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+            public string szTypeName;
+        };
+
+        [Flags]
+	    public enum Shgfi
+        {
+           SHGFI_ICON = 0x100,
+           SHGFI_LARGEICON = 0x0, // 'Large icon
+           SHGFI_SMALLICON = 0x1 // 'Small icon
+        }
+
+        [DllImport("shell32.dll")]
+        public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+
+        public static System.Drawing.Icon GetIconForFile(string file, Shgfi iconType)
+        {
+            var shinfo = new SHFILEINFO();
+            var hImgSmall = SHGetFileInfo(file, 0, ref shinfo,(uint)Marshal.SizeOf(shinfo), (uint) (Shgfi.SHGFI_ICON | iconType));
+            return hImgSmall == IntPtr.Zero ? null : System.Drawing.Icon.FromHandle(shinfo.hIcon);
+        }
+				
 
 	}
 }
