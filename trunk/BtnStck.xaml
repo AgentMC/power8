@@ -23,10 +23,10 @@
 
                 </MenuItem>
             </Menu>-->
-            <Menu  ItemsSource="{Binding ElementName=Mnu, Path=Items}">
+            <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}">
                 <Menu.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                        <Grid>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}"> 
+                        <Grid MouseUp="MenuItemClick">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="24"/>
                                 <ColumnDefinition/>

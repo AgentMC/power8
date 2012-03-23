@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Diagnostics;
@@ -105,5 +107,18 @@ namespace Power8
             Process.Start(si);
         }
         #endregion
+
+
+        private void MenuItemClick(object sender, MouseButtonEventArgs e)
+        {
+            var powerItem = ((PowerItem) ((Grid) sender).DataContext);
+            if (powerItem.Parent != null && (!powerItem.IsFolder || (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))))
+            {
+                powerItem.Invoke();
+                Hide();
+            }
+
+        }
+
     }
 }
