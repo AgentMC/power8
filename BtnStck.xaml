@@ -25,12 +25,12 @@
             </Menu>-->
             <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}">
                 <Menu.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Items}"> 
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}" > 
                         <Grid MouseUp="MenuItemClick">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition Width="16"/>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition Width="16"/>
                             </Grid.ColumnDefinitions>
                             <Image Source="{Binding Icon}"/>
                             <TextBlock Grid.Column="1" Text="{Binding FriendlyName}"/>
