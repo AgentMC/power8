@@ -49,7 +49,7 @@ namespace Power8
             public const uint DWM_BB_TRANSITIONONMAXIMIZED = 4;
         }
 
-        internal static void MakeGlass(IntPtr hWnd)
+        public static void MakeGlass(IntPtr hWnd)
         {
             var bbhOff = new DwmBlurbehind
                             {
@@ -62,10 +62,10 @@ namespace Power8
         }
 
         [DllImport("user32.dll", EntryPoint = "GetDesktopWindow")]
-        internal static extern IntPtr GetDesktopWindow();
+        public static extern IntPtr GetDesktopWindow();
 
         [DllImport("user32.dll")]
-        internal static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
 
         public const int SC_SCREENSAVE = 0xF140;
         public const int WM_SYSCOMMAND = 0x0112;
@@ -96,11 +96,11 @@ namespace Power8
         [DllImport("shell32.dll")]
         public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref Shfileinfo psfi, uint cbSizeFileInfo, uint uFlags);
 
-        public static System.Drawing.Icon GetIconForFile(string file, Shgfi iconType)
+        public static IntPtr GetIconForFile(string file, Shgfi iconType)
         {
             var shinfo = new Shfileinfo();
             var hImgSmall = SHGetFileInfo(file, 0, ref shinfo,(uint)Marshal.SizeOf(shinfo), (uint) (Shgfi.SHGFI_ICON | iconType));
-            return hImgSmall == IntPtr.Zero ? null : System.Drawing.Icon.FromHandle(shinfo.hIcon);
+            return hImgSmall == IntPtr.Zero || shinfo.hIcon == IntPtr.Zero ? IntPtr.Zero : shinfo.hIcon;
         }
                 
 
