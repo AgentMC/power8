@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 
 namespace Power8
 {
-    public class PowerItem
+    public class PowerItem : INotifyPropertyChanged
     {
         public string Executable { get; set; }
         public string Argument { get; set; }
@@ -40,7 +40,12 @@ namespace Power8
                 }
                 return _icon;
             }
-            set { _icon = value; }
+            set
+            {
+                _icon = value;
+                OnPropertyChanged("Icon");
+            }
+
         }
 
 
@@ -57,12 +62,32 @@ namespace Power8
 
         public override string ToString()
         {
-            return string.IsNullOrEmpty(Argument) ? "All Programs" : Path.GetFileNameWithoutExtension(Argument);
+            if(string.IsNullOrEmpty(Argument))
+                return "All Programs";
+            return Path.GetFileNameWithoutExtension(Argument) ?? "";
         }
 
         public void Invoke()
         {
             Process.Start(PowerItemTree.ResolveItem(this));
+        }
+
+        public void Update()
+        {
+            Icon = null;
+        }
+
+        public Double MinWidth
+        {
+            get { return Parent == null ? 300 : 0; }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string property)
+        {   
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(property));
         }
     }
 
@@ -71,7 +96,7 @@ namespace Power8
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return new Image { Source = value as ImageSource};
+            return new Image { Source = value as ImageSource, Width=16, Height = 16};
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

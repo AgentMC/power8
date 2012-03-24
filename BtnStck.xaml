@@ -17,22 +17,22 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items}" Margin="3">
-                <Menu.ItemContainerStyle>
-                    <Style TargetType="MenuItem">
-                        <Setter Property="Icon" Value="{Binding Path=Icon, Converter={StaticResource SourceImageConverter}}"/>
-                        <Setter Property="Header" Value="{Binding FriendlyName}"/>
-                        <Setter Property="ItemsSource" Value="{Binding Items}"/>
-                        <Setter Property="Command" Value="{Binding ClickCommand, ElementName=Mnu}"/>
-                        <Setter Property="CommandParameter" Value="{Binding}"/>
-                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        <Setter Property="Height" Value="18"/>
-                        <Setter Property="Padding" Value="1"/>
-                        <!--<Setter Property="MinWidth" Value="280"/>-->
-                    </Style>    
-                </Menu.ItemContainerStyle>
-            </Menu>
-            <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600">
+        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot">
+            <Menu.ItemContainerStyle>
+                <Style TargetType="MenuItem">
+                    <Setter Property="Icon" Value="{Binding Path=Icon, Converter={StaticResource SourceImageConverter}}"/>
+                    <Setter Property="Header" Value="{Binding FriendlyName}"/>
+                    <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                    <Setter Property="Command" Value="{Binding ClickCommand, ElementName=Mnu}"/>
+                    <Setter Property="CommandParameter" Value="{Binding}"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="Height" Value="20"/>
+                    <Setter Property="Padding" Value="1"/>
+                    <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
+                </Style>    
+            </Menu.ItemContainerStyle>
+        </Menu>
+            <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" CanUserAddRows="False">
                 <!--make it Fill the space somehow-->
                 <DataGrid.Columns>
                     <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->

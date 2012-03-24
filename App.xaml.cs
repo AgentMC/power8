@@ -14,7 +14,8 @@ namespace Power8
         {
             if (Environment.OSVersion.Version.Major >= 6)
             {
-                new Thread(PowerItemTree.InitTree).Start();
+                PowerItemTree.MainDisp = Dispatcher;
+                new Thread(PowerItemTree.InitTree){Name = "InitTree"}.Start();
                 return;
             }
             MessageBox.Show("Launched under XP or below won't work", "Power8", MessageBoxButton.OK, MessageBoxImage.Error);

@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace Power8
 {
     static class PowerItemTree
     {
+        public static Dispatcher MainDisp;
+
         private static readonly string PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
         private static readonly string PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
 
@@ -20,11 +18,10 @@ namespace Power8
         private static readonly FileSystemWatcher CommonWatcher = new FileSystemWatcher(PathCommonRoot);
 
         private static readonly PowerItem RootItem = new PowerItem();
-
         private static readonly ObservableCollection<PowerItem> ItemsRootCollection =
             new ObservableCollection<PowerItem> {RootItem};
-
         public static ObservableCollection<PowerItem> ItemsRoot { get { return ItemsRootCollection; } }  
+
 
         static PowerItemTree()
         {
@@ -36,6 +33,10 @@ namespace Power8
             CommonWatcher.Changed += FileChanged;
             Watcher.Renamed += FileRenamed;
             CommonWatcher.Renamed += FileRenamed;
+            Watcher.EnableRaisingEvents = true;
+            CommonWatcher.EnableRaisingEvents = true;
+            Watcher.IncludeSubdirectories = true;
+            CommonWatcher.IncludeSubdirectories = true;
         }
 
 
@@ -53,43 +54,80 @@ namespace Power8
                         WatcherChangeTypes.Created,
                         e.FullPath.TrimEnd(e.Name.ToCharArray()),
                         e.Name));
-            return;
-
-            if (e.FullPath.StartsWith(PathRoot) || e.FullPath.StartsWith(PathCommonRoot))
-            {
-                bool isDir = Directory.Exists(e.FullPath);
-                string sourceForSplit = null;
-                if (e.OldFullPath.StartsWith(PathRoot))
-                    sourceForSplit = e.OldFullPath.Substring(PathRoot.Length);
-                else if(e.OldFullPath.StartsWith(PathCommonRoot))
-                    sourceForSplit = e.OldFullPath.Substring(PathCommonRoot.Length);
-                if(sourceForSplit != null)
-                {
-                    var sourceSplitted = sourceForSplit.Split(new[] {'\\'}, StringSplitOptions.RemoveEmptyEntries);
-                    var item2Remove = RootItem;
-                    for (int i = 0; i < sourceSplitted.Length-2; i++)
-                    {
-                        item2Remove =
-                            item2Remove.Items.First(item => item.IsFolder && item.FriendlyName == sourceSplitted[i]);
-                    }
-                    item2Remove =
-                        item2Remove.Items.First(
-                            item => item.IsFolder == isDir && item.Argument == sourceSplitted[sourceSplitted.Length - 1]);
-                    item2Remove.Parent.Items.Remove(item2Remove);
-                }
-            }
         }
 
-        private static void FileChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
+        private static void FileChanged(object sender, FileSystemEventArgs e)
         {
-            throw new NotImplementedException();
+            lock (RootItem)
+            {//We ignore hiden data
+            if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
+                return;
+            //Ensuring buttonstack is created on Main thread
+            MainDisp.Invoke(DispatcherPriority.DataBind,
+                                               new Action(() => BtnStck.Instance.InvalidateVisual()));
+            bool isDir = Directory.Exists(e.FullPath);
+            string sourceForSplit = null, basepath = null;
+            if (e.FullPath.StartsWith(PathRoot))
+            {
+                sourceForSplit = e.FullPath.Substring(PathRoot.Length);
+                basepath = PathRoot;
+            }
+            else if (e.FullPath.StartsWith(PathCommonRoot))
+            {
+                sourceForSplit = e.FullPath.Substring(PathCommonRoot.Length);
+                basepath = PathCommonRoot;
+            }
+            if (sourceForSplit == null) 
+                return;
+            var sourceSplitted = sourceForSplit.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            var item = RootItem;
+            for (int i = 0; i < sourceSplitted.Length - 1; i++)
+            {
+                var prevItem = item;
+                item =
+                    item.Items.FirstOrDefault(j => j.IsFolder && j.FriendlyName == sourceSplitted[i]);
+                if (item == null && e.ChangeType == WatcherChangeTypes.Created)
+                    item = (PowerItem)MainDisp.Invoke(DispatcherPriority.DataBind, new Func<PowerItem>(() =>
+// ReSharper disable AccessToModifiedClosure
+                        AddSubItem(prevItem,basepath,basepath +prevItem.Argument +"\\" +sourceSplitted[i],true)));
+// ReSharper restore AccessToModifiedClosure
+                else if(item == null)
+                    break;
+            }
+            if (item != null)
+            {
+                MainDisp.Invoke(DispatcherPriority.DataBind, new Action(() =>
+                {
+                    switch (e.ChangeType)
+                    {
+                        case WatcherChangeTypes.Deleted:
+                        case WatcherChangeTypes.Changed:
+                            item =
+                                item.Items.FirstOrDefault(
+                                    j =>
+                                    (j.IsFolder == isDir || e.ChangeType == WatcherChangeTypes.Deleted) &&
+                                    j.Argument == sourceForSplit);
+                            if (e.ChangeType == WatcherChangeTypes.Deleted && item != null)
+                                item.Parent.Items.Remove(item);
+                            else if(item != null)
+                                item.Update();
+                            break;
+                        case WatcherChangeTypes.Created:
+                            AddSubItem(item, basepath, e.FullPath, isDir);
+                            break;
+                    }
+                }));
+            }}
         }
 
 
         public static void InitTree()
         {
-            ScanFolder(RootItem, PathRoot);
-            ScanFolder(RootItem, PathCommonRoot);
+            lock (RootItem)
+            {
+                ScanFolder(RootItem, PathRoot);
+                ScanFolder(RootItem, PathCommonRoot);
+            }
         }
 
         private static void ScanFolder(PowerItem item, string basePath)
@@ -151,5 +189,6 @@ namespace Power8
             }
             return psi;
         }
+
     }
 }
