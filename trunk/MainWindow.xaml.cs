@@ -12,9 +12,9 @@ namespace Power8
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-	public partial class MainWindow
+    public partial class MainWindow
     {
-		public static bool ClosedW;
+        public static bool ClosedW;
         private const string TRAY_WND_CLASS = "Shell_TrayWnd";
         private const string TRAY_NTF_WND_CLASS = "TrayNotifyWnd";
         private const string SH_DSKTP_WND_CLASS = "TrayShowDesktopButtonWClass";
@@ -34,20 +34,20 @@ namespace Power8
         }
 
 
-		private void Button1Click(object sender, RoutedEventArgs e)
+        private void Button1Click(object sender, RoutedEventArgs e)
         {
             //BtnStck.Instance.Hide();
             BtnStck.Instance.Show();
             var screenPoint = PointToScreen(Mouse.GetPosition(this));
-			var screen = Screen.FromPoint(new System.Drawing.Point((int) screenPoint.X, (int) screenPoint.Y));
+            var screen = Screen.FromPoint(new System.Drawing.Point((int) screenPoint.X, (int) screenPoint.Y));
 
-				//vertical @ left or horizontal
-			if (screen.WorkingArea.X > screen.Bounds.X || screen.WorkingArea.Width == screen.Bounds.Width)
+                //vertical @ left or horizontal
+            if (screen.WorkingArea.X > screen.Bounds.X || screen.WorkingArea.Width == screen.Bounds.Width)
                 screenPoint.X = screen.WorkingArea.X;
             else                                                                                            //vertical @ right
                 screenPoint.X = screen.WorkingArea.Width + screen.WorkingArea.X - BtnStck.Instance.Width;
-				//horizontal @ top or vertical
-			if (screen.WorkingArea.Y > screen.Bounds.Y || screen.WorkingArea.Height == screen.Bounds.Height)
+                //horizontal @ top or vertical
+            if (screen.WorkingArea.Y > screen.Bounds.Y || screen.WorkingArea.Height == screen.Bounds.Height)
                 screenPoint.Y = screen.WorkingArea.Y;
             else                                                                                            //horizontal @ bottom
                 screenPoint.Y = screen.WorkingArea.Height + screen.WorkingArea.Y - BtnStck.Instance.Height;
@@ -62,14 +62,14 @@ namespace Power8
             BtnStck.Instance.Focus();
         }
 
-		private void WindowClosed(object sender, EventArgs e)
+        private void WindowClosed(object sender, EventArgs e)
         {
             ClosedW = true;
             _watch = false;
             BtnStck.Instance.Close();
         }
 
-		private void WindowLoaded(object sender, RoutedEventArgs e)
+        private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             _taskBar = API.FindWindow(TRAY_WND_CLASS, null);
             CheckWnd(_taskBar, TRAY_WND_CLASS);
@@ -81,7 +81,7 @@ namespace Power8
             Left = 0;
             Top = 0;
             _watch = true;
-            new Thread(WatchDesktopBtn).Start();
+            new Thread(WatchDesktopBtn){Name = "ShowDesktop button watcher"}.Start();
 
             var hlpr = new WindowInteropHelper(this);
             HwndSource.FromHwnd(hlpr.Handle).CompositionTarget.BackgroundColor = Colors.Transparent;
@@ -91,14 +91,14 @@ namespace Power8
 
         private void WatchDesktopBtn()
         {
-			double width = -1, height = -1;
+            double width = -1, height = -1;
 
             while (_watch)
             {
-				API.RECT r;
+                API.RECT r;
                 API.GetWindowRect(_showDesktopBtn, out r);
-				var curHeight = r.Bottom - r.Top;
-				var curWidth = r.Right - r.Left;
+                var curHeight = r.Bottom - r.Top;
+                var curWidth = r.Right - r.Left;
                 if (width != curWidth)
                 {
                     width = curWidth;
