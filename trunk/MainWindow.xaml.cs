@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Interop;
+using Application = System.Windows.Forms.Application;
 
 
 namespace Power8
@@ -25,6 +26,7 @@ namespace Power8
         public MainWindow()
         {
             InitializeComponent();
+            menu.DataContext = this;
         }
 
         private void CheckWnd(IntPtr wnd, string className)
@@ -34,9 +36,8 @@ namespace Power8
         }
 
 
-        private void Button1Click(object sender, RoutedEventArgs e)
+        private void ShowButtonStack(object sender, RoutedEventArgs e)
         {
-            //BtnStck.Instance.Hide();
             BtnStck.Instance.Show();
             var screenPoint = PointToScreen(Mouse.GetPosition(this));
             var screen = Screen.FromPoint(new System.Drawing.Point((int) screenPoint.X, (int) screenPoint.Y));
@@ -113,5 +114,32 @@ namespace Power8
             }
         }
 
+        public bool AutoStartEnabled
+        {
+            get
+            {
+                var k = Microsoft.Win32.Registry.CurrentUser;
+                k = k.OpenSubKey(Properties.Resources.RegKey, false);
+                return k != null && k.GetValue(Properties.Resources.AppShortName) != null;
+            }
+            set
+            {
+                if (value == AutoStartEnabled)
+                    return;
+                var k = Microsoft.Win32.Registry.CurrentUser;
+                k = k.OpenSubKey(Properties.Resources.RegKey, true);
+                if (k == null) 
+                    return;
+                if (value)
+                    k.SetValue(Properties.Resources.AppShortName, Application.ExecutablePath);
+                else
+                    k.DeleteValue(Properties.Resources.AppShortName);
+            }
         }
+
+        private void ExitClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+    }
 }
