@@ -11,7 +11,7 @@
         <Button.ContextMenu>
             <ContextMenu Name="menu">
                 <MenuItem Header="Auto start" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" />
-                <MenuItem Header="Check for updates" IsCheckable="True" />
+                <MenuItem Header="Check for updates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" />
                 <Separator/>
                 <MenuItem Header="Exit" Click="ExitClick"/> 
             </ContextMenu>

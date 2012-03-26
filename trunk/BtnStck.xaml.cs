@@ -14,7 +14,6 @@ namespace Power8
     /// </summary>
     public partial class BtnStck
     {
-        #region Load, Unload, Show, Hide
         private static BtnStck _instance;
         public static BtnStck Instance
         {
@@ -22,6 +21,9 @@ namespace Power8
             private set { _instance = value; }
         }
 
+        private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
+
+        #region Load, Unload, Show, Hide
         public BtnStck()
         {
             InitializeComponent();
@@ -90,11 +92,6 @@ namespace Power8
         }
         #endregion
 
-        public ObservableCollection<PowerItem> Items
-        {
-            get { return PowerItemTree.ItemsRoot; }
-        } 
-
         #region Helpers
         private static void LaunchShForced(string arg)
         {
@@ -108,12 +105,17 @@ namespace Power8
         }
         #endregion
 
-        private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
+        #region Bindable props
+        public ObservableCollection<PowerItem> Items
+        {
+            get { return PowerItemTree.ItemsRoot; }
+        } 
+
         public MenuItemClickCommand ClickCommand
         {
             get { return _cmd; }
         }
-        
+        #endregion
 
     }
 
@@ -121,8 +123,8 @@ namespace Power8
     {
         public void Execute(object parameter)
         {
-            var powerItem = parameter as PowerItem;
-            if (powerItem.Parent != null && (!powerItem.IsFolder || (Keyboard.Modifiers.HasFlag(ModifierKeys.Control))))
+            var powerItem = parameter as PowerItem;           //this vvv goes to context menu...
+            if (powerItem != null && powerItem.Parent != null /*&& (!powerItem.IsFolder || (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)))*/)
             {
                 powerItem.Invoke();
                 BtnStck.Instance.Hide();
