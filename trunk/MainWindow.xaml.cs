@@ -37,6 +37,7 @@ namespace Power8
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
         }
+
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             _taskBar = API.FindWindow(TRAY_WND_CLASS, null);
