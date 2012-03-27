@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using Power8.Properties;
 
 namespace Power8
 {
@@ -51,7 +52,15 @@ namespace Power8
 
         public void Invoke()
         {
-            Process.Start(PowerItemTree.ResolveItem(this));
+            InvokeVerb(null);
+        }
+
+        public void InvokeVerb(string verb)
+        {
+            var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);
+            if (!string.IsNullOrEmpty(verb) && psi.FileName.EndsWith(".exe"))
+                psi.Verb = verb;
+            Process.Start(psi);
         }
 
         public void Update()
@@ -62,6 +71,11 @@ namespace Power8
         public Double MinWidth
         {
             get { return Parent == null ? 300 : 0; }
+        }
+
+        public bool IsFile
+        {
+            get { return Argument != null && !IsFolder; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

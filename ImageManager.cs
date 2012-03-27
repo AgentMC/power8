@@ -25,8 +25,7 @@ namespace Power8
 
         public static ImageContainer GetImageContainer(PowerItem item, API.Shgfi iconNeeded)
         {
-            var psi = PowerItemTree.ResolveItem(item);
-            var arg = item.IsFolder ? psi.Arguments : psi.FileName;
+            var arg = PowerItemTree.GetResolvedArgument(item, false);
             var descr = GetObjectDescriptor(item, arg);
             lock (Cache)
             {
@@ -71,7 +70,7 @@ namespace Power8
             {
                 if (SmallImage != null) 
                     return;
-                SmallIconHandle = API.GetIconForFile(InitialObject, API.Shgfi.SHGFI_SMALLICON);
+                SmallIconHandle = Util.GetIconForFile(InitialObject, API.Shgfi.SHGFI_SMALLICON);
                 SmallIcon = Icon.FromHandle(SmallIconHandle);
                 SmallBitmap = ExtractInternal(SmallIcon);
             }
@@ -85,7 +84,7 @@ namespace Power8
             {
                 if(LargeImage != null)
                     return;
-                LargeIconHandle = API.GetIconForFile(InitialObject, API.Shgfi.SHGFI_LARGEICON);
+                LargeIconHandle = Util.GetIconForFile(InitialObject, API.Shgfi.SHGFI_LARGEICON);
                 LargeIcon = Icon.FromHandle(LargeIconHandle);
                 LargeBitmap = ExtractInternal(LargeIcon);
             }

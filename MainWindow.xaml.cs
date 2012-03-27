@@ -52,10 +52,7 @@ namespace Power8
             _watch = true;
             new Thread(WatchDesktopBtn){Name = "ShowDesktop button watcher"}.Start();
 
-            var hlpr = new WindowInteropHelper(this);
-            HwndSource.FromHwnd(hlpr.Handle).CompositionTarget.BackgroundColor = Colors.Transparent;
-            API.MakeGlass(hlpr.Handle);
-            API.SetParent(hlpr.Handle, _taskBar);
+            API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
         }
 
         private void WindowClosed(object sender, EventArgs e)

@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot">
+        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot" ContextMenuOpening="AllItemsMenuRoot_ContextMenuOpening">
             <Menu.ItemContainerStyle>
                 <Style TargetType="MenuItem">
                     <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
@@ -29,27 +29,26 @@
                     <Setter Property="Height" Value="20"/>
                     <Setter Property="Padding" Value="1"/>
                     <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
+                    <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
                 </Style>    
             </Menu.ItemContainerStyle>
         </Menu>
-            <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" CanUserAddRows="False">
-                <DataGrid.Columns>
-                    <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
-                    <DataGridTemplateColumn Header="Icon" MinWidth="16">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate >
-                                <Image Source="{Binding Icon.SmallBitmap}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Item" Width="*" Binding="{Binding Path=FriendlyName}"/>
-                    <!--<DataGridTemplateColumn Header="Recent>" Width="0">
-                    </DataGridTemplateColumn>-->
-                </DataGrid.Columns>
-                
-                
-            </DataGrid>
-            <TextBox Grid.Row="2" Name="SearchBox" Text="Search..." Margin="3"></TextBox>
+        <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
+                <DataGridTemplateColumn Header="Icon" MinWidth="16">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <Image Source="{Binding Icon.SmallBitmap}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Item" Width="*" Binding="{Binding Path=FriendlyName}"/>
+                <!--<DataGridTemplateColumn Header="Recent>" Width="0">
+                </DataGridTemplateColumn>-->
+            </DataGrid.Columns>
+        </DataGrid>
+        <TextBox Grid.Row="2" Name="SearchBox" Text="Search..." Margin="3"></TextBox>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
             <!--Button with dropdown... maybe a styled combobox??
             maybe we can get rid of 4th column in datagrid?-->
@@ -69,4 +68,16 @@
                 <Button Content="Lock PC" Click="ButtonLockClick" Name="ButtonLock"  Margin="3,3,0,3"></Button>
             </StackPanel>
     </Grid>
+    <Window.Resources>
+        <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
+            <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="Run_Click"/>
+            <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAs_Click"/>
+            <Separator/>
+            <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="Run_Click"/>
+            <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAs_Click"/>
+            <Separator/>
+            <MenuItem Name="ShowProperties" Header="Properties" Click="ShowProperties_Click"/>
+            <!--<MenuItem Name="ShowSystemMenu" Header="Show system menu items"/>-->
+        </ContextMenu>
+    </Window.Resources>
 </Window>
