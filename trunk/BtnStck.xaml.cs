@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
 using System.Diagnostics;
 
 namespace Power8
@@ -45,9 +45,7 @@ namespace Power8
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            var hlpr = new WindowInteropHelper(this);
-            HwndSource.FromHwnd(hlpr.Handle).CompositionTarget.BackgroundColor = Colors.Transparent;
-            API.MakeGlass(hlpr.Handle);
+            this.MakeGlassWpfWindow();
             MinHeight = Height;
             MaxHeight = MinHeight;
             MinWidth = Width;
@@ -117,6 +115,60 @@ namespace Power8
         }
         #endregion
 
+        private void AllItemsMenuRoot_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext = ExtractRelatedPowerItem(e);
+        }
+
+        private void Run_Click(object sender, RoutedEventArgs e)
+        {
+            ExtractRelatedPowerItem(sender).Invoke();
+        }
+
+        private void RunAs_Click(object sender, RoutedEventArgs e)
+        {
+            ExtractRelatedPowerItem(sender).InvokeVerb(API.SEIVerbs.SEV_RunAsAdmin);
+        }
+
+        private static PowerItem ExtractRelatedPowerItem(object o)
+        {
+            var menuItem = o as MenuItem;
+            if (menuItem != null)
+                return (PowerItem) (menuItem).DataContext;
+            if (o is ContextMenuEventArgs)
+                return (PowerItem) (((MenuItem)
+                         o.GetType()
+                             .GetProperty("TargetElement",
+                                          BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
+                             .GetValue(o, null)).DataContext);
+            return null;
+        }
+
+        private void ShowProperties_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var pi = ExtractRelatedPowerItem(sender);
+                var info = new API.ShellExecuteInfo
+                                {
+                                    fMask =
+                                        API.SEIFlags.SEE_MASK_INVOKEIDLIST | API.SEIFlags.SEE_MASK_NOCLOSEPROCESS |
+                                        API.SEIFlags.SEE_MASK_FLAG_NO_UI | API.SEIFlags.SEE_MASK_NOASYNC,
+                                    hwnd = this.GetHandle(),
+                                    lpVerb = API.SEIVerbs.SEV_Properties,
+                                    lpFile = PowerItemTree.GetResolvedArgument(pi, false),
+                                    nShow = API.SWCommands.SW_HIDE
+                                };
+                var executer = new Util.ShellExecuteHelper(info);
+                if (!executer.ShellExecuteOnSTAThread())
+                    throw new ExternalException(string.Format(
+                        Properties.Resources.ShellExecExErrorFormatString, executer.ErrorCode));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
     }
 
     public class MenuItemClickCommand : ICommand

@@ -144,4 +144,7 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="Power8URI" xml:space="preserve">
     <value>http://power8.googlecode.com/</value>
   </data>
+  <data name="ShellExecExErrorFormatString" xml:space="preserve">
+    <value>Error {0} caused while trying to call ShellExecuteEx()!</value>
+  </data>
 </root>

@@ -97,6 +97,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error {0} caused while trying to call ShellExecuteEx()!.
+        /// </summary>
+        internal static string ShellExecExErrorFormatString {
+            get {
+                return ResourceManager.GetString("ShellExecExErrorFormatString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to : update available!.
         /// </summary>
         internal static string UpdateAvailable {

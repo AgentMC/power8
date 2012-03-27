@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows.Threading;
 
 namespace Power8
@@ -17,7 +18,7 @@ namespace Power8
         private static readonly FileSystemWatcher Watcher = new FileSystemWatcher(PathRoot);
         private static readonly FileSystemWatcher CommonWatcher = new FileSystemWatcher(PathCommonRoot);
 
-        private static readonly PowerItem RootItem = new PowerItem();
+        private static readonly PowerItem RootItem = new PowerItem {IsFolder = true};
         private static readonly ObservableCollection<PowerItem> ItemsRootCollection =
             new ObservableCollection<PowerItem> {RootItem};
         public static ObservableCollection<PowerItem> ItemsRoot { get { return ItemsRootCollection; } }  
@@ -65,7 +66,7 @@ namespace Power8
             //Ensuring buttonstack is created on Main thread
             MainDisp.Invoke(DispatcherPriority.DataBind,
                                                new Action(() => BtnStck.Instance.InvalidateVisual()));
-            bool isDir = Directory.Exists(e.FullPath);
+            var isDir = Directory.Exists(e.FullPath);
             string sourceForSplit = null, basepath = null;
             if (e.FullPath.StartsWith(PathRoot))
             {
@@ -157,11 +158,13 @@ namespace Power8
         }
 
 
-        public static ProcessStartInfo ResolveItem(PowerItem item)
+        public static ProcessStartInfo ResolveItem(PowerItem item, bool prioritizeCommons = false)
         {
             var psi = new ProcessStartInfo();
             var arg1 = PathRoot + item.Argument;
             var arg2 = PathCommonRoot + item.Argument;
+            if (prioritizeCommons)
+                arg2 = Interlocked.Exchange(ref arg1, arg2);
             if (item.IsFolder)
             {
                 psi.FileName = "explorer.exe";
@@ -190,5 +193,10 @@ namespace Power8
             return psi;
         }
 
+        public static string GetResolvedArgument(PowerItem item, bool prioritizeCommons)
+        {
+            var psi = ResolveItem(item, prioritizeCommons);
+            return item.IsFolder ? psi.Arguments : psi.FileName;
+        }
     }
 }
