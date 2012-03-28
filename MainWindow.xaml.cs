@@ -5,8 +5,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Interop;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -108,6 +106,7 @@ namespace Power8
                 API.GetWindowRect(_showDesktopBtn, out r);
                 var curHeight = r.Bottom - r.Top;
                 var curWidth = r.Right - r.Left;
+// ReSharper disable CompareOfFloatsByEqualityOperator
                 if (width != curWidth)
                 {
                     width = curWidth;
@@ -118,6 +117,7 @@ namespace Power8
                     height = curHeight;
                     Dispatcher.Invoke(new Action(() =>  b1.Height = curHeight));
                 }
+// ReSharper restore CompareOfFloatsByEqualityOperator
                 Thread.Sleep(100);
             }
         }
@@ -212,11 +212,13 @@ namespace Power8
         #endregion
 
         #region Helpers
+// ReSharper disable UnusedParameter.Local
         private static void CheckWnd(IntPtr wnd, string className)
         {
             if (wnd == IntPtr.Zero)
                 Environment.FailFast(className + " not found");
         }
+// ReSharper restore UnusedParameter.Local
         
         private void UpdateCheckThreadInit()
         {

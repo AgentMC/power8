@@ -58,9 +58,18 @@ namespace Power8
         public void InvokeVerb(string verb)
         {
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);
-            if (!string.IsNullOrEmpty(verb) && psi.FileName.EndsWith(".exe"))
+            if (!string.IsNullOrEmpty(verb) && IsFile)
                 psi.Verb = verb;
-            Process.Start(psi);
+            try
+            {
+                Process.Start(psi);
+            }
+            catch (Exception)
+            {
+                psi.Verb = null;
+                Process.Start(psi);
+                throw new InvalidProgramException("Unable to start specified object as Administrator. Process launched with regular user rights.");
+            }
         }
 
         public void Update()
