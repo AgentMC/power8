@@ -17,7 +17,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot" ContextMenuOpening="AllItemsMenuRoot_ContextMenuOpening">
+        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot" ContextMenuOpening="AllItemsMenuRootContextMenuOpening">
             <Menu.ItemContainerStyle>
                 <Style TargetType="MenuItem">
                     <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
@@ -70,13 +70,13 @@
     </Grid>
     <Window.Resources>
         <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
-            <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="Run_Click"/>
-            <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAs_Click"/>
+            <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="RunClick"/>
+            <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAsClick"/>
             <Separator/>
-            <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="Run_Click"/>
-            <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAs_Click"/>
+            <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick"/>
+            <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick"/>
             <Separator/>
-            <MenuItem Name="ShowProperties" Header="Properties" Click="ShowProperties_Click"/>
+            <MenuItem Name="ShowProperties" Header="Properties" Click="ShowPropertiesClick"/>
             <!--<MenuItem Name="ShowSystemMenu" Header="Show system menu items"/>-->
         </ContextMenu>
     </Window.Resources>

@@ -115,36 +115,42 @@ namespace Power8
         }
         #endregion
 
-        private void AllItemsMenuRoot_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        private void AllItemsMenuRootContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext = ExtractRelatedPowerItem(e);
         }
 
-        private void Run_Click(object sender, RoutedEventArgs e)
+        private void RunClick(object sender, RoutedEventArgs e)
         {
             ExtractRelatedPowerItem(sender).Invoke();
         }
 
-        private void RunAs_Click(object sender, RoutedEventArgs e)
+        private void RunAsClick(object sender, RoutedEventArgs e)
         {
-            ExtractRelatedPowerItem(sender).InvokeVerb(API.SEIVerbs.SEV_RunAsAdmin);
+            try
+            {
+                ExtractRelatedPowerItem(sender).InvokeVerb(API.SEIVerbs.SEV_RunAsAdmin);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), Properties.Resources.AppShortName);
+            }
         }
 
         private static PowerItem ExtractRelatedPowerItem(object o)
         {
-            var menuItem = o as MenuItem;
-            if (menuItem != null)
-                return (PowerItem) (menuItem).DataContext;
+            if (o is MenuItem)
+                return (PowerItem) ((MenuItem) o).DataContext;
             if (o is ContextMenuEventArgs)
                 return (PowerItem) (((MenuItem)
-                         o.GetType()
-                             .GetProperty("TargetElement",
-                                          BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
-                             .GetValue(o, null)).DataContext);
+                       o.GetType()
+                        .GetProperty("TargetElement",
+                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
+                        .GetValue(o, null)).DataContext);
             return null;
         }
 
-        private void ShowProperties_Click(object sender, RoutedEventArgs e)
+        private void ShowPropertiesClick(object sender, RoutedEventArgs e)
         {
             try
             {
