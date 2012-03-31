@@ -22,6 +22,7 @@ namespace Power8
         private const string TRAY_WND_CLASS = "Shell_TrayWnd";
         private const string TRAY_NTF_WND_CLASS = "TrayNotifyWnd";
         private const string SH_DSKTP_WND_CLASS = "TrayShowDesktopButtonWClass";
+        private const string SH_DSKTP_START_CLASS = "Button";
 
         private bool _watch, _update;
         private IntPtr _taskBar, _showDesktopBtn;
@@ -40,10 +41,18 @@ namespace Power8
         {
             _taskBar = API.FindWindow(TRAY_WND_CLASS, null);
             CheckWnd(_taskBar, TRAY_WND_CLASS);
-            _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, TRAY_NTF_WND_CLASS, null);
-            CheckWnd(_showDesktopBtn, TRAY_NTF_WND_CLASS);
-            _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, SH_DSKTP_WND_CLASS, null);
-            CheckWnd(_showDesktopBtn, SH_DSKTP_WND_CLASS);
+            if (Environment.OSVersion.Version.Major >= 6)
+            {
+                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, TRAY_NTF_WND_CLASS, null);
+                CheckWnd(_showDesktopBtn, TRAY_NTF_WND_CLASS);
+                _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, SH_DSKTP_WND_CLASS, null);
+                CheckWnd(_showDesktopBtn, SH_DSKTP_WND_CLASS);
+            }
+            else
+            {
+                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, SH_DSKTP_START_CLASS, null);
+                CheckWnd(_showDesktopBtn, SH_DSKTP_START_CLASS);
+            }
 
             Left = 0;
             Top = 0;
