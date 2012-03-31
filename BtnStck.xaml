@@ -72,12 +72,14 @@
         <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
             <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="RunClick"/>
             <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAsClick"/>
+            <MenuItem Name="OpenContainer" Header="Open containing folder" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick"/>
+            <MenuItem Name="OpenTargetContainer" Header="Open link target containing folder" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick"/>
             <Separator/>
             <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick"/>
             <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick"/>
             <Separator/>
             <MenuItem Name="ShowProperties" Header="Properties" Click="ShowPropertiesClick"/>
-            <!--<MenuItem Name="ShowSystemMenu" Header="Show system menu items"/>-->
+            <MenuItem Name="ShowTargetProperties" Header="Link target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick"/>
         </ContextMenu>
     </Window.Resources>
 </Window>

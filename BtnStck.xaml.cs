@@ -175,14 +175,20 @@ namespace Power8
                 MessageBox.Show(ex.ToString());
             }
         }
+
+        private void OpenContainerClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 
     public class MenuItemClickCommand : ICommand
     {
         public void Execute(object parameter)
         {
-            var powerItem = parameter as PowerItem;           //this vvv goes to context menu...
-            if (powerItem != null && powerItem.Parent != null /*&& (!powerItem.IsFolder || (Keyboard.Modifiers.HasFlag(ModifierKeys.Control)))*/)
+            var powerItem = parameter as PowerItem;          
+            if (powerItem != null && powerItem.Parent != null)
             {
                 powerItem.Invoke();
                 BtnStck.Instance.Hide();
