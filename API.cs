@@ -245,7 +245,6 @@ namespace Power8
         InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IPersist
         {
-            [PreserveSig]
             void GetClassID(out Guid pClassID);
         }
 
@@ -254,16 +253,11 @@ namespace Power8
         public interface IPersistFile : IPersist
         {
             new void GetClassID(out Guid pClassID);
-            [PreserveSig]
-            int IsDirty();
-            [PreserveSig]
+            bool IsDirty();
             void Load([In, MarshalAs(UnmanagedType.LPWStr)]string pszFileName, uint dwMode);
-            [PreserveSig]
             void Save([In, MarshalAs(UnmanagedType.LPWStr)] string pszFileName,
                 [In, MarshalAs(UnmanagedType.Bool)] bool fRemember);
-            [PreserveSig]
             void SaveCompleted([In, MarshalAs(UnmanagedType.LPWStr)] string pszFileName);
-            [PreserveSig]
             void GetCurFile([In, MarshalAs(UnmanagedType.LPWStr)] string ppszFileName);
         }
 
