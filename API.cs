@@ -8,6 +8,11 @@ namespace Power8
     public static class API
     {
 // ReSharper disable InconsistentNaming
+        public const string TRAY_WND_CLASS = "Shell_TrayWnd";
+        public const string TRAY_NTF_WND_CLASS = "TrayNotifyWnd";
+        public const string SH_DSKTP_WND_CLASS = "TrayShowDesktopButtonWClass";
+        public const string SH_DSKTP_START_CLASS = "Button";
+
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
 

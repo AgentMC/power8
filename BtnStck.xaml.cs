@@ -20,6 +20,7 @@ namespace Power8
             get { return _instance ?? (_instance = new BtnStck()); }
             private set { _instance = value; }
         }
+        public static bool IsInitDone { get { return _instance != null; } }
 
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
 
@@ -90,31 +91,7 @@ namespace Power8
         }
         #endregion
 
-        #region Helpers
-        private static void LaunchShForced(string arg)
-        {
-            StartConsoleHidden("shutdown.exe", arg + " -f -t 0");
-        }
-
-        private static void StartConsoleHidden(string exe, string args)
-        {
-            var si = new ProcessStartInfo(exe, args) {CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden};
-            Process.Start(si);
-        }
-        #endregion
-
-        #region Bindable props
-        public ObservableCollection<PowerItem> Items
-        {
-            get { return PowerItemTree.ItemsRoot; }
-        } 
-
-        public MenuItemClickCommand ClickCommand
-        {
-            get { return _cmd; }
-        }
-        #endregion
-
+        #region Menu handlers
         private void AllItemsMenuRootContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext = ExtractRelatedPowerItem(e);
@@ -135,19 +112,6 @@ namespace Power8
             {
                 MessageBox.Show(ex.ToString(), Properties.Resources.AppShortName);
             }
-        }
-
-        private static PowerItem ExtractRelatedPowerItem(object o)
-        {
-            if (o is MenuItem)
-                return (PowerItem) ((MenuItem) o).DataContext;
-            if (o is ContextMenuEventArgs)
-                return (PowerItem) (((MenuItem)
-                       o.GetType()
-                        .GetProperty("TargetElement",
-                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
-                        .GetValue(o, null)).DataContext);
-            return null;
         }
 
         private void ShowPropertiesClick(object sender, RoutedEventArgs e)
@@ -186,26 +150,64 @@ namespace Power8
                 arg = Util.ResolveLink(arg);
             Process.Start("explorer.exe", "/select,\"" + arg + "\"");
         }
+        #endregion
 
-    }
-
-    public class MenuItemClickCommand : ICommand
-    {
-        public void Execute(object parameter)
+        #region Helpers
+        private static void LaunchShForced(string arg)
         {
-            var powerItem = parameter as PowerItem;          
-            if (powerItem != null && powerItem.Parent != null)
+            StartConsoleHidden("shutdown.exe", arg + " -f -t 0");
+        }
+
+        private static void StartConsoleHidden(string exe, string args)
+        {
+            var si = new ProcessStartInfo(exe, args) {CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden};
+            Process.Start(si);
+        }
+
+        private static PowerItem ExtractRelatedPowerItem(object o)
+        {
+            if (o is MenuItem)
+                return (PowerItem) ((MenuItem) o).DataContext;
+            if (o is ContextMenuEventArgs)
+                return (PowerItem) (((MenuItem)
+                       o.GetType()
+                        .GetProperty("TargetElement",
+                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
+                        .GetValue(o, null)).DataContext);
+            return null;
+        }
+        #endregion
+
+        #region Bindable props
+        public ObservableCollection<PowerItem> Items
+        {
+            get { return PowerItemTree.ItemsRoot; }
+        } 
+
+        public MenuItemClickCommand ClickCommand
+        {
+            get { return _cmd; }
+        }
+        #endregion
+
+        public class MenuItemClickCommand : ICommand
+        {
+            public void Execute(object parameter)
             {
+                var powerItem = parameter as PowerItem;
+                if (powerItem == null || powerItem.Parent == null) 
+                    return;
                 powerItem.Invoke();
-                BtnStck.Instance.Hide();
+                Instance.Hide();
             }
-        }
 
-        public bool CanExecute(object parameter)
-        {
-            return true;
-        }
+            public bool CanExecute(object parameter)
+            {
+                return true;
+            }
 
-        public event EventHandler CanExecuteChanged;
+            public event EventHandler CanExecuteChanged;
+        }
     }
+
 }

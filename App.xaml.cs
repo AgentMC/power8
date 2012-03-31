@@ -12,7 +12,7 @@ namespace Power8
         
         public App()
         {
-            PowerItemTree.MainDisp = Dispatcher;
+            Util.MainDisp = Dispatcher;
             new Thread(PowerItemTree.InitTree){Name = "InitTree"}.Start();
         }
     }

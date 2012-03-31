@@ -89,6 +89,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="RestartExplorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RestartExplorer.Designer.cs">
+      <DependentUpon>RestartExplorer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Util.cs" />
     <Page Include="Brushes.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -140,6 +146,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RestartExplorer.resx">
+      <DependentUpon>RestartExplorer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

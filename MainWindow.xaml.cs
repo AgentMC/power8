@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Windows;
@@ -19,10 +20,6 @@ namespace Power8
     public partial class MainWindow
     {
         public static bool ClosedW;
-        private const string TRAY_WND_CLASS = "Shell_TrayWnd";
-        private const string TRAY_NTF_WND_CLASS = "TrayNotifyWnd";
-        private const string SH_DSKTP_WND_CLASS = "TrayShowDesktopButtonWClass";
-        private const string SH_DSKTP_START_CLASS = "Button";
 
         private bool _watch, _update;
         private IntPtr _taskBar, _showDesktopBtn;
@@ -33,25 +30,28 @@ namespace Power8
         {
             InitializeComponent();
             menu.DataContext = this;
+            Application.SetCompatibleTextRenderingDefault(true);
+            Application.EnableVisualStyles();
+            System.Windows.Application.Current.SessionEnding += (sender, args) => Close();
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            _taskBar = API.FindWindow(TRAY_WND_CLASS, null);
-            CheckWnd(_taskBar, TRAY_WND_CLASS);
+            _taskBar = API.FindWindow(API.TRAY_WND_CLASS, null);
+            CheckWnd(_taskBar, API.TRAY_WND_CLASS);
             if (Environment.OSVersion.Version.Major >= 6)
             {
-                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, TRAY_NTF_WND_CLASS, null);
-                CheckWnd(_showDesktopBtn, TRAY_NTF_WND_CLASS);
-                _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, SH_DSKTP_WND_CLASS, null);
-                CheckWnd(_showDesktopBtn, SH_DSKTP_WND_CLASS);
+                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.TRAY_NTF_WND_CLASS, null);
+                CheckWnd(_showDesktopBtn, API.TRAY_NTF_WND_CLASS);
+                _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, API.SH_DSKTP_WND_CLASS, null);
+                CheckWnd(_showDesktopBtn, API.SH_DSKTP_WND_CLASS);
             }
             else
             {
-                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, SH_DSKTP_START_CLASS, null);
-                CheckWnd(_showDesktopBtn, SH_DSKTP_START_CLASS);
+                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.SH_DSKTP_START_CLASS, null);
+                CheckWnd(_showDesktopBtn, API.SH_DSKTP_START_CLASS);
             }
 
             Left = 0;
@@ -66,7 +66,8 @@ namespace Power8
         {
             ClosedW = true;
             _watch = false;
-            BtnStck.Instance.Close();
+            if (BtnStck.IsInitDone)
+                BtnStck.Instance.Close();
         }
         #endregion
 
@@ -112,7 +113,31 @@ namespace Power8
             while (_watch)
             {
                 API.RECT r;
-                API.GetWindowRect(_showDesktopBtn, out r);
+                if (!API.GetWindowRect(_showDesktopBtn, out r))
+                {//looks like explorer.exe is dead!
+                    Thread.Sleep(10000);//let's wait for explorer to auto-restart
+                    var explorers = Process.GetProcessesByName("explorer");
+                    var ses = Process.GetCurrentProcess().SessionId;
+                    if (explorers.Any(e => e.SessionId == ses))
+                    {//explorer is restarted already?
+                        Util.Restart("explorer.exe restarted.");//need reinit handles tree
+                    }
+                    else
+                    {//seems, user killed explorer so hard it is dead to death :)
+                        var trd  = new Thread(() =>
+                        {
+                            var dialog = new RestartExplorer();
+                            dialog.ShowDialog();
+                            if (dialog.DialogResult == System.Windows.Forms.DialogResult.OK)
+                                Util.Restart("user have chosen to restart.");
+                            else
+                                Util.Die("no user-action was to restore normal workflow...");
+                        });
+                        trd.SetApartmentState(ApartmentState.STA);
+                        trd.Start();
+                        trd.Join();
+                    }
+                }
                 var curHeight = r.Bottom - r.Top;
                 var curWidth = r.Right - r.Left;
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -225,7 +250,7 @@ namespace Power8
         private static void CheckWnd(IntPtr wnd, string className)
         {
             if (wnd == IntPtr.Zero)
-                Environment.FailFast(className + " not found");
+                Util.Die(className + " not found");
         }
 // ReSharper restore UnusedParameter.Local
         
