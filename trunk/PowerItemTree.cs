@@ -10,7 +10,6 @@ namespace Power8
 {
     static class PowerItemTree
     {
-        public static Dispatcher MainDisp;
 
         private static readonly string PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
         private static readonly string PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
@@ -21,6 +20,7 @@ namespace Power8
         private static readonly PowerItem RootItem = new PowerItem {IsFolder = true};
         private static readonly ObservableCollection<PowerItem> ItemsRootCollection =
             new ObservableCollection<PowerItem> {RootItem};
+
         public static ObservableCollection<PowerItem> ItemsRoot { get { return ItemsRootCollection; } }  
 
 
@@ -64,7 +64,7 @@ namespace Power8
             if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
                 return;
             //Ensuring buttonstack is created on Main thread
-            MainDisp.Invoke(DispatcherPriority.DataBind,
+            Util.MainDisp.Invoke(DispatcherPriority.DataBind,
                                                new Action(() => BtnStck.Instance.InvalidateVisual()));
             var isDir = Directory.Exists(e.FullPath);
             string sourceForSplit = null, basepath = null;
@@ -88,7 +88,7 @@ namespace Power8
                 item =
                     item.Items.FirstOrDefault(j => j.IsFolder && j.FriendlyName == sourceSplitted[i]);
                 if (item == null && e.ChangeType == WatcherChangeTypes.Created)
-                    item = (PowerItem)MainDisp.Invoke(DispatcherPriority.DataBind, new Func<PowerItem>(() =>
+                    item = (PowerItem)Util.MainDisp.Invoke(DispatcherPriority.DataBind, new Func<PowerItem>(() =>
 // ReSharper disable AccessToModifiedClosure
                         AddSubItem(prevItem,basepath,basepath +prevItem.Argument +"\\" +sourceSplitted[i],true)));
 // ReSharper restore AccessToModifiedClosure
@@ -97,7 +97,7 @@ namespace Power8
             }
             if (item != null)
             {
-                MainDisp.Invoke(DispatcherPriority.DataBind, new Action(() =>
+                Util.MainDisp.Invoke(DispatcherPriority.DataBind, new Action(() =>
                 {
                     switch (e.ChangeType)
                     {

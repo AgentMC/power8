@@ -1,15 +1,20 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
+using Application = System.Windows.Forms.Application;
 
 namespace Power8
 {
     static class Util
     {
+        public static Dispatcher MainDisp;
+
         private static readonly StringBuilder Builder = new StringBuilder(1024);
 
         public static IntPtr GetHandle(this Window w)
@@ -93,6 +98,18 @@ namespace Power8
                     ShellExecuteFunction();
                 return _succeeded;
             }
+        }
+
+        public static void Restart(string reason)
+        {
+            Process.Start("explorer.exe");
+            Process.Start(Application.ExecutablePath);
+            Die(reason);
+        }
+
+        public static void Die(string becauseString)
+        {
+            Environment.FailFast(string.Format(Properties.Resources.FailFastFormat, becauseString));
         }
     }
 }
