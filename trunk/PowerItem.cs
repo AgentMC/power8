@@ -87,6 +87,12 @@ namespace Power8
             get { return Argument != null && !IsFolder; }
         }
 
+        public bool IsLink
+        {
+            get { return IsFile && Argument.EndsWith(".lnk"); }
+        }
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void OnPropertyChanged(string property)
