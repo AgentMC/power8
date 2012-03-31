@@ -165,6 +165,8 @@ namespace Power8
                                     lpFile = PowerItemTree.GetResolvedArgument(pi, false),
                                     nShow = API.SWCommands.SW_HIDE
                                 };
+                if (pi.IsLink && ((MenuItem)sender).Name == "ShowTargetProperties")
+                    info.lpFile = Util.ResolveLink(info.lpFile);
                 var executer = new Util.ShellExecuteHelper(info);
                 if (!executer.ShellExecuteOnSTAThread())
                     throw new ExternalException(string.Format(
@@ -178,7 +180,11 @@ namespace Power8
 
         private void OpenContainerClick(object sender, RoutedEventArgs e)
         {
-
+            var item = ExtractRelatedPowerItem(sender);
+            var arg = PowerItemTree.GetResolvedArgument(item, false);
+            if (item.IsLink && ((MenuItem)sender).Name == "OpenTargetContainer")
+                arg = Util.ResolveLink(arg);
+            Process.Start("explorer.exe", "/select,\"" + arg + "\"");
         }
 
     }

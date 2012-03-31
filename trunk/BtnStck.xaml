@@ -17,7 +17,8 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot" ContextMenuOpening="AllItemsMenuRootContextMenuOpening">
+        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
+              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="16">
             <Menu.ItemContainerStyle>
                 <Style TargetType="MenuItem">
                     <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
@@ -33,7 +34,9 @@
                 </Style>    
             </Menu.ItemContainerStyle>
         </Menu>
-        <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" CanUserAddRows="False">
+        <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
+                  ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
+                  CanUserAddRows="False">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" MinWidth="16">
@@ -50,36 +53,34 @@
         </DataGrid>
         <TextBox Grid.Row="2" Name="SearchBox" Text="Search..." Margin="3"></TextBox>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
-            <!--Button with dropdown... maybe a styled combobox??
-            maybe we can get rid of 4th column in datagrid?-->
-            <Button Name="MyComputer" HorizontalContentAlignment="Left" Margin="3,0,3,3">Computer ></Button>
+            <Button Name="MyComputer" HorizontalContentAlignment="Left" Margin="3">Computer ></Button>
             <Button Name="Libraries" HorizontalContentAlignment="Left">Libraries ></Button>
             <Button Name="ControlPanel" HorizontalContentAlignment="Left">Control Panel ></Button>
             <Button Name="AdminTools" HorizontalContentAlignment="Left">Administrative tools ></Button>
             <Button Name="NetItems" HorizontalContentAlignment="Left">Network ></Button>
             <Separator Margin="0,5"/>
             <!--Completely different design here-->
-                <Button Content="Shutdown" Click="ButtonShutdownClick" Name="ButtonShutdown"></Button>
-                <Button Content="Restart" Click="ButtonRestartClick" Name="ButtonRestart"></Button>
-                <Button Content="Sleep" Click="ButtonSleepClick" Name="ButtonSleep"></Button>
-                <Button Content="Hibernate" Click="ButtonHibernateClick" Name="ButtonHibernate"></Button>
-                <Button Content="Log off" Click="ButtonLogOffClick" Name="ButtonLogOff"></Button>
-                <Button Content="Start screensaver" Click="ButtonScreensaveClick" Name="ButtonScreensave"></Button>
-                <Button Content="Lock PC" Click="ButtonLockClick" Name="ButtonLock"  Margin="3,3,0,3"></Button>
+            <Button Content="Shutdown" Click="ButtonShutdownClick" Name="ButtonShutdown"/>
+            <Button Content="Restart" Click="ButtonRestartClick" Name="ButtonRestart"/>
+            <Button Content="Sleep" Click="ButtonSleepClick" Name="ButtonSleep"></Button>
+            <Button Content="Hibernate" Click="ButtonHibernateClick" Name="ButtonHibernate"/>
+            <Button Content="Log off" Click="ButtonLogOffClick" Name="ButtonLogOff"/>
+            <Button Content="Start screensaver" Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
+            <Button Content="Lock PC" Click="ButtonLockClick" Name="ButtonLock"/>
             </StackPanel>
     </Grid>
     <Window.Resources>
         <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
             <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="RunClick"/>
             <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAsClick"/>
-            <MenuItem Name="OpenContainer" Header="Open containing folder" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick"/>
-            <MenuItem Name="OpenTargetContainer" Header="Open link target containing folder" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick"/>
+            <MenuItem Name="OpenContainer" Header="Open locatiom" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick"/>
+            <MenuItem Name="OpenTargetContainer" Header="Open target location" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick"/>
             <Separator/>
             <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick"/>
             <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick"/>
             <Separator/>
             <MenuItem Name="ShowProperties" Header="Properties" Click="ShowPropertiesClick"/>
-            <MenuItem Name="ShowTargetProperties" Header="Link target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick"/>
+            <MenuItem Name="ShowTargetProperties" Header="Target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick"/>
         </ContextMenu>
     </Window.Resources>
 </Window>
