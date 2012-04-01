@@ -61,10 +61,42 @@ namespace Power8
         public static extern IntPtr GetDesktopWindow();
 
         [DllImport("user32.dll")]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, int wParam, int lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, WM msg, int wParam, int lParam);
 
-        public const int SC_SCREENSAVE = 0xF140;
-        public const int WM_SYSCOMMAND = 0x0112;
+        public enum WM : uint
+        {
+//excerpt
+            SYSCOMMAND = 0x0112,
+
+            DWMCOMPOSITIONCHANGED = 0x031E,
+            DWMNCRENDERINGCHANGED = 0x031F,
+            DWMCOLORIZATIONCOLORCHANGED = 0x0320,
+            DWMWINDOWMAXIMIZEDCHANGE = 0x0321
+        }
+
+        public enum SC
+        {
+            SIZE = 0xF000,
+            MOVE = 0xF010,
+            MINIMIZE = 0xF020,
+            MAXIMIZE = 0xF030,
+            NEXTWINDOW = 0xF040,
+            PREVWINDOW = 0xF050,
+            CLOSE = 0xF060,
+            VSCROLL = 0xF070,
+            HSCROLL = 0xF080,
+            MOUSEMENU = 0xF090,
+            KEYMENU = 0xF100,
+            ARRANGE = 0xF110,
+            RESTORE = 0xF120,
+            TASKLIST = 0xF130,
+            SCREENSAVE = 0xF140,
+            HOTKEY = 0xF150,
+            DEFAULT = 0xF160,
+            MONITORPOWER = 0xF170,
+            CONTEXTHELP = 0xF180,
+            SEPARATOR = 0xF00F
+        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct Shfileinfo
