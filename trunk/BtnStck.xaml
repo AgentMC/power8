@@ -28,7 +28,7 @@
                     <Setter Property="CommandParameter" Value="{Binding}"/>
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
                     <Setter Property="Height" Value="20"/>
-                    <Setter Property="Padding" Value="1"/>
+                    <Setter Property="Padding" Value="0,3,0,0"/>
                     <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
                     <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
                 </Style>    

@@ -144,7 +144,7 @@ namespace Power8
             var dsktp = curDir + "\\desktop.ini";
             if (File.Exists(dsktp))
             {
-                using (var reader = new StreamReader(dsktp, true))
+                using (var reader = new StreamReader(dsktp, System.Text.Encoding.Default, true))
                 {
                     string str;
                     while ((str = reader.ReadLine()) != null && !str.Contains("[LocalizedFileNames]"))
