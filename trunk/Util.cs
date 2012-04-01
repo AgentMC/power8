@@ -17,18 +17,26 @@ namespace Power8
 
         private static readonly StringBuilder Builder = new StringBuilder(1024);
 
+
+
         public static IntPtr GetHandle(this Window w)
         {
             return new WindowInteropHelper(w).Handle;
         }
 
+        public static HwndSource GetHwndSource(this Window w)
+        {
+            return HwndSource.FromHwnd(w.GetHandle());
+        }
+
         public static IntPtr MakeGlassWpfWindow(this Window w)
         {
-            var handle = w.GetHandle();
-            HwndSource.FromHwnd(handle).CompositionTarget.BackgroundColor = Colors.Transparent;
+            var source = w.GetHwndSource();
+            if (source.CompositionTarget != null) 
+                source.CompositionTarget.BackgroundColor = Colors.Transparent;
             if (Environment.OSVersion.Version.Major >= 6) 
-                MakeGlass(handle);
-            return handle;
+                MakeGlass(source.Handle);
+            return source.Handle;
         }
         
         public static void MakeGlass(IntPtr hWnd)
@@ -42,6 +50,13 @@ namespace Power8
             API.DwmEnableBlurBehindWindow(hWnd, bbhOff);
             API.DwmExtendFrameIntoClientArea(hWnd, new API.Margins { cxLeftWidth = -1, cxRightWidth = 0, cyTopHeight = 0, cyBottomHeight = 0 });
         }
+
+        public static void RegisterHook(this Window w, HwndSourceHook hook)
+        {
+            w.GetHwndSource().AddHook(hook);
+        }
+            
+
 
         public static IntPtr GetIconForFile(string file, API.Shgfi iconType)
         {
@@ -65,13 +80,7 @@ namespace Power8
             private int _errorCode;
             private bool _succeeded;
 
-            public int ErrorCode
-            {
-                get
-                {
-                    return _errorCode;
-                }
-            }
+            public int ErrorCode{get { return _errorCode; }}
 
             public ShellExecuteHelper(API.ShellExecuteInfo executeInfo)
             {
@@ -100,6 +109,8 @@ namespace Power8
             }
         }
 
+
+        
         public static void Restart(string reason)
         {
             Process.Start("explorer.exe");

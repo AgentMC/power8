@@ -25,10 +25,43 @@ namespace Power8
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
 
         #region Load, Unload, Show, Hide
+
+        private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            handled = false;
+            if (msg == (uint)API.WM.NCHITTEST)
+            {
+                handled = true;
+                var htLocation = API.DefWindowProc(hwnd, msg, wParam, lParam);
+                switch ((API.HT)Enum.Parse(typeof(API.HT), htLocation.ToString()))
+                {
+                    case API.HT.BOTTOM:
+                    case API.HT.BOTTOMLEFT:
+                    case API.HT.BOTTOMRIGHT:
+                    case API.HT.LEFT:
+                    case API.HT.RIGHT:
+                    case API.HT.TOP:
+                    case API.HT.TOPLEFT:
+                    case API.HT.TOPRIGHT:
+                        htLocation = new IntPtr((int)API.HT.BORDER);
+                        break;
+                }
+                return htLocation;
+            }
+            return IntPtr.Zero;
+        }
+
         public BtnStck()
         {
             InitializeComponent();
             ((App) Application.Current).DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            this.MakeGlassWpfWindow();
+            this.RegisterHook(WndProc);
         }
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -47,12 +80,12 @@ namespace Power8
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            this.MakeGlassWpfWindow();
             MinHeight = Height;
             MaxHeight = MinHeight;
             MinWidth = Width;
             MaxWidth = MinWidth;
         }
+
         #endregion
 
         #region Buttons handlers
