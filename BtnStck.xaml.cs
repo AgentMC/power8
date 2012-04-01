@@ -28,6 +28,7 @@ namespace Power8
         public BtnStck()
         {
             InitializeComponent();
+            ((App) Application.Current).DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
         }
 
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -87,7 +88,7 @@ namespace Power8
 
         private void ButtonScreensaveClick(object sender, RoutedEventArgs e)
         {
-            API.SendMessage(API.GetDesktopWindow(), API.WM_SYSCOMMAND, API.SC_SCREENSAVE, 0);
+            API.SendMessage(API.GetDesktopWindow(), API.WM.SYSCOMMAND, (int)API.SC.SCREENSAVE, 0);
         }
         #endregion
 
