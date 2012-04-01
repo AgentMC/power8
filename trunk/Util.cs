@@ -15,7 +15,7 @@ namespace Power8
     {
         public static Dispatcher MainDisp;
 
-        private static readonly StringBuilder Builder = new StringBuilder(1024);
+        private static readonly StringBuilder Buffer = new StringBuilder(1024);
 
 
 
@@ -68,10 +68,34 @@ namespace Power8
         public static string ResolveLink(string link)
         {
             var shLink = new API.ShellLink();
-            API.WIN32_FIND_DATAW sd;
             ((API.IPersistFile)shLink).Load(link, 0);
-            ((API.IShellLink) shLink).GetPath(Builder, 512, out sd, API.SLGP_FLAGS.SLGP_UNCPRIORITY);
-            return Builder.ToString();
+            lock (Buffer)
+            {
+                API.WIN32_FIND_DATAW sd;
+                ((API.IShellLink) shLink).GetPath(Buffer, 512, out sd, API.SLGP_FLAGS.SLGP_UNCPRIORITY);
+                return Buffer.ToString();
+            }
+        }
+
+        public static string ResolveResource(string localizeableResourceId)
+        {
+            //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000
+            var lastCommaIdx = localizeableResourceId.LastIndexOf(',');
+            var resDll = Environment.ExpandEnvironmentVariables(localizeableResourceId.Substring(0, lastCommaIdx));
+            var resId = uint.Parse(localizeableResourceId.Substring(lastCommaIdx + 2));
+            var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
+                                            API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
+            if (dllHandle != IntPtr.Zero)
+            {
+                lock (Buffer)
+                {
+                    var number = API.LoadString(dllHandle, resId, Buffer, Buffer.Capacity);
+                    API.FreeLibrary(dllHandle);
+                    if (number > 0)
+                        return Buffer.ToString();
+                }
+            }
+            return null;
         }
 
         public class ShellExecuteHelper

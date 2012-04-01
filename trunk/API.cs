@@ -8,6 +8,8 @@ namespace Power8
     public static class API
     {
 // ReSharper disable InconsistentNaming
+
+        //Windows positioning
         public const string TRAY_WND_CLASS = "Shell_TrayWnd";
         public const string TRAY_NTF_WND_CLASS = "TrayNotifyWnd";
         public const string SH_DSKTP_WND_CLASS = "TrayShowDesktopButtonWClass";
@@ -35,6 +37,7 @@ namespace Power8
             public int Bottom;
         }
 
+        //Aero Glass
         [DllImport("dwmapi.dll")]
         public static extern void DwmEnableBlurBehindWindow (IntPtr hWnd, DwmBlurbehind pBlurBehind);
 
@@ -57,6 +60,8 @@ namespace Power8
             public const uint DWM_BB_TRANSITIONONMAXIMIZED = 4;
         }
 
+
+        //Utility User32 functions and data, needed in different places
         [DllImport("user32.dll", EntryPoint = "GetDesktopWindow")]
         public static extern IntPtr GetDesktopWindow();
 
@@ -156,6 +161,8 @@ namespace Power8
             HELP = 21
         }
 
+
+        //Getting icons
         [StructLayout(LayoutKind.Sequential)]
         public struct Shfileinfo
         {
@@ -177,9 +184,11 @@ namespace Power8
         }
 
         [DllImport("shell32.dll")]
-        public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref Shfileinfo psfi, uint cbSizeFileInfo, uint uFlags);
+        public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, 
+            ref Shfileinfo psfi, uint cbSizeFileInfo, uint uFlags);
 
 
+        //Invoking specific verbs (show properties)
         [StructLayout(LayoutKind.Sequential)]
         public class ShellExecuteInfo
         {
@@ -270,7 +279,7 @@ namespace Power8
         [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = false)]
         public static extern bool ShellExecuteEx(ShellExecuteInfo info);
 
-
+        //Resolving links
         const string CLSID_ShellLink = "00021401-0000-0000-C000-000000000046";
         const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
         const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
@@ -403,6 +412,29 @@ namespace Power8
         [ComImport, ClassInterface(ClassInterfaceType.None)]
         [Guid(CLSID_ShellLink)]
         public class ShellLink { }
+
+        
+        //Loading native string resources
+        [Flags]
+        public enum LLF:uint
+        {
+            DONT_RESOLVE_DLL_REFERENCES         =0x00000001,
+            LOAD_LIBRARY_AS_DATAFILE            =0x00000002,
+            LOAD_WITH_ALTERED_SEARCH_PATH       =0x00000008,
+            LOAD_IGNORE_CODE_AUTHZ_LEVEL        =0x00000010,
+            LOAD_LIBRARY_AS_IMAGE_RESOURCE      =0x00000020,
+            LOAD_LIBRARY_AS_DATAFILE_EXCLUSIVE  =0x00000040,
+            LOAD_LIBRARY_REQUIRE_SIGNED_TARGET  =0x00000080
+        }
+
+        [DllImport("Kernel32.dll", CharSet=CharSet.Unicode, EntryPoint = "LoadLibraryExW")]
+        public static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPWStr)] string lpLibFileName, IntPtr hFile, LLF dwFlags);
+
+        [DllImport("Kernel32.dll")]
+        public static extern bool FreeLibrary(IntPtr hModule);
+        
+        [DllImport("user32.dll")]
+        public static extern int LoadString(IntPtr hInstance, uint resourceID, StringBuilder lpBuffer, int nBufferMax);
 // ReSharper restore InconsistentNaming
     }
 }
