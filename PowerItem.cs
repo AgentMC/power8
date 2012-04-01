@@ -3,19 +3,21 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using Power8.Properties;
 
 namespace Power8
 {
     public class PowerItem : INotifyPropertyChanged
     {
-        public string Executable { get; set; }
+        private ImageManager.ImageContainer _icon;
+        private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
+        private string _friendlyName;
+
         public string Argument { get; set; }
         public PowerItem Parent { get; set; }
         public bool IsFolder { get; set; }
+        public string ResourceIdString { get; set; }
 
 
-        private ImageManager.ImageContainer _icon;
         public ImageManager.ImageContainer Icon
         {
             get
@@ -31,8 +33,6 @@ namespace Power8
             }
         }
 
-
-        private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>(); 
         public ObservableCollection<PowerItem> Items
         {
             get { return _items; }
@@ -40,14 +40,48 @@ namespace Power8
 
         public string FriendlyName
         {
-            get { return ToString(); }
+            get
+            {
+                if(_friendlyName != null)
+                    return _friendlyName;
+                if (ResourceIdString != null)
+                {
+                    _friendlyName = Util.ResolveResource(ResourceIdString);
+                    if (_friendlyName != null)
+                        return _friendlyName;
+                    ResourceIdString = null; //Operation failed somewhere, resourceId is invalid
+                }
+                if (string.IsNullOrEmpty(Argument))
+                    return "All Programs";
+                return Path.GetFileNameWithoutExtension(Argument) ?? "";
+            }
+            set
+            {
+                _friendlyName = value;
+                OnPropertyChanged("FriendlyName");
+            }
         }
+
+        public Double MinWidth
+        {
+            get { return Parent == null ? 300 : 0; }
+        }
+
+        public bool IsFile
+        {
+            get { return Argument != null && !IsFolder; }
+        }
+
+        public bool IsLink
+        {
+            get { return IsFile && Argument.EndsWith(".lnk"); }
+        }
+
+
 
         public override string ToString()
         {
-            if(string.IsNullOrEmpty(Argument))
-                return "All Programs";
-            return Path.GetFileNameWithoutExtension(Argument) ?? "";
+            return FriendlyName;
         }
 
         public void Invoke()
@@ -75,22 +109,9 @@ namespace Power8
         public void Update()
         {
             Icon = null;
+            FriendlyName = null;
         }
 
-        public Double MinWidth
-        {
-            get { return Parent == null ? 300 : 0; }
-        }
-
-        public bool IsFile
-        {
-            get { return Argument != null && !IsFolder; }
-        }
-
-        public bool IsLink
-        {
-            get { return IsFile && Argument.EndsWith(".lnk"); }
-        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

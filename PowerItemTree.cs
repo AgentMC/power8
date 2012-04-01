@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -133,25 +134,46 @@ namespace Power8
 
         private static void ScanFolder(PowerItem item, string basePath)
         {
-            foreach (var directory in Directory.GetDirectories(basePath + item.Argument))
+            var curDir = basePath + item.Argument;
+            foreach (var directory in Directory.GetDirectories(curDir))
             {
                 if(!(File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
                     ScanFolder(AddSubItem(item, basePath, directory, true), basePath);
             }
-            foreach (var file in Directory.GetFiles(basePath + item.Argument))
+            var resources = new Dictionary<string, string>();
+            var dsktp = curDir + "\\desktop.ini";
+            if (File.Exists(dsktp))
+            {
+                using (var reader = new StreamReader(dsktp, true))
+                {
+                    string str;
+                    while ((str = reader.ReadLine()) != null && !str.Contains("[LocalizedFileNames]"))
+                    {}
+                    while ((str = reader.ReadLine()) != null && str.Contains("="))
+                    {
+                        var pair = str.Split(new[] {'='}, 2);
+                        resources.Add(pair[0], pair[1].TrimStart('@'));
+                    }
+                }
+            }
+            foreach (var file in Directory.GetFiles(curDir))
             {
                 if (!(File.GetAttributes(file).HasFlag(FileAttributes.Hidden)))
-                    AddSubItem(item, basePath, file, false);
+                {
+                    var fn = Path.GetFileName(file);
+                    AddSubItem(item, basePath, file, false,
+                               fn != null && resources.ContainsKey(fn) ? resources[fn] : null);
+                }
             }
         }
 
-        private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder)
+        private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null)
         {
             var argStr = fsObject.Substring(basePath.Length);
             var child = item.Items.FirstOrDefault(i => i.Argument == argStr && i.IsFolder == isFolder);
             if(child == null)
             {
-                child = new PowerItem {Argument = argStr, Parent = item, IsFolder = isFolder};
+                child = new PowerItem {Argument = argStr, Parent = item, IsFolder = isFolder, ResourceIdString = resourceId};
                 item.Items.Add(child);
             }
             return child;
