@@ -63,10 +63,35 @@ namespace Power8
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, WM msg, int wParam, int lParam);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
         public enum WM : uint
         {
 //excerpt
             SYSCOMMAND = 0x0112,
+
+            NCCREATE = 0x0081,
+            NCDESTROY = 0x0082,
+            NCCALCSIZE = 0x0083,
+            NCHITTEST = 0x0084,
+            NCPAINT = 0x0085,
+            NCACTIVATE = 0x0086,
+            GETDLGCODE = 0x0087,
+            SYNCPAINT = 0x0088,
+            NCMOUSEMOVE = 0x00A0,
+            NCLBUTTONDOWN = 0x00A1,
+            NCLBUTTONUP = 0x00A2,
+            NCLBUTTONDBLCLK = 0x00A3,
+            NCRBUTTONDOWN = 0x00A4,
+            NCRBUTTONUP = 0x00A5,
+            NCRBUTTONDBLCLK = 0x00A6,
+            NCMBUTTONDOWN = 0x00A7,
+            NCMBUTTONUP = 0x00A8,
+            NCMBUTTONDBLCLK = 0x00A9,
+            NCXBUTTONDOWN = 0x00AB,
+            NCXBUTTONUP = 0x00AC,
+            NCXBUTTONDBLCLK = 0x00AD,
 
             DWMCOMPOSITIONCHANGED = 0x031E,
             DWMNCRENDERINGCHANGED = 0x031F,
@@ -96,6 +121,39 @@ namespace Power8
             MONITORPOWER = 0xF170,
             CONTEXTHELP = 0xF180,
             SEPARATOR = 0xF00F
+        }
+        
+        public enum HT
+        {
+            ERROR = (-2),
+            TRANSPARENT = (-1),
+            NOWHERE = 0,
+            CLIENT = 1,
+            CAPTION = 2,
+            SYSMENU = 3,
+            GROWBOX = 4,
+            SIZE = GROWBOX,
+            MENU = 5,
+            HSCROLL = 6,
+            VSCROLL = 7,
+            MINBUTTON = 8,
+            MAXBUTTON = 9,
+            LEFT = 10,
+            RIGHT = 11,
+            TOP = 12,
+            TOPLEFT = 13,
+            TOPRIGHT = 14,
+            BOTTOM = 15,
+            BOTTOMLEFT = 16,
+            BOTTOMRIGHT = 17,
+            BORDER = 18,
+            REDUCE = MINBUTTON,
+            ZOOM = MAXBUTTON,
+            SIZEFIRST = LEFT,
+            SIZELAST = BOTTOMRIGHT,
+            OBJECT = 19,
+            CLOSE = 20,
+            HELP = 21
         }
 
         [StructLayout(LayoutKind.Sequential)]
