@@ -129,7 +129,11 @@ namespace Power8
                             var dialog = new RestartExplorer();
                             dialog.ShowDialog();
                             if (dialog.DialogResult == System.Windows.Forms.DialogResult.OK)
-                                Util.Restart("user have chosen to restart.");
+                            {
+								Process.Start("explorer.exe");
+                            	Thread.Sleep(2000);
+                            	Util.Restart("user have chosen to restart.");
+                            }
                             else
                                 Util.Die("no user-action was to restore normal workflow...");
                         });

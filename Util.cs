@@ -137,7 +137,6 @@ namespace Power8
         
         public static void Restart(string reason)
         {
-            Process.Start("explorer.exe");
             Process.Start(Application.ExecutablePath);
             Die(reason);
         }
