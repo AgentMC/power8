@@ -48,7 +48,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource ButtonNormalBorder}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3"/>
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10,3"/>
@@ -120,7 +120,14 @@
                 				</Grid>
                 			</Border>
                 		</Border>
-                		<ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                		<Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" >
+                			<Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#CCFFFFFF" Margin="-6,3,-6,2">
+                				<Rectangle.Effect>
+                					<BlurEffect Radius="15"/>
+                				</Rectangle.Effect>
+                			</Rectangle>
+                		</Border>
+                		<ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                 	</Grid>
                     <ControlTemplate.Triggers>
                     	<Trigger Property="IsMouseOver" Value="True"/>
@@ -134,6 +141,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="FontWeight" Value="Normal"/>
     </Style>
     
     
