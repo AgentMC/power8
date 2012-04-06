@@ -53,7 +53,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Grid Width="Auto" x:Name="LayoutRoot" Height="Auto" SnapsToDevicePixels="True">
+                    <Grid Width="Auto" x:Name="LayoutRoot" Height="Auto" SnapsToDevicePixels="True" Background="Transparent">
                 		<VisualStateManager.VisualStateGroups>
                 			<VisualStateGroup x:Name="CommonStates">
                 				<VisualStateGroup.Transitions>
