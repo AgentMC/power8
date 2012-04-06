@@ -43,15 +43,13 @@
         </Setter>
     </Style>
     <Style TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource ButtonFocusVisual}"/>
-        <Setter Property="Background" Value="{DynamicResource ButtonNormalBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource ButtonNormalBorder}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10,3"/>
+		<Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -141,8 +139,30 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="FontWeight" Value="Normal"/>
     </Style>
-    
+    <LinearGradientBrush x:Key="MenuBackground" EndPoint="0,1" StartPoint="0,0">
+    	<GradientStop Color="#F6F6F6" Offset="0.25"/>
+    	<GradientStop Color="#EAE8E8" Offset="0.25"/>
+    	<GradientStop Color="#DCD9D9" Offset="0.8"/>
+    	<GradientStop Color="White" Offset="1"/>
+    </LinearGradientBrush>
+    <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
+    	<Setter Property="Background" Value="{StaticResource MenuBackground}"/>
+    	<Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
+    	<Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
+    	<Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
+    	<Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
+    	<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+    	<Setter Property="Template">
+    		<Setter.Value>
+    			<ControlTemplate TargetType="{x:Type Menu}">
+    				<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" CornerRadius="2">
+    					<ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+    				</Border>
+    			</ControlTemplate>
+    		</Setter.Value>
+    	</Setter>
+    </Style>
+   
     
 </ResourceDictionary>

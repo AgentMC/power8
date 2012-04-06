@@ -18,17 +18,16 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
-              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="16">
-            <Menu.ItemContainerStyle>
-                <Style TargetType="MenuItem">
+              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="16" Style="{DynamicResource MenuStyle}">
+        <Menu.ItemContainerStyle>
+               <Style TargetType="MenuItem">
                     <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
                     <Setter Property="Header" Value="{Binding FriendlyName}"/>
                     <Setter Property="ItemsSource" Value="{Binding Items}"/>
                     <Setter Property="Command" Value="{Binding ClickCommand, ElementName=Mnu}"/>
                     <Setter Property="CommandParameter" Value="{Binding}"/>
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="Height" Value="20"/>
-                    <Setter Property="Padding" Value="0,3,0,0"/>
+                    <Setter Property="Padding" Value="6,3"/>
                     <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
                     <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
                 </Style>    
@@ -71,16 +70,16 @@
     </Grid>
     <Window.Resources>
         <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
-            <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="RunClick"/>
-            <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAsClick"/>
-            <MenuItem Name="OpenContainer" Header="Open locatiom" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick"/>
-            <MenuItem Name="OpenTargetContainer" Header="Open target location" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick"/>
+            <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="RunClick" Padding="6,3"/>
+            <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAsClick" Padding="6,3"/>
+            <MenuItem Name="OpenContainer" Header="Open locatiom" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick" Padding="6,3"/>
+            <MenuItem Name="OpenTargetContainer" Header="Open target location" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick" Padding="6,3"/>
             <Separator/>
-            <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick"/>
-            <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick"/>
+            <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick" Padding="6,3"/>
+            <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick" Padding="6,3"/>
             <Separator/>
-            <MenuItem Name="ShowProperties" Header="Properties" Click="ShowPropertiesClick"/>
-            <MenuItem Name="ShowTargetProperties" Header="Target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick"/>
+            <MenuItem Name="ShowProperties" Header="Properties" Click="ShowPropertiesClick" Padding="6,3"/>
+            <MenuItem Name="ShowTargetProperties" Header="Target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Padding="6,3"/>
         </ContextMenu>
     </Window.Resources>
 </Window>
