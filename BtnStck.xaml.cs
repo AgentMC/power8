@@ -210,6 +210,12 @@ namespace Power8
                         .GetValue(o, null)).DataContext);
             return null;
         }
+
+        new public void Focus()
+        {
+        	base.Focus();
+            SearchBox.Focus();
+        }
         #endregion
 
         #region Bindable props
