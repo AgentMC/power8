@@ -26,6 +26,7 @@ namespace Power8
         private Thread _updateThread;
 
         #region Window (de)init 
+
         public MainWindow()
         {
             InitializeComponent();
@@ -60,6 +61,9 @@ namespace Power8
             new Thread(WatchDesktopBtn){Name = "ShowDesktop button watcher"}.Start();
 
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
+
+            API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_WIN, Keys.Z);
+            this.RegisterHook(WndProc);
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -69,6 +73,21 @@ namespace Power8
             if (BtnStck.IsInitDone)
                 BtnStck.Instance.Close();
         }
+
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            handled = false;
+            if (msg == (uint)API.WM.HOTKEY)
+            {
+                handled = true;
+                if (BtnStck.Instance.IsActive)
+                    b1.Focus();
+                else
+                    ShowButtonStack(this, null);
+            }
+            return IntPtr.Zero;
+        }
+
         #endregion
 
         #region Handlers
@@ -130,9 +149,9 @@ namespace Power8
                             dialog.ShowDialog();
                             if (dialog.DialogResult == System.Windows.Forms.DialogResult.OK)
                             {
-								Process.Start("explorer.exe");
-                            	Thread.Sleep(2000);
-                            	Util.Restart("user have chosen to restart.");
+                                Process.Start("explorer.exe");
+                                Thread.Sleep(2000);
+                                Util.Restart("user have chosen to restart.");
                             }
                             else
                                 Util.Die("no user-action was to restore normal workflow...");
