@@ -1,0 +1,12 @@
+#summary Specific features of Power8 described in details
+=Specific features of Power8 described in details=
+
+== Check-for-update ==
+
+This feature checks for new version. When you check the corresponding menu item in context menu of Power8 button, the check begins the same moment.
+
+After that, the check occurs every 12 hours.
+
+Each check downloads 2.26 KB file named "AssemblyInfo.cs" from the project source code and uses it to identify the version.
+
+At the moment, when version is found, only notification is available, later the auto-update will be implemented.
