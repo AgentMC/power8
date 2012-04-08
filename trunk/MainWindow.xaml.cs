@@ -38,6 +38,20 @@ namespace Power8
                 UpdateCheckThreadInit();
         }
 
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            handled = false;
+            if (msg == (uint)API.WM.HOTKEY)
+            {
+                handled = true;
+                if (BtnStck.Instance.IsActive)
+                    b1.Focus();
+                else
+                    ShowButtonStack(this, null);
+            }
+            return IntPtr.Zero;
+        }
+
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             _taskBar = API.FindWindow(API.TRAY_WND_CLASS, null);
@@ -62,7 +76,7 @@ namespace Power8
 
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
 
-            API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_WIN, Keys.Z);
+            API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
             this.RegisterHook(WndProc);
         }
 
@@ -72,20 +86,6 @@ namespace Power8
             _watch = false;
             if (BtnStck.IsInitDone)
                 BtnStck.Instance.Close();
-        }
-
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            handled = false;
-            if (msg == (uint)API.WM.HOTKEY)
-            {
-                handled = true;
-                if (BtnStck.Instance.IsActive)
-                    b1.Focus();
-                else
-                    ShowButtonStack(this, null);
-            }
-            return IntPtr.Zero;
         }
 
         #endregion
@@ -115,6 +115,7 @@ namespace Power8
 
             BtnStck.Instance.Left = screenPoint.X;
             BtnStck.Instance.Top = screenPoint.Y;
+            BtnStck.Instance.Activate();
             BtnStck.Instance.Focus();
         }
 

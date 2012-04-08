@@ -26,6 +26,12 @@ namespace Power8
 
         #region Load, Unload, Show, Hide
 
+        public BtnStck()
+        {
+            InitializeComponent();
+            ((App) Application.Current).DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
+        }
+
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             handled = false;
@@ -49,12 +55,6 @@ namespace Power8
                 return htLocation;
             }
             return IntPtr.Zero;
-        }
-
-        public BtnStck()
-        {
-            InitializeComponent();
-            ((App) Application.Current).DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
         }
 
         protected override void OnSourceInitialized(EventArgs e)
