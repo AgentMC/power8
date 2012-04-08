@@ -1,0 +1,36 @@
+#summary History of Power8 development/changelog.
+
+
+==Alpha 2 (v.0.2.0.0): 08.04.2012==
+  
+  # [new] Auto-update checker working (checks for new version once a 12 hours);
+  # [new] Added context menu for "All Programs" and all it's child items:
+    * Run / Run as Administrator;
+    * Open folder / Open link target's folder;
+    * Show properties / Show link target's properties.
+  # [new] Made Power8 work on Windows XP;
+  # [new] Added a window that will assist user in case explorer.exe is closed;
+  # [new] Power8 can be activated by Alt+Z hot key (original idea was Win+Z, but Win8 prevents Win+* hotkeys from being registered);
+  # [changed] Labels on menu items are resolved more correct now using system-provided resources;
+  # [changed] Buttons and menus restyled.
+
+
+==Alpha 1 (v.0.1.0.0): 24.03.2012==
+
+(all below is [new])
+  # Launches :) and positions itself in the Taskbar opposite to Show Desktop button;
+  # Styled similar to Show Desktop button (as in Developer Preview);
+  # Power and session features:
+    * Shutdown;
+    * Sleep;
+    * Hibernate;
+    * Restart;
+    * Log off;
+    * Lock screen (start screensaver);
+    * Lock Windows;
+  # Displays expanding "All Programs" menu as it was back in old good XP time:
+    * With real icons;
+    * Click to launch item;
+  # On main button right-click:
+    * Allows to toggle auto-start;
+    * Allows to exit.
