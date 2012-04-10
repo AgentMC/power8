@@ -96,30 +96,24 @@ namespace Power8
             BtnStck.Instance.Show();
             var screenPoint = PointToScreen(Mouse.GetPosition(this));
             var screen = Screen.FromPoint(new System.Drawing.Point((int) screenPoint.X, (int) screenPoint.Y));
-
-            if (screen.WorkingArea.Width == screen.Bounds.Width && screen.WorkingArea.Height == screen.Bounds.Height)
-            {//"Hide task bar" is on
-                //TODO: define corners, position stack
-            }
-            else
-            {
-                //taskbar is vertical @ left or horizontal
-                if (screen.WorkingArea.X > screen.Bounds.X || screen.WorkingArea.Width == screen.Bounds.Width)
-                    screenPoint.X = screen.WorkingArea.X;
-                else                                                                                            //vertical @ right
-                    screenPoint.X = screen.WorkingArea.Width + screen.WorkingArea.X - BtnStck.Instance.Width;
-                //taskbar is horizontal @ top or vertical
-                if (screen.WorkingArea.Y > screen.Bounds.Y || screen.WorkingArea.Height == screen.Bounds.Height)
-                    screenPoint.Y = screen.WorkingArea.Y;
-                else                                                                                            //horizontal @ bottom
-                    screenPoint.Y = screen.WorkingArea.Height + screen.WorkingArea.Y - BtnStck.Instance.Height;
-
-                //Do we need this?
-                if (screenPoint.X + BtnStck.Instance.Width > screen.Bounds.Width + screen.Bounds.Left)
-                    screenPoint.X -= BtnStck.Instance.Width;
-                if (screenPoint.Y + BtnStck.Instance.Height > screen.Bounds.Height + screen.Bounds.Top)
-                    screenPoint.Y -= BtnStck.Instance.Height;
-            }
+            bool isHideTaskBarOptionOn = screen.WorkingArea.Width == screen.Bounds.Width &&
+                                         screen.WorkingArea.Height == screen.Bounds.Height;
+// ReSharper disable PossibleLossOfFraction
+                    //taskbar is vertical @ left or horizontal
+            if ((isHideTaskBarOptionOn && screenPoint.X <= screen.WorkingArea.X + screen.WorkingArea.Width / 2) 
+                || screen.WorkingArea.X > screen.Bounds.X 
+                || (screen.WorkingArea.Width == screen.Bounds.Width & !isHideTaskBarOptionOn))
+                screenPoint.X = screen.WorkingArea.X;
+            else    //vertical @ right
+                screenPoint.X = screen.WorkingArea.Width + screen.WorkingArea.X - BtnStck.Instance.Width;
+                    //taskbar is horizontal @ top or vertical
+            if ((isHideTaskBarOptionOn && screenPoint.Y <= screen.WorkingArea.Y + screen.WorkingArea.Height / 2) 
+                || screen.WorkingArea.Y > screen.Bounds.Y 
+                || (screen.WorkingArea.Height == screen.Bounds.Height & !isHideTaskBarOptionOn))
+                screenPoint.Y = screen.WorkingArea.Y;
+            else    //horizontal @ bottom
+                screenPoint.Y = screen.WorkingArea.Height + screen.WorkingArea.Y - BtnStck.Instance.Height;
+// ReSharper restore PossibleLossOfFraction
             BtnStck.Instance.Left = screenPoint.X;
             BtnStck.Instance.Top = screenPoint.Y;
             BtnStck.Instance.Activate();
