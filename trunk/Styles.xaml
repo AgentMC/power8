@@ -49,120 +49,130 @@
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10,3"/>
-		<Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid Width="Auto" x:Name="LayoutRoot" Height="Auto" SnapsToDevicePixels="True" Background="Transparent">
-                		<VisualStateManager.VisualStateGroups>
-                			<VisualStateGroup x:Name="CommonStates">
-                				<VisualStateGroup.Transitions>
-                					<VisualTransition GeneratedDuration="0:0:0.02"/>
-                				</VisualStateGroup.Transitions>
-                				<VisualState x:Name="Normal"/>
-                				<VisualState x:Name="MouseOver">
-                					<Storyboard>
-                						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
-                							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                						</DoubleAnimationUsingKeyFrames>
-                					</Storyboard>
-                				</VisualState>
-                				<VisualState x:Name="Pressed">
-                					<Storyboard>
-                						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
-                							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                						</DoubleAnimationUsingKeyFrames>
-                					</Storyboard>
-                				</VisualState>
-                				<VisualState x:Name="Disabled"/>
-                			</VisualStateGroup>
-                			<VisualStateGroup x:Name="FocusStates">
-                				<VisualStateGroup.Transitions>
-                					<VisualTransition GeneratedDuration="0:0:0.02"/>
-                				</VisualStateGroup.Transitions>
-                				<VisualState x:Name="Unfocused"/>
-                				<VisualState x:Name="Focused">
-                					<Storyboard>
-                						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
-                							<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                						</DoubleAnimationUsingKeyFrames>
-                					</Storyboard>
-                				</VisualState>
-                			</VisualStateGroup>
-                			<VisualStateGroup x:Name="ValidationStates">
-                				<VisualStateGroup.Transitions>
-                					<VisualTransition GeneratedDuration="0:0:0.02"/>
-                				</VisualStateGroup.Transitions>
-                			</VisualStateGroup>
-                		</VisualStateManager.VisualStateGroups>
-                		<Border x:Name="border" BorderBrush="{DynamicResource WhiteAlfa30}" BorderThickness="1" CornerRadius="3" Opacity="0">
-                			<Border BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="2">
-                				<Grid>
-                					<Grid.RowDefinitions>
-                						<RowDefinition/>
-                						<RowDefinition/>
-                					</Grid.RowDefinitions>
-                					<Border BorderThickness="1,1,1,0" CornerRadius="1,1,0,0" Background="{DynamicResource WhiteRoundGradient}"/>
-                					<Border BorderBrush="{DynamicResource WhiteAlfa60}" BorderThickness="1" CornerRadius="1" Grid.RowSpan="2"/>
-                					<Border Grid.RowSpan="1" Background="{DynamicResource WhiteAlfa30}" CornerRadius="1,1,0,0"/>
-                					<Border BorderThickness="1,0,1,1" CornerRadius="0,0,1,1" Background="{DynamicResource WhiteRoundGradient}" Grid.Row="1" RenderTransformOrigin="0.5,0.5">
-                						<Border.RenderTransform>
-                							<TransformGroup>
-                								<ScaleTransform ScaleY="-1" ScaleX="1"/>
-                								<SkewTransform AngleY="0" AngleX="0"/>
-                								<RotateTransform Angle="0"/>
-                								<TranslateTransform/>
-                							</TransformGroup>
-                						</Border.RenderTransform>
-                					</Border>
-                				</Grid>
-                			</Border>
-                		</Border>
-                		<Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" >
-                			<Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#CCFFFFFF" Margin="-6,3,-6,2">
-                				<Rectangle.Effect>
-                					<BlurEffect Radius="15"/>
-                				</Rectangle.Effect>
-                			</Rectangle>
-                		</Border>
-                		<ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                	</Grid>
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.02"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Normal"/>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                                            <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                                            <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled"/>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.02"/>
+                                </VisualStateGroup.Transitions>
+                                <VisualState x:Name="Unfocused"/>
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                                            <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="ValidationStates">
+                                <VisualStateGroup.Transitions>
+                                    <VisualTransition GeneratedDuration="0:0:0.02"/>
+                                </VisualStateGroup.Transitions>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Border x:Name="border" BorderBrush="{DynamicResource WhiteAlfa30}" BorderThickness="1" CornerRadius="3" Opacity="0">
+                            <Border BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="2">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Border BorderThickness="1,1,1,0" CornerRadius="1,1,0,0" Background="{DynamicResource WhiteRoundGradient}"/>
+                                    <Border BorderBrush="{DynamicResource WhiteAlfa60}" BorderThickness="1" CornerRadius="1" Grid.RowSpan="2"/>
+                                    <Border Grid.RowSpan="1" Background="{DynamicResource WhiteAlfa30}" CornerRadius="1,1,0,0"/>
+                                    <Border BorderThickness="1,0,1,1" CornerRadius="0,0,1,1" Background="{DynamicResource WhiteRoundGradient}" Grid.Row="1" RenderTransformOrigin="0.5,0.5">
+                                        <Border.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                                                <SkewTransform AngleY="0" AngleX="0"/>
+                                                <RotateTransform Angle="0"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Border.RenderTransform>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Border>
+                        <Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" >
+                            <Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#CCFFFFFF" Margin="-6,3,-6,2">
+                                <Rectangle.Effect>
+                                    <BlurEffect Radius="15"/>
+                                </Rectangle.Effect>
+                            </Rectangle>
+                        </Border>
+                        <ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Grid>
                     <ControlTemplate.Triggers>
-                    	<Trigger Property="IsMouseOver" Value="True"/>
-                    	<Trigger Property="IsKeyboardFocused" Value="true"/>
-                    	<Trigger Property="ToggleButton.IsChecked" Value="true"/>
-                    	<Trigger Property="IsEnabled" Value="false">
-                    		<Setter Property="Foreground" Value="#ADADAD"/>
-                    	</Trigger>
-                    	<Trigger Property="IsPressed" Value="True"/>
+                        <Trigger Property="IsMouseOver" Value="True"/>
+                        <Trigger Property="IsKeyboardFocused" Value="true"/>
+                        <Trigger Property="ToggleButton.IsChecked" Value="true"/>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="#ADADAD"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True"/>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
     <LinearGradientBrush x:Key="MenuBackground" EndPoint="0,1" StartPoint="0,0">
-    	<GradientStop Color="#F6F6F6" Offset="0.25"/>
-    	<GradientStop Color="#EAE8E8" Offset="0.25"/>
-    	<GradientStop Color="#DCD9D9" Offset="0.8"/>
-    	<GradientStop Color="White" Offset="1"/>
+        <GradientStop Color="#F6F6F6" Offset="0.25"/>
+        <GradientStop Color="#EAE8E8" Offset="0.25"/>
+        <GradientStop Color="#DCD9D9" Offset="0.8"/>
+        <GradientStop Color="White" Offset="1"/>
     </LinearGradientBrush>
     <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
-    	<Setter Property="Background" Value="{StaticResource MenuBackground}"/>
-    	<Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
-    	<Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
-    	<Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
-    	<Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
-    	<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
-    	<Setter Property="Template">
-    		<Setter.Value>
-    			<ControlTemplate TargetType="{x:Type Menu}">
-    				<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" CornerRadius="2">
-    					<ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-    				</Border>
-    			</ControlTemplate>
-    		</Setter.Value>
-    	</Setter>
+        <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
+        <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
+        <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Menu}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true" CornerRadius="2">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
-   
-    
+    <Style x:Key="MenuItemStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
+        <Setter Property="Header" Value="{Binding FriendlyName}"/>
+        <Setter Property="ItemsSource" Value="{Binding Items}"/>
+        <Setter Property="Command" Value="{DynamicResource globalClickCommand}"/>
+        <Setter Property="CommandParameter" Value="{Binding}"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="6,3"/>
+        <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
+        <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
+    </Style>
+
 </ResourceDictionary>

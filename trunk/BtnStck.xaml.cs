@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Reflection;
-using System.Runtime.InteropServices;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Power8
 {
@@ -21,6 +21,7 @@ namespace Power8
             private set { _instance = value; }
         }
         public static bool IsInitDone { get { return _instance != null; } }
+        private static readonly Dictionary<string, PowerItem> SpecialItems = new Dictionary<string, PowerItem>();
 
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
 
@@ -30,6 +31,8 @@ namespace Power8
         {
             InitializeComponent();
             ((App) Application.Current).DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
+            foreach (var mb in folderButtons.Children.OfType<MenuedButton>())
+                mb.Item = GetSpecialItems(mb.Name);
         }
 
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -88,7 +91,8 @@ namespace Power8
 
         #endregion
 
-        #region Buttons handlers
+        #region Handlers
+
         private void ButtonHibernateClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Hibernate, true, false);
@@ -123,70 +127,16 @@ namespace Power8
         {
             API.SendMessage(API.GetDesktopWindow(), API.WM.SYSCOMMAND, (int)API.SC.SCREENSAVE, 0);
         }
-        #endregion
 
-        #region Menu handlers
         private void AllItemsMenuRootContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext = ExtractRelatedPowerItem(e);
+            ((App)Application.Current).MenuDataContext = Util.ExtractRelatedPowerItem(e);
         }
-
-        private void RunClick(object sender, RoutedEventArgs e)
-        {
-            ExtractRelatedPowerItem(sender).Invoke();
-        }
-
-        private void RunAsClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                ExtractRelatedPowerItem(sender).InvokeVerb(API.SEIVerbs.SEV_RunAsAdmin);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString(), Properties.Resources.AppShortName);
-            }
-        }
-
-        private void ShowPropertiesClick(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                var pi = ExtractRelatedPowerItem(sender);
-                var info = new API.ShellExecuteInfo
-                                {
-                                    fMask =
-                                        API.SEIFlags.SEE_MASK_INVOKEIDLIST | API.SEIFlags.SEE_MASK_NOCLOSEPROCESS |
-                                        API.SEIFlags.SEE_MASK_FLAG_NO_UI | API.SEIFlags.SEE_MASK_NOASYNC,
-                                    hwnd = this.GetHandle(),
-                                    lpVerb = API.SEIVerbs.SEV_Properties,
-                                    lpFile = PowerItemTree.GetResolvedArgument(pi, false),
-                                    nShow = API.SWCommands.SW_HIDE
-                                };
-                if (pi.IsLink && ((MenuItem)sender).Name == "ShowTargetProperties")
-                    info.lpFile = Util.ResolveLink(info.lpFile);
-                var executer = new Util.ShellExecuteHelper(info);
-                if (!executer.ShellExecuteOnSTAThread())
-                    throw new ExternalException(string.Format(
-                        Properties.Resources.ShellExecExErrorFormatString, executer.ErrorCode));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
-
-        private void OpenContainerClick(object sender, RoutedEventArgs e)
-        {
-            var item = ExtractRelatedPowerItem(sender);
-            var arg = PowerItemTree.GetResolvedArgument(item, false);
-            if (item.IsLink && ((MenuItem)sender).Name == "OpenTargetContainer")
-                arg = Util.ResolveLink(arg);
-            Process.Start("explorer.exe", "/select,\"" + arg + "\"");
-        }
+        
         #endregion
 
         #region Helpers
+        
         private static void LaunchShForced(string arg)
         {
             StartConsoleHidden("shutdown.exe", arg + " -f -t 0");
@@ -198,24 +148,46 @@ namespace Power8
             Process.Start(si);
         }
 
-        private static PowerItem ExtractRelatedPowerItem(object o)
-        {
-            if (o is MenuItem)
-                return (PowerItem) ((MenuItem) o).DataContext;
-            if (o is ContextMenuEventArgs)
-                return (PowerItem) (((MenuItem)
-                       o.GetType()
-                        .GetProperty("TargetElement",
-                                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
-                        .GetValue(o, null)).DataContext);
-            return null;
-        }
-
         new public void Focus()
         {
         	base.Focus();
             SearchBox.Focus();
         }
+
+        private static PowerItem GetSpecialItems(string containerName)
+        {
+            if (!SpecialItems.ContainsKey(containerName))
+                switch (containerName)
+                {
+                    case "MyComputer":
+                        var mcItem = new PowerItem {FriendlyName = "Computer", IsFolder = true, /*Icon=icon*/};
+                        foreach (var drive in DriveInfo.GetDrives())
+                        {
+                            switch (drive.DriveType)
+                            {
+                                case DriveType.Removable:
+                                case DriveType.Fixed:
+                                case DriveType.Ram:
+                                case DriveType.Network:
+                                    mcItem.Items.Add(new PowerItem
+                                    {
+                                        Argument = drive.Name,
+                                        AutoExpand = true,
+                                        IsFolder = true,
+                                        Parent = mcItem,
+                                        NonCachedIcon = true
+                                    });
+                                    break;
+                            }
+                        }
+                        SpecialItems[containerName] = mcItem;
+                        break;
+                    default :
+                        return null;
+                }
+            return SpecialItems[containerName];
+        }
+
         #endregion
 
         #region Bindable props
@@ -229,25 +201,5 @@ namespace Power8
             get { return _cmd; }
         }
         #endregion
-
-        public class MenuItemClickCommand : ICommand
-        {
-            public void Execute(object parameter)
-            {
-                var powerItem = parameter as PowerItem;
-                if (powerItem == null || powerItem.Parent == null) 
-                    return;
-                powerItem.Invoke();
-                Instance.Hide();
-            }
-
-            public bool CanExecute(object parameter)
-            {
-                return true;
-            }
-
-            public event EventHandler CanExecuteChanged;
-        }
     }
-
 }

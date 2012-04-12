@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -55,8 +57,24 @@ namespace Power8
         {
             w.GetHwndSource().AddHook(hook);
         }
-            
 
+
+
+        public static PowerItem ExtractRelatedPowerItem(object o)
+        {
+            if (o is MenuItem)
+                return (PowerItem)((MenuItem)o).DataContext;
+            if (o is ContextMenuEventArgs)
+            {
+                var mi = o.GetType()
+                          .GetProperty("TargetElement",
+                                       BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
+                          .GetValue(o, null) as MenuItem;
+                if(mi != null)
+                    return (PowerItem)(mi.DataContext);
+            }
+            return null;
+        }
 
         public static IntPtr GetIconForFile(string file, API.Shgfi iconType)
         {
