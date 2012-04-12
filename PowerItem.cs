@@ -11,11 +11,14 @@ namespace Power8
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
         private string _friendlyName;
+        private bool _expanding;
 
         public string Argument { get; set; }
         public PowerItem Parent { get; set; }
         public bool IsFolder { get; set; }
         public string ResourceIdString { get; set; }
+        public bool AutoExpand { get; set; }
+        public bool NonCachedIcon { get; set; }
 
 
         public ImageManager.ImageContainer Icon
@@ -35,7 +38,15 @@ namespace Power8
 
         public ObservableCollection<PowerItem> Items
         {
-            get { return _items; }
+            get
+            {
+                if (_items.Count == 0 && AutoExpand && !_expanding)
+                {
+                    _expanding = true;
+                    PowerItemTree.ScanFolder(this, string.Empty, false);
+                }
+                return _items;
+            }
         }
 
         public string FriendlyName
@@ -53,7 +64,8 @@ namespace Power8
                 }
                 if (string.IsNullOrEmpty(Argument))
                     return "All Programs";
-                return Path.GetFileNameWithoutExtension(Argument) ?? "";
+                var path = Path.GetFileNameWithoutExtension(Argument);
+                return string.IsNullOrEmpty(path) ? Argument : path;
             }
             set
             {

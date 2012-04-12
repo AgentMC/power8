@@ -18,7 +18,7 @@ namespace Power8
         private static readonly FileSystemWatcher Watcher = new FileSystemWatcher(PathRoot);
         private static readonly FileSystemWatcher CommonWatcher = new FileSystemWatcher(PathCommonRoot);
 
-        private static readonly PowerItem RootItem = new PowerItem {IsFolder = true};
+        private static readonly PowerItem RootItem = new PowerItem {IsFolder = true, AutoExpand = false};
         private static readonly ObservableCollection<PowerItem> ItemsRootCollection =
             new ObservableCollection<PowerItem> {RootItem};
 
@@ -132,13 +132,17 @@ namespace Power8
             }
         }
 
-        private static void ScanFolder(PowerItem item, string basePath)
+        public static void ScanFolder(PowerItem item, string basePath, bool recoursive = true)
         {
             var curDir = basePath + item.Argument;
             foreach (var directory in Directory.GetDirectories(curDir))
             {
                 if(!(File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
-                    ScanFolder(AddSubItem(item, basePath, directory, true), basePath);
+                {
+                    var subitem = AddSubItem(item, basePath, directory, true, autoExpand: !recoursive);
+                    if(recoursive)
+                        ScanFolder(subitem, basePath);
+                }
             }
             var resources = new Dictionary<string, string>();
             var dsktp = curDir + "\\desktop.ini";
@@ -148,7 +152,10 @@ namespace Power8
                 {
                     string str;
                     while ((str = reader.ReadLine()) != null && !str.Contains("[LocalizedFileNames]"))
-                    {}
+                    {
+                        //if (str.Contains("IconFile="))
+                        //    ImageManager.DeCacheFolder(item);
+                    }
                     while ((str = reader.ReadLine()) != null && str.Contains("="))
                     {
                         var pair = str.Split(new[] {'='}, 2);
@@ -167,13 +174,20 @@ namespace Power8
             }
         }
 
-        private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null)
+        private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
         {
             var argStr = fsObject.Substring(basePath.Length);
             var child = item.Items.FirstOrDefault(i => i.Argument == argStr && i.IsFolder == isFolder);
             if(child == null)
             {
-                child = new PowerItem {Argument = argStr, Parent = item, IsFolder = isFolder, ResourceIdString = resourceId};
+                child = new PowerItem
+                            {
+                                Argument = argStr,
+                                Parent = item,
+                                IsFolder = isFolder,
+                                ResourceIdString = resourceId,
+                                AutoExpand = autoExpand
+                            };
                 item.Items.Add(child);
             }
             return child;
@@ -183,34 +197,45 @@ namespace Power8
         public static ProcessStartInfo ResolveItem(PowerItem item, bool prioritizeCommons = false)
         {
             var psi = new ProcessStartInfo();
-            var arg1 = PathRoot + item.Argument;
-            var arg2 = PathCommonRoot + item.Argument;
-            if (prioritizeCommons)
-                arg2 = Interlocked.Exchange(ref arg1, arg2);
-            if (item.IsFolder)
+            var arg1 = item.Argument;
+            if (item.Argument.StartsWith("::{"))
             {
                 psi.FileName = "explorer.exe";
-                if (Directory.Exists(arg1))
-                    psi.Arguments = arg1;
-                else
-                {
-                    if (Directory.Exists(arg2))
-                        psi.Arguments = arg2;
-                    else
-                        throw new IOException("Directory not found for " + item.Argument);
-                }
+                psi.Arguments = item.Argument;
             }
             else
             {
-                if (File.Exists(arg1))
-                    psi.FileName = arg1;
+                if (!(arg1.StartsWith("\\\\") || (arg1.Length > 1 && arg1[1] == ':')))
+                    arg1 = PathRoot + item.Argument;
+                var arg2 = PathCommonRoot + item.Argument;
+                if (prioritizeCommons)
+                    arg2 = Interlocked.Exchange(ref arg1, arg2);
+                if (item.IsFolder)
+                {
+                    psi.FileName = "explorer.exe";
+                    if (Directory.Exists(arg1))
+                        psi.Arguments = arg1;
+                    else
+                    {
+                        if (Directory.Exists(arg2))
+                            psi.Arguments = arg2;
+                        else
+                            throw new IOException("Directory not found for " + item.Argument);
+                    }
+                }
                 else
                 {
-                    if (File.Exists(arg2))
-                        psi.FileName = arg2;
+                    if (File.Exists(arg1))
+                        psi.FileName = arg1;
                     else
-                        throw new IOException("File not found for " + item.Argument);
+                    {
+                        if (File.Exists(arg2))
+                            psi.FileName = arg2;
+                        else
+                            throw new IOException("File not found for " + item.Argument);
+                    }
                 }
+                
             }
             return psi;
         }

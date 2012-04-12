@@ -15,7 +15,7 @@ namespace Power8
         private static string GetObjectDescriptor(PowerItem item, string resolved)
         {
             if (item.IsFolder)
-                return "*";
+                return item.NonCachedIcon ? resolved : "*";
             var rl = resolved.ToLower();
             return rl.EndsWith(".lnk")
                 || rl.EndsWith(".exe")
@@ -46,6 +46,7 @@ namespace Power8
                 return container;
             }
         }
+
 
         public class ImageContainer
         {

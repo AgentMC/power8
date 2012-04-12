@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Power8="clr-namespace:Power8"
         AllowsTransparency="False" Background="Transparent" 
         Title="BtnStck0" Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated" Loaded="WindowLoaded"
@@ -18,21 +18,8 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
-              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="16" Style="{DynamicResource MenuStyle}">
-        <Menu.ItemContainerStyle>
-               <Style TargetType="MenuItem">
-                    <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
-                    <Setter Property="Header" Value="{Binding FriendlyName}"/>
-                    <Setter Property="ItemsSource" Value="{Binding Items}"/>
-                    <Setter Property="Command" Value="{Binding ClickCommand, ElementName=Mnu}"/>
-                    <Setter Property="CommandParameter" Value="{Binding}"/>
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="Padding" Value="6,3"/>
-                    <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
-                    <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
-                </Style>    
-            </Menu.ItemContainerStyle>
-        </Menu>
+              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="16" 
+              Style="{DynamicResource MenuStyle}" ItemContainerStyle="{DynamicResource MenuItemStyle}"/>
         <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
                   ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
                   CanUserAddRows="False">
@@ -52,7 +39,7 @@
         </DataGrid>
         <TextBox Grid.Row="2" Name="SearchBox" Text="Search..." Margin="3"></TextBox>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
-            <Button Name="MyComputer" HorizontalContentAlignment="Left" Margin="3,1,1,3" Padding="10,6">Computer ></Button>
+            <Power8:MenuedButton x:Name="MyComputer" HorizontalContentAlignment="Left" Margin="3,1,1,3" Padding="10,6"/>
             <Button Name="Libraries" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3">Libraries ></Button>
             <Button Name="ControlPanel" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3">Control Panel ></Button>
             <Button Name="AdminTools" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3">Administrative tools ></Button>
@@ -68,18 +55,4 @@
             <Button Content="Lock PC" Click="ButtonLockClick" Name="ButtonLock" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1"/>
             </StackPanel>
     </Grid>
-    <Window.Resources>
-        <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
-            <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="RunClick" Padding="6,3"/>
-            <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAsClick" Padding="6,3"/>
-            <MenuItem Name="OpenContainer" Header="Open locatiom" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick" Padding="6,3"/>
-            <MenuItem Name="OpenTargetContainer" Header="Open target location" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick" Padding="6,3"/>
-            <Separator/>
-            <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick" Padding="6,3"/>
-            <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick" Padding="6,3"/>
-            <Separator/>
-            <MenuItem Name="ShowProperties" Header="Properties" Click="ShowPropertiesClick" Padding="6,3"/>
-            <MenuItem Name="ShowTargetProperties" Header="Target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Padding="6,3"/>
-        </ContextMenu>
-    </Window.Resources>
 </Window>
