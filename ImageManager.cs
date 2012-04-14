@@ -25,11 +25,11 @@ namespace Power8
 
         public static ImageContainer GetImageContainer(PowerItem item, API.Shgfi iconNeeded)
         {
-            Util.Post(new Action(() => item.Icon = GetImageContainerInternal(item, iconNeeded)));
+            Util.Post(new Action(() => item.Icon = GetImageContainerSync(item, iconNeeded)));
             return null;
         }
 
-        private static ImageContainer GetImageContainerInternal(PowerItem item, API.Shgfi iconNeeded)
+        public static ImageContainer GetImageContainerSync(PowerItem item, API.Shgfi iconNeeded)
         {
             var resolvedArg = PowerItemTree.GetResolvedArgument(item, false);
             var descr = GetObjectDescriptor(item, resolvedArg);
@@ -45,6 +45,7 @@ namespace Power8
                     else
                         container.ExtractLarge();
                 }
+                //TODO: after templating all items with <Image> there'll be no need in this:
                 if (iconNeeded == API.Shgfi.SHGFI_SMALLICON)
                     container.GenerateSmallImage();
                 else

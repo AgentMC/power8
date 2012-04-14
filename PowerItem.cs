@@ -11,7 +11,7 @@ namespace Power8
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
         private string _friendlyName;
-        private bool _expanding;
+        private bool _expanding, _hasLargeIcon;
 
         public string Argument { get; set; }
         public PowerItem Parent { get; set; }
@@ -26,7 +26,7 @@ namespace Power8
             get
             {
                 if (_icon == null && Argument != null)
-                    _icon = ImageManager.GetImageContainer(this, API.Shgfi.SHGFI_SMALLICON);
+                    _icon = ImageManager.GetImageContainer(this, HasLargeIcon ? API.Shgfi.SHGFI_LARGEICON : API.Shgfi.SHGFI_SMALLICON);
                 return _icon;
             }
             set
@@ -35,6 +35,20 @@ namespace Power8
                 OnPropertyChanged("Icon");
             }
         }
+
+        public bool HasLargeIcon 
+        { 
+            get
+            {
+                return _hasLargeIcon;
+            } 
+            set
+            {
+                _hasLargeIcon = value;
+                OnPropertyChanged("Icon");
+            }
+         }
+
 
         public ObservableCollection<PowerItem> Items
         {
@@ -88,6 +102,12 @@ namespace Power8
         {
             get { return IsFile && Argument.EndsWith(".lnk"); }
         }
+
+        public bool IsSpecialFolder
+        {
+            get { return IsFolder && Argument.StartsWith("::{"); }
+        }
+
 
 
 
