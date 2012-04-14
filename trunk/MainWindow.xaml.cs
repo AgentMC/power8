@@ -33,7 +33,7 @@ namespace Power8
             menu.DataContext = this;
             Application.SetCompatibleTextRenderingDefault(true);
             Application.EnableVisualStyles();
-            System.Windows.Application.Current.SessionEnding += (sender, args) => Close();
+            App.Current.SessionEnding += (sender, args) => Close();
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
         }

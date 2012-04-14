@@ -64,7 +64,7 @@ namespace Power8
                 }
                 if (string.IsNullOrEmpty(Argument))
                     return "All Programs";
-                var path = Path.GetFileNameWithoutExtension(Argument);
+                var path = IsLink ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
                 return string.IsNullOrEmpty(path) ? Argument : path;
             }
             set

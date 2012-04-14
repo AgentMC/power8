@@ -30,7 +30,7 @@ namespace Power8
         public BtnStck()
         {
             InitializeComponent();
-            ((App) Application.Current).DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
+            App.Current.DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
             foreach (var mb in folderButtons.Children.OfType<MenuedButton>())
                 mb.Item = GetSpecialItems(mb.Name);
         }
@@ -130,7 +130,7 @@ namespace Power8
 
         private void AllItemsMenuRootContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            ((App)Application.Current).MenuDataContext = Util.ExtractRelatedPowerItem(e);
+            App.Current.MenuDataContext = Util.ExtractRelatedPowerItem(e);
         }
         
         #endregion
@@ -193,7 +193,7 @@ namespace Power8
         #region Bindable props
         public ObservableCollection<PowerItem> Items
         {
-            get { return PowerItemTree.ItemsRoot; }
+            get { return PowerItemTree.StartMenuRoot; }
         } 
 
         public MenuItemClickCommand ClickCommand
