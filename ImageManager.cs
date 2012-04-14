@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace Power8
 {
@@ -25,27 +27,34 @@ namespace Power8
 
         public static ImageContainer GetImageContainer(PowerItem item, API.Shgfi iconNeeded)
         {
-            var arg = PowerItemTree.GetResolvedArgument(item, false);
-            var descr = GetObjectDescriptor(item, arg);
+            Util.Post(new Action(() => item.Icon = GetImageContainerInternal(item, iconNeeded)));
+            return null;
+        }
+
+        private static ImageContainer GetImageContainerInternal(PowerItem item, API.Shgfi iconNeeded)
+        {
+            var resolvedArg = PowerItemTree.GetResolvedArgument(item, false);
+            var descr = GetObjectDescriptor(item, resolvedArg);
             lock (Cache)
             {
-                var container = (ImageContainer) (Cache.ContainsKey(descr) ? Cache[descr] : null);
+                var container = (ImageContainer)(Cache.ContainsKey(descr) ? Cache[descr] : null);
                 if (container == null)
                 {
-                    container = new ImageContainer(arg, descr);
+                    container = new ImageContainer(resolvedArg, descr);
                     Cache.Add(descr, container);
-                    if(iconNeeded == API.Shgfi.SHGFI_SMALLICON)
+                    if (iconNeeded == API.Shgfi.SHGFI_SMALLICON)
                         container.ExtractSmall();
                     else
                         container.ExtractLarge();
                 }
-                if(iconNeeded == API.Shgfi.SHGFI_SMALLICON)
+                if (iconNeeded == API.Shgfi.SHGFI_SMALLICON)
                     container.GenerateSmallImage();
                 else
                     container.GenerateLargeImage();
                 return container;
             }
         }
+
 
 
         public class ImageContainer

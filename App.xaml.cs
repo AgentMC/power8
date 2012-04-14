@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
@@ -13,11 +14,25 @@ namespace Power8
     /// </summary>
     public partial class App
     {
+        internal readonly Thread InitTreeThread = new Thread(PowerItemTree.InitTree) {Name = "InitTree"};
         
         public App()
         {
             Util.MainDisp = Dispatcher;
-            new Thread(PowerItemTree.InitTree){Name = "InitTree"}.Start();
+            //Initialize standard folder icon
+            foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))
+            {
+                var path = Environment.GetFolderPath(sf);
+                if (!File.Exists(path + @"\desktop.ini"))
+                {
+                    ImageManager.GetImageContainer(new PowerItem {Argument = path, IsFolder = true},
+                                                   API.Shgfi.SHGFI_SMALLICON);
+                    break;
+                }
+            }
+            //Build tree
+            InitTreeThread.Start();
+            //react on DwmCompositionChanged event
             ComponentDispatcher.ThreadFilterMessage += WndProc;
         }
 
@@ -100,6 +115,11 @@ namespace Power8
         {
             get { return ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext; }
             set { ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext = value; }
+        }
+
+        public static new App Current
+        {
+            get { return (App) Application.Current; }
         }
     }
 }

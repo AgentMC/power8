@@ -17,6 +17,8 @@
         <ContextMenu x:Key="itemsList" 
                      ItemsSource="{Binding Item.Items}" 
                      ItemContainerStyle="{DynamicResource MenuItemStyle}"
-                     ContextMenuOpening="ContextMenuContextMenuOpening"/>
+                     ContextMenuOpening="ContextMenuContextMenuOpening"
+                     Placement="Right"
+                     PlacementTarget="{Binding MenuTarget}"/>
     </UserControl.Resources>
 </UserControl>

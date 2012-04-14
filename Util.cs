@@ -20,6 +20,21 @@ namespace Power8
         private static readonly StringBuilder Buffer = new StringBuilder(1024);
 
 
+        public static void Send(Delegate method)
+        {
+            MainDisp.Invoke(DispatcherPriority.Render, method);
+        }
+
+        public static void Post(Delegate method)
+        {
+            MainDisp.BeginInvoke(DispatcherPriority.Background, method);
+        }
+
+        public static T Eval<T>(Func<T> method)
+        {
+            return (T) MainDisp.Invoke(DispatcherPriority.DataBind, method);
+        }
+
 
         public static IntPtr GetHandle(this Window w)
         {

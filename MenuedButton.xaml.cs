@@ -14,8 +14,6 @@ namespace Power8
         {
             InitializeComponent();
             ItemsList.DataContext = this;
-            ItemsList.PlacementTarget = menuDropper;
-            ItemsList.Placement = PlacementMode.Left;
         }
 
         private PowerItem _item;
@@ -47,9 +45,14 @@ namespace Power8
             get { return BtnStck.Instance; }
         }
 
+        public Control MenuTarget
+        {
+            get { return menuDropper; }
+        }
+
         private void ContextMenuContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
-            ((App)Application.Current).MenuDataContext = Util.ExtractRelatedPowerItem(e);
+            App.Current.MenuDataContext = Util.ExtractRelatedPowerItem(e);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
