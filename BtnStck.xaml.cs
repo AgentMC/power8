@@ -25,6 +25,8 @@ namespace Power8
 
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
 
+        public event EventHandler RunCalled;
+
         #region Load, Unload, Show, Hide
 
         public BtnStck()
@@ -133,6 +135,13 @@ namespace Power8
             App.Current.MenuDataContext = Util.ExtractRelatedPowerItem(e);
         }
         
+        private void ButtonRunClick(object sender, RoutedEventArgs e)
+        {
+            var handler = RunCalled;
+            if (handler != null)
+                handler(this, null);
+        }
+
         #endregion
 
         #region Helpers
@@ -150,7 +159,7 @@ namespace Power8
 
         new public void Focus()
         {
-        	base.Focus();
+            base.Focus();
             SearchBox.Focus();
         }
 
@@ -201,5 +210,6 @@ namespace Power8
             get { return _cmd; }
         }
         #endregion
+
     }
 }
