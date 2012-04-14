@@ -450,6 +450,40 @@ namespace Power8
 			MOD_WIN = 8,
 		}
 
+		//Undocumented shell API
+		[Flags]
+		public enum RFF
+		{
+			/// <summary>
+			/// No changes to run dialog
+			/// </summary>
+			NORMAL = 0,
+			/// <summary>
+			/// Removes the browse button.
+			/// </summary>
+			NOBROWSE = 1,
+			/// <summary>
+			/// No MRU item selected.
+			/// </summary>
+			NODEFAULT = 2,
+			/// <summary>
+			/// Calculates the working directory from the file name.
+			/// </summary>
+			CALCDIRECTORY = 4,
+			/// <summary>
+			/// Removes the edit box label.
+			/// </summary>
+			NOLABEL = 8,
+			/// <summary>
+			/// Removes the Separate Memory Space check box (Windows NT only).
+			/// </summary>
+			NOSEPARATEMEM = 16 //14 originally at http://www.swissdelphicenter.ch/en/showcode.php?id=1181
+		}
+
+		[DllImport("shell32.dll", EntryPoint = "#61")]
+		public static extern
+		void SHRunDialog(IntPtr hWnd, IntPtr hIcon, string sDir, string szTitle, string szPrompt, RFF uFlags);
+
 // ReSharper restore InconsistentNaming
 	}
 }

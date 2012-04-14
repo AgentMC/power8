@@ -31,9 +31,13 @@ namespace Power8
         {
             InitializeComponent();
             menu.DataContext = this;
+
             Application.SetCompatibleTextRenderingDefault(true);
             Application.EnableVisualStyles();
+
             App.Current.SessionEnding += (sender, args) => Close();
+            BtnStck.Instance.RunCalled += ShowRunDialog;
+
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
         }
@@ -93,6 +97,11 @@ namespace Power8
         #region Handlers
         private void ShowButtonStack(object sender, RoutedEventArgs e)
         {
+            if (Keyboard.GetKeyStates(Key.LeftCtrl) == KeyStates.Down || Keyboard.GetKeyStates(Key.RightCtrl) == KeyStates.Down)
+            {
+                ShowRunDialog(this, null);
+                return;
+            }
             BtnStck.Instance.Show();
             var screenPoint = PointToScreen(Mouse.GetPosition(this));
             var screen = Screen.FromPoint(new System.Drawing.Point((int) screenPoint.X, (int) screenPoint.Y));
@@ -118,6 +127,11 @@ namespace Power8
             BtnStck.Instance.Top = screenPoint.Y;
             BtnStck.Instance.Activate();
             BtnStck.Instance.Focus();
+        }
+
+        private void ShowRunDialog(object sender, EventArgs e)
+        {
+            API.SHRunDialog(_taskBar, IntPtr.Zero, null, null, null, API.RFF.NORMAL);
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)

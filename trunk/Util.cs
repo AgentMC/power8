@@ -146,9 +146,11 @@ namespace Power8
 
             private void ShellExecuteFunction()
             {
+// ReSharper disable RedundantBoolCompare
                 if ((_succeeded = API.ShellExecuteEx(_executeInfo)) == true)
                     return;
                 _errorCode = Marshal.GetLastWin32Error();
+// ReSharper restore RedundantBoolCompare
             }
 
             public bool ShellExecuteOnSTAThread()
