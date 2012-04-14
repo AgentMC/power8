@@ -166,10 +166,19 @@ namespace Power8
         private static PowerItem GetSpecialItems(string containerName)
         {
             if (!SpecialItems.ContainsKey(containerName))
+            {
+                PowerItem mcItem;
                 switch (containerName)
                 {
                     case "MyComputer":
-                        var mcItem = new PowerItem {FriendlyName = "Computer", IsFolder = true, /*Icon=icon*/};
+                        mcItem = new PowerItem
+                        {
+                            Argument = API.ShNs.MyComputer,
+                            ResourceIdString = Util.GetResourceIdForClass(API.ShNs.MyComputer),
+                            IsFolder = true,
+                            NonCachedIcon = true,
+                            HasLargeIcon = true
+                        };
                         foreach (var drive in DriveInfo.GetDrives())
                         {
                             switch (drive.DriveType)
@@ -189,11 +198,19 @@ namespace Power8
                                     break;
                             }
                         }
-                        SpecialItems[containerName] = mcItem;
                         break;
-                    default :
+                    case "AdminTools":
+                        mcItem = PowerItemTree.AdminToolsRootItem;
+                        mcItem.NonCachedIcon = true;
+                        mcItem.Icon = ImageManager.GetImageContainerSync(mcItem, API.Shgfi.SHGFI_SMALLICON);
+                        mcItem.Icon.ExtractLarge();
+                        mcItem.HasLargeIcon = true;
+                        break;
+                    default:
                         return null;
                 }
+                SpecialItems[containerName] = mcItem;
+            }
             return SpecialItems[containerName];
         }
 

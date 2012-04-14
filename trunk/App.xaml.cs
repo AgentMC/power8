@@ -25,7 +25,7 @@ namespace Power8
                 var path = Environment.GetFolderPath(sf);
                 if (!File.Exists(path + @"\desktop.ini"))
                 {
-                    ImageManager.GetImageContainer(new PowerItem {Argument = path, IsFolder = true},
+                    ImageManager.GetImageContainerSync(new PowerItem {Argument = path, IsFolder = true},
                                                    API.Shgfi.SHGFI_SMALLICON);
                     break;
                 }

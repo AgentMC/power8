@@ -42,7 +42,7 @@
             <Power8:MenuedButton x:Name="MyComputer" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3"/>
             <Button Name="Libraries" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3">Libraries ></Button>
             <Button Name="ControlPanel" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3">Control Panel ></Button>
-            <Button Name="AdminTools" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3">Administrative tools ></Button>
+            <Power8:MenuedButton x:Name="AdminTools" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3"/>
             <Button Name="NetItems" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1,1,3">Network ></Button>
             <Separator Margin="0,5"/>
             <Button Content="Run..." Click="ButtonRunClick" Name="ButtonRun" HorizontalContentAlignment="Left" Padding="10,6" Margin="3,1"/>

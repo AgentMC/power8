@@ -21,9 +21,27 @@ namespace Power8
         private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true, AutoExpand = false};
         private static readonly ObservableCollection<PowerItem> StartMenuCollection =
             new ObservableCollection<PowerItem> {StartMenuRootItem};
+        public static ObservableCollection<PowerItem> StartMenuRoot { get { return StartMenuCollection; } }
 
-        public static ObservableCollection<PowerItem> StartMenuRoot { get { return StartMenuCollection; } }  
-
+        private static PowerItem _adminToolsRootItem;
+        public static PowerItem AdminToolsRootItem
+        {
+            get
+            {
+                if (_adminToolsRootItem == null)
+                {
+                    lock (StartMenuRootItem)
+                    {
+                        var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
+                        _adminToolsRootItem = SearchContainerByArgument(PathToBaseAndArg(path), StartMenuRootItem, false);
+                        _adminToolsRootItem = SearchItemByArgument(path, true, _adminToolsRootItem);
+                        _adminToolsRootItem.Argument = API.ShNs.AdministrationTools;
+                        _adminToolsRootItem.ResourceIdString = Util.GetResourceIdForClass(API.ShNs.AdministrationTools);
+                    }                
+                }
+                return _adminToolsRootItem;
+            }
+        }
 
         static PowerItemTree()
         {
@@ -70,24 +88,8 @@ namespace Power8
                 var baseAndArg = PathToBaseAndArg(e.FullPath);
                 if (baseAndArg.Item2 == null) 
                     return;
-                var sourceSplitted = baseAndArg.Item2.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
-                var item = StartMenuRootItem;
-                for (int i = 0; i < sourceSplitted.Length - 1; i++)
-                {
-                    var prevItem = item;
-                    item =
-                        item.Items.FirstOrDefault(j => j.IsFolder && j.FriendlyName == sourceSplitted[i]);
-                    if (item == null && e.ChangeType == WatcherChangeTypes.Created)
-    // ReSharper disable AccessToModifiedClosure
-                        item = Util.Eval(() =>
-                                         AddSubItem(prevItem, 
-                                                    baseAndArg.Item1,
-                                                    baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i], 
-                                                    true));
-    // ReSharper restore AccessToModifiedClosure
-                    else if (item == null)
-                        break;
-                }
+                var item = SearchContainerByArgument(baseAndArg, StartMenuRootItem,
+                                                e.ChangeType == WatcherChangeTypes.Created);
                 if (item != null)
                 {
                     Util.Send(new Action(() =>
@@ -120,18 +122,18 @@ namespace Power8
         {
             lock (StartMenuRootItem)
             {
-                ScanFolder(StartMenuRootItem, PathRoot);
-                ScanFolder(StartMenuRootItem, PathCommonRoot);
+                ScanFolderSync(StartMenuRootItem, PathRoot, true);
+                ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
             }
         }
 
         public static void ScanFolder(PowerItem item, string basePath, bool recoursive = true)
         {
             Util.MainDisp.BeginInvoke(DispatcherPriority.Background,
-                                    new Action(() => ScanFolderInternal(item, basePath, recoursive)));
+                                    new Action(() => ScanFolderSync(item, basePath, recoursive)));
         }
 
-        public static void ScanFolderInternal(PowerItem item, string basePath, bool recoursive)
+    	public static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
         {
             try
             {
@@ -142,7 +144,7 @@ namespace Power8
                     {
                         var subitem = AddSubItem(item, basePath, directory, true, autoExpand: !recoursive);
                         if (recoursive)
-                            ScanFolder(subitem, basePath);
+                            ScanFolderSync(subitem, basePath, recoursive);
                     }
                 }
                 var resources = new Dictionary<string, string>();
@@ -205,10 +207,10 @@ namespace Power8
         {
             var psi = new ProcessStartInfo();
             var arg1 = item.Argument;
-            if (item.Argument.StartsWith("::{"))
+            if (item.IsSpecialFolder)
             {
                 psi.FileName = "explorer.exe";
-                psi.Arguments = item.Argument;
+                psi.Arguments = "/N," + item.Argument;
             }
             else
             {
@@ -249,10 +251,17 @@ namespace Power8
 
         public static string GetResolvedArgument(PowerItem item, bool prioritizeCommons)
         {
+            if(item.IsSpecialFolder)
+                return item.Argument;
             var psi = ResolveItem(item, prioritizeCommons);
             return item.IsFolder ? psi.Arguments : psi.FileName;
         }
 
+        /// <summary>
+        /// Breaks full path into predicate base (one of User Start Menu and Common Start Menu) and the trailling stuff
+        /// </summary>
+        /// <param name="itemFullPath">file system object in its string representation</param>
+        /// <returns>Tuple of base path and the other staff</returns>
         private static Tuple<string, string> PathToBaseAndArg(string itemFullPath)
         {
             if (itemFullPath.StartsWith(PathRoot))
@@ -263,5 +272,46 @@ namespace Power8
                        ? new Tuple<string, string>(PathCommonRoot, itemFullPath.Substring(PathCommonRoot.Length))
                        : new Tuple<string, string>(null, itemFullPath);
         }
+
+        /// <summary>
+        /// From collection passed, searches for a parent item (i.e. container) of the one that would represent the object
+        /// described by passed tuple. Optionally tries to generate items in the middle.
+        /// </summary>
+        /// <param name="baseAndArg">Tuple returned by <code>PathToBaseAndArg</code></param>
+        /// <param name="collectionRoot">The root of collection, like <code>StartMenuRootItem</code></param>
+        /// <param name="autoGenerateSubItems">Should method generate proxy Folder items in between of last available 
+        /// and required items?</param>
+        /// <returns></returns>
+        private static PowerItem SearchContainerByArgument(Tuple<string, string> baseAndArg, PowerItem collectionRoot, bool autoGenerateSubItems)
+        {
+            var sourceSplitted = baseAndArg.Item2.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            var item = collectionRoot;
+            for (int i = 0; i < sourceSplitted.Length - 1; i++)
+            {
+                var prevItem = item;
+                item = item.Items.FirstOrDefault(j => j.IsFolder && j.FriendlyName == sourceSplitted[i]);
+                if (item == null && autoGenerateSubItems)
+                    // ReSharper disable AccessToModifiedClosure
+                    item = Util.Eval(() =>
+                            AddSubItem(prevItem,
+                                       baseAndArg.Item1,
+                                       baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i],
+                                       true));
+                    // ReSharper restore AccessToModifiedClosure
+                else if (item == null)
+                    break;
+            }
+            return item;
+        }
+
+        private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container)
+        {
+            return container.Items.FirstOrDefault(
+                i =>
+                    i.IsFolder == isFolder &&
+                    i.Argument.EndsWith(
+                        Path.GetFileName(argument) ?? argument, 
+                        StringComparison.InvariantCultureIgnoreCase));
+            }
     }
 }

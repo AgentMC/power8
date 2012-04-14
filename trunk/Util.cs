@@ -110,6 +110,23 @@ namespace Power8
             }
         }
 
+        public static string GetResourceIdForClass(string clsidOrApiShNs)
+        {
+            clsidOrApiShNs = clsidOrApiShNs.Substring(clsidOrApiShNs.LastIndexOf('\\') + 1);
+            clsidOrApiShNs = clsidOrApiShNs.TrimStart(':', '\\');
+            if (!clsidOrApiShNs.StartsWith("{"))
+                clsidOrApiShNs = "{" + clsidOrApiShNs + "}";
+            try
+            {
+                using (var k = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsidOrApiShNs, false))
+                    return ((string) k.GetValue("LocalizedString", null)).TrimStart('@');
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         public static string ResolveResource(string localizeableResourceId)
         {
             //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000

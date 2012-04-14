@@ -5,13 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Name="dblBtn"
              d:DesignHeight="60" d:DesignWidth="300">
-    <Grid>
+    <Grid Margin="0" Background="Azure">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="32" />
+            <ColumnDefinition/>
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Button Content="{Binding ElementName=dblBtn, Path=Item.FriendlyName}" Name="actionBtn" Grid.Column="0" Padding="0"/>
-        <Button Content=">" Grid.Column="1" Padding="1,0" Click="DisplayMenu" Name="menuDropper" />
+        <Image Grid.Column="0" Source="{Binding ElementName=dblBtn, Path=Item.Icon.LargeBitmap}" Width="24" Height="24" />
+        <Button Content="{Binding ElementName=dblBtn, Path=Item.FriendlyName}" Name="actionBtn" Grid.Column="1" 
+                Padding="3" Margin="0" Click="actionBtnClick" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" />
+        <Button Content=">" Grid.Column="2" Margin="0"  Padding="2,0" Click="DisplayMenu" Name="menuDropper" />
     </Grid>
     <UserControl.Resources>
         <ContextMenu x:Key="itemsList" 
