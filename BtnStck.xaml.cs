@@ -174,7 +174,8 @@ namespace Power8
                         mcItem = new PowerItem
                         {
                             Argument = API.ShNs.MyComputer,
-                            ResourceIdString = Util.GetResourceIdForClass(API.ShNs.MyComputer),
+                            ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.MyComputer),
+                            SpecialFolderId = API.Csidl.DRIVES,
                             IsFolder = true,
                             NonCachedIcon = true,
                             HasLargeIcon = true
@@ -201,8 +202,7 @@ namespace Power8
                         break;
                     case "AdminTools":
                         mcItem = PowerItemTree.AdminToolsRootItem;
-                        mcItem.NonCachedIcon = true;
-                        mcItem.Icon = ImageManager.GetImageContainerSync(mcItem, API.Shgfi.SHGFI_SMALLICON);
+                        mcItem.Icon = ImageManager.GetImageContainerSync(mcItem, API.Shgfi.SMALLICON);
                         mcItem.Icon.ExtractLarge();
                         mcItem.HasLargeIcon = true;
                         break;

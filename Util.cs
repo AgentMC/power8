@@ -91,13 +91,6 @@ namespace Power8
             return null;
         }
 
-        public static IntPtr GetIconForFile(string file, API.Shgfi iconType)
-        {
-            var shinfo = new API.Shfileinfo();
-            var hImgSmall = API.SHGetFileInfo(file, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), (uint)(API.Shgfi.SHGFI_ICON | iconType));
-            return hImgSmall == IntPtr.Zero || shinfo.hIcon == IntPtr.Zero ? IntPtr.Zero : shinfo.hIcon;
-        }
-
         public static string ResolveLink(string link)
         {
             var shLink = new API.ShellLink();
@@ -110,42 +103,79 @@ namespace Power8
             }
         }
 
-        public static string GetResourceIdForClass(string clsidOrApiShNs)
+        public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs)
         {
-            clsidOrApiShNs = clsidOrApiShNs.Substring(clsidOrApiShNs.LastIndexOf('\\') + 1);
-            clsidOrApiShNs = clsidOrApiShNs.TrimStart(':', '\\');
-            if (!clsidOrApiShNs.StartsWith("{"))
-                clsidOrApiShNs = "{" + clsidOrApiShNs + "}";
-            try
-            {
-                using (var k = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey("CLSID\\" + clsidOrApiShNs, false))
-                    return ((string) k.GetValue("LocalizedString", null)).TrimStart('@');
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString");
         }
 
-        public static string ResolveResource(string localizeableResourceId)
+        public static string GetDefaultIconResourceIdForClass(string clsidOrApiShNs)
         {
-            //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000
-            var lastCommaIdx = localizeableResourceId.LastIndexOf(',');
-            var resDll = Environment.ExpandEnvironmentVariables(localizeableResourceId.Substring(0, lastCommaIdx));
-            var resId = uint.Parse(localizeableResourceId.Substring(lastCommaIdx + 2));
-            var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
-                                            API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
-            if (dllHandle != IntPtr.Zero)
+            return GetResourceIdForClassCommon(clsidOrApiShNs, "\\DefaultIcon", "");
+        }
+
+        private static string GetResourceIdForClassCommon(string clsidOrApiShNs, string subkey, string valueName)
+        {
+// ReSharper disable EmptyGeneralCatchClause
+            try
+            {
+                using (var k = Microsoft.Win32.Registry.ClassesRoot
+                        .OpenSubKey("CLSID\\" + NameSpaceToGuidWithBraces(clsidOrApiShNs) + subkey, false))
+                {
+                    if (k != null)
+                        return ((string)k.GetValue(valueName, null)).TrimStart('@');
+                }
+            }
+            catch (Exception){}
+// ReSharper restore EmptyGeneralCatchClause
+            return null;
+        }
+
+        public static string NameSpaceToGuidWithBraces(string ns)
+        {
+            ns = ns.Substring(ns.LastIndexOf('\\') + 1);
+            ns = ns.TrimStart(':', '\\');
+            if (!ns.StartsWith("{"))
+                ns = "{" + ns + "}";
+            return ns;
+        }
+
+        public static string ResolveStringResource(string localizeableResourceId)
+        {
+            var resData = ResolveResourceCommon(localizeableResourceId);
+            if (resData.Item1 != IntPtr.Zero)
             {
                 lock (Buffer)
                 {
-                    var number = API.LoadString(dllHandle, resId, Buffer, Buffer.Capacity);
-                    API.FreeLibrary(dllHandle);
+                    var number = API.LoadString(resData.Item1, resData.Item2, Buffer, Buffer.Capacity);
+                    API.FreeLibrary(resData.Item1);
                     if (number > 0)
                         return Buffer.ToString();
                 }
             }
             return null;
+        }
+
+        public static IntPtr ResolveIconicResource(string localizeableResourceId)
+        {
+            var resData = ResolveResourceCommon(localizeableResourceId);
+            if (resData.Item1 != IntPtr.Zero)
+            {
+                var icon = API.LoadIcon(resData.Item1, resData.Item2);
+                API.FreeLibrary(resData.Item1);
+                return icon;
+            }
+            return IntPtr.Zero;
+        }
+
+        private static Tuple<IntPtr, uint> ResolveResourceCommon(string resourceString)
+        {
+            //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000
+            var lastCommaIdx = resourceString.LastIndexOf(',');
+            var resDll = Environment.ExpandEnvironmentVariables(resourceString.Substring(0, lastCommaIdx));
+            var resId = uint.Parse(resourceString.Substring(lastCommaIdx + 2));
+            var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
+                                            API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
+            return new Tuple<IntPtr, uint>(dllHandle, resId);
         }
 
         public class ShellExecuteHelper

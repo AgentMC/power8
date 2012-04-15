@@ -30,14 +30,13 @@ namespace Power8
             {
                 if (_adminToolsRootItem == null)
                 {
-                    lock (StartMenuRootItem)
-                    {
-                        var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
-                        _adminToolsRootItem = SearchContainerByArgument(PathToBaseAndArg(path), StartMenuRootItem, false);
-                        _adminToolsRootItem = SearchItemByArgument(path, true, _adminToolsRootItem);
-                        _adminToolsRootItem.Argument = API.ShNs.AdministrationTools;
-                        _adminToolsRootItem.ResourceIdString = Util.GetResourceIdForClass(API.ShNs.AdministrationTools);
-                    }                
+                    var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
+                    _adminToolsRootItem = SearchContainerByArgument(PathToBaseAndArg(path), StartMenuRootItem, false);
+                    _adminToolsRootItem = SearchItemByArgument(path, true, _adminToolsRootItem);
+                    _adminToolsRootItem.Argument = API.ShNs.AdministrationTools;
+                    _adminToolsRootItem.ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AdministrationTools);
+                    _adminToolsRootItem.SpecialFolderId = API.Csidl.COMMON_ADMINTOOLS;
+                    _adminToolsRootItem.NonCachedIcon = true;
                 }
                 return _adminToolsRootItem;
             }
