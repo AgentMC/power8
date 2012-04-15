@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -38,15 +38,16 @@ namespace Power8
                 var container = (ImageContainer)(Cache.ContainsKey(descr) ? Cache[descr] : null);
                 if (container == null)
                 {
-                    container = new ImageContainer(resolvedArg, descr);
+                    container = new ImageContainer(resolvedArg, descr, 
+                                    item.IsSpecialFolder ? item.SpecialFolderId : API.Csidl.INVALID);
                     Cache.Add(descr, container);
-                    if (iconNeeded == API.Shgfi.SHGFI_SMALLICON)
+                    if (iconNeeded == API.Shgfi.SMALLICON)
                         container.ExtractSmall();
                     else
                         container.ExtractLarge();
                 }
                 //TODO: after templating all items with <Image> there'll be no need in this:
-                if (iconNeeded == API.Shgfi.SHGFI_SMALLICON)
+                if (iconNeeded == API.Shgfi.SMALLICON)
                     container.GenerateSmallImage();
                 else
                     container.GenerateLargeImage();
@@ -58,30 +59,37 @@ namespace Power8
 
         public class ImageContainer
         {
-            public readonly string ObjectDescriptor, InitialObject;
+            private readonly string _objectDescriptor;
+            private readonly string _initialObject;
+            private readonly API.Csidl _id;
 
-            public IntPtr SmallIconHandle { get; private set; }
-            public Icon SmallIcon { get; private set; }
             public ImageSource SmallBitmap { get; private set; }
             public System.Windows.Controls.Image SmallImage { get; private set; }
-            public IntPtr LargeIconHandle { get; private set; }
-            public Icon LargeIcon { get; private set; }
             public ImageSource LargeBitmap { get; private set; }
             public System.Windows.Controls.Image LargeImage { get; private set; }
 
-            public ImageContainer(string objectToGetIcons, string typeDescriptor)
+            public ImageContainer(string objectToGetIcons, string typeDescriptor, API.Csidl specialId)
             {
-                InitialObject = objectToGetIcons;
-                ObjectDescriptor = typeDescriptor;
+                _initialObject = objectToGetIcons;
+                _objectDescriptor = typeDescriptor;
+                _id = specialId;
             }
 
             public void ExtractSmall()
             {
-                if (SmallImage != null) 
+                if (SmallBitmap != null) 
                     return;
-                SmallIconHandle = Util.GetIconForFile(InitialObject, API.Shgfi.SHGFI_SMALLICON);
-                SmallIcon = Icon.FromHandle(SmallIconHandle);
-                SmallBitmap = ExtractInternal(SmallIcon);
+                var smallIconHandle = GetUnmanagedIcon(API.Shgfi.SMALLICON);
+                if (smallIconHandle != IntPtr.Zero)
+                {
+                    SmallBitmap = ExtractInternal(smallIconHandle);
+                    SmallBitmap.Freeze();
+                    API.DestroyIcon(smallIconHandle);
+                }
+                else
+                {
+                    Debug.WriteLine("!!!ExtractSmall failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
+                }
             }
 
             public void GenerateSmallImage()
@@ -91,11 +99,19 @@ namespace Power8
 
             public void ExtractLarge()
             {
-                if(LargeImage != null)
+                if(LargeBitmap != null)
                     return;
-                LargeIconHandle = Util.GetIconForFile(InitialObject, API.Shgfi.SHGFI_LARGEICON);
-                LargeIcon = Icon.FromHandle(LargeIconHandle);
-                LargeBitmap = ExtractInternal(LargeIcon);
+                var largeIconHandle = GetUnmanagedIcon(API.Shgfi.LARGEICON);
+                if (largeIconHandle != IntPtr.Zero)
+                {
+                    LargeBitmap = ExtractInternal(largeIconHandle);
+                    LargeBitmap.Freeze();
+                    API.DestroyIcon(largeIconHandle);
+                }
+                else
+                {
+                    Debug.WriteLine("!!!ExtractLarge failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
+                }
             }
 
             public void GenerateLargeImage()
@@ -103,17 +119,43 @@ namespace Power8
                 LargeImage = new System.Windows.Controls.Image {Source = LargeBitmap, Width=32, Height=32};
             }
 
-            private static BitmapImage ExtractInternal(Icon icon)
+            private static BitmapSource ExtractInternal(IntPtr handle)
             {
-                var stream = new MemoryStream();
-                icon.ToBitmap().Save(stream, ImageFormat.Png);
-                var img = new BitmapImage();
-                img.BeginInit();
-                img.CreateOptions = BitmapCreateOptions.None;
-                img.CacheOption = BitmapCacheOption.Default;
-                img.StreamSource = stream;
-                img.EndInit();
-                return img;
+
+                var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(handle,
+                                                      System.Windows.Int32Rect.Empty,
+                                                      BitmapSizeOptions.FromEmptyOptions());
+                bs.Freeze();
+                return bs;
+            }
+
+            private IntPtr GetUnmanagedIcon(API.Shgfi iconType)
+            {
+                var shinfo = new API.Shfileinfo();
+                var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
+                if (zeroFails == IntPtr.Zero && _id != API.Csidl.INVALID) //some ids on Win8 will work via this
+                {
+                    var temp = Util.GetDefaultIconResourceIdForClass(_initialObject);
+                    if (!string.IsNullOrEmpty(temp))
+                    {
+                        zeroFails = Util.ResolveIconicResource(temp);
+                    }
+                    if(zeroFails == IntPtr.Zero)
+                    {
+                        var ppIdl = IntPtr.Zero;
+                        var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, _id, ref ppIdl);
+                        zeroFails = (hRes != 0
+                                         ? IntPtr.Zero
+                                         : API.SHGetFileInfo(ppIdl, 0, ref shinfo, (uint) Marshal.SizeOf(shinfo),
+                                                             API.Shgfi.ICON | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES | iconType));
+                        Marshal.FreeCoTaskMem(ppIdl);                                       
+                    }
+                    else //ResolveIconicResource() succeeded and zeroFails contains required handle
+                    {
+                        shinfo.hIcon = zeroFails;
+                    }
+                }
+                return zeroFails == IntPtr.Zero || shinfo.hIcon == IntPtr.Zero ? IntPtr.Zero : shinfo.hIcon;
             }
         }
     }

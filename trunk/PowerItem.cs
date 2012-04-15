@@ -18,7 +18,9 @@ namespace Power8
         public bool IsFolder { get; set; }
         public string ResourceIdString { get; set; }
         public bool AutoExpand { get; set; }
-        public bool NonCachedIcon { get; set; }
+        public API.Csidl SpecialFolderId { get; set; }
+
+
 
 
         public ImageManager.ImageContainer Icon
@@ -26,7 +28,7 @@ namespace Power8
             get
             {
                 if (_icon == null && Argument != null)
-                    _icon = ImageManager.GetImageContainer(this, HasLargeIcon ? API.Shgfi.SHGFI_LARGEICON : API.Shgfi.SHGFI_SMALLICON);
+                    _icon = ImageManager.GetImageContainer(this, HasLargeIcon ? API.Shgfi.LARGEICON : API.Shgfi.SMALLICON);
                 return _icon;
             }
             set
@@ -48,6 +50,10 @@ namespace Power8
                 OnPropertyChanged("Icon");
             }
          }
+
+        public bool NonCachedIcon { get; set; }
+
+
 
 
         public ObservableCollection<PowerItem> Items
@@ -71,7 +77,7 @@ namespace Power8
                     return _friendlyName;
                 if (ResourceIdString != null)
                 {
-                    _friendlyName = Util.ResolveResource(ResourceIdString);
+                    _friendlyName = Util.ResolveStringResource(ResourceIdString);
                     if (_friendlyName != null)
                         return _friendlyName;
                     ResourceIdString = null; //Operation failed somewhere, resourceId is invalid
