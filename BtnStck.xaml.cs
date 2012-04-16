@@ -202,9 +202,9 @@ namespace Power8
                         break;
                     case "AdminTools":
                         mcItem = PowerItemTree.AdminToolsRootItem;
-                        mcItem.Icon = ImageManager.GetImageContainerSync(mcItem, API.Shgfi.SMALLICON);
-                        mcItem.Icon.ExtractLarge();
-                        mcItem.HasLargeIcon = true;
+                        break;
+                    case "Libraries":
+                        mcItem = PowerItemTree.LibrariesItem;
                         break;
                     default:
                         return null;

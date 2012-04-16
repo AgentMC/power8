@@ -84,7 +84,7 @@ namespace Power8
                 }
                 if (string.IsNullOrEmpty(Argument))
                     return "All Programs";
-                var path = IsLink ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
+                var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
                 return string.IsNullOrEmpty(path) ? Argument : path;
             }
             set
@@ -106,12 +106,23 @@ namespace Power8
 
         public bool IsLink
         {
-            get { return IsFile && Argument.EndsWith(".lnk"); }
+            get { return IsFile && 
+                  !string.IsNullOrEmpty(Argument) && 
+                  Argument.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase); }
         }
 
         public bool IsSpecialFolder
         {
-            get { return IsFolder && Argument.StartsWith("::{"); }
+            get { return IsLibrary || (IsFolder && 
+                                       !string.IsNullOrEmpty(Argument) && 
+                                       Argument.StartsWith("::{")); }
+        }
+
+        public bool IsLibrary
+        {
+            get { return IsFolder && 
+                  !string.IsNullOrEmpty(Argument) && 
+                  Argument.EndsWith(".library-ms", StringComparison.InvariantCultureIgnoreCase); }
         }
 
 
