@@ -589,8 +589,7 @@ namespace Power8
         void SHRunDialog(IntPtr hWnd, IntPtr hIcon, string sDir, string szTitle, string szPrompt, RFF uFlags);
 
 
-        //Shell namespaces=========================================================================
-        //http://www.codeproject.com/Articles/13280/How-to-display-Windows-Explorer-objects-in-one-com
+        //Shell namespaces, known folders, etc=====================================================
         public static class ShNs
         {//Explorer /N,{ns}
             public const string MyComputer = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}";
@@ -608,7 +607,138 @@ namespace Power8
             public const string DefaultNavigator = "::{871C5380-42A0-1069-A2EA-08002B30309D}";
             public const string ComputerSearchResultsFolder = "::{1F4DE370-D627-11D1-BA4F-00A0C91EEDBA}";
             public const string NetworkSearchResultsComputer = "::{E17D4FC0-5564-11D1-83F2-00A0C90DC849}";
+            public const string Libraries = "::{031E4825-7B94-4dc3-B131-E946B44C8DD5}";
         }
+
+        public enum KFF : uint
+        {
+            NO_APPCONTAINER_REDIRECTION = 0x00010000,
+            CREATE = 0x00008000,
+            DONT_VERIFY = 0x00004000,
+            DONT_UNEXPAND = 0x00002000,
+            NO_ALIAS = 0x00001000,
+            INIT = 0x00000800,
+            DEFAULT_PATH = 0x00000400,
+            NOT_PARENT_RELATIVE = 0x00000200,
+            SIMPLE_IDLIST = 0x00000100,
+            ALIAS_ONLY = 0x80000000,
+            NORMAL = 0
+        }
+
+        public static class KnFldrIds
+        {
+            public static string AddNewPrograms	 = "{de61d971-5ebc-4f02-a3a9-6c82895e5c04}";
+            public static string AdminTools	 = "{724EF170-A42D-4FEF-9F26-B60E846FBA4F}";
+            public static string ApplicationShortcuts	 = "{A3918781-E5F2-4890-B3D9-A7E54332328C}";
+            public static string AppsFolder	 = "{1e87508d-89c2-42f0-8a7e-645a0f50ca58}";
+            public static string AppUpdates	 = "{a305ce99-f527-492b-8b1a-7e76fa98d6e4}";
+            public static string CDBurning	 = "{9E52AB10-F80D-49DF-ACB8-4330F5687855}";
+            public static string ChangeRemovePrograms	 = "{df7266ac-9274-4867-8d55-3bd661de872d}";
+            public static string CommonAdminTools	 = "{D0384E7D-BAC3-4797-8F14-CBA229B392B5}";
+            public static string CommonOEMLinks	 = "{C1BAE2D0-10DF-4334-BEDD-7AA20B227A9D}";
+            public static string CommonPrograms	 = "{0139D44E-6AFE-49F2-8690-3DAFCAE6FFB8}";
+            public static string CommonStartMenu	 = "{A4115719-D62E-491D-AA7C-E74B8BE3B067}";
+            public static string CommonStartup	 = "{82A5EA35-D9CD-47C5-9629-E15D2F714E6E}";
+            public static string CommonTemplates	 = "{B94237E7-57AC-4347-9151-B08C6C32D1F7}";
+            public static string ComputerFolder	 = "{0AC0837C-BBF8-452A-850D-79D08E667CA7}";
+            public static string ConflictFolder	 = "{4bfefb45-347d-4006-a5be-ac0cb0567192}";
+            public static string ConnectionsFolder	 = "{6F0CD92B-2E97-45D1-88FF-B0D186B8DEDD}";
+            public static string Contacts	 = "{56784854-C6CB-462b-8169-88E350ACB882}";
+            public static string ControlPanelFolder	 = "{82A74AEB-AEB4-465C-A014-D097EE346D63}";
+            public static string Cookies	 = "{2B0F765D-C0E9-4171-908E-08A611B84FF6}";
+            public static string Desktop	 = "{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}";
+            public static string DeviceMetadataStore	 = "{5CE4A5E9-E4EB-479D-B89F-130C02886155}";
+            public static string DocumentsLibrary	 = "{7B0DB17D-9CD2-4A93-9733-46CC89022E7C}";
+            public static string Downloads	 = "{374DE290-123F-4565-9164-39C4925E467B}";
+            public static string Favorites	 = "{1777F761-68AD-4D8A-87BD-30B759FA33DD}";
+            public static string Fonts	 = "{FD228CB7-AE11-4AE3-864C-16F3910AB8FE}";
+            public static string Games	 = "{CAC52C1A-B53D-4edc-92D7-6B2E8AC19434}";
+            public static string GameTasks	 = "{054FAE61-4DD8-4787-80B6-090220C4B700}";
+            public static string History	 = "{D9DC8A3B-B784-432E-A781-5A1130A75963}";
+            public static string HomeGroup	 = "{52528A6B-B9E3-4ADD-B60D-588C2DBA842D}";
+            public static string HomeGroupCurrentUser	 = "{9B74B6A3-0DFD-4f11-9E78-5F7800F2E772}";
+            public static string ImplicitAppShortcuts	 = "{BCB5256F-79F6-4CEE-B725-DC34E402FD46}";
+            public static string InternetCache	 = "{352481E8-33BE-4251-BA85-6007CAEDCF9D}";
+            public static string InternetFolder	 = "{4D9F7874-4E0C-4904-967B-40B0D20C3E4B}";
+            public static string Libraries	 = "{1B3EA5DC-B587-4786-B4EF-BD1DC332AEAE}";
+            public static string Links	 = "{bfb9d5e0-c6a9-404c-b2b2-ae6db6af4968}";
+            public static string LocalAppData	 = "{F1B32785-6FBA-4FCF-9D55-7B8E7F157091}";
+            public static string LocalAppDataLow	 = "{A520A1A4-1780-4FF6-BD18-167343C5AF16}";
+            public static string LocalizedResourcesDir	 = "{2A00375E-224C-49DE-B8D1-440DF7EF3DDC}";
+            public static string Music	 = "{4BD8D571-6D19-48D3-BE97-422220080E43}";
+            public static string MusicLibrary	 = "{2112AB0A-C86A-4FFE-A368-0DE96E47012E}";
+            public static string NetHood	 = "{C5ABBF53-E17F-4121-8900-86626FC2C973}";
+            public static string NetworkFolder	 = "{D20BEEC4-5CA8-4905-AE3B-BF251EA09B53}";
+            public static string OriginalImages	 = "{2C36C0AA-5812-4b87-BFD0-4CD0DFB19B39}";
+            public static string PhotoAlbums	 = "{69D2CF90-FC33-4FB7-9A0C-EBB0F0FCB43C}";
+            public static string PicturesLibrary	 = "{A990AE9F-A03B-4E80-94BC-9912D7504104}";
+            public static string Pictures	 = "{33E28130-4E1E-4676-835A-98395C3BC3BB}";
+            public static string Playlists	 = "{DE92C1C7-837F-4F69-A3BB-86E631204A23}";
+            public static string PrintersFolder	 = "{76FC4E2D-D6AD-4519-A663-37BD56068185}";
+            public static string PrintHood	 = "{9274BD8D-CFD1-41C3-B35E-B13F55A758F4}";
+            public static string Profile	 = "{5E6C858F-0E22-4760-9AFE-EA3317B67173}";
+            public static string ProgramData	 = "{62AB5D82-FDC1-4DC3-A9DD-070D1D495D97}";
+            public static string ProgramFiles	= "{905e63b6-c1bf-494e-b29c-65b732d3d21a}";
+            public static string ProgramFilesX64	= "{6D809377-6AF0-444b-8957-A3773F02200E}";
+            public static string ProgramFilesX86	= "{7C5A40EF-A0FB-4BFC-874A-C0F2E0B9FA8E}";
+            public static string ProgramFilesCommon = "{F7F1ED05-9F6D-47A2-AAAE-29D317C6F066}";
+            public static string ProgramFilesCommonX64	 = "{6365D5A7-0F0D-45E5-87F6-0DA56B6A4F7D}";
+            public static string ProgramFilesCommonX86	= "{DE974D24-D9C6-4D3E-BF91-F4455120B917}";
+            public static string Programs	 = "{A77F5D77-2E2B-44C3-A6A2-ABA601054A51}";
+            public static string Public	 = "{DFDF76A2-C82A-4D63-906A-5644AC457385}";
+            public static string PublicDesktop	 = "{C4AA340D-F20F-4863-AFEF-F87EF2E6BA25}";
+            public static string PublicDocuments	 = "{ED4824AF-DCE4-45A8-81E2-FC7965083634}";
+            public static string PublicDownloads	 = "{3D644C9B-1FB8-4f30-9B45-F670235F79C0}";
+            public static string PublicGameTasks	 = "{DEBF2536-E1A8-4c59-B6A2-414586476AEA}";
+            public static string PublicLibraries	 = "{48DAF80B-E6CF-4F4E-B800-0E69D84EE384}";
+            public static string PublicMusic	 = "{3214FAB5-9757-4298-BB61-92A9DEAA44FF}";
+            public static string PublicPictures	 = "{B6EBFB86-6907-413C-9AF7-4FC2ABF07CC5}";
+            public static string PublicRingtones	 = "{E555AB60-153B-4D17-9F04-A5FE99FC15EC}";
+            public static string PublicUserTiles	 = "{0482af6c-08f1-4c34-8c90-e17ec98b1e17}";
+            public static string PublicVideos	 = "{2400183A-6185-49FB-A2D8-4A392A602BA3}";
+            public static string QuickLaunch	 = "{52a4f021-7b75-48a9-9f6b-4b87a210bc8f}";
+            public static string Recent	 = "{AE50C081-EBD2-438A-8655-8A092E34987A}";
+            public static string RecordedTVLibrary	 = "{1A6FDBA2-F42D-4358-A798-B74D745926C5}";
+            public static string RecycleBinFolder	 = "{B7534046-3ECB-4C18-BE4E-64CD4CB7D6AC}";
+            public static string ResourceDir	 = "{8AD10C31-2ADB-4296-A8F7-E4701232C972}";
+            public static string Ringtones	 = "{C870044B-F49E-4126-A9C3-B52A1FF411E8}";
+            public static string RoamingAppData	 = "{3EB685DB-65F9-4CF6-A03A-E3EF65729F3D}";
+            public static string RoamingTiles	 = "{00BCFC5A-ED94-4e48-96A1-3F6217F21990}";
+            public static string SampleMusic	 = "{B250C668-F57D-4EE1-A63C-290EE7D1AA1F}";
+            public static string SamplePictures	 = "{C4900540-2379-4C75-844B-64E6FAF8716B}";
+            public static string SamplePlaylists	 = "{15CA69B3-30EE-49C1-ACE1-6B5EC372AFB5}";
+            public static string SampleVideos	 = "{859EAD94-2E85-48AD-A71A-0969CB56A6CD}";
+            public static string SavedGames	 = "{4C5C32FF-BB9D-43b0-B5B4-2D72E54EAAA4}";
+            public static string SavedSearches	 = "{7d1d3a04-debb-4115-95cf-2f29da2920da}";
+            public static string SEARCH_CSC	 = "{ee32e446-31ca-4aba-814f-a5ebd2fd6d5e}";
+            public static string SEARCH_MAPI	 = "{98ec0e18-2098-4d44-8644-66979315a281}";
+            public static string SearchHome	 = "{190337d1-b8ca-4121-a639-6d472d16972a}";
+            public static string SendTo	 = "{8983036C-27C0-404B-8F08-102D10DCFD74}";
+            public static string SidebarDefaultParts	 = "{7B396E54-9EC5-4300-BE0A-2482EBAE1A26}";
+            public static string SidebarParts	 = "{A75D362E-50FC-4fb7-AC2C-A8BEAA314493}";
+            public static string StartMenu	 = "{625B53C3-AB48-4EC1-BA1F-A1EF4146FC19}";
+            public static string Startup	 = "{B97D20BB-F46A-4C97-BA10-5E3608430854}";
+            public static string SyncManagerFolder	 = "{43668BF8-C14E-49B2-97C9-747784D784B7}";
+            public static string SyncResultsFolder	 = "{289a9a43-be44-4057-a41b-587a76d7e7f9}";
+            public static string SyncSetupFolder	 = "{0F214138-B1D3-4a90-BBA9-27CBC0C5389A}";
+            public static string System	 = "{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7}";
+            public static string SystemX86	 = "{D65231B0-B2F1-4857-A4CE-A8E7C6EA7D27}";
+            public static string Templates	 = "{A63293E8-664E-48DB-A079-DF759E0509F7}";
+            public static string UserPinned	 = "{9E3995AB-1F9C-4F13-B827-48B24B6C7174}";
+            public static string UserProfiles	 = "{0762D272-C50A-4BB0-A382-697DCD729B80}";
+            public static string UserProgramFiles	 = "{5CD7AEE2-2219-4A67-B85D-6C9CE15660CB}";
+            public static string UserProgramFilesCommon	 = "{BCBD3057-CA5C-4622-B42D-BC56DB0AE516}";
+            public static string UsersFiles	 = "{f3ce0f7c-4901-4acc-8648-d5d44b04ef8f}";
+            public static string UsersLibraries	 = "{A302545D-DEFF-464b-ABE8-61C8648D939B}";
+            public static string UserTiles	 = "{008ca0b1-55b4-4c56-b8a8-4de4b299d3be}";
+            public static string Videos	 = "{18989B1D-99B5-455B-841C-AB7C74E4DDFC}";
+            public static string VideosLibrary	 = "{491E922F-5643-4AF4-A7EB-4E7A138D8174}";
+            public static string Windows = "{F38BF404-1D43-42F2-9305-67DE0B28FC23}";
+        }
+
+        [DllImport("shell32.dll", CharSet=CharSet.Unicode)]
+        public static extern
+        void SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, KFF dwFlags, IntPtr hToken, out IntPtr ppwszPath);
 // ReSharper restore InconsistentNaming
     }
 }

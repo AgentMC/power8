@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Threading;
+using System.Xml;
 
 namespace Power8
 {
@@ -37,8 +39,48 @@ namespace Power8
                     _adminToolsRootItem.ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AdministrationTools);
                     _adminToolsRootItem.SpecialFolderId = API.Csidl.COMMON_ADMINTOOLS;
                     _adminToolsRootItem.NonCachedIcon = true;
+                    _adminToolsRootItem.Icon = ImageManager.GetImageContainerSync(_adminToolsRootItem, API.Shgfi.SMALLICON);
+                    _adminToolsRootItem.Icon.ExtractLarge(); //as this is a reference to existing PowerItem, 
+                    _adminToolsRootItem.HasLargeIcon = true; //we need both small and large icons available
                 }
                 return _adminToolsRootItem;
+            }
+        }
+
+        private static PowerItem _librariesOrMyDocsItem;
+        public static PowerItem LibrariesItem
+        {
+            get
+            {
+                if (_librariesOrMyDocsItem == null)
+                {
+                    string path, ns;
+                    if (Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 1) //Win7+ -> return libraries
+                    {
+                        IntPtr pwstr;
+                        API.SHGetKnownFolderPath(new Guid(API.KnFldrIds.Libraries), API.KFF.NORMAL, IntPtr.Zero, out pwstr);
+                        path = Marshal.PtrToStringUni(pwstr);
+                        Marshal.FreeCoTaskMem(pwstr);
+                        ns = API.ShNs.Libraries;
+                    }
+                    else                                          //Vista or below -> return MyDocs
+                    {
+                        path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                        ns = API.ShNs.MyDocuments;
+                    }
+                    _librariesOrMyDocsItem = new PowerItem
+                    {
+                        Argument = path,
+                        SpecialFolderId = API.Csidl.MYDOCUMENTS,
+                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(ns),
+                        NonCachedIcon = true,
+                        HasLargeIcon = true,
+                        IsFolder = true
+                    };
+                    ScanFolderSync(_librariesOrMyDocsItem, string.Empty, false);
+                    _librariesOrMyDocsItem.Argument = ns;
+                }
+                return _librariesOrMyDocsItem;
             }
         }
 
@@ -137,15 +179,17 @@ namespace Power8
             try
             {
                 var curDir = basePath + item.Argument;
-                foreach (var directory in Directory.GetDirectories(curDir))
+                foreach (var directory in item.IsLibrary ? GetLibraryDirectories(curDir) : Directory.GetDirectories(curDir))
                 {
-                    if (!(File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
-                    {
-                        var subitem = AddSubItem(item, basePath, directory, true, autoExpand: !recoursive);
-                        if (recoursive)
-                            ScanFolderSync(subitem, basePath, recoursive);
-                    }
+                    if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden))) 
+                        continue;
+
+                    var subitem = AddSubItem(item, basePath, directory, true, autoExpand: !recoursive);
+                    if (recoursive)
+                        ScanFolderSync(subitem, basePath, true);
                 }
+                if(item.IsLibrary)
+                    return;
                 var resources = new Dictionary<string, string>();
                 var dsktp = curDir + "\\desktop.ini";
                 if (File.Exists(dsktp))
@@ -170,12 +214,16 @@ namespace Power8
                 }
                 foreach (var file in Directory.GetFiles(curDir))
                 {
-                    if (!(File.GetAttributes(file).HasFlag(FileAttributes.Hidden)))
-                    {
-                        var fn = Path.GetFileName(file);
-                        AddSubItem(item, basePath, file, false,
-                                   fn != null && resources.ContainsKey(fn) ? resources[fn] : null);
-                    }
+                    if ((File.GetAttributes(file).HasFlag(FileAttributes.Hidden))) 
+                        continue;
+
+                    var fn = Path.GetFileName(file);
+                    var fileIsLib = file.EndsWith(".library-ms");
+                    var subitem = AddSubItem(item, basePath, file, fileIsLib,
+                                             fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
+                                             fileIsLib);
+                    if(fileIsLib)
+                        subitem.NonCachedIcon = true;
                 }
             }
             catch (UnauthorizedAccessException)
@@ -311,6 +359,23 @@ namespace Power8
                     i.Argument.EndsWith(
                         Path.GetFileName(argument) ?? argument, 
                         StringComparison.InvariantCultureIgnoreCase));
-            }
+        }
+
+        private static string[] GetLibraryDirectories(string libraryMs)
+        {
+            var xdoc = new XmlDocument();
+            xdoc.Load(libraryMs);
+// ReSharper disable PossibleNullReferenceException
+            var temp = (from XmlNode node 
+                        in xdoc["libraryDescription"]
+                               ["searchConnectorDescriptionList"]
+                               .GetElementsByTagName("searchConnectorDescription") 
+                        select node["simpleLocation"]
+                                   ["url"]
+                                   .InnerText
+                        ).ToList();
+// ReSharper restore PossibleNullReferenceException
+            return temp.ToArray();
+        }
     }
 }
