@@ -51,7 +51,12 @@ namespace Power8
             }
          }
 
-        public bool NonCachedIcon { get; set; }
+        private bool _nonCachedIcon;
+        public bool NonCachedIcon
+        {
+            get { return IsLibrary || _nonCachedIcon; } 
+            set { _nonCachedIcon = value; }
+        }
 
 
 
@@ -111,10 +116,9 @@ namespace Power8
                   Argument.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase); }
         }
 
-        public bool IsSpecialFolder
+        public bool IsSpecialObject
         {
-            get { return IsLibrary || (IsFolder && 
-                                       !string.IsNullOrEmpty(Argument) && 
+            get { return IsLibrary || (!string.IsNullOrEmpty(Argument) && 
                                        Argument.StartsWith("::{")); }
         }
 

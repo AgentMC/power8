@@ -171,40 +171,16 @@ namespace Power8
                 switch (containerName)
                 {
                     case "MyComputer":
-                        mcItem = new PowerItem
-                        {
-                            Argument = API.ShNs.MyComputer,
-                            ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.MyComputer),
-                            SpecialFolderId = API.Csidl.DRIVES,
-                            IsFolder = true,
-                            NonCachedIcon = true,
-                            HasLargeIcon = true
-                        };
-                        foreach (var drive in DriveInfo.GetDrives())
-                        {
-                            switch (drive.DriveType)
-                            {
-                                case DriveType.Removable:
-                                case DriveType.Fixed:
-                                case DriveType.Ram:
-                                case DriveType.Network:
-                                    mcItem.Items.Add(new PowerItem
-                                    {
-                                        Argument = drive.Name,
-                                        AutoExpand = true,
-                                        IsFolder = true,
-                                        Parent = mcItem,
-                                        NonCachedIcon = true
-                                    });
-                                    break;
-                            }
-                        }
+                        mcItem = PowerItemTree.MyComputerRootItem;
                         break;
                     case "AdminTools":
                         mcItem = PowerItemTree.AdminToolsRootItem;
                         break;
                     case "Libraries":
                         mcItem = PowerItemTree.LibrariesItem;
+                        break;
+                    case "ControlPanel":
+                        mcItem = PowerItemTree.ControlPanelItem;
                         break;
                     default:
                         return null;

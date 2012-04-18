@@ -184,12 +184,27 @@ namespace Power8
 
         private static Tuple<IntPtr, uint> ResolveResourceCommon(string resourceString)
         {
-            //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000
-            var lastCommaIdx = resourceString.LastIndexOf(',');
-            var resDll = Environment.ExpandEnvironmentVariables(resourceString.Substring(0, lastCommaIdx));
-            var resId = uint.Parse(resourceString.Substring(lastCommaIdx + 2));
+            //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
+            //or like C:\data\a.dll,-2000#embedding8
+            //or      B:\wakawaka\foo.dlx
+            //or      %windir%\msm.dll,8 => 8 == -8
+            var lastCommaIdx = Math.Max(resourceString.LastIndexOf(','), 0);
+            var lastSharpIdx = resourceString.LastIndexOf('#');
+            
+            var resDll =
+                Environment.ExpandEnvironmentVariables(
+                    resourceString.Substring(0, lastCommaIdx > 0 ? lastCommaIdx : resourceString.Length));
+            
+            var resId = 
+                lastCommaIdx == 0
+                ? 0
+                : uint.Parse((lastSharpIdx > lastCommaIdx
+                        ? resourceString.Substring(lastCommaIdx + 1, lastSharpIdx - (lastCommaIdx + 1))
+                        : resourceString.Substring(lastCommaIdx + 1)).TrimStart('-'));
+            
             var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
                                             API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
+            
             return new Tuple<IntPtr, uint>(dllHandle, resId);
         }
 

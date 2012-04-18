@@ -593,7 +593,8 @@ namespace Power8
         public static class ShNs
         {//Explorer /N,{ns}
             public const string MyComputer = "::{20D04FE0-3AEA-1069-A2D8-08002B30309D}";
-            public const string ControlPanel = @"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\::{21EC2020-3AEA-1069-A2DD-08002B30309D}";
+            public const string AllControlPanelItems = @"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\::{21EC2020-3AEA-1069-A2DD-08002B30309D}";
+            public const string ControlPanel = "::{26EE0668-A00A-44D7-9371-BEB064C98683}";
             public const string PrintersAndtelecopiers = @"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{2227A280-3AEA-1069-A2DE-08002B30309D}";
             public const string Fonts = @"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{D20EA4E1-3957-11d2-A40B-0C5020524152}";
             public const string ScannersAndCameras = @"::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\::{21EC2020-3AEA-1069-A2DD-08002B30309D}\::{E211B736-43FD-11D1-9EFB-0000F8757FCD}";
