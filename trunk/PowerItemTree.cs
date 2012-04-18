@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Threading;
 using System.Xml;
@@ -57,10 +56,7 @@ namespace Power8
                     string path, ns;
                     if (Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 1) //Win7+ -> return libraries
                     {
-                        IntPtr pwstr;
-                        API.SHGetKnownFolderPath(new Guid(API.KnFldrIds.Libraries), API.KFF.NORMAL, IntPtr.Zero, out pwstr);
-                        path = Marshal.PtrToStringUni(pwstr);
-                        Marshal.FreeCoTaskMem(pwstr);
+                        path = Util.ResolveKnownFolder(API.KnFldrIds.Libraries);
                         ns = API.ShNs.Libraries;
                     }
                     else                                          //Vista or below -> return MyDocs
@@ -365,17 +361,27 @@ namespace Power8
         {
             var xdoc = new XmlDocument();
             xdoc.Load(libraryMs);
-// ReSharper disable PossibleNullReferenceException
-            var temp = (from XmlNode node 
-                        in xdoc["libraryDescription"]
-                               ["searchConnectorDescriptionList"]
-                               .GetElementsByTagName("searchConnectorDescription") 
+            var nodeList = xdoc["libraryDescription"]["searchConnectorDescriptionList"];
+            if(nodeList == null)
+                return new string[0];
+            var nodeList2 = nodeList.GetElementsByTagName("searchConnectorDescription");
+            if (nodeList2.Count == 0)
+                return new string[0];
+            var temp = (from XmlNode node
+                        in nodeList2
                         select node["simpleLocation"]
                                    ["url"]
                                    .InnerText
                         ).ToList();
-// ReSharper restore PossibleNullReferenceException
-            return temp.ToArray();
+            var arr = new string[temp.Count];
+            for (var i = 0; i < temp.Count; i++)
+            {
+                if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
+                    arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12));
+                else
+                    arr[i] = temp[i];
+            }
+            return arr;
         }
     }
 }

@@ -91,6 +91,8 @@ namespace Power8
             return null;
         }
 
+
+        
         public static string ResolveLink(string link)
         {
             var shLink = new API.ShellLink();
@@ -102,6 +104,17 @@ namespace Power8
                 return Buffer.ToString();
             }
         }
+
+        public static string ResolveKnownFolder(string apiKnFldr)
+        {
+            IntPtr pwstr;
+            API.SHGetKnownFolderPath(new Guid(apiKnFldr), API.KFF.NORMAL, IntPtr.Zero, out pwstr);
+            var res = Marshal.PtrToStringUni(pwstr);
+            Marshal.FreeCoTaskMem(pwstr);
+            return res;
+        }
+
+
 
         public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs)
         {
@@ -139,6 +152,8 @@ namespace Power8
             return ns;
         }
 
+
+        
         public static string ResolveStringResource(string localizeableResourceId)
         {
             var resData = ResolveResourceCommon(localizeableResourceId);
@@ -177,6 +192,8 @@ namespace Power8
                                             API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
             return new Tuple<IntPtr, uint>(dllHandle, resId);
         }
+
+
 
         public class ShellExecuteHelper
         {
