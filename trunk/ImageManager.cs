@@ -14,7 +14,7 @@ namespace Power8
 
         private static string GetObjectDescriptor(PowerItem item, string resolved)
         {
-            if (item.IsFolder)
+            if (item.IsFolder || item.IsSpecialObject)
                 return item.NonCachedIcon ? resolved : "*";
             var rl = resolved.ToLower();
             return rl.EndsWith(".lnk")
@@ -39,7 +39,7 @@ namespace Power8
                 if (container == null)
                 {
                     container = new ImageContainer(resolvedArg, descr, 
-                                    item.IsSpecialFolder ? item.SpecialFolderId : API.Csidl.INVALID);
+                                    item.IsSpecialObject ? item.SpecialFolderId : API.Csidl.INVALID);
                     Cache.Add(descr, container);
                     if (iconNeeded == API.Shgfi.SMALLICON)
                         container.ExtractSmall();
@@ -62,11 +62,49 @@ namespace Power8
             private readonly string _objectDescriptor;
             private readonly string _initialObject;
             private readonly API.Csidl _id;
+            private ImageSource _smallBitmap, _largeBitmap;
+            private System.Windows.Controls.Image _smallImage, _largeImage;
 
-            public ImageSource SmallBitmap { get; private set; }
-            public System.Windows.Controls.Image SmallImage { get; private set; }
-            public ImageSource LargeBitmap { get; private set; }
-            public System.Windows.Controls.Image LargeImage { get; private set; }
+            public ImageSource SmallBitmap
+            {
+                get
+                {
+                    if (_smallBitmap == null)
+                        ExtractSmall();
+                    return _smallBitmap;
+                } 
+                private set { _smallBitmap = value; }
+            }
+            public ImageSource LargeBitmap 
+            { 
+                get
+                {
+                    if (_largeBitmap == null)
+                        ExtractLarge();
+                    return _largeBitmap;
+                }
+                private set { _largeBitmap = value; }
+            }
+            public System.Windows.Controls.Image SmallImage
+            {
+                get
+                {
+                    if (_smallImage == null)
+                        GenerateSmallImage();
+                    return _smallImage;
+                }
+                private set { _smallImage = value; }
+            }
+            public System.Windows.Controls.Image LargeImage 
+            {
+                get
+                {
+                    if(_largeImage == null)
+                        GenerateLargeImage();
+                    return _largeImage;
+                } 
+                private set { _largeImage = value; } 
+            }
 
             public ImageContainer(string objectToGetIcons, string typeDescriptor, API.Csidl specialId)
             {
@@ -77,7 +115,7 @@ namespace Power8
 
             public void ExtractSmall()
             {
-                if (SmallBitmap != null) 
+                if (_smallBitmap != null) 
                     return;
                 var smallIconHandle = GetUnmanagedIcon(API.Shgfi.SMALLICON);
                 if (smallIconHandle != IntPtr.Zero)
@@ -99,7 +137,7 @@ namespace Power8
 
             public void ExtractLarge()
             {
-                if(LargeBitmap != null)
+                if(_largeBitmap != null)
                     return;
                 var largeIconHandle = GetUnmanagedIcon(API.Shgfi.LARGEICON);
                 if (largeIconHandle != IntPtr.Zero)
@@ -132,6 +170,7 @@ namespace Power8
             private IntPtr GetUnmanagedIcon(API.Shgfi iconType)
             {
                 var shinfo = new API.Shfileinfo();
+
                 var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
                 if (zeroFails == IntPtr.Zero && _id != API.Csidl.INVALID) //some ids on Win8 will work via this
                 {

@@ -80,6 +80,113 @@ namespace Power8
             }
         }
 
+        private static PowerItem _controlPanelItem;
+        public static PowerItem ControlPanelItem
+        {
+            get
+            {
+                if (_controlPanelItem == null)
+                {
+                    _controlPanelItem = new PowerItem
+                    {
+                        Argument = API.ShNs.ControlPanel,
+                        SpecialFolderId = API.Csidl.CONTROLS,
+                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.ControlPanel),
+                        NonCachedIcon = true,
+                        HasLargeIcon = true,
+                        IsFolder = true
+                    };
+
+                    _controlPanelItem.Icon = ImageManager.GetImageContainerSync(_controlPanelItem, API.Shgfi.SMALLICON);
+
+                    _controlPanelItem.Items.Add(new PowerItem
+                    {
+                        Argument = API.ShNs.AllControlPanelItems,
+                        SpecialFolderId = API.Csidl.CONTROLS,
+                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
+                        Parent = _controlPanelItem,
+                        Icon = _controlPanelItem.Icon,
+                        IsFolder = true
+                    });
+
+                    //TODO: separator in binded ObservableCollection? (and below)
+                    _controlPanelItem.Items.Add(new PowerItem {FriendlyName = "----"});
+
+                    foreach (var file in Directory.EnumerateFiles(
+                        Environment.GetFolderPath(Environment.SpecialFolder.System), 
+                        "*.cpl", 
+                        SearchOption.TopDirectoryOnly))
+                    {
+                        AddSubItem(_controlPanelItem, string.Empty, file, false);
+                        //TODO: send messages to cpl to get more info
+                    }
+
+                    _controlPanelItem.Items.Add(new PowerItem { FriendlyName = "----" });
+
+                    using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                       @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace", false))
+                    {
+                        if (k != null)
+                        {
+                            foreach (var cplguid in k.GetSubKeyNames())
+                            {
+                                if(cplguid.StartsWith("{"))
+                                    _controlPanelItem.Items.Add(new PowerItem
+                                    {
+                                        Argument = "::" + cplguid,
+                                        NonCachedIcon = true,
+                                        Parent = _controlPanelItem,
+                                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid)
+                                    });
+                            }
+                        }
+                    }
+
+                }
+                return _controlPanelItem;
+            }
+        }
+
+        private static PowerItem _myComputerItem;
+        public static PowerItem MyComputerRootItem
+        {
+            get
+            {
+                if (_myComputerItem == null)
+                {
+                    _myComputerItem = new PowerItem
+                    {
+                        Argument = API.ShNs.MyComputer,
+                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.MyComputer),
+                        SpecialFolderId = API.Csidl.DRIVES,
+                        IsFolder = true,
+                        NonCachedIcon = true,
+                        HasLargeIcon = true
+                    };
+                    foreach (var drive in DriveInfo.GetDrives())
+                    {
+                        switch (drive.DriveType)
+                        {
+                            case DriveType.Removable:
+                            case DriveType.Fixed:
+                            case DriveType.Ram:
+                            case DriveType.Network:
+                                _myComputerItem.Items.Add(new PowerItem
+                                {
+                                    Argument = drive.Name,
+                                    AutoExpand = true,
+                                    IsFolder = true,
+                                    Parent = _myComputerItem,
+                                    NonCachedIcon = true
+                                });
+                                break;
+                        }
+                    }
+                }
+                return _myComputerItem;
+            }
+        }
+        
         static PowerItemTree()
         {
             Watcher.Created += FileChanged;
@@ -170,7 +277,7 @@ namespace Power8
                                     new Action(() => ScanFolderSync(item, basePath, recoursive)));
         }
 
-    	public static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
+        public static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
         {
             try
             {
@@ -215,11 +322,9 @@ namespace Power8
 
                     var fn = Path.GetFileName(file);
                     var fileIsLib = file.EndsWith(".library-ms");
-                    var subitem = AddSubItem(item, basePath, file, fileIsLib,
-                                             fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
-                                             fileIsLib);
-                    if(fileIsLib)
-                        subitem.NonCachedIcon = true;
+                    AddSubItem(item, basePath, file, fileIsLib,
+                                fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
+                                fileIsLib);
                 }
             }
             catch (UnauthorizedAccessException)
@@ -250,7 +355,7 @@ namespace Power8
         {
             var psi = new ProcessStartInfo();
             var arg1 = item.Argument;
-            if (item.IsSpecialFolder)
+            if (item.IsSpecialObject)
             {
                 psi.FileName = "explorer.exe";
                 psi.Arguments = "/N," + item.Argument;
@@ -294,7 +399,7 @@ namespace Power8
 
         public static string GetResolvedArgument(PowerItem item, bool prioritizeCommons)
         {
-            if(item.IsSpecialFolder)
+            if(item.IsSpecialObject)
                 return item.Argument;
             var psi = ResolveItem(item, prioritizeCommons);
             return item.IsFolder ? psi.Arguments : psi.FileName;
