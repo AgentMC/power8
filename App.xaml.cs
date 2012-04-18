@@ -22,13 +22,26 @@ namespace Power8
             //Initialize standard folder icon
             foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))
             {
-                var path = Environment.GetFolderPath(sf);
-                if (!File.Exists(path + @"\desktop.ini"))
+                bool isOk = false;
+                switch (sf)
                 {
-                    ImageManager.GetImageContainerSync(new PowerItem {Argument = path, IsFolder = true},
-                                                   API.Shgfi.SMALLICON);
-                    break;
+                    case Environment.SpecialFolder.Desktop:
+                    case Environment.SpecialFolder.DesktopDirectory:
+                    case Environment.SpecialFolder.CommonDesktopDirectory:
+                    case Environment.SpecialFolder.MyComputer:
+                        break;
+                    default:
+                        var path = Environment.GetFolderPath(sf);
+                        if (!File.Exists(path + @"\desktop.ini"))
+                        {
+                            ImageManager.GetImageContainerSync(new PowerItem {Argument = path, IsFolder = true},
+                                                           API.Shgfi.SMALLICON);
+                            isOk = true;
+                        }
+                        break;
                 }
+                if(isOk)
+                    break;
             }
             //Build tree
             InitTreeThread.Start();
