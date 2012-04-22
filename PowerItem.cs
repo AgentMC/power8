@@ -10,18 +10,21 @@ namespace Power8
     {
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
-        private string _friendlyName;
+        private string _friendlyName, _resIdString;
         private bool _expanding, _hasLargeIcon;
 
         public string Argument { get; set; }
         public PowerItem Parent { get; set; }
         public bool IsFolder { get; set; }
-        public string ResourceIdString { get; set; }
         public bool AutoExpand { get; set; }
         public API.Csidl SpecialFolderId { get; set; }
 
 
-
+        public PowerItem()
+        {
+            SpecialFolderId = API.Csidl.INVALID;
+        }
+    
 
         public ImageManager.ImageContainer Icon
         {
@@ -73,6 +76,19 @@ namespace Power8
                 return _items;
             }
         }
+
+
+
+        public string ResourceIdString
+        {
+            get { return _resIdString; } 
+            set
+            {
+                _resIdString = value;
+                FriendlyName = null;
+            }
+        }
+
 
         public string FriendlyName
         {

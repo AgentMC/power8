@@ -281,7 +281,7 @@ namespace Power8
         {
             try
             {
-                var curDir = basePath + item.Argument;
+                var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
                 foreach (var directory in item.IsLibrary ? GetLibraryDirectories(curDir) : Directory.GetDirectories(curDir))
                 {
                     if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden))) 
@@ -302,10 +302,14 @@ namespace Power8
                         string str;
                         while ((str = reader.ReadLine()) != null && !str.Contains("[LocalizedFileNames]"))
                         {
-                            if (str.Contains("IconFile="))
+                            if (str.StartsWith("IconFile="))
                             {
                                 item.NonCachedIcon = true;
                                 item.Icon = null;
+                            }
+                            if (str.StartsWith("LocalizedResourceName="))
+                            {
+                                item.ResourceIdString = str.Split(new[] {'='}, 2)[1].TrimStart('@');
                             }
                         }
                         while ((str = reader.ReadLine()) != null && str.Contains("="))

@@ -278,6 +278,9 @@ namespace Power8
         [DllImport("shell32.dll", SetLastError = true)]
         public static extern int SHGetSpecialFolderLocation(IntPtr hwndOwner, Csidl nFolder, ref IntPtr ppidl);
 
+        [DllImport("shell32.dll", SetLastError = true, EntryPoint = "SHGetSpecialFolderPathW")]
+        public static extern int SHGetSpecialFolderPath(IntPtr hwndOwner, out IntPtr ppwszPath, Csidl nFolder, bool fCreate);
+
         [DllImport("user32.dll")]
         public static extern int DestroyIcon(IntPtr hIcon);
 
