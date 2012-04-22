@@ -30,6 +30,25 @@ namespace Power8
             MainDisp.BeginInvoke(DispatcherPriority.Background, method);
         }
 
+        public static void PostBackgroundReleaseResourceCall(Delegate method)
+        {
+#if DEBUG
+            var mName = method.Method;
+            method = Delegate.Combine(method, new Action(() => Debug.WriteLine("PBRRC invoked for " + mName)));
+#endif
+            MainDisp.BeginInvoke(DispatcherPriority.ApplicationIdle, method);
+        }
+
+        public static void PostBackgroundDllUnload(IntPtr hModule)
+        {
+            PostBackgroundReleaseResourceCall(new Action(() => API.FreeLibrary(hModule)));
+        }
+
+        public static void PostBackgroundIconDestroy(IntPtr hIcon)
+        {
+            PostBackgroundReleaseResourceCall(new Action(() => API.DestroyIcon(hIcon)));
+        }
+
         public static T Eval<T>(Func<T> method)
         {
             return (T) MainDisp.Invoke(DispatcherPriority.DataBind, method);
@@ -114,11 +133,21 @@ namespace Power8
             return res;
         }
 
+        public static string ResolveSpecialFolder(API.Csidl id)
+        {
+            IntPtr pwstr;
+            API.SHGetSpecialFolderPath(IntPtr.Zero, out pwstr, id, false);
+            var res = Marshal.PtrToStringUni(pwstr);
+            Marshal.FreeCoTaskMem(pwstr);
+            return res;
+        }
+
 
 
         public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs)
         {
-            return GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString");
+            return GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString") ??
+                   GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip");
         }
 
         public static string GetDefaultIconResourceIdForClass(string clsidOrApiShNs)
@@ -157,12 +186,15 @@ namespace Power8
         public static string ResolveStringResource(string localizeableResourceId)
         {
             var resData = ResolveResourceCommon(localizeableResourceId);
-            if (resData.Item1 != IntPtr.Zero)
+            if (resData.Item2 != IntPtr.Zero)
             {
                 lock (Buffer)
                 {
-                    var number = API.LoadString(resData.Item1, resData.Item2, Buffer, Buffer.Capacity);
-                    API.FreeLibrary(resData.Item1);
+                    var number = API.LoadString(resData.Item2, resData.Item3, Buffer, Buffer.Capacity);
+#if DEBUG
+                    Debug.WriteLine("RSR: number => " + number + ", data: " + Buffer);
+#endif
+                    PostBackgroundDllUnload(resData.Item2);
                     if (number > 0)
                         return Buffer.ToString();
                 }
@@ -173,39 +205,54 @@ namespace Power8
         public static IntPtr ResolveIconicResource(string localizeableResourceId)
         {
             var resData = ResolveResourceCommon(localizeableResourceId);
-            if (resData.Item1 != IntPtr.Zero)
+            if (resData.Item2 != IntPtr.Zero)
             {
-                var icon = API.LoadIcon(resData.Item1, resData.Item2);
-                API.FreeLibrary(resData.Item1);
-                return icon;
+                var icon = API.LoadIcon(resData.Item2, resData.Item3);
+#if DEBUG
+                Debug.WriteLine("RIR: icon => " + icon);
+#endif
+                PostBackgroundDllUnload(resData.Item2);
+                if(icon != IntPtr.Zero)
+                    return icon;
+
+                var shinfo = new API.Shfileinfo();
+                API.SHGetFileInfo(resData.Item1, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), API.Shgfi.ICON | API.Shgfi.LARGEICON);
+                return shinfo.hIcon;
             }
             return IntPtr.Zero;
         }
 
-        private static Tuple<IntPtr, uint> ResolveResourceCommon(string resourceString)
+        private static Tuple<string, IntPtr, uint> ResolveResourceCommon(string resourceString)
         {
             //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
             //or like C:\data\a.dll,-2000#embedding8
             //or      B:\wakawaka\foo.dlx
             //or      %windir%\msm.dll,8 => 8 == -8
+#if DEBUG
+            Debug.WriteLine("RRC: in => " + resourceString);
+#endif
+
             var lastCommaIdx = Math.Max(resourceString.LastIndexOf(','), 0);
             var lastSharpIdx = resourceString.LastIndexOf('#');
             
             var resDll =
                 Environment.ExpandEnvironmentVariables(
                     resourceString.Substring(0, lastCommaIdx > 0 ? lastCommaIdx : resourceString.Length));
-            
+
             var resId = 
                 lastCommaIdx == 0
                 ? 0
                 : uint.Parse((lastSharpIdx > lastCommaIdx
                         ? resourceString.Substring(lastCommaIdx + 1, lastSharpIdx - (lastCommaIdx + 1))
                         : resourceString.Substring(lastCommaIdx + 1)).TrimStart('-'));
-            
+
             var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
                                             API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
-            
-            return new Tuple<IntPtr, uint>(dllHandle, resId);
+#if DEBUG
+            Debug.WriteLine("RRC: hModule<={0}, resId<={1}, resDll<={2}", dllHandle, resId, resDll);
+#endif
+
+            return new Tuple<string, IntPtr, uint>(resDll, dllHandle, resId);
         }
 
 

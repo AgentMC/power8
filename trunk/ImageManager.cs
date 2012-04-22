@@ -31,11 +31,19 @@ namespace Power8
 
         public static ImageContainer GetImageContainerSync(PowerItem item, API.Shgfi iconNeeded)
         {
+#if DEBUG
+            var dbgLine = "GICS for " + item.FriendlyName + ": ";
+            Debug.WriteLine(dbgLine + "begin");
+#endif
             var resolvedArg = PowerItemTree.GetResolvedArgument(item, false);
             var descr = GetObjectDescriptor(item, resolvedArg);
             lock (Cache)
             {
                 var container = (ImageContainer)(Cache.ContainsKey(descr) ? Cache[descr] : null);
+#if DEBUG
+                Debug.WriteLine("{3}arg<={0}, descr<={1}, container<={2}", resolvedArg, descr,
+                                (container != null ? "not " : "") + "null", dbgLine);
+#endif
                 if (container == null)
                 {
                     container = new ImageContainer(resolvedArg, descr, 
@@ -51,6 +59,9 @@ namespace Power8
                     container.GenerateSmallImage();
                 else
                     container.GenerateLargeImage();
+#if DEBUG
+                Debug.WriteLine(dbgLine + "end<<<<<<<<<<<<<<");
+#endif
                 return container;
             }
         }
@@ -122,12 +133,14 @@ namespace Power8
                 {
                     SmallBitmap = ExtractInternal(smallIconHandle);
                     SmallBitmap.Freeze();
-                    API.DestroyIcon(smallIconHandle);
+                    Util.PostBackgroundIconDestroy(smallIconHandle);
                 }
+#if DEBUG
                 else
                 {
                     Debug.WriteLine("!!!ExtractSmall failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
                 }
+#endif
             }
 
             public void GenerateSmallImage()
@@ -144,12 +157,14 @@ namespace Power8
                 {
                     LargeBitmap = ExtractInternal(largeIconHandle);
                     LargeBitmap.Freeze();
-                    API.DestroyIcon(largeIconHandle);
+                    Util.PostBackgroundIconDestroy(largeIconHandle);
                 }
+#if DEBUG
                 else
                 {
                     Debug.WriteLine("!!!ExtractLarge failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
                 }
+#endif
             }
 
             public void GenerateLargeImage()
@@ -169,31 +184,52 @@ namespace Power8
 
             private IntPtr GetUnmanagedIcon(API.Shgfi iconType)
             {
+#if DEBUG
+                var dbgLine = "GUIc for " + _initialObject + ": ";
+                Debug.WriteLine(dbgLine + "begin");
+#endif
                 var shinfo = new API.Shfileinfo();
-
                 var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
-                if (zeroFails == IntPtr.Zero && _id != API.Csidl.INVALID) //some ids on Win8 will work via this
+#if DEBUG
+                Debug.WriteLine(dbgLine + "ShGetFileInfo returned " + zeroFails);
+#endif
+                if (zeroFails == IntPtr.Zero) //lot of stuff will work via this
                 {
                     var temp = Util.GetDefaultIconResourceIdForClass(_initialObject);
+#if DEBUG
+                    Debug.WriteLine(dbgLine + "GetDefaultIconResourceIdForClass returned " + (temp ?? "NULL!!"));
+#endif
                     if (!string.IsNullOrEmpty(temp))
                     {
                         zeroFails = Util.ResolveIconicResource(temp);
+#if DEBUG
+                        Debug.WriteLine(dbgLine + "ResolveIconicResource returned " + zeroFails);
+#endif
                     }
-                    if(zeroFails == IntPtr.Zero)
+                    if(zeroFails != IntPtr.Zero)//ResolveIconicResource() succeeded and zeroFails contains required handle
+                    {
+                        shinfo.hIcon = zeroFails;
+                    }
+                    else if (_id != API.Csidl.INVALID)//For PowerItems initialized without argument but with folderId
                     {
                         var ppIdl = IntPtr.Zero;
                         var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, _id, ref ppIdl);
+#if DEBUG
+                        Debug.WriteLine("{2}SHGetSp.F.Loc. for id<={0} returned result code {1}", _id, hRes, dbgLine);
+#endif
                         zeroFails = (hRes != 0
                                          ? IntPtr.Zero
                                          : API.SHGetFileInfo(ppIdl, 0, ref shinfo, (uint) Marshal.SizeOf(shinfo),
                                                              API.Shgfi.ICON | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES | iconType));
-                        Marshal.FreeCoTaskMem(ppIdl);                                       
-                    }
-                    else //ResolveIconicResource() succeeded and zeroFails contains required handle
-                    {
-                        shinfo.hIcon = zeroFails;
+                        Marshal.FreeCoTaskMem(ppIdl);
+#if DEBUG
+                        Debug.WriteLine(dbgLine + "ShGetFileInfo (2p) returned " + zeroFails);      
+#endif
                     }
                 }
+#if DEBUG
+                Debug.WriteLine("{2}end<<<<<, zf={0}, hi={1}", zeroFails, shinfo.hIcon, dbgLine);
+#endif
                 return zeroFails == IntPtr.Zero || shinfo.hIcon == IntPtr.Zero ? IntPtr.Zero : shinfo.hIcon;
             }
         }
