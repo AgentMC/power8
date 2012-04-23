@@ -32,5 +32,6 @@
 		<GradientStop Color="#33FFFFFF"/>
 		<GradientStop Offset="0.5"/>
 	</RadialGradientBrush>
+	<SolidColorBrush x:Key="WhiteSolidBrush" Color="White"/>
 	<!-- Resource dictionary entries should be defined here. -->
 </ResourceDictionary>
