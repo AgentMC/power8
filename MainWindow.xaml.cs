@@ -204,33 +204,42 @@ namespace Power8
             {
                 if (cycles == 0)
                 {
-                    var info =
-                        new System.IO.StringReader(
-                            client.DownloadString(Properties.Resources.Power8URI + Properties.Resources.AssemblyInfoURI));
-                    string line;
-                    while ((line = info.ReadLine()) != null)
+                    try
                     {
-                        if (line.StartsWith("[assembly: AssemblyVersion("))
+                        var info =
+                            new System.IO.StringReader(
+                                client.DownloadString(Properties.Resources.Power8URI + Properties.Resources.AssemblyInfoURI));
+                        string line;
+                        while ((line = info.ReadLine()) != null)
                         {
-                            var verLine = line.Substring(28).TrimEnd(new[] {']', ')', '"'});
-                            if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
+                            if (line.StartsWith("[assembly: AssemblyVersion("))
                             {
-                                switch (MessageBox.Show(string.Format(
-                                            Properties.Resources.UpdateAvailableFormat, Application.ProductVersion, verLine),
-                                        Properties.Resources.AppShortName + Properties.Resources.UpdateAvailable,
-                                        MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
+                                var verLine = line.Substring(28).TrimEnd(new[] {']', ')', '"'});
+                                if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
                                 {
-                                    case MessageBoxResult.Cancel:
-                                        Settings.Default.IgnoreVer = verLine;
-                                        Settings.Default.Save();
-                                        break;
-                                    case MessageBoxResult.Yes:
-                                        Process.Start(Properties.Resources.Power8URI);
-                                        break;
+                                    switch (MessageBox.Show(string.Format(
+                                                Properties.Resources.UpdateAvailableFormat, Application.ProductVersion, verLine),
+                                            Properties.Resources.AppShortName + Properties.Resources.UpdateAvailable,
+                                            MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
+                                    {
+                                        case MessageBoxResult.Cancel:
+                                            Settings.Default.IgnoreVer = verLine;
+                                            Settings.Default.Save();
+                                            break;
+                                        case MessageBoxResult.Yes:
+                                            Process.Start(Properties.Resources.Power8URI);
+                                            break;
+                                    }
                                 }
+                                break;
                             }
-                            break;
                         }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(Properties.Resources.CantCheckUpdates + ex.Message,
+                                        Properties.Resources.AppShortName, MessageBoxButton.OK,
+                                        MessageBoxImage.Exclamation);
                     }
                 }
                 Thread.Sleep(1000);

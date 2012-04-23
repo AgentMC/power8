@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using Power8.Properties;
 
 namespace Power8
 {
@@ -104,7 +105,7 @@ namespace Power8
                     ResourceIdString = null; //Operation failed somewhere, resourceId is invalid
                 }
                 if (string.IsNullOrEmpty(Argument))
-                    return "All Programs";
+                    return Resources.AllPrograms;
                 var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
                 return string.IsNullOrEmpty(path) ? Argument : path;
             }
@@ -167,11 +168,15 @@ namespace Power8
             {
                 Process.Start(psi);
             }
-            catch (Exception)
+            catch (Win32Exception w32E)
             {
-                psi.Verb = null;
-                Process.Start(psi);
-                throw new InvalidProgramException("Unable to start specified object as Administrator. Process launched with regular user rights.");
+                if (w32E.ErrorCode == -2147467259)
+                {
+                    psi.Verb = null;
+                    Process.Start(psi);
+                    throw new InvalidProgramException(Resources.StartAsAdminFailed);
+                }
+                throw;
             }
         }
 
