@@ -18,6 +18,13 @@ namespace Power8
         
         public App()
         {
+            if(Environment.OSVersion.Version.ToString().StartsWith("6.0"))
+            {
+                MessageBox.Show(
+                    "Windows (R) Vista (R) is not intended to be used with Power8. Please use normal operating system.",
+                    Power8.Properties.Resources.AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(2);
+            }
             Util.MainDisp = Dispatcher;
             //Initialize standard folder icon
             foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))
