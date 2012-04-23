@@ -223,9 +223,17 @@ namespace Power8
         private static void FileChanged(object sender, FileSystemEventArgs e)
         {
             lock (StartMenuRootItem)
-            {//We ignore hiden data
-                if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
+            {
+                try
+                {
+                    //We ignore hiden data
+                    if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
+                        return;
+                }
+                catch (Exception) //In case we have multiple change operations caused by links beung updated by installer
+                {
                     return;
+                }
                 //Ensuring buttonstack is created on Main thread
                 Util.Send(new Action(() => BtnStck.Instance.InvalidateVisual()));
                 var isDir = Directory.Exists(e.FullPath);
@@ -284,14 +292,14 @@ namespace Power8
                 var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
                 foreach (var directory in item.IsLibrary ? GetLibraryDirectories(curDir) : Directory.GetDirectories(curDir))
                 {
-                    if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden))) 
+                    if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
                         continue;
 
                     var subitem = AddSubItem(item, basePath, directory, true, autoExpand: !recoursive);
                     if (recoursive)
                         ScanFolderSync(subitem, basePath, true);
                 }
-                if(item.IsLibrary)
+                if (item.IsLibrary)
                     return;
                 var resources = new Dictionary<string, string>();
                 var dsktp = curDir + "\\desktop.ini";
@@ -309,19 +317,19 @@ namespace Power8
                             }
                             if (str.StartsWith("LocalizedResourceName="))
                             {
-                                item.ResourceIdString = str.Split(new[] {'='}, 2)[1].TrimStart('@');
+                                item.ResourceIdString = str.Split(new[] { '=' }, 2)[1].TrimStart('@');
                             }
                         }
                         while ((str = reader.ReadLine()) != null && str.Contains("="))
                         {
-                            var pair = str.Split(new[] {'='}, 2);
+                            var pair = str.Split(new[] { '=' }, 2);
                             resources.Add(pair[0], pair[1].TrimStart('@'));
                         }
                     }
                 }
                 foreach (var file in Directory.GetFiles(curDir))
                 {
-                    if ((File.GetAttributes(file).HasFlag(FileAttributes.Hidden))) 
+                    if ((File.GetAttributes(file).HasFlag(FileAttributes.Hidden)))
                         continue;
 
                     var fn = Path.GetFileName(file);
@@ -332,7 +340,9 @@ namespace Power8
                 }
             }
             catch (UnauthorizedAccessException)
-            {}//Don't care if user is not allowed to access fileor directory or it's contents
+            { }//Don't care if user is not allowed to access fileor directory or it's contents
+            catch (IOException)
+            { }//Don't care as well if file was deleted on-the-fly, watcher will notify list
         }
 
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)

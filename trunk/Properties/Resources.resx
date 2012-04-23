@@ -150,4 +150,14 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="FailFastFormat" xml:space="preserve">
     <value>Exiting because {0}</value>
   </data>
+    <data name="CantCheckUpdates">
+        <value xml:space="preserve">Unable to check for updates.
+</value>
+    </data>
+    <data name="AllPrograms">
+        <value xml:space="preserve">All Programs</value>
+    </data>
+    <data name="StartAsAdminFailed">
+        <value xml:space="preserve">Unable to start specified object as Administrator. Process launched with regular user rights.</value>
+    </data>
 </root>
