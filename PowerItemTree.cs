@@ -371,8 +371,25 @@ namespace Power8
             var arg1 = item.Argument;
             if (item.IsSpecialObject)
             {
-                psi.FileName = "explorer.exe";
-                psi.Arguments = "/N," + item.Argument;
+                if (!item.IsFolder && item.Parent != null && item.Parent.SpecialFolderId == API.Csidl.CONTROLS)
+                {
+                    //Control panel flow item
+                    var command = Util.GetOpenCommandForClass(item.Argument);
+                    if (command != null)
+                    {
+                        psi.Arguments = command;
+                    }
+                    else
+                    {
+                        psi.FileName = "control.exe";
+                        psi.Arguments = "/name " + Util.GetCplAppletSysNameForClass(item.Argument);
+                    }
+                }
+                else
+                {
+                    psi.FileName = "explorer.exe";
+                    psi.Arguments = "/N," + item.Argument;
+                }
             }
             else
             {
@@ -406,7 +423,7 @@ namespace Power8
                             throw new IOException("File not found for " + item.Argument);
                     }
                 }
-                
+
             }
             return psi;
         }

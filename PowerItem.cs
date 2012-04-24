@@ -146,6 +146,15 @@ namespace Power8
                   Argument.EndsWith(".library-ms", StringComparison.InvariantCultureIgnoreCase); }
         }
 
+        public bool IsNotControlPanelFlowItem
+        {
+            get
+            {
+                return Parent == null || Parent.SpecialFolderId != API.Csidl.CONTROLS ||
+                       Argument.EndsWith(".cpl", StringComparison.InvariantCultureIgnoreCase);
+            }
+        }
+
 
 
 

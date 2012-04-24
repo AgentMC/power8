@@ -155,6 +155,16 @@ namespace Power8
             return GetResourceIdForClassCommon(clsidOrApiShNs, "\\DefaultIcon", "");
         }
 
+        public static string GetOpenCommandForClass(string clsidOrApiShNs)
+        {
+            return GetResourceIdForClassCommon(clsidOrApiShNs, "\\Shell\\Open\\Command", "");
+        }
+        
+        public static string GetCplAppletSysNameForClass(string clsidOrApiShNs)
+        {
+            return GetResourceIdForClassCommon(clsidOrApiShNs, "", "System.ApplicationName");
+        }
+
         private static string GetResourceIdForClassCommon(string clsidOrApiShNs, string subkey, string valueName)
         {
 // ReSharper disable EmptyGeneralCatchClause
