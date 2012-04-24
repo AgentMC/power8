@@ -9,11 +9,11 @@
         AllowsTransparency="False" Background="Transparent" SizeToContent="WidthAndHeight">
     <Button Name="b1" Style="{DynamicResource TransparentButtonStyle}" Click="ShowButtonStack">
         <Button.ContextMenu>
-            <ContextMenu Name="menu">
-                <MenuItem Header="Auto start" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" />
-                <MenuItem Header="Check for updates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" />
+            <ContextMenu Name="menu" >
+                <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Style="{DynamicResource ContextMenuItemStyle}"/>
                 <Separator/>
-                <MenuItem Header="Exit" Click="ExitClick"/> 
+                <MenuItem Name="MWExit" Click="ExitClick" Style="{DynamicResource ContextMenuItemStyle}"/> 
             </ContextMenu>
         </Button.ContextMenu>
     </Button>
