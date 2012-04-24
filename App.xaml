@@ -11,18 +11,20 @@
                 <ResourceDictionary Source="Brushes.xaml"/>
                 <ResourceDictionary Source="Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
             <my:MenuItemClickCommand x:Key="globalClickCommand"/>
+            
             <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
-                <MenuItem Name="Run" Header="Run" IsEnabled="{Binding IsFile}" Click="RunClick" Padding="6,3"/>
-                <MenuItem Name="RunAs" Header="Run as Administrator" IsEnabled="{Binding IsFile}" Click="RunAsClick" Padding="6,3"/>
-                <MenuItem Name="OpenContainer" Header="Open locatiom" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick" Padding="6,3"/>
-                <MenuItem Name="OpenTargetContainer" Header="Open target location" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick" Padding="6,3"/>
-                <Separator/>
-                <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick" Padding="6,3"/>
-                <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick" Padding="6,3"/>
-                <Separator/>
-                <MenuItem Name="ShowProperties" Header="Properties" IsEnabled="{Binding IsNotControlPanelFlowItem}" Click="ShowPropertiesClick" Padding="6,3"/>
-                <MenuItem Name="ShowTargetProperties" Header="Target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Padding="6,3"/>
+                <MenuItem Name="AppRun" IsEnabled="{Binding IsFile}" Click="RunClick" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <MenuItem Name="AppRunAs" IsEnabled="{Binding IsFile}" Click="RunAsClick" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <MenuItem Name="AppOpenContainer" IsEnabled="{Binding IsFile}"  Click="OpenContainerClick" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <MenuItem Name="AppOpenTargetContainer" IsEnabled="{Binding IsLink}"  Click="OpenContainerClick" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <Separator/>    
+                <MenuItem Name="AppOpenFolder" IsEnabled="{Binding IsFolder}" Click="RunClick" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <MenuItem Name="AppOpenCommonFolder" IsEnabled="{Binding IsFolder}" Click="RunAsClick" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <Separator/>    
+                <MenuItem Name="AppShowProperties" IsEnabled="{Binding IsNotControlPanelFlowItem}" Click="ShowPropertiesClick" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <MenuItem Name="AppShowTargetProperties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Style="{DynamicResource ContextMenuItemStyle}"/>
             </ContextMenu>
         </ResourceDictionary>
     </Application.Resources>

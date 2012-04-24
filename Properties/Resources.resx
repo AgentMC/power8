@@ -150,14 +150,71 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="FailFastFormat" xml:space="preserve">
     <value>Exiting because {0}</value>
   </data>
-    <data name="CantCheckUpdates">
-        <value xml:space="preserve">Unable to check for updates.
+  <data name="CantCheckUpdates" xml:space="preserve">
+    <value>Unable to check for updates.
 </value>
-    </data>
-    <data name="AllPrograms">
-        <value xml:space="preserve">All Programs</value>
-    </data>
-    <data name="StartAsAdminFailed">
-        <value xml:space="preserve">Unable to start specified object as Administrator. Process launched with regular user rights.</value>
-    </data>
+  </data>
+  <data name="AllPrograms" xml:space="preserve">
+    <value>All Programs</value>
+  </data>
+  <data name="StartAsAdminFailed" xml:space="preserve">
+    <value>Unable to start specified object as Administrator. Process launched with regular user rights.</value>
+  </data>
+  <data name="CR_AppOpenCommonFolder" xml:space="preserve">
+    <value>Open All Users Folder</value>
+  </data>
+  <data name="CR_AppOpenContainer" xml:space="preserve">
+    <value>Open Location</value>
+  </data>
+  <data name="CR_AppOpenFolder" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="CR_AppOpenTargetContainer" xml:space="preserve">
+    <value>Open Target Location</value>
+  </data>
+  <data name="CR_AppRun" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="CR_AppRunAs" xml:space="preserve">
+    <value>Run As...</value>
+  </data>
+  <data name="CR_AppShowProperties" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="CR_AppShowTargetProperties" xml:space="preserve">
+    <value>Target Properties</value>
+  </data>
+  <data name="CR_ButtonHibernate" xml:space="preserve">
+    <value>Hibernate</value>
+  </data>
+  <data name="CR_ButtonLock" xml:space="preserve">
+    <value>Lock PC</value>
+  </data>
+  <data name="CR_ButtonLogOff" xml:space="preserve">
+    <value>Log Off</value>
+  </data>
+  <data name="CR_ButtonRestart" xml:space="preserve">
+    <value>Restart</value>
+  </data>
+  <data name="CR_ButtonRun" xml:space="preserve">
+    <value>Run...</value>
+  </data>
+  <data name="CR_ButtonScreensave" xml:space="preserve">
+    <value>Start Screensaver</value>
+  </data>
+  <data name="CR_ButtonShutdown" xml:space="preserve">
+    <value>Shutdown</value>
+  </data>
+  <data name="CR_ButtonSleep" xml:space="preserve">
+    <value>Sleep</value>
+  </data>
+  <data name="CR_MWAutoStart" xml:space="preserve">
+    <value>Auto Start</value>
+  </data>
+  <data name="CR_MWCheckForUpdates" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="CR_MWExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
 </root>

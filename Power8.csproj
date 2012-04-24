@@ -95,6 +95,7 @@
       <DependentUpon>MenuedButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="MenuItemClickCommand.cs" />
+    <Compile Include="NameToResourceConverter.cs" />
     <Compile Include="RestartExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
