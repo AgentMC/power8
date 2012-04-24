@@ -21,7 +21,7 @@
                 <MenuItem Name="OpenFolder" Header="Open" IsEnabled="{Binding IsFolder}" Click="RunClick" Padding="6,3"/>
                 <MenuItem Name="OpenCommonFolder" Header="Open all users folder" IsEnabled="{Binding IsFolder}" Click="RunAsClick" Padding="6,3"/>
                 <Separator/>
-                <MenuItem Name="ShowProperties" Header="Properties" Click="ShowPropertiesClick" Padding="6,3"/>
+                <MenuItem Name="ShowProperties" Header="Properties" IsEnabled="{Binding IsNotControlPanelFlowItem}" Click="ShowPropertiesClick" Padding="6,3"/>
                 <MenuItem Name="ShowTargetProperties" Header="Target properties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Padding="6,3"/>
             </ContextMenu>
         </ResourceDictionary>
