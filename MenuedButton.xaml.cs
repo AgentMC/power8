@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 
 namespace Power8
 {
@@ -13,7 +12,6 @@ namespace Power8
         public MenuedButton()
         {
             InitializeComponent();
-            ItemsList.DataContext = this;
         }
 
         private PowerItem _item;
@@ -30,24 +28,9 @@ namespace Power8
             }
         }
 
-        private ContextMenu ItemsList
-        {
-            get { return ((ContextMenu) Resources["itemsList"]); }
-        }
-
-        private void DisplayMenu(object sender, RoutedEventArgs e)
-        {
-            ItemsList.IsOpen = true;
-        }
-
         public BtnStck Mnu
         {
             get { return BtnStck.Instance; }
-        }
-
-        public Control MenuTarget
-        {
-            get { return menuDropper; }
         }
 
         private void ContextMenuContextMenuOpening(object sender, ContextMenuEventArgs e)
