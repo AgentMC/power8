@@ -18,8 +18,8 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
-              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="16" 
-              Style="{DynamicResource MenuStyle}" ItemContainerStyle="{DynamicResource MenuItemStyle}"/>
+              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="22" 
+              Style="{DynamicResource MenuStyle}" ItemContainerStyle="{DynamicResource MenuItemStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}"/>
         <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
                   ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
                   CanUserAddRows="False">
