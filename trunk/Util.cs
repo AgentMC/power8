@@ -142,12 +142,33 @@ namespace Power8
             return res;
         }
 
-
-
-        public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs)
+        public static string ResolveSpecialFolderName(API.Csidl id)
         {
-            return GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString") ??
-                   GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip");
+            var ppIdl = IntPtr.Zero;
+            var info = new API.Shfileinfo();
+            var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, id, ref ppIdl);
+#if DEBUG
+            Debug.WriteLine("RSFN: SHGetSp.F.Loc. for id<={0} returned result code {1}", id, hRes);
+#endif
+            var zeroFails = (hRes != 0
+                                ? IntPtr.Zero
+                                : API.SHGetFileInfo(ppIdl, 0, ref info, (uint) Marshal.SizeOf(info),
+                                                    API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES));
+            Marshal.FreeCoTaskMem(ppIdl);
+#if DEBUG
+            Debug.WriteLine("RSFN: ShGetFileInfo returned " + zeroFails);      
+#endif
+            return zeroFails == IntPtr.Zero ? null : info.szDisplayName;
+        }
+
+
+
+        public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs, bool fallbackToInfoTip = false)
+        {
+            var ls = GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString");
+            if(ls == null && fallbackToInfoTip)
+                return GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip");
+            return ls;
         }
 
         public static string GetDefaultIconResourceIdForClass(string clsidOrApiShNs)
@@ -174,7 +195,7 @@ namespace Power8
                         .OpenSubKey("CLSID\\" + NameSpaceToGuidWithBraces(clsidOrApiShNs) + subkey, false))
                 {
                     if (k != null)
-                        return ((string)k.GetValue(valueName, null)).TrimStart('@');
+                        return ((string)k.GetValue(valueName, null));
                 }
             }
             catch (Exception){}
@@ -182,7 +203,7 @@ namespace Power8
             return null;
         }
 
-        public static string NameSpaceToGuidWithBraces(string ns)
+        private static string NameSpaceToGuidWithBraces(string ns)
         {
             ns = ns.Substring(ns.LastIndexOf('\\') + 1);
             ns = ns.TrimStart(':', '\\');
@@ -195,6 +216,8 @@ namespace Power8
         
         public static string ResolveStringResource(string localizeableResourceId)
         {
+            if(!(localizeableResourceId.StartsWith("@")))
+                return localizeableResourceId; //when non-@ string is used for id
             var resData = ResolveResourceCommon(localizeableResourceId);
             if (resData.Item2 != IntPtr.Zero)
             {
@@ -234,13 +257,14 @@ namespace Power8
 
         private static Tuple<string, IntPtr, uint> ResolveResourceCommon(string resourceString)
         {
-            //ResId = %ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
-            //or like C:\data\a.dll,-2000#embedding8
-            //or      B:\wakawaka\foo.dlx
-            //or      %windir%\msm.dll,8 => 8 == -8
+            //ResId = @%ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
+            //or like @C:\data\a.dll,-2000#embedding8
+            //or      @B:\wakawaka\foo.dlx
+            //or      @%windir%\msm.dll,8 => 8 == -8
 #if DEBUG
             Debug.WriteLine("RRC: in => " + resourceString);
 #endif
+            resourceString = resourceString.TrimStart('@');
 
             var lastCommaIdx = Math.Max(resourceString.LastIndexOf(','), 0);
             var lastSharpIdx = resourceString.LastIndexOf('#');

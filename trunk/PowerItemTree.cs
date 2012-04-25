@@ -89,7 +89,7 @@ namespace Power8
                 {
                     _controlPanelItem = new PowerItem
                     {
-                        Argument = API.ShNs.ControlPanel,
+                        Argument = Environment.OSVersion.Version.Major > 5 ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
                         SpecialFolderId = API.Csidl.CONTROLS,
                         ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.ControlPanel),
                         NonCachedIcon = true,
@@ -97,20 +97,23 @@ namespace Power8
                         IsFolder = true
                     };
 
-                    _controlPanelItem.Icon = ImageManager.GetImageContainerSync(_controlPanelItem, API.Shgfi.SMALLICON);
-
-                    _controlPanelItem.Items.Add(new PowerItem
+                    if (Environment.OSVersion.Version.Major > 5) //XP only supports "All items"
                     {
-                        Argument = API.ShNs.AllControlPanelItems,
-                        SpecialFolderId = API.Csidl.CONTROLS,
-                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
-                        Parent = _controlPanelItem,
-                        Icon = _controlPanelItem.Icon,
-                        IsFolder = true
-                    });
+                        _controlPanelItem.Icon = ImageManager.GetImageContainerSync(_controlPanelItem, API.Shgfi.SMALLICON);
 
-                    //TODO: separator in binded ObservableCollection? (and below)
-                    _controlPanelItem.Items.Add(new PowerItem {FriendlyName = "----"});
+                        _controlPanelItem.Items.Add(new PowerItem
+                        {
+                            Argument = API.ShNs.AllControlPanelItems,
+                            SpecialFolderId = API.Csidl.CONTROLS,
+                            ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
+                            Parent = _controlPanelItem,
+                            Icon = _controlPanelItem.Icon,
+                            IsFolder = true
+                        });
+
+                        //TODO: separator in binded ObservableCollection? (and below)
+                        _controlPanelItem.Items.Add(new PowerItem {FriendlyName = "----"});
+                    }
 
                     foreach (var file in Directory.EnumerateFiles(
                         Environment.GetFolderPath(Environment.SpecialFolder.System), 
@@ -133,10 +136,10 @@ namespace Power8
                                 if(cplguid.StartsWith("{"))
                                     _controlPanelItem.Items.Add(new PowerItem
                                     {
-                                        Argument = "::" + cplguid,
+                                        Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
                                         NonCachedIcon = true,
                                         Parent = _controlPanelItem,
-                                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid)
+                                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
                                     });
                             }
                         }
@@ -317,13 +320,13 @@ namespace Power8
                             }
                             if (str.StartsWith("LocalizedResourceName="))
                             {
-                                item.ResourceIdString = str.Split(new[] { '=' }, 2)[1].TrimStart('@');
+                                item.ResourceIdString = str.Substring(22);
                             }
                         }
                         while ((str = reader.ReadLine()) != null && str.Contains("="))
                         {
                             var pair = str.Split(new[] { '=' }, 2);
-                            resources.Add(pair[0], pair[1].TrimStart('@'));
+                            resources.Add(pair[0], pair[1]);
                         }
                     }
                 }
@@ -371,21 +374,30 @@ namespace Power8
             var arg1 = item.Argument;
             if (item.IsSpecialObject)
             {
+                bool cplSucceeded = false;
                 if (!item.IsFolder && item.Parent != null && item.Parent.SpecialFolderId == API.Csidl.CONTROLS)
                 {
                     //Control panel flow item
                     var command = Util.GetOpenCommandForClass(item.Argument);
-                    if (command != null)
+                    if (!string.IsNullOrEmpty(command))
                     {
-                        psi.Arguments = command;
+                        var argPtr = command[0] == '"' ? command.IndexOf('"', 1) + 1 : command.IndexOf(' ');
+                        psi.FileName = command.Substring(0, argPtr).Trim('"');
+                        psi.Arguments = command.Substring(argPtr).TrimStart(' ');
+                        cplSucceeded = true;
                     }
                     else
                     {
-                        psi.FileName = "control.exe";
-                        psi.Arguments = "/name " + Util.GetCplAppletSysNameForClass(item.Argument);
+                        var sysname = Util.GetCplAppletSysNameForClass(item.Argument);
+                        if(!string.IsNullOrEmpty(sysname))
+                        {
+                            psi.FileName = "control.exe";
+                            psi.Arguments = "/name " + sysname;
+                            cplSucceeded = true;
+                        }
                     }
                 }
-                else
+                if(!cplSucceeded)
                 {
                     psi.FileName = "explorer.exe";
                     psi.Arguments = "/N," + item.Argument;

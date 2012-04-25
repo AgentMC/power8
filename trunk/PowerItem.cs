@@ -104,6 +104,12 @@ namespace Power8
                         return _friendlyName;
                     ResourceIdString = null; //Operation failed somewhere, resourceId is invalid
                 }
+                if (SpecialFolderId != API.Csidl.INVALID)
+                {
+                    _friendlyName = Util.ResolveSpecialFolderName(SpecialFolderId);
+                    if (_friendlyName != null)
+                        return _friendlyName;
+                }
                 if (string.IsNullOrEmpty(Argument))
                     return Resources.AllPrograms;
                 var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
