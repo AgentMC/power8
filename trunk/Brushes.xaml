@@ -33,5 +33,12 @@
 		<GradientStop Offset="0.5"/>
 	</RadialGradientBrush>
 	<SolidColorBrush x:Key="WhiteSolidBrush" Color="White"/>
-	<!-- Resource dictionary entries should be defined here. -->
+    <LinearGradientBrush x:Key="MenuBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#F6F6F6" Offset="0.25"/>
+        <GradientStop Color="#EAE8E8" Offset="0.25"/>
+        <GradientStop Color="#DCD9D9" Offset="0.8"/>
+        <GradientStop Color="White" Offset="1"/>
+    </LinearGradientBrush>
+
+    <!-- Resource dictionary entries should be defined here. -->
 </ResourceDictionary>

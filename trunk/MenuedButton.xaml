@@ -28,7 +28,7 @@
     			<TextBlock x:Name="textBlock" Text="{Binding Item.FriendlyName, ElementName=dblBtn}" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,8,0"/>
     		</Grid>
     	</Button>
-        <Menu Grid.Column="1" Margin="0"  Padding="0"  ContextMenuOpening="ContextMenuContextMenuOpening" Style="{DynamicResource RightMenuStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}">
+        <Menu Grid.Column="1" Margin="0"  Padding="0"  ContextMenuOpening="ContextMenuContextMenuOpening" Style="{DynamicResource RightMenuStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}" IsMainMenu="False">
             <MenuItem ItemsSource="{Binding ElementName=dblBtn, Path=Item.Items}" ItemContainerStyle="{DynamicResource MenuItemStyle}" Padding="0">
 				<MenuItem.Header>
 	        	    <Grid Width="14" Height="14" Margin="2,1,1,1">
