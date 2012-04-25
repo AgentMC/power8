@@ -8,7 +8,7 @@ namespace Power8
         public void Execute(object parameter)
         {
             var powerItem = parameter as PowerItem;
-            if (powerItem == null || powerItem.Parent == null)
+            if (powerItem == null || (powerItem.Parent == null && string.IsNullOrEmpty(powerItem.Argument)))
                 return;
             powerItem.Invoke();
             BtnStck.Instance.Hide();

@@ -45,10 +45,5 @@ namespace Power8
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, new PropertyChangedEventArgs(property));
         }
-
-        private void actionBtnClick(object sender, RoutedEventArgs e)
-        {
-            Item.Invoke();
-        }
     }
 }

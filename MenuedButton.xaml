@@ -10,8 +10,9 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-    	<Button x:Name="actionBtn" 
-    		Padding="3" Margin="0,0,-1,0" Click="actionBtnClick" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Style="{DynamicResource LeftMenuButtonStyle}" >
+    	<Button x:Name="actionBtn" Padding="3" Margin="0,0,-1,0"
+            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Style="{DynamicResource LeftMenuButtonStyle}" 
+            Command="{DynamicResource globalClickCommand}" CommandParameter="{Binding Item, ElementName=dblBtn}">
     		<Grid Margin="1">
     			<Grid.ColumnDefinitions>
     				<ColumnDefinition Width="Auto"/>
