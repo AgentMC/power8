@@ -52,9 +52,9 @@
             <Button Click="ButtonRestartClick" Name="ButtonRestart"/>
             <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
             <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
-            <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
-            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
-            <Button Click="ButtonLockClick" Name="ButtonLock"/>
+            <Button Click="ButtonLogOffClick" Name="ButtonLogOff" Margin="3,0"/>
+            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave" Margin="3,0"/>
+            <Button Click="ButtonLockClick" Name="ButtonLock" Margin="3,0"/>
             </StackPanel>
     </Grid>
 </Window>
