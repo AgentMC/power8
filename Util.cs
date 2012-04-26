@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -176,9 +177,21 @@ namespace Power8
             return GetResourceIdForClassCommon(clsidOrApiShNs, "\\DefaultIcon", "");
         }
 
-        public static string GetOpenCommandForClass(string clsidOrApiShNs)
+        public static Tuple<string, string> GetOpenCommandForClass(string clsidOrApiShNs)
         {
-            return GetResourceIdForClassCommon(clsidOrApiShNs, "\\Shell\\Open\\Command", "");
+            var command = GetResourceIdForClassCommon(clsidOrApiShNs, "\\Shell\\Open\\Command", "");
+            if (!string.IsNullOrEmpty(command))
+            {
+                if (File.Exists(command))
+                    return new Tuple<string, string>(command, "");
+                var argPtr = command[0] == '"' ? command.IndexOf('"', 1) + 1 : command.IndexOf(' ');
+                if (argPtr > 0)
+                {
+                    return new Tuple<string, string>(command.Substring(0, argPtr).Trim('"'),
+                                                     command.Substring(argPtr).TrimStart(' '));
+                }
+            }
+            return null;
         }
         
         public static string GetCplAppletSysNameForClass(string clsidOrApiShNs)
