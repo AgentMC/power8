@@ -379,11 +379,10 @@ namespace Power8
                 {
                     //Control panel flow item
                     var command = Util.GetOpenCommandForClass(item.Argument);
-                    if (!string.IsNullOrEmpty(command))
+                    if (command != null)
                     {
-                        var argPtr = command[0] == '"' ? command.IndexOf('"', 1) + 1 : command.IndexOf(' ');
-                        psi.FileName = command.Substring(0, argPtr).Trim('"');
-                        psi.Arguments = command.Substring(argPtr).TrimStart(' ');
+                        psi.FileName = command.Item1;
+                        psi.Arguments = command.Item2;
                         cplSucceeded = true;
                     }
                     else
