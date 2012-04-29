@@ -87,6 +87,7 @@ namespace Power8
             {
                 if (_controlPanelItem == null)
                 {
+                    //the item itself
                     _controlPanelItem = new PowerItem
                     {
                         Argument = Environment.OSVersion.Version.Major > 5 ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
@@ -99,6 +100,7 @@ namespace Power8
 
                     if (Environment.OSVersion.Version.Major > 5) //XP only supports "All items"
                     {
+                        //for 7+ we add "All Control Panel Items" + separator
                         _controlPanelItem.Icon = ImageManager.GetImageContainerSync(_controlPanelItem, API.Shgfi.SMALLICON);
 
                         _controlPanelItem.Items.Add(new PowerItem
@@ -115,40 +117,55 @@ namespace Power8
                         _controlPanelItem.Items.Add(new PowerItem {FriendlyName = "----"});
                     }
 
-                    foreach (var file in Directory.EnumerateFiles(
-                        Environment.GetFolderPath(Environment.SpecialFolder.System), 
-                        "*.cpl", 
-                        SearchOption.TopDirectoryOnly))
-                    {
-                        var resolved = Util.GetCplInfo(file);
-                        if (resolved.Item1 == null && resolved.Item2 == null) 
-                            continue;
-                        var item = AddSubItem(_controlPanelItem, string.Empty, file, false);
-                        item.FriendlyName = resolved.Item1;
-                        item.Icon = resolved.Item2;
-                    }
+                    //*.CPL items + separator
+                    var itemsList = (from file 
+                                     in Directory.EnumerateFiles(
+                                            Environment.GetFolderPath(Environment.SpecialFolder.System), 
+                                            "*.cpl", 
+                                            SearchOption.TopDirectoryOnly)
+                                     let resolved = Util.GetCplInfo(file)
+                                     where resolved.Item1 != null || resolved.Item2 != null
+                                     select new PowerItem
+                                                {
+                                                    Argument = file, 
+                                                    Parent = _controlPanelItem, 
+                                                    FriendlyName = resolved.Item1, 
+                                                    Icon = resolved.Item2
+                                                }).ToList();
+                    itemsList.Sort();
+                    itemsList.ForEach(_controlPanelItem.Items.Add);
 
                     _controlPanelItem.Items.Add(new PowerItem { FriendlyName = "----" });
 
+                    //Flow items
+                    itemsList.Clear();
                     using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace", false))
                     {
                         if (k != null)
                         {
-                            foreach (var cplguid in k.GetSubKeyNames())
-                            {
-                                if(cplguid.StartsWith("{"))
-                                    _controlPanelItem.Items.Add(new PowerItem
-                                    {
-                                        Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
-                                        NonCachedIcon = true,
-                                        Parent = _controlPanelItem,
-                                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
-                                    });
-                            }
+                            itemsList.AddRange(
+                                from cplguid in k.GetSubKeyNames()
+                                where cplguid.StartsWith("{")
+                                select new PowerItem
+                                {
+                                    Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
+                                    NonCachedIcon = true,
+                                    Parent = _controlPanelItem,
+                                    ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
+                                });
                         }
                     }
+                    itemsList.Sort();
+                    itemsList.ForEach(_controlPanelItem.Items.Add);
 
+                    //Remove duplicates leaving separators
+                    for (var i = _controlPanelItem.Items.Count - 1; i >= 0; i--)
+                    {
+                        if(_controlPanelItem.Items[i].Argument != null && _controlPanelItem.Items.Count(
+                            item => item.FriendlyName == _controlPanelItem.Items[i].FriendlyName) > 1)
+                            _controlPanelItem.Items.RemoveAt(i);
+                    }
                 }
                 return _controlPanelItem;
             }

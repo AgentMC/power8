@@ -7,7 +7,7 @@ using Power8.Properties;
 
 namespace Power8
 {
-    public class PowerItem : INotifyPropertyChanged
+    public class PowerItem : INotifyPropertyChanged, IComparable<PowerItem>
     {
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
@@ -162,7 +162,10 @@ namespace Power8
         }
 
 
-
+        public int CompareTo(PowerItem other)
+        {
+            return String.CompareOrdinal(FriendlyName, other.FriendlyName);
+        }
 
         public override string ToString()
         {
