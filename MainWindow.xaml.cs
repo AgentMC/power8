@@ -58,6 +58,7 @@ namespace Power8
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+#warning context menu position should be handeled well
             _taskBar = API.FindWindow(API.TRAY_WND_CLASS, null);
             CheckWnd(_taskBar, API.TRAY_WND_CLASS);
             if (Environment.OSVersion.Version.Major >= 6)
@@ -137,6 +138,8 @@ namespace Power8
         private void ExitClick(object sender, RoutedEventArgs e)
         {
             Close();
+#warning hackfix. Env.Exit() shouldn't be required.
+            Environment.Exit(0); 
         }
         #endregion
 
@@ -200,7 +203,7 @@ namespace Power8
             int cycles = 0;
             var client = new WebClient();
             _update = true;
-            while (_update)
+            while (_update && _watch)
             {
                 if (cycles == 0)
                 {

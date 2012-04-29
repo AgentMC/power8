@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -287,6 +288,9 @@ namespace Power8
         [DllImport("Kernel32.dll")]
         public static extern Boolean CloseHandle(IntPtr handle);
 
+        [DllImport("shell32.dll", EntryPoint = "ExtractIconW")]
+        public static extern IntPtr ExtractIcon(IntPtr hInst, [MarshalAs(UnmanagedType.LPWStr)] string lpszExeFileName, uint nIconIndex);
+
 
         //Invoking specific verbs (show properties)================================================
         [StructLayout(LayoutKind.Sequential)]
@@ -519,6 +523,7 @@ namespace Power8
         [Flags]
         public enum LLF:uint
         {
+            AS_REGULAR_LOAD_LIBRARY             =0,
             DONT_RESOLVE_DLL_REFERENCES         =0x00000001,
             LOAD_LIBRARY_AS_DATAFILE            =0x00000002,
             LOAD_WITH_ALTERED_SEARCH_PATH       =0x00000008,
@@ -533,6 +538,9 @@ namespace Power8
 
         [DllImport("Kernel32.dll")]
         public static extern bool FreeLibrary(IntPtr hModule);
+
+        [DllImport("Kernel32.dll")]
+        public static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)] string lpProcName);
         
         [DllImport("user32.dll")]
         public static extern int LoadString(IntPtr hInstance, uint resourceID, StringBuilder lpBuffer, int nBufferMax);
@@ -743,6 +751,125 @@ namespace Power8
         [DllImport("shell32.dll", CharSet=CharSet.Unicode)]
         public static extern
         void SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, KFF dwFlags, IntPtr hToken, out IntPtr ppwszPath);
+
+
+        //CPLs ====================================================================================
+        public delegate int CplAppletProc (IntPtr hwndCpl, CplMsg msg, IntPtr lParam1, IntPtr lParam2);
+
+        public enum CplMsg : uint
+        {
+            /// <summary>
+            /// This message is sent to indicate CPlApplet() was found. 
+            /// lParam1 and lParam2 are not defined. 
+            /// Return TRUE or FALSE indicating whether the control panel should proceed.
+            /// </summary>
+            INIT = 1,
+
+            /// <summary>
+            /// This message is sent to determine the number of applets to be displayed.
+            /// lParam1 and lParam2 are not defined. 
+            /// Return the number of applets you wish to display in the control panel window. 
+            /// </summary>
+            GETCOUNT = 2,
+
+            /// <summary>
+            /// This message is sent for information about each applet. 
+            /// The return value is ignored. 
+            /// lParam1 is the applet number to register, a value from 0 to 
+            /// (CPL_GETCOUNT - 1).  lParam2 is a pointer to a CPLINFO structure. 
+            /// Fill in CPLINFO's idIcon, idName, idInfo and lData fields with 
+            /// the resource id for an icon to display, name and description string ids, 
+            /// and a long data item associated with applet #lParam1.  This information 
+            /// may be cached by the caller at runtime and/or across sessions. 
+            /// To prevent caching, see CPL_DYNAMIC_RES, above.  If the icon, name, and description
+            /// are not dynamic then CPL_DYNAMIC_RES should not be used and the CPL_NEWINQURE message
+            /// should be ignored 
+            /// </summary>
+            INQUIRE = 3,
+
+            /// <summary>
+            /// Not used
+            /// </summary>
+            SELECT = 4,
+
+            /// <summary>
+            /// This message is sent when the applet's icon has been double-clicked.
+            /// lParam1 is the applet number which was selected. 
+            /// lParam2 is the applet's lData value. 
+            /// This message should initiate the applet's dialog box. 
+            /// </summary>
+            DBLCLK = 5,
+
+            /// <summary>
+            /// This message is sent for each applet when the control panel is exiting.
+            /// lParam1 is the applet number.  lParam2 is the applet's lData value. 
+            /// Do applet specific cleaning up here. 
+            /// </summary>
+            STOP = 6,
+
+            /// <summary>
+            /// This message is sent just before the control panel calls FreeLibrary. 
+            /// lParam1 and lParam2 are not defined. Do non-applet specific cleaning up here. 
+            /// </summary>
+            EXIT = 7,
+
+            /// <summary>
+            /// Same as CPL_INQUIRE execpt lParam2 is a pointer to a NEWCPLINFO struct. 
+            /// The return value is ignored. 
+            /// A CPL should NOT respond to the CPL_NEWINQURE message unless CPL_DYNAMIC_RES 
+            /// is used in CPL_INQUIRE.  CPLs which respond to CPL_NEWINQUIRE cannot be cached 
+            /// and slow the loading of the Control Panel window. 
+            /// </summary>
+            NEWINQUIRE = 8,
+
+            /// <summary>
+            /// <see cref="STARTWPARMSW"/>
+            /// </summary>
+            STARTWPARMSA = 9,
+
+            /// <summary>
+            /// This message parallels CPL_DBLCLK in that the applet should initiate
+            /// its dialog box.  Where it differs is that this invocation is coming
+            /// out of RUNDLL, and there may be some extra directions for execution.
+            /// lParam1: the applet number.
+            /// lParam2: an LPSTR to any extra directions that might exist.
+            /// returns: TRUE if the message was handled; FALSE if not.
+            /// </summary>
+            STARTWPARMSW = 10,
+
+            /// <summary>
+            /// This message is internal to the Control Panel and MAIN applets.
+            /// It is only sent when an applet is invoked from the command line
+            /// during system installation.                                    
+            /// </summary>
+            SETUP = 200
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class CplInfo
+        {
+            public uint idIcon;     /* icon resource id, provided by CPlApplet() */
+            public uint idName;     /* display name string resource id, provided by CPlApplet() */
+            public uint idInfo;     /* description/tooltip/status bar string resource id, provided by CPlApplet() */
+            public IntPtr lData;    /* user defined data */
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
+        public class NewCplInfoW
+        {
+            public uint dwSize;    /* size, in bytes, of the structure */
+            public uint dwFlags;
+            public uint dwHelpContext; /* help context to use */
+            public IntPtr lData;   /* user defined data */
+            public IntPtr hIcon;   /* icon to use, this is owned by the Control Panel window (may be deleted) */
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)] 
+            public string szName;  /* display name */
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)] 
+            public string szInfo;  /* description/tooltip/status bar string */
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)] 
+            public string szHelpFile; /* path to help file to use */
+        }
+
 // ReSharper restore InconsistentNaming
     }
 }

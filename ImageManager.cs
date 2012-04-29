@@ -66,6 +66,14 @@ namespace Power8
             }
         }
 
+        public static void AddContainerToCache(string description, ImageContainer container)
+        {
+            lock (Cache)
+            {
+                Cache.Add(description, container);
+            }
+        }
+
 
 
         public class ImageContainer
@@ -122,6 +130,14 @@ namespace Power8
                 _initialObject = objectToGetIcons;
                 _objectDescriptor = typeDescriptor;
                 _id = specialId;
+            }
+
+            public ImageContainer(IntPtr unmanagedIcon)
+            {
+                SmallBitmap = ExtractInternal(unmanagedIcon);
+                SmallBitmap.Freeze();
+                LargeBitmap = SmallBitmap;
+                Util.PostBackgroundIconDestroy(unmanagedIcon);
             }
 
             public void ExtractSmall()
