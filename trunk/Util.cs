@@ -253,7 +253,9 @@ namespace Power8
             var resData = ResolveResourceCommon(localizeableResourceId);
             if (resData.Item2 != IntPtr.Zero)
             {
-                var icon = API.LoadIcon(resData.Item2, resData.Item3);
+                IntPtr icon = resData.Item3 == 0xFFFFFFFF 
+                                  ? API.ExtractIcon(resData.Item2, resData.Item1, 0) 
+                                  : API.LoadIcon(resData.Item2, resData.Item3);
 #if DEBUG
                 Debug.WriteLine("RIR: icon => " + icon);
 #endif
@@ -288,7 +290,7 @@ namespace Power8
 
             var resId = 
                 lastCommaIdx == 0
-                ? 0
+                ? 0xFFFFFFFF
                 : uint.Parse((lastSharpIdx > lastCommaIdx
                         ? resourceString.Substring(lastCommaIdx + 1, lastSharpIdx - (lastCommaIdx + 1))
                         : resourceString.Substring(lastCommaIdx + 1)).TrimStart('-'));
@@ -300,6 +302,81 @@ namespace Power8
 #endif
 
             return new Tuple<string, IntPtr, uint>(resDll, dllHandle, resId);
+        }
+
+
+
+        public static Tuple<string, ImageManager.ImageContainer> GetCplInfo(string cplFileName)
+        {
+            string name = null;
+            ImageManager.ImageContainer container = null;
+            var info = new API.CplInfo {lData = new IntPtr(0xDEADC0DE)};
+            
+            var hModule = API.LoadLibrary(cplFileName, IntPtr.Zero, API.LLF.AS_REGULAR_LOAD_LIBRARY);
+
+            if(hModule != IntPtr.Zero)
+            {
+                var cplProcAddress = API.GetProcAddress(hModule, "CPlApplet");
+                if (cplProcAddress != IntPtr.Zero)
+                {
+                    var cplProc = (API.CplAppletProc) Marshal.GetDelegateForFunctionPointer(
+                                                                cplProcAddress, 
+                                                                typeof (API.CplAppletProc));
+                    if (cplProc != null)
+                    {
+                        var hWnd = BtnStck.Instance.GetHandle();
+                        var res = cplProc(hWnd, API.CplMsg.INIT, IntPtr.Zero, IntPtr.Zero);
+                        if (res != 0)
+                        {
+                            res = cplProc(hWnd, API.CplMsg.GETCOUNT, IntPtr.Zero, IntPtr.Zero);
+                            if (res > 0)
+                            {
+                                var hMem = Marshal.AllocHGlobal(Marshal.SizeOf(typeof (API.CplInfo)));
+                                cplProc(hWnd, API.CplMsg.INQUIRE, IntPtr.Zero, hMem);
+                                Marshal.PtrToStructure(hMem, info);
+
+                                var idIcon = info.idIcon;
+                                var idName = info.idName == 0 ? info.idInfo : info.idName;
+                                var unmanagedIcon = IntPtr.Zero;
+
+                                if (idIcon == 0 || idName == 0)
+                                {
+                                    hMem = Marshal.ReAllocHGlobal(hMem,
+                                                                  new IntPtr(Marshal.SizeOf(typeof (API.NewCplInfoW))));
+                                    cplProc(hWnd, API.CplMsg.NEWINQUIRE, IntPtr.Zero, hMem);
+                                    var infoNew = (API.NewCplInfoW)Marshal.PtrToStructure(hMem,typeof(API.NewCplInfoW));
+                                    unmanagedIcon = infoNew.hIcon;
+                                    name = infoNew.szName ?? infoNew.szInfo;
+                                }
+                                Marshal.FreeHGlobal(hMem);
+
+                                if (name == null)
+                                {
+                                    lock (Buffer)
+                                    {
+                                        if (0 < API.LoadString(hModule, idName, Buffer, Buffer.Capacity))
+                                            name = Buffer.ToString();
+                                    }
+                                }
+
+                                if(unmanagedIcon == IntPtr.Zero)
+                                    unmanagedIcon = API.LoadIcon(hModule, idIcon);
+                                if(unmanagedIcon != IntPtr.Zero)
+                                {
+                                    container = new ImageManager.ImageContainer(unmanagedIcon);//freeing icon here
+                                    ImageManager.AddContainerToCache(cplFileName, container);
+                                }
+                            
+                                cplProc(hWnd, API.CplMsg.STOP, IntPtr.Zero, info.lData);
+                            }
+                            cplProc(hWnd, API.CplMsg.EXIT, IntPtr.Zero, IntPtr.Zero);
+                        }
+                    }
+                }
+                PostBackgroundDllUnload(hModule);
+            }
+
+            return new Tuple<string, ImageManager.ImageContainer>(name, container);
         }
 
 

@@ -120,8 +120,12 @@ namespace Power8
                         "*.cpl", 
                         SearchOption.TopDirectoryOnly))
                     {
-                        AddSubItem(_controlPanelItem, string.Empty, file, false);
-                        //TODO: send messages to cpl to get more info
+                        var resolved = Util.GetCplInfo(file);
+                        if (resolved.Item1 == null && resolved.Item2 == null) 
+                            continue;
+                        var item = AddSubItem(_controlPanelItem, string.Empty, file, false);
+                        item.FriendlyName = resolved.Item1;
+                        item.Icon = resolved.Item2;
                     }
 
                     _controlPanelItem.Items.Add(new PowerItem { FriendlyName = "----" });
