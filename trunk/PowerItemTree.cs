@@ -113,38 +113,33 @@ namespace Power8
                             IsFolder = true
                         });
 
-                        //TODO: separator in binded ObservableCollection? (and below)
+                        //TODO: separator in binded ObservableCollection?
                         _controlPanelItem.Items.Add(new PowerItem {FriendlyName = "----"});
                     }
 
                     //*.CPL items + separator
-                    var itemsList = (from file 
-                                     in Directory.EnumerateFiles(
-                                            Environment.GetFolderPath(Environment.SpecialFolder.System), 
-                                            "*.cpl", 
-                                            SearchOption.TopDirectoryOnly)
+                    var itemsDic = (from file
+                                         in Directory.EnumerateFiles(
+                                             Environment.GetFolderPath(Environment.SpecialFolder.System),
+                                             "*.cpl",
+                                             SearchOption.TopDirectoryOnly)
                                      let resolved = Util.GetCplInfo(file)
                                      where resolved.Item1 != null || resolved.Item2 != null
                                      select new PowerItem
                                                 {
-                                                    Argument = file, 
-                                                    Parent = _controlPanelItem, 
-                                                    FriendlyName = resolved.Item1, 
+                                                    Argument = file,
+                                                    Parent = _controlPanelItem,
+                                                    FriendlyName = resolved.Item1,
                                                     Icon = resolved.Item2
-                                                }).ToList();
-                    itemsList.Sort();
-                    itemsList.ForEach(_controlPanelItem.Items.Add);
-
-                    _controlPanelItem.Items.Add(new PowerItem { FriendlyName = "----" });
+                                                }).ToDictionary(p => p.FriendlyName);
 
                     //Flow items
-                    itemsList.Clear();
                     using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace", false))
                     {
                         if (k != null)
                         {
-                            itemsList.AddRange(
+                            foreach (var powerItem in
                                 from cplguid in k.GetSubKeyNames()
                                 where cplguid.StartsWith("{")
                                 select new PowerItem
@@ -153,19 +148,16 @@ namespace Power8
                                     NonCachedIcon = true,
                                     Parent = _controlPanelItem,
                                     ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
-                                });
+                                })
+                            {
+                                itemsDic[powerItem.FriendlyName] = powerItem;
+                            }
                         }
                     }
+
+                    var itemsList = itemsDic.Select(kvp => kvp.Value).ToList();
                     itemsList.Sort();
                     itemsList.ForEach(_controlPanelItem.Items.Add);
-
-                    //Remove duplicates leaving separators
-                    for (var i = _controlPanelItem.Items.Count - 1; i >= 0; i--)
-                    {
-                        if(_controlPanelItem.Items[i].Argument != null && _controlPanelItem.Items.Count(
-                            item => item.FriendlyName == _controlPanelItem.Items[i].FriendlyName) > 1)
-                            _controlPanelItem.Items.RemoveAt(i);
-                    }
                 }
                 return _controlPanelItem;
             }
