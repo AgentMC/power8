@@ -117,45 +117,78 @@ namespace Power8
                         _controlPanelItem.Items.Add(new PowerItem {FriendlyName = "----"});
                     }
 
-                    //*.CPL items + separator
-                    var itemsDic = (from file
-                                         in Directory.EnumerateFiles(
-                                             Environment.GetFolderPath(Environment.SpecialFolder.System),
-                                             "*.cpl",
-                                             SearchOption.TopDirectoryOnly)
-                                     let resolved = Util.GetCplInfo(file)
-                                     where resolved.Item1 != null || resolved.Item2 != null
-                                     select new PowerItem
-                                                {
-                                                    Argument = file,
-                                                    Parent = _controlPanelItem,
-                                                    FriendlyName = resolved.Item1,
-                                                    Icon = resolved.Item2
-                                                }).ToDictionary(p => p.FriendlyName);
-
-                    //Flow items
+                    var itemsList = new List<PowerItem>();
+                    var cplCache = new List<string>();
+                    //Flow items and CPLs from cache
                     using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace", false))
                     {
                         if (k != null)
                         {
-                            foreach (var powerItem in
-                                from cplguid in k.GetSubKeyNames()
-                                where cplguid.StartsWith("{")
-                                select new PowerItem
-                                {
-                                    Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
-                                    NonCachedIcon = true,
-                                    Parent = _controlPanelItem,
-                                    ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
-                                })
+                            foreach (var cplguid in k.GetSubKeyNames())
                             {
-                                itemsDic[powerItem.FriendlyName] = powerItem;
+                                if(cplguid.StartsWith("{"))
+                                {
+                                    itemsList.Add(new PowerItem
+                                    {
+                                        Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
+                                        NonCachedIcon = true,
+                                        Parent = _controlPanelItem,
+                                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
+                                    });
+                                }
+                                else
+                                {
+                                    using (var sk = k.OpenSubKey(cplguid, false))
+                                    {
+                                        if (sk != null)
+                                        {
+                                            var cplArg = (string) sk.GetValue("Module");
+                                            var cplName = (string) sk.GetValue("Name");
+                                            var cplIconIdx = sk.GetValue("IconIndex");
+                                            if (cplIconIdx != null 
+                                                && !string.IsNullOrEmpty(cplArg) 
+                                                && !string.IsNullOrEmpty(cplName)
+                                                && File.Exists(cplArg))
+                                            {
+                                                var item = new PowerItem
+                                                {
+                                                    Argument = cplArg,
+                                                    Parent = _controlPanelItem,
+                                                    FriendlyName = cplName,
+                                                    Icon = new ImageManager.ImageContainer(
+                                                        Util.ResolveIconicResource("@" + cplArg + ",-" + cplIconIdx))
+                                                };
+                                                itemsList.Add(item);
+                                                ImageManager.AddContainerToCache(item.Argument, item.Icon);
+                                                cplCache.Add(cplArg);
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
 
-                    var itemsList = itemsDic.Select(kvp => kvp.Value).ToList();
+                    //*.CPL items + separator
+                    foreach (var cpl in Directory.EnumerateFiles(
+                                             Environment.GetFolderPath(Environment.SpecialFolder.System),
+                                             "*.cpl",
+                                             SearchOption.TopDirectoryOnly))
+                    {
+                        if (cplCache.Contains(cpl, StringComparer.InvariantCultureIgnoreCase)) 
+                            continue;
+                        var resolved = Util.GetCplInfo(cpl);
+                        if (resolved.Item2 != null && itemsList.Find(p => p.FriendlyName == resolved.Item1) == null)
+                            itemsList.Add(new PowerItem
+                            {
+                                Argument = cpl,
+                                Parent = _controlPanelItem,
+                                FriendlyName = resolved.Item1,
+                                Icon = resolved.Item2
+                            });
+                    }
+
                     itemsList.Sort();
                     itemsList.ForEach(_controlPanelItem.Items.Add);
                 }

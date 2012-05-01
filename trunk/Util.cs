@@ -310,7 +310,7 @@ namespace Power8
         {
             string name = null;
             ImageManager.ImageContainer container = null;
-            var info = new API.CplInfo {lData = new IntPtr(0xDEADC0DE)};
+            var info = new API.CplInfo {lData = new IntPtr(0xDEADC0D)};
             
             var hModule = API.LoadLibrary(cplFileName, IntPtr.Zero, API.LLF.AS_REGULAR_LOAD_LIBRARY);
 
