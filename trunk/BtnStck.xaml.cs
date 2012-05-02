@@ -181,16 +181,16 @@ namespace Power8
                 switch (containerName)
                 {
                     case "MyComputer":
-                        mcItem = PowerItemTree.MyComputerRootItem;
+                        mcItem = PowerItemTree.MyComputerRoot;
                         break;
                     case "AdminTools":
-                        mcItem = PowerItemTree.AdminToolsRootItem;
+                        mcItem = PowerItemTree.AdminToolsRoot;
                         break;
                     case "Libraries":
-                        mcItem = PowerItemTree.LibrariesItem;
+                        mcItem = PowerItemTree.LibrariesRoot;
                         break;
                     case "ControlPanel":
-                        mcItem = PowerItemTree.ControlPanelItem;
+                        mcItem = PowerItemTree.ControlPanelRoot;
                         break;
                     default:
                         return null;

@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Windows.Threading;
 using System.Xml;
 
 namespace Power8
@@ -16,38 +15,37 @@ namespace Power8
         private static readonly string PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
         private static readonly string PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
 
-        private static readonly FileSystemWatcher Watcher = new FileSystemWatcher(PathRoot);
-        private static readonly FileSystemWatcher CommonWatcher = new FileSystemWatcher(PathCommonRoot);
+        private static readonly List<FileSystemWatcher> Watchers = new List<FileSystemWatcher>();
 
         private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true, AutoExpand = false};
         private static readonly ObservableCollection<PowerItem> StartMenuCollection =
             new ObservableCollection<PowerItem> {StartMenuRootItem};
         public static ObservableCollection<PowerItem> StartMenuRoot { get { return StartMenuCollection; } }
 
-        private static PowerItem _adminToolsRootItem;
-        public static PowerItem AdminToolsRootItem
+        private static PowerItem _adminToolsItem;
+        public static PowerItem AdminToolsRoot
         {
             get
             {
-                if (_adminToolsRootItem == null)
+                if (_adminToolsItem == null)
                 {
                     var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
-                    _adminToolsRootItem = SearchContainerByArgument(PathToBaseAndArg(path), StartMenuRootItem, false);
-                    _adminToolsRootItem = SearchItemByArgument(path, true, _adminToolsRootItem);
-                    _adminToolsRootItem.Argument = API.ShNs.AdministrationTools;
-                    _adminToolsRootItem.ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AdministrationTools);
-                    _adminToolsRootItem.SpecialFolderId = API.Csidl.COMMON_ADMINTOOLS;
-                    _adminToolsRootItem.NonCachedIcon = true;
-                    _adminToolsRootItem.Icon = ImageManager.GetImageContainerSync(_adminToolsRootItem, API.Shgfi.SMALLICON);
-                    _adminToolsRootItem.Icon.ExtractLarge(); //as this is a reference to existing PowerItem, 
-                    _adminToolsRootItem.HasLargeIcon = true; //we need both small and large icons available
+                    _adminToolsItem = SearchContainerByArgument(PathToBaseAndArg(path), StartMenuRootItem, false);
+                    _adminToolsItem = SearchItemByArgument(path, true, _adminToolsItem);
+                    _adminToolsItem.Argument = API.ShNs.AdministrationTools;
+                    _adminToolsItem.ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AdministrationTools);
+                    _adminToolsItem.SpecialFolderId = API.Csidl.COMMON_ADMINTOOLS;
+                    _adminToolsItem.NonCachedIcon = true;
+                    _adminToolsItem.Icon = ImageManager.GetImageContainerSync(_adminToolsItem, API.Shgfi.SMALLICON);
+                    _adminToolsItem.Icon.ExtractLarge(); //as this is a reference to existing PowerItem, 
+                    _adminToolsItem.HasLargeIcon = true; //we need both small and large icons available
                 }
-                return _adminToolsRootItem;
+                return _adminToolsItem;
             }
         }
 
         private static PowerItem _librariesOrMyDocsItem;
-        public static PowerItem LibrariesItem
+        public static PowerItem LibrariesRoot
         {
             get
             {
@@ -80,15 +78,15 @@ namespace Power8
             }
         }
 
-        private static PowerItem _controlPanelItem;
-        public static PowerItem ControlPanelItem
+        private static PowerItem _controlPanelRoot;
+        public static PowerItem ControlPanelRoot
         {
             get
             {
-                if (_controlPanelItem == null)
+                if (_controlPanelRoot == null)
                 {
                     //the item itself
-                    _controlPanelItem = new PowerItem
+                    _controlPanelRoot = new PowerItem
                     {
                         Argument = Environment.OSVersion.Version.Major > 5 ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
                         SpecialFolderId = API.Csidl.CONTROLS,
@@ -109,11 +107,11 @@ namespace Power8
                             {
                                 if(cplguid.StartsWith("{"))
                                 {
-                                    _controlPanelItem.Items.Add(new PowerItem
+                                    _controlPanelRoot.Items.Add(new PowerItem
                                     {
                                         Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
                                         NonCachedIcon = true,
-                                        Parent = _controlPanelItem,
+                                        Parent = _controlPanelRoot,
                                         ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
                                     });
                                 }
@@ -134,12 +132,12 @@ namespace Power8
                                                 var item = new PowerItem
                                                 {
                                                     Argument = cplArg,
-                                                    Parent = _controlPanelItem,
+                                                    Parent = _controlPanelRoot,
                                                     FriendlyName = cplName,
                                                     Icon = new ImageManager.ImageContainer(
                                                         Util.ResolveIconicResource("@" + cplArg + ",-" + cplIconIdx))
                                                 };
-                                                _controlPanelItem.Items.Add(item);
+                                                _controlPanelRoot.Items.Add(item);
                                                 ImageManager.AddContainerToCache(item.Argument, item.Icon);
                                                 cplCache.Add(cplArg);
                                             }
@@ -159,44 +157,44 @@ namespace Power8
                         if (cplCache.Contains(cpl, StringComparer.InvariantCultureIgnoreCase)) 
                             continue;
                         var resolved = Util.GetCplInfo(cpl);
-                        if (resolved.Item2 != null && _controlPanelItem.Items.FirstOrDefault(p => p.FriendlyName == resolved.Item1) == null)
-                            _controlPanelItem.Items.Add(new PowerItem
+                        if (resolved.Item2 != null && _controlPanelRoot.Items.FirstOrDefault(p => p.FriendlyName == resolved.Item1) == null)
+                            _controlPanelRoot.Items.Add(new PowerItem
                             {
                                 Argument = cpl,
-                                Parent = _controlPanelItem,
+                                Parent = _controlPanelRoot,
                                 FriendlyName = resolved.Item1,
                                 Icon = resolved.Item2
                             });
                     }
 
-                    _controlPanelItem.SortItems();
+                    _controlPanelRoot.SortItems();
 
                     if (Environment.OSVersion.Version.Major > 5) //XP only supports "All items"
                     {
                         //for 7+ we add "All Control Panel Items" + separator
-                        _controlPanelItem.Icon = ImageManager.GetImageContainerSync(_controlPanelItem, API.Shgfi.SMALLICON);
+                        _controlPanelRoot.Icon = ImageManager.GetImageContainerSync(_controlPanelRoot, API.Shgfi.SMALLICON);
 
-                        _controlPanelItem.Items.Insert(0, new PowerItem
+                        _controlPanelRoot.Items.Insert(0, new PowerItem
                         {
                             Argument = API.ShNs.AllControlPanelItems,
                             SpecialFolderId = API.Csidl.CONTROLS,
                             ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
-                            Parent = _controlPanelItem,
-                            Icon = _controlPanelItem.Icon,
+                            Parent = _controlPanelRoot,
+                            Icon = _controlPanelRoot.Icon,
                             IsFolder = true
                         });
 
                         //TODO: separator in binded ObservableCollection?
-                        _controlPanelItem.Items.Insert(1, new PowerItem { FriendlyName = "----" });
+                        _controlPanelRoot.Items.Insert(1, new PowerItem { FriendlyName = "----" });
                     }
 
                 }
-                return _controlPanelItem;
+                return _controlPanelRoot;
             }
         }
 
         private static PowerItem _myComputerItem;
-        public static PowerItem MyComputerRootItem
+        public static PowerItem MyComputerRoot
         {
             get
             {
@@ -227,6 +225,14 @@ namespace Power8
                                     Parent = _myComputerItem,
                                     NonCachedIcon = true
                                 });
+                                var w = new FileSystemWatcher(drive.Name);
+                                w.Created += FileChanged;
+                                w.Deleted += FileChanged;
+                                w.Changed += FileChanged;
+                                w.Renamed += FileRenamed;
+                                w.IncludeSubdirectories = true;
+                                w.EnableRaisingEvents = true;
+                                Watchers.Add(w);
                                 break;
                         }
                     }
@@ -234,62 +240,52 @@ namespace Power8
                 return _myComputerItem;
             }
         }
-        
-        static PowerItemTree()
-        {
-            Watcher.Created += FileChanged;
-            CommonWatcher.Created += FileChanged;
-            Watcher.Deleted += FileChanged;
-            CommonWatcher.Deleted += FileChanged;
-            Watcher.Changed += FileChanged;
-            CommonWatcher.Changed += FileChanged;
-            Watcher.Renamed += FileRenamed;
-            CommonWatcher.Renamed += FileRenamed;
-            Watcher.EnableRaisingEvents = true;
-            CommonWatcher.EnableRaisingEvents = true;
-            Watcher.IncludeSubdirectories = true;
-            CommonWatcher.IncludeSubdirectories = true;
-        }
-
 
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
-            if(e.OldFullPath.StartsWith(PathRoot) || e.OldFullPath.StartsWith(PathCommonRoot))
-                FileChanged(sender,
-                    new FileSystemEventArgs(
-                        WatcherChangeTypes.Deleted,
-                        e.OldFullPath.TrimEnd(e.OldName.ToCharArray()),
-                        e.OldName));
-            if(e.FullPath.StartsWith(PathRoot) || e.FullPath.StartsWith(PathCommonRoot))
-                FileChanged(sender,
-                    new FileSystemEventArgs(
-                        WatcherChangeTypes.Created,
-                        e.FullPath.TrimEnd(e.Name.ToCharArray()),
-                        e.Name));
+            FileChanged(sender,
+                new FileSystemEventArgs(
+                    WatcherChangeTypes.Deleted,
+                    e.OldFullPath.TrimEnd(e.OldName.ToCharArray()),
+                    e.OldName));
+            FileChanged(sender,
+                new FileSystemEventArgs(
+                    WatcherChangeTypes.Created,
+                    e.FullPath.TrimEnd(e.Name.ToCharArray()),
+                    e.Name));
         }
 
         private static void FileChanged(object sender, FileSystemEventArgs e)
         {
-            lock (StartMenuRootItem)
+#if DEBUG
+            Debug.WriteLine("File {0}: {1}", e.ChangeType, e.FullPath);
+#endif
+            try
             {
-                try
-                {
-                    //We ignore hiden data
-                    if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
-                        return;
-                }
-                catch (Exception) //In case we have multiple change operations caused by links beung updated by installer
-                {
+                //We ignore hiden data
+                if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
                     return;
-                }
-                //Ensuring buttonstack is created on Main thread
-                Util.Send(new Action(() => BtnStck.Instance.InvalidateVisual()));
-                var isDir = Directory.Exists(e.FullPath);
-                var baseAndArg = PathToBaseAndArg(e.FullPath);
-                if (baseAndArg.Item2 == null) 
-                    return;
-                var item = SearchContainerByArgument(baseAndArg, StartMenuRootItem,
-                                                e.ChangeType == WatcherChangeTypes.Created);
+            }
+            catch (Exception) //In case we have multiple change operations caused by links beung updated by installer
+            {
+                return;
+            }
+            //Ensuring buttonstack is created on Main thread
+            Util.Send(new Action(() => BtnStck.Instance.InvalidateVisual()));
+            var isDir = Directory.Exists(e.FullPath);
+            var baseAndArg = PathToBaseAndArg(e.FullPath);
+            if (baseAndArg.Item2 == null) 
+                return;
+
+            var roots = new List<PowerItem> {MyComputerRoot, StartMenuRootItem};
+            foreach (var lib in LibrariesRoot.Items)
+                roots.AddRange(lib.Items);
+
+            foreach (var root in roots)
+            {
+                var item = SearchContainerByArgument(baseAndArg, root,
+                                                        e.ChangeType == WatcherChangeTypes.Created &&
+                                                        root == StartMenuRootItem);
                 if (item != null)
                 {
                     Util.Send(new Action(() =>
@@ -298,14 +294,15 @@ namespace Power8
                         {
                             case WatcherChangeTypes.Deleted:
                             case WatcherChangeTypes.Changed:
-                                item =
-                                    item.Items.FirstOrDefault(
+                                item = item.IsAutoExpandPending 
+                                    ? null
+                                    : item.Items.FirstOrDefault(
                                         j =>
                                         (j.IsFolder == isDir || e.ChangeType == WatcherChangeTypes.Deleted) &&
                                         j.Argument == baseAndArg.Item2);
                                 if (e.ChangeType == WatcherChangeTypes.Deleted && item != null)
                                     item.Parent.Items.Remove(item);
-                                else if(item != null)
+                                else if (item != null)
                                     item.Update();
                                 break;
                             case WatcherChangeTypes.Created:
@@ -358,7 +355,7 @@ namespace Power8
                         string str;
                         while ((str = reader.ReadLine()) != null && !str.Contains("[LocalizedFileNames]"))
                         {
-                            if (str.StartsWith("IconFile="))
+                            if (str.StartsWith("IconFile=") || str.StartsWith("IconResource="))
                             {
                                 item.NonCachedIcon = true;
                                 item.Icon = null;
@@ -505,7 +502,7 @@ namespace Power8
             }
             return itemFullPath.StartsWith(PathCommonRoot)
                        ? new Tuple<string, string>(PathCommonRoot, itemFullPath.Substring(PathCommonRoot.Length))
-                       : new Tuple<string, string>(null, itemFullPath);
+                       : new Tuple<string, string>(string.Empty, itemFullPath);
         }
 
         /// <summary>
@@ -519,19 +516,33 @@ namespace Power8
         /// <returns></returns>
         private static PowerItem SearchContainerByArgument(Tuple<string, string> baseAndArg, PowerItem collectionRoot, bool autoGenerateSubItems)
         {
-            var sourceSplitted = baseAndArg.Item2.Split(new[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            if (!string.IsNullOrEmpty(collectionRoot.Argument)
+                && baseAndArg.Item2.StartsWith(collectionRoot.Argument, StringComparison.InvariantCultureIgnoreCase)
+                && baseAndArg.Item2 != collectionRoot.Argument)
+            {
+                baseAndArg = new Tuple<string, string>(baseAndArg.Item1,
+                                                        baseAndArg.Item2.Substring(collectionRoot.Argument.Length + 1));
+            }
+            var sourceSplitted = baseAndArg.Item2.Split(new[] {'\\'}, StringSplitOptions.RemoveEmptyEntries);
+            if (sourceSplitted.Length > 0 && sourceSplitted[0].EndsWith(":"))
+                sourceSplitted[0] += "\\";
             var item = collectionRoot;
             for (int i = 0; i < sourceSplitted.Length - 1; i++)
             {
                 var prevItem = item;
-                item = item.Items.FirstOrDefault(j => j.IsFolder && j.FriendlyName == sourceSplitted[i]);
-                if (item == null && autoGenerateSubItems)
+                item = item.IsAutoExpandPending 
+                    ? null
+                    : item.Items.FirstOrDefault(j =>
+                                                j.IsFolder &&
+                                                j.Argument.EndsWith(sourceSplitted[i],
+                                                                    StringComparison.InvariantCultureIgnoreCase));
+                if (item == null && autoGenerateSubItems && !string.IsNullOrEmpty(baseAndArg.Item1))
                     // ReSharper disable AccessToModifiedClosure
                     item = Util.Eval(() =>
-                            AddSubItem(prevItem,
-                                       baseAndArg.Item1,
-                                       baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i],
-                                       true));
+                                        AddSubItem(prevItem,
+                                                baseAndArg.Item1,
+                                                baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i],
+                                                true));
                     // ReSharper restore AccessToModifiedClosure
                 else if (item == null)
                     break;
@@ -541,7 +552,7 @@ namespace Power8
 
         private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container)
         {
-            return container.Items.FirstOrDefault(
+            return container.IsAutoExpandPending ? null : container.Items.FirstOrDefault(
                 i =>
                     i.IsFolder == isFolder &&
                     i.Argument.EndsWith(
