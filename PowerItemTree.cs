@@ -330,8 +330,7 @@ namespace Power8
 
         public static void ScanFolder(PowerItem item, string basePath, bool recoursive = true)
         {
-            Util.MainDisp.BeginInvoke(DispatcherPriority.Background,
-                                    new Action(() => ScanFolderSync(item, basePath, recoursive)));
+            ThreadPool.QueueUserWorkItem(o => ScanFolderSync(item, basePath, recoursive));
         }
 
         public static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
@@ -408,7 +407,7 @@ namespace Power8
                                 ResourceIdString = resourceId,
                                 AutoExpand = autoExpand
                             };
-                item.Items.Add(child);
+                Util.Send(new Action(()=>item.Items.Add(child)));
             }
             return child;
         }
