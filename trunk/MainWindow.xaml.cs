@@ -36,7 +36,8 @@ namespace Power8
             Application.EnableVisualStyles();
 
             App.Current.SessionEnding += (sender, args) => Close();
-            BtnStck.Instance.RunCalled += ShowRunDialog;
+            //deferred btnstack instance generation
+            BtnStck.Instanciated += (sender, args) => BtnStck.Instance.RunCalled += ShowRunDialog;
 
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();

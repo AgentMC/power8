@@ -16,7 +16,17 @@ namespace Power8
         private static BtnStck _instance;
         public static BtnStck Instance
         {
-            get { return _instance ?? (_instance = new BtnStck()); }
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new BtnStck();
+                    var h = Instanciated;
+                    if (h != null)
+                        h(null, null);
+                }
+                return _instance;
+            }
             private set { _instance = value; }
         }
         public static bool IsInitDone { get { return _instance != null; } }
@@ -25,6 +35,7 @@ namespace Power8
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
 
         public event EventHandler RunCalled;
+        public static event EventHandler Instanciated;
 
         #region Load, Unload, Show, Hide
 

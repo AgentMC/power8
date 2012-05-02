@@ -98,26 +98,6 @@ namespace Power8
                         IsFolder = true
                     };
 
-                    if (Environment.OSVersion.Version.Major > 5) //XP only supports "All items"
-                    {
-                        //for 7+ we add "All Control Panel Items" + separator
-                        _controlPanelItem.Icon = ImageManager.GetImageContainerSync(_controlPanelItem, API.Shgfi.SMALLICON);
-
-                        _controlPanelItem.Items.Add(new PowerItem
-                        {
-                            Argument = API.ShNs.AllControlPanelItems,
-                            SpecialFolderId = API.Csidl.CONTROLS,
-                            ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
-                            Parent = _controlPanelItem,
-                            Icon = _controlPanelItem.Icon,
-                            IsFolder = true
-                        });
-
-                        //TODO: separator in binded ObservableCollection?
-                        _controlPanelItem.Items.Add(new PowerItem {FriendlyName = "----"});
-                    }
-
-                    var itemsList = new List<PowerItem>();
                     var cplCache = new List<string>();
                     //Flow items and CPLs from cache
                     using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
@@ -129,7 +109,7 @@ namespace Power8
                             {
                                 if(cplguid.StartsWith("{"))
                                 {
-                                    itemsList.Add(new PowerItem
+                                    _controlPanelItem.Items.Add(new PowerItem
                                     {
                                         Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
                                         NonCachedIcon = true,
@@ -159,7 +139,7 @@ namespace Power8
                                                     Icon = new ImageManager.ImageContainer(
                                                         Util.ResolveIconicResource("@" + cplArg + ",-" + cplIconIdx))
                                                 };
-                                                itemsList.Add(item);
+                                                _controlPanelItem.Items.Add(item);
                                                 ImageManager.AddContainerToCache(item.Argument, item.Icon);
                                                 cplCache.Add(cplArg);
                                             }
@@ -179,8 +159,8 @@ namespace Power8
                         if (cplCache.Contains(cpl, StringComparer.InvariantCultureIgnoreCase)) 
                             continue;
                         var resolved = Util.GetCplInfo(cpl);
-                        if (resolved.Item2 != null && itemsList.Find(p => p.FriendlyName == resolved.Item1) == null)
-                            itemsList.Add(new PowerItem
+                        if (resolved.Item2 != null && _controlPanelItem.Items.FirstOrDefault(p => p.FriendlyName == resolved.Item1) == null)
+                            _controlPanelItem.Items.Add(new PowerItem
                             {
                                 Argument = cpl,
                                 Parent = _controlPanelItem,
@@ -189,8 +169,27 @@ namespace Power8
                             });
                     }
 
-                    itemsList.Sort();
-                    itemsList.ForEach(_controlPanelItem.Items.Add);
+                    _controlPanelItem.SortItems();
+
+                    if (Environment.OSVersion.Version.Major > 5) //XP only supports "All items"
+                    {
+                        //for 7+ we add "All Control Panel Items" + separator
+                        _controlPanelItem.Icon = ImageManager.GetImageContainerSync(_controlPanelItem, API.Shgfi.SMALLICON);
+
+                        _controlPanelItem.Items.Insert(0, new PowerItem
+                        {
+                            Argument = API.ShNs.AllControlPanelItems,
+                            SpecialFolderId = API.Csidl.CONTROLS,
+                            ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
+                            Parent = _controlPanelItem,
+                            Icon = _controlPanelItem.Icon,
+                            IsFolder = true
+                        });
+
+                        //TODO: separator in binded ObservableCollection?
+                        _controlPanelItem.Items.Insert(1, new PowerItem { FriendlyName = "----" });
+                    }
+
                 }
                 return _controlPanelItem;
             }
@@ -325,6 +324,7 @@ namespace Power8
             {
                 ScanFolderSync(StartMenuRootItem, PathRoot, true);
                 ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
+                StartMenuRootItem.SortItems();
             }
         }
 
@@ -397,7 +397,7 @@ namespace Power8
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
         {
             var argStr = fsObject.Substring(basePath.Length);
-            var child = item.Items.FirstOrDefault(i => i.Argument == argStr && i.IsFolder == isFolder);
+            var child = isFolder && !autoExpand ? item.Items.FirstOrDefault(i => i.Argument == argStr && i.IsFolder) : null;
             if(child == null)
             {
                 child = new PowerItem
