@@ -80,6 +80,11 @@ namespace Power8
             }
         }
 
+        public bool IsAutoExpandPending
+        {
+            get { return AutoExpand && !_expanding; }
+        }
+
 
 
         public string ResourceIdString
