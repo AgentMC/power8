@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using Power8.Properties;
+using System.Linq;
 
 namespace Power8
 {
@@ -202,6 +204,21 @@ namespace Power8
         {
             Icon = null;
             FriendlyName = null;
+        }
+
+        public void SortItems()
+        {
+            foreach (var powerItem in _items)
+            {
+                powerItem.SortItems();
+            }
+            var lf = new List<PowerItem>(_items.Where(i => i.IsFolder));
+            var li = new List<PowerItem>(_items.Where(i => !i.IsFolder));
+            lf.Sort();
+            li.Sort();
+            _items.Clear();
+            lf.ForEach(_items.Add);
+            li.ForEach(_items.Add);
         }
 
 
