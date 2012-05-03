@@ -165,11 +165,11 @@ namespace Power8
 
 
         //Getting icons============================================================================
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential, Pack=1, CharSet=CharSet.Ansi)]
         public struct Shfileinfo
         {
             public IntPtr hIcon;
-            public IntPtr iIcon;
+            public int iIcon;
             public uint dwAttributes;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
             public string szDisplayName;

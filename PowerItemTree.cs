@@ -258,13 +258,13 @@ namespace Power8
                                        };
 
                     _networkRoot.Items.Add(new PowerItem
-                                        {
-                                            SpecialFolderId = API.Csidl.CONNECTIONS,
-                                            NonCachedIcon = true,
-                                            IsFolder = true,
-                                            Argument = API.ShNs.NetworkConnections,
-                                            Parent = _networkRoot
-                                        });
+                    {
+                        SpecialFolderId = API.Csidl.CONNECTIONS,
+                        NonCachedIcon = true,
+                        IsFolder = true,
+                        Argument = API.ShNs.NetworkConnections,
+                        Parent = _networkRoot
+                    });
                     _networkRoot.Items.Add(new PowerItem
                     {
                         SpecialFolderId = API.Csidl.COMPUTERSNEARME,
@@ -272,7 +272,6 @@ namespace Power8
                         NonCachedIcon = true,
                         Parent = _networkRoot
                     });
-
                 }
                 return _networkRoot;
             }
