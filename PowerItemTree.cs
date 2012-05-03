@@ -241,6 +241,43 @@ namespace Power8
             }
         }
 
+        private static PowerItem _networkRoot;
+        public static PowerItem NetworkRoot
+        {
+            get
+            {
+                if (_networkRoot == null)
+                {
+                    _networkRoot = new PowerItem
+                                       {
+                                           SpecialFolderId = API.Csidl.NETWORK,
+                                           IsFolder = true,
+                                           HasLargeIcon = true,
+                                           NonCachedIcon = true,
+                                           Argument = API.ShNs.NetworkNeighbourhood
+                                       };
+
+                    _networkRoot.Items.Add(new PowerItem
+                                        {
+                                            SpecialFolderId = API.Csidl.CONNECTIONS,
+                                            NonCachedIcon = true,
+                                            IsFolder = true,
+                                            Argument = API.ShNs.NetworkConnections,
+                                            Parent = _networkRoot
+                                        });
+                    _networkRoot.Items.Add(new PowerItem
+                    {
+                        SpecialFolderId = API.Csidl.COMPUTERSNEARME,
+                        IsFolder = true,
+                        NonCachedIcon = true,
+                        Parent = _networkRoot
+                    });
+
+                }
+                return _networkRoot;
+            }
+        }
+
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
             FileChanged(sender,
@@ -330,7 +367,7 @@ namespace Power8
             ThreadPool.QueueUserWorkItem(o => ScanFolderSync(item, basePath, recoursive));
         }
 
-        public static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
+        private static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
         {
             try
             {
@@ -414,13 +451,13 @@ namespace Power8
         {
             var psi = new ProcessStartInfo();
             var arg1 = item.Argument;
-            if (item.IsSpecialObject)
+            if (item.IsSpecialObject || arg1 == null)
             {
                 bool cplSucceeded = false;
                 if (!item.IsFolder && item.Parent != null && item.Parent.SpecialFolderId == API.Csidl.CONTROLS)
                 {
                     //Control panel flow item
-                    var command = Util.GetOpenCommandForClass(item.Argument);
+                    var command = Util.GetOpenCommandForClass(arg1);
                     if (command != null)
                     {
                         psi.FileName = command.Item1;
@@ -429,8 +466,8 @@ namespace Power8
                     }
                     else
                     {
-                        var sysname = Util.GetCplAppletSysNameForClass(item.Argument);
-                        if(!string.IsNullOrEmpty(sysname))
+                        var sysname = Util.GetCplAppletSysNameForClass(arg1);
+                        if (!string.IsNullOrEmpty(sysname))
                         {
                             psi.FileName = "control.exe";
                             psi.Arguments = "/name " + sysname;
@@ -438,10 +475,10 @@ namespace Power8
                         }
                     }
                 }
-                if(!cplSucceeded)
+                if (!cplSucceeded)
                 {
                     psi.FileName = "explorer.exe";
-                    psi.Arguments = "/N," + item.Argument;
+                    psi.Arguments = "/N," + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
                 }
             }
             else

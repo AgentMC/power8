@@ -46,8 +46,7 @@ namespace Power8
 #endif
                 if (container == null)
                 {
-                    container = new ImageContainer(resolvedArg, descr, 
-                                    item.IsSpecialObject ? item.SpecialFolderId : API.Csidl.INVALID);
+                    container = new ImageContainer(resolvedArg, descr, item.SpecialFolderId);
                     Cache.Add(descr, container);
                     if (iconNeeded == API.Shgfi.SMALLICON)
                         container.ExtractSmall();

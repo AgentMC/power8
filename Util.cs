@@ -202,16 +202,19 @@ namespace Power8
         private static string GetResourceIdForClassCommon(string clsidOrApiShNs, string subkey, string valueName)
         {
 // ReSharper disable EmptyGeneralCatchClause
-            try
+            if (!string.IsNullOrEmpty(clsidOrApiShNs))
             {
-                using (var k = Microsoft.Win32.Registry.ClassesRoot
-                        .OpenSubKey("CLSID\\" + NameSpaceToGuidWithBraces(clsidOrApiShNs) + subkey, false))
+                try
                 {
-                    if (k != null)
-                        return ((string)k.GetValue(valueName, null));
+                    using (var k = Microsoft.Win32.Registry.ClassesRoot
+                            .OpenSubKey("CLSID\\" + NameSpaceToGuidWithBraces(clsidOrApiShNs) + subkey, false))
+                    {
+                        if (k != null)
+                            return ((string)k.GetValue(valueName, null));
+                    }
                 }
+                catch (Exception){}
             }
-            catch (Exception){}
 // ReSharper restore EmptyGeneralCatchClause
             return null;
         }

@@ -33,7 +33,7 @@ namespace Power8
         {
             get
             {
-                if (_icon == null && Argument != null)
+                if (_icon == null && (Argument != null || SpecialFolderId != API.Csidl.INVALID))
                     _icon = ImageManager.GetImageContainer(this, HasLargeIcon ? API.Shgfi.LARGEICON : API.Shgfi.SMALLICON);
                 return _icon;
             }
