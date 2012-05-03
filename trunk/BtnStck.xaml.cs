@@ -192,6 +192,9 @@ namespace Power8
                     case "ControlPanel":
                         mcItem = PowerItemTree.ControlPanelRoot;
                         break;
+                    case "NetItems":
+                        mcItem = PowerItemTree.NetworkRoot;
+                        break;
                     default:
                         return null;
                 }
