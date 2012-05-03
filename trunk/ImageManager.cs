@@ -35,8 +35,16 @@ namespace Power8
             var dbgLine = "GICS for " + item.FriendlyName + ": ";
             Debug.WriteLine(dbgLine + "begin");
 #endif
-            var resolvedArg = PowerItemTree.GetResolvedArgument(item, false);
-            var descr = GetObjectDescriptor(item, resolvedArg);
+            string resolvedArg, descr;
+            try
+            {
+                resolvedArg = PowerItemTree.GetResolvedArgument(item, false);
+                descr = GetObjectDescriptor(item, resolvedArg);
+            }
+            catch (IOException)
+            {
+                return null;
+            }
             lock (Cache)
             {
                 var container = (ImageContainer)(Cache.ContainsKey(descr) ? Cache[descr] : null);
