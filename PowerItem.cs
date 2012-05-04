@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using Power8.Properties;
 using System.Linq;
 
@@ -40,8 +39,11 @@ namespace Power8
             }
             set
             {
-                _icon = value;
-                OnPropertyChanged("Icon");
+                if(_icon != value)
+                {
+                    _icon = value;
+                    OnPropertyChanged("Icon");
+                }
             }
         }
 
@@ -105,6 +107,7 @@ namespace Power8
             {
                 if(_friendlyName != null)
                     return _friendlyName;
+
                 if (ResourceIdString != null)
                 {
                     _friendlyName = Util.ResolveStringResource(ResourceIdString);
@@ -112,16 +115,25 @@ namespace Power8
                         return _friendlyName;
                     ResourceIdString = null; //Operation failed somewhere, resourceId is invalid
                 }
+
                 if (SpecialFolderId != API.Csidl.INVALID)
                 {
                     _friendlyName = Util.ResolveSpecialFolderName(SpecialFolderId);
                     if (_friendlyName != null)
                         return _friendlyName;
                 }
+
                 if (string.IsNullOrEmpty(Argument))
-                    return Resources.AllPrograms;
-                var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
-                return string.IsNullOrEmpty(path) ? Argument : path;
+                {
+                    _friendlyName = Resources.AllPrograms;
+                }
+                else
+                {
+                    var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
+                    _friendlyName = string.IsNullOrEmpty(path) ? Argument : path;
+                }
+                
+                return _friendlyName;
             }
             set
             {
@@ -197,6 +209,8 @@ namespace Power8
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);
             if (!string.IsNullOrEmpty(verb) && IsFile)
                 psi.Verb = verb;
+            if (psi.Arguments.StartsWith("\\\\"))
+                psi.UseShellExecute = false;
             try
             {
                 Process.Start(psi);

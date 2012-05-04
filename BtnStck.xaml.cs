@@ -175,6 +175,9 @@ namespace Power8
 
         private static PowerItem GetSpecialItems(string containerName)
         {
+#if DEBUG
+            var s = Stopwatch.StartNew();
+#endif
             if (!SpecialItems.ContainsKey(containerName))
             {
                 PowerItem mcItem;
@@ -200,6 +203,10 @@ namespace Power8
                 }
                 SpecialItems[containerName] = mcItem;
             }
+#if DEBUG
+            Debug.WriteLine("BtnStck:GSI - done for {0} as of {1}", containerName, s.ElapsedMilliseconds);
+            s.Stop();
+#endif
             return SpecialItems[containerName];
         }
 
