@@ -263,14 +263,14 @@ namespace Power8
                         NonCachedIcon = true,
                         IsFolder = true,
                         Argument = API.ShNs.NetworkConnections,
-                        Parent = _networkRoot
+                        Parent = ControlPanelRoot
                     });
                     _networkRoot.Items.Add(new PowerItem
                     {
                         SpecialFolderId = API.Csidl.COMPUTERSNEARME,
                         IsFolder = true,
                         NonCachedIcon = true,
-                        Parent = _networkRoot
+                        Parent = ControlPanelRoot
                     });
                 }
                 return _networkRoot;

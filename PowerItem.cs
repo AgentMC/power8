@@ -164,8 +164,10 @@ namespace Power8
         {
             get
             {
-                return Parent == null || Parent.SpecialFolderId != API.Csidl.CONTROLS ||
-                       Argument.EndsWith(".cpl", StringComparison.InvariantCultureIgnoreCase);
+                return Parent == null 
+                    || Parent.SpecialFolderId != API.Csidl.CONTROLS 
+                    || (Argument != null 
+                        && Argument.EndsWith(".cpl", StringComparison.InvariantCultureIgnoreCase));
             }
         }
 
@@ -189,52 +191,7 @@ namespace Power8
         {
             if (string.IsNullOrEmpty(Argument) && SpecialFolderId != API.Csidl.INVALID)
             {
-                API.IShellFolder isf, isf2;
-                var res = API.SHGetDesktopFolder(out isf);
-                var pidl = IntPtr.Zero;
-                res = API.SHGetSpecialFolderLocation(IntPtr.Zero, SpecialFolderId, ref pidl);
-                var browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
-                browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
-                
-                
-                //var iidSf = new Guid(API.IID_IShellFolder);
-                //IntPtr isf2Ptr, isvPtr, hWnd;
-                //res = isf.BindToObject(pidl, IntPtr.Zero, ref iidSf, out isf2Ptr);
-                //isf2 = (API.IShellFolder) Marshal.GetObjectForIUnknown(isf2Ptr);
-                //var iidSv = new Guid(API.IID_IShellView);
-                //res = isf2.CreateViewObject(IntPtr.Zero, ref iidSv, out isvPtr);
-                //var isv = (API.IShellView) Marshal.GetObjectForIUnknown(isvPtr);
-
-                //var prov = (API.IServiceProvider) isv;
-                //API.IShellBrowser browser;
-                //var sidGuid = new Guid(API.SID_STopLevelBrowser);
-                //var browserGuid = new Guid(API.IID_IShellBrowser);
-                //res = prov.QueryService(ref browserGuid, ref browserGuid, out browser);
-                //var settings = new API.FOLDERSETTINGS
-                //                   {vFlags = API.FOLDERFLAGS.FWF_NONE, viewMode = API.FOLDERVIEWMODE.FVM_AUTO};
-                //var r = new API.RECT();
-                //res = isv.CreateViewWindow(isv, ref settings, browser, ref r, out hWnd);
-                //if (hWnd == IntPtr.Zero)
-                //    res = browser.GetWindow(out hWnd);
-                //API.ShowWindow(hWnd, API.SWCommands.SHOW);
-
-                //Fuck it...
-                /* BOOL fSuccess = FALSE;
-     RECT rc;
-     PIDLIST_ABSOLUTE pidl = NULL;
-     if (SUCCEEDED(CoCreateInstance(CLSID_ExplorerBrowser, NULL,
-                          CLSCTX_INPROC, IID_PPV_ARGS(&g_peb))) &&
-         GetClientRect(hwnd, &rc) &&
-         SUCCEEDED(g_peb->Initialize(hwnd, &rc, NULL)) &&
-         SUCCEEDED(SHParseDisplayName(
-                          L"C:\\Program Files\\Internet Explorer",
-                                         NULL, &pidl, 0, NULL)) &&
-         SUCCEEDED(g_peb->SetOptions(EBO_NAVIGATEONCE)) &&
-         SUCCEEDED(g_peb->BrowseToIDList(pidl, SBSP_ABSOLUTE))) {
-         fSuccess = TRUE;
-     }
-     ILFree(pidl);
-     return fSuccess;*/
+                Util.DisplaySpecialFolder(SpecialFolderId);
                 return;
             }
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);

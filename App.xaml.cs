@@ -76,16 +76,15 @@ namespace Power8
         }
 
 
-        private void RunClick(object sender, RoutedEventArgs e)
-        {
-            Util.ExtractRelatedPowerItem(sender).Invoke();
-        }
-
-        private void RunAsClick(object sender, RoutedEventArgs e)
+        private void RunRunasOpenOpencommonClick(object sender, RoutedEventArgs e)
         {
             try
             {
-                Util.ExtractRelatedPowerItem(sender).InvokeVerb(API.SEIVerbs.SEV_RunAsAdmin);
+                var n = ((MenuItem) sender).Name;
+                if (n == "AppRun" || n == "AppOpenFolder")
+                    Util.ExtractRelatedPowerItem(sender).Invoke();
+                else
+                    Util.ExtractRelatedPowerItem(sender).InvokeVerb(API.SEIVerbs.SEV_RunAsAdmin);
             }
             catch (Exception ex)
             {
