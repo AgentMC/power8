@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Threading;
 using System.Xml;
 
@@ -52,12 +54,12 @@ namespace Power8
                 if (_librariesOrMyDocsItem == null)
                 {
                     string path, ns;
-                    if (Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 1) //Win7+ -> return libraries
+                    if (Environment.OSVersion.Version.Major >= 6) //Win7+ -> return libraries
                     {
                         path = Util.ResolveKnownFolder(API.KnFldrIds.Libraries);
                         ns = API.ShNs.Libraries;
                     }
-                    else                                          //Vista or below -> return MyDocs
+                    else                                          //XP or below -> return MyDocs
                     {
                         path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                         ns = API.ShNs.MyDocuments;
@@ -185,9 +187,12 @@ namespace Power8
                         });
 
                         //TODO: separator in binded ObservableCollection?
-                        _controlPanelRoot.Items.Insert(1, new PowerItem { FriendlyName = "----" });
+                        _controlPanelRoot.Items.Insert(1, new PowerItem
+                        {
+                            FriendlyName = "----", 
+                            Parent = _controlPanelRoot
+                        });
                     }
-
                 }
                 return _controlPanelRoot;
             }
@@ -209,6 +214,8 @@ namespace Power8
                         NonCachedIcon = true,
                         HasLargeIcon = true
                     };
+                    _myComputerItem.Icon = ImageManager.GetImageContainerSync(_myComputerItem, API.Shgfi.LARGEICON);
+                    _myComputerItem.Icon.ExtractSmall();
                     foreach (var drive in DriveInfo.GetDrives())
                     {
                         switch (drive.DriveType)
@@ -231,8 +238,8 @@ namespace Power8
                                 w.Changed += FileChanged;
                                 w.Renamed += FileRenamed;
                                 w.IncludeSubdirectories = true;
-                                w.EnableRaisingEvents = true;
                                 Watchers.Add(w);
+                                BtnStck.Instanciated += (sender, args) => w.EnableRaisingEvents = true;
                                 break;
                         }
                     }
@@ -248,30 +255,62 @@ namespace Power8
             {
                 if (_networkRoot == null)
                 {
-                    _networkRoot = new PowerItem
-                                       {
-                                           SpecialFolderId = API.Csidl.NETWORK,
-                                           IsFolder = true,
-                                           HasLargeIcon = true,
-                                           NonCachedIcon = true,
-                                           Argument = API.ShNs.NetworkNeighbourhood
-                                       };
-
-                    _networkRoot.Items.Add(new PowerItem
+                    var xpNet7Wrkgrp = new PowerItem
                     {
-                        SpecialFolderId = API.Csidl.CONNECTIONS,
-                        NonCachedIcon = true,
+                        SpecialFolderId = API.Csidl.NETWORK,
                         IsFolder = true,
-                        Argument = API.ShNs.NetworkConnections,
+                        HasLargeIcon = true,
+                        NonCachedIcon = true,
+                        Argument = API.ShNs.NetworkNeighbourhood,
                         Parent = ControlPanelRoot
-                    });
-                    _networkRoot.Items.Add(new PowerItem
+                    };
+                    var conString = Util.ResolveSpecialFolderName(API.Csidl.CONNECTIONS);
+                    var connections =
+                        ControlPanelRoot.Items.FirstOrDefault(i => i.FriendlyName == conString) ??
+                        new PowerItem
+                            {
+                                SpecialFolderId = API.Csidl.CONNECTIONS,
+                                NonCachedIcon = true,
+                                IsFolder = true,
+                                Argument = API.ShNs.NetworkConnections,
+                                Parent = ControlPanelRoot
+                            };
+                    var xpWrkgrp7Net = new PowerItem
                     {
                         SpecialFolderId = API.Csidl.COMPUTERSNEARME,
                         IsFolder = true,
                         NonCachedIcon = true,
                         Parent = ControlPanelRoot
-                    });
+                    };
+
+                    _networkRoot = Environment.OSVersion.Version.Major >= 6 ? xpWrkgrp7Net : xpNet7Wrkgrp;
+                    _networkRoot.Items.Add(_networkRoot == xpWrkgrp7Net ? xpNet7Wrkgrp : xpWrkgrp7Net);
+                    _networkRoot.Items.Add(connections);
+                    _networkRoot.Items.Add(new PowerItem {FriendlyName = "----", Parent = _networkRoot});
+
+                    new Thread(() =>
+                                   {
+                                       string wkgrpName = null;
+                                       foreach (var obj in new ManagementObjectSearcher("select Domain from Win32_ComputerSystem").Get())
+                                           wkgrpName = obj.GetPropertyValue("Domain").ToString();//only 1 item available
+                                       if (Environment.OSVersion.Version.Major >= 6)
+                                           xpNet7Wrkgrp.FriendlyName = wkgrpName;
+                                       using (var workgroup = new DirectoryEntry("WinNT://" + wkgrpName))
+                                       {
+                                           workgroup.Children
+                                               .Cast<DirectoryEntry>()
+                                               .Where(e => e.SchemaClassName == "Computer")
+                                               .Select(e => new PowerItem
+                                                                {
+                                                                    Argument = "\\\\" + e.Name,
+                                                                    IsFolder = true,
+                                                                    Parent = _networkRoot,
+                                                                    Icon = MyComputerRoot.Icon
+                                                                })
+                                               .ToList()
+                                               .ForEach(i => Util.Post(new Action(() => _networkRoot.Items.Add(i))));
+                                       }
+                                   }).Start();
                 }
                 return _networkRoot;
             }
@@ -353,12 +392,23 @@ namespace Power8
 
         public static void InitTree()
         {
+#if DEBUG
+            var s = Stopwatch.StartNew();
+#endif
             lock (StartMenuRootItem)
             {
                 ScanFolderSync(StartMenuRootItem, PathRoot, true);
                 ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
                 StartMenuRootItem.SortItems();
             }
+#if DEBUG
+            Debug.WriteLine("InitTree - scanned in {0}", s.ElapsedMilliseconds);
+#endif
+            Util.Send(new Action(() => BtnStck.Instance.InvalidateVisual()));
+#if DEBUG
+            Debug.WriteLine("InitTree - done in {0}", s.ElapsedMilliseconds);
+            s.Stop();
+#endif
         }
 
         public static void ScanFolder(PowerItem item, string basePath, bool recoursive = true)
@@ -490,7 +540,7 @@ namespace Power8
                 if (item.IsFolder)
                 {
                     psi.FileName = "explorer.exe";
-                    if (Directory.Exists(arg1))
+                    if (arg1.StartsWith("\\\\") || Directory.Exists(arg1))
                         psi.Arguments = arg1;
                     else
                     {
@@ -588,12 +638,12 @@ namespace Power8
 
         private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container)
         {
-            return container.IsAutoExpandPending ? null : container.Items.FirstOrDefault(
-                i =>
+            if(container.IsAutoExpandPending)
+                return null;
+            var endExpr = Path.GetFileName(argument) ?? argument;
+            return container.Items.FirstOrDefault(i =>
                     i.IsFolder == isFolder &&
-                    i.Argument.EndsWith(
-                        Path.GetFileName(argument) ?? argument, 
-                        StringComparison.InvariantCultureIgnoreCase));
+                    i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private static string[] GetLibraryDirectories(string libraryMs)

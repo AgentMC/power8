@@ -10,77 +10,72 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-    	<Button x:Name="actionBtn" Padding="3" Margin="0,0,-1,0"
+        <Button x:Name="actionBtn" Padding="3" Margin="0,0,-1,0"
             HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Style="{DynamicResource LeftMenuButtonStyle}" 
             Command="{DynamicResource globalClickCommand}" CommandParameter="{Binding Item, ElementName=dblBtn}">
-    		<Grid Margin="1">
-    			<Grid.ColumnDefinitions>
-    				<ColumnDefinition Width="Auto"/>
-    				<ColumnDefinition/>
-    			</Grid.ColumnDefinitions>
-    			<Image Grid.Column="0" Source="{Binding Item.Icon.LargeBitmap, ElementName=dblBtn}" Width="24" Height="24" HorizontalAlignment="Center" Margin="0,0,8,0" VerticalAlignment="Center" d:LayoutOverrides="Width, Height" />
-    			<Border Height="{Binding ActualHeight, ElementName=textBlock, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=textBlock, Mode=OneWay}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,8,0" >
-    				<Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#CCFFFFFF" Margin="-6,3,-6,2">
-    					<Rectangle.Effect>
-    						<BlurEffect Radius="15"/>
-    					</Rectangle.Effect>
-    				</Rectangle>
-    			</Border>
-    			<TextBlock x:Name="textBlock" Text="{Binding Item.FriendlyName, ElementName=dblBtn}" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,8,0"/>
-    		</Grid>
-    	</Button>
+            <Grid Margin="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Source="{Binding Item.Icon.LargeBitmap, ElementName=dblBtn}" Width="24" Height="24" HorizontalAlignment="Center" Margin="0,0,8,0" VerticalAlignment="Center" d:LayoutOverrides="Width, Height" />
+                <Border Height="{Binding ActualHeight, ElementName=textBlock, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=textBlock, Mode=OneWay}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,8,0" >
+                    <Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#CCFFFFFF" Margin="-6,3,-6,2">
+                        <Rectangle.Effect>
+                            <BlurEffect Radius="15"/>
+                        </Rectangle.Effect>
+                    </Rectangle>
+                </Border>
+                <TextBlock x:Name="textBlock" Text="{Binding Item.FriendlyName, ElementName=dblBtn}" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,8,0"/>
+            </Grid>
+        </Button>
         <Menu Grid.Column="1" Margin="0"  Padding="0"  ContextMenuOpening="ContextMenuContextMenuOpening" Style="{DynamicResource RightMenuStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}" IsMainMenu="False">
             <MenuItem ItemsSource="{Binding ElementName=dblBtn, Path=Item.Items}" ItemContainerStyle="{DynamicResource MenuItemStyle}" Padding="0">
-				<MenuItem.Header>
-	        	    <Grid Width="14" Height="14" Margin="2,1,1,1">
-	        		    <Path Data="M0,0 L2,2 0,4z" Fill="{DynamicResource WhiteSolidBrush}" Stretch="Uniform" Stroke="{DynamicResource BlackBrush}"/>
-	        	    </Grid>
-				</MenuItem.Header>
-			</MenuItem>			
-            <!--<Button  Click="DisplayMenu" x:Name="menuDropper" Style="{DynamicResource RightMenuButtonStyle}" >
-        	    <Grid Width="14" Height="14" Margin="8,1">
-        		    <Path Data="M0,0 L2,2 0,4z" Fill="{DynamicResource WhiteSolidBrush}" Stretch="Uniform" Stroke="{DynamicResource BlackBrush}"/>
-        	    </Grid>
-            </Button>-->
+                <MenuItem.Header>
+                    <Grid Width="14" Height="14" Margin="2,1,1,1">
+                        <Path Data="M0,0 L2,2 0,4z" Fill="{DynamicResource WhiteSolidBrush}" Stretch="Uniform" Stroke="{DynamicResource BlackBrush}"/>
+                    </Grid>
+                </MenuItem.Header>
+            </MenuItem>			
         </Menu>
         <Border x:Name="border" BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1,1,0,1" CornerRadius="2,0,0,2" Opacity="0">
-        	<Border.Effect>
-        		<DropShadowEffect ShadowDepth="0" Color="White"/>
-        	</Border.Effect>
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" Color="White"/>
+            </Border.Effect>
         </Border>
         <Border x:Name="border1" BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="0,2,2,0" Grid.Column="1" Opacity="0">
-        	<Border.Effect>
-        		<DropShadowEffect ShadowDepth="0" Color="White"/>
-        	</Border.Effect>
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" Color="White"/>
+            </Border.Effect>
         </Border>
     </Grid>
     <UserControl.Resources>
         <Storyboard x:Key="OnMouseEnter1">
-        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
-        		<EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
-        	</DoubleAnimationUsingKeyFrames>
-        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border1">
-        		<EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
-        	</DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border1">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="MouseLeave">
-        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
-        		<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-        	</DoubleAnimationUsingKeyFrames>
-        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border1">
-        		<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-        	</DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border1">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
-	<UserControl.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard x:Name="MouseLeave_BeginStoryboard1" Storyboard="{StaticResource MouseLeave}"/>
-		</EventTrigger>
-		<EventTrigger RoutedEvent="Mouse.MouseEnter">
-			<BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
-		</EventTrigger>
-		<EventTrigger RoutedEvent="Mouse.MouseLeave">
-			<BeginStoryboard x:Name="MouseLeave_BeginStoryboard" Storyboard="{StaticResource MouseLeave}"/>
-		</EventTrigger>
-	</UserControl.Triggers>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard x:Name="MouseLeave_BeginStoryboard1" Storyboard="{StaticResource MouseLeave}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseEnter">
+            <BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseLeave">
+            <BeginStoryboard x:Name="MouseLeave_BeginStoryboard" Storyboard="{StaticResource MouseLeave}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
 </UserControl>

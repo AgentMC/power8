@@ -364,7 +364,7 @@ namespace Power8
                                                                 typeof (API.CplAppletProc));
                     if (cplProc != null)
                     {
-                        var hWnd = BtnStck.Instance.GetHandle();
+                        var hWnd = API.GetDesktopWindow();
                         var res = cplProc(hWnd, API.CplMsg.INIT, IntPtr.Zero, IntPtr.Zero);
                         if (res != 0)
                         {

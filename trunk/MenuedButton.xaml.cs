@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace Power8
@@ -26,11 +25,6 @@ namespace Power8
                     OnPropertyChanged("Item");
                 }
             }
-        }
-
-        public BtnStck Mnu
-        {
-            get { return BtnStck.Instance; }
         }
 
         private void ContextMenuContextMenuOpening(object sender, ContextMenuEventArgs e)
