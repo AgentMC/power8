@@ -295,6 +295,22 @@ namespace Power8
         [DllImport("shell32.dll", SetLastError = true, EntryPoint = "SHGetSpecialFolderPathW")]
         public static extern int SHGetSpecialFolderPath(IntPtr hwndOwner, out IntPtr ppwszPath, Csidl nFolder, bool fCreate);
 
+        public enum SIGDN : uint
+        {
+            NORMALDISPLAY = 0x00000000,
+            PARENTRELATIVEPARSING = 0x80018001,
+            DESKTOPABSOLUTEPARSING = 0x80028000,
+            PARENTRELATIVEEDITING = 0x80031001,
+            DESKTOPABSOLUTEEDITING = 0x8004c000,
+            FILESYSPATH = 0x80058000,
+            URL = 0x80068000,
+            PARENTRELATIVEFORADDRESSBAR = 0x8007c001,
+            PARENTRELATIVE = 0x80080001
+        }
+
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        public static extern int SHGetNameFromIDList(IntPtr pidl,  SIGDN sigdnName, ref IntPtr ppszName);
+
         [DllImport("user32.dll")]
         public static extern int DestroyIcon(IntPtr hIcon);
 
@@ -536,7 +552,7 @@ namespace Power8
         /// <summary> Implements IShellLink and IPersistFile COM interfaces</summary>
         [ComImport, ClassInterface(ClassInterfaceType.None)]
         [Guid(CLSID_ShellLink)]
-        public class ShellLink { }
+        public class ShellLink {}
 
         
         //Loading native resources=================================================================
@@ -1138,7 +1154,7 @@ namespace Power8
         [ComImport, Guid(IID_ExplorerBrowser)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IExplorerBrowser
-        {
+        {//todo: create commented structures and ensure parameters passed well to describe interface better
             void Initialize([In] IntPtr hwndParent, [In] ref RECT prc, [In] ref FOLDERSETTINGS pfs);
             void Destroy();
             void SetRect(/*[In] [Out] ref HDWP*/ IntPtr phdwp, [In] RECT rcBrowser);

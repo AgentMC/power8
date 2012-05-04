@@ -121,6 +121,7 @@ namespace Power8
             {
                 API.WIN32_FIND_DATAW sd;
                 ((API.IShellLink) shLink).GetPath(Buffer, 512, out sd, API.SLGP_FLAGS.SLGP_UNCPRIORITY);
+                Marshal.FinalReleaseComObject(shLink);
                 return Buffer.ToString();
             }
         }
@@ -146,20 +147,56 @@ namespace Power8
         public static string ResolveSpecialFolderName(API.Csidl id)
         {
             var ppIdl = IntPtr.Zero;
-            var info = new API.Shfileinfo();
             var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, id, ref ppIdl);
 #if DEBUG
             Debug.WriteLine("RSFN: SHGetSp.F.Loc. for id<={0} returned result code {1}", id, hRes);
 #endif
-            var zeroFails = (hRes != 0
-                                ? IntPtr.Zero
-                                : API.SHGetFileInfo(ppIdl, 0, ref info, (uint) Marshal.SizeOf(info),
-                                                    API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES));
+            var pwstr = IntPtr.Zero;
+            var info = new API.Shfileinfo();
+            var zeroFails = new IntPtr(1);
+            if (hRes == 0 
+                && API.SHGetNameFromIDList(ppIdl, API.SIGDN.NORMALDISPLAY, ref pwstr) == 0)
+            {
+                info.szDisplayName = Marshal.PtrToStringUni(pwstr);
+                Marshal.FreeCoTaskMem(pwstr);
+            }
+            else
+            {
+                zeroFails = (hRes != 0
+                            ? IntPtr.Zero
+                            : API.SHGetFileInfo(ppIdl, 0, ref info, (uint) Marshal.SizeOf(info),
+                                                API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES));
+            }
             Marshal.FreeCoTaskMem(ppIdl);
 #if DEBUG
             Debug.WriteLine("RSFN: ShGetFileInfo returned " + zeroFails);      
 #endif
             return zeroFails == IntPtr.Zero ? null : info.szDisplayName;
+        }
+
+        public static void DisplaySpecialFolder(API.Csidl id)
+        {
+            var pidl = IntPtr.Zero;
+            var res = API.SHGetSpecialFolderLocation(IntPtr.Zero, id, ref pidl);
+            if (res != 0)
+            {
+#if DEBUG
+                Debug.WriteLine("Can't SHget folder PIDL, error " + res);
+#endif
+                return;
+            }
+            API.IExplorerBrowser browser = null;
+            try
+            {
+                browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
+                browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
+            }
+            finally
+            {
+                if (browser != null) 
+                    Marshal.ReleaseComObject(browser);
+                Marshal.FreeCoTaskMem(pidl);
+            }
         }
 
 
