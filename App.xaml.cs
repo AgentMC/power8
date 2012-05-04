@@ -106,7 +106,7 @@ namespace Power8
                     hwnd = BtnStck.Instance.GetHandle(),
                     lpVerb = API.SEIVerbs.SEV_Properties,
                     lpFile = PowerItemTree.GetResolvedArgument(pi, false),
-                    nShow = API.SWCommands.SW_HIDE
+                    nShow = API.SWCommands.HIDE
                 };
                 if (pi.IsLink && ((MenuItem)sender).Name == "AppShowTargetProperties")
                     info.lpFile = Util.ResolveLink(info.lpFile);

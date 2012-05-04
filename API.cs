@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Interop;
 
 namespace Power8
 {
@@ -163,6 +163,8 @@ namespace Power8
             HELP = 21
         }
 
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindow(IntPtr hWnd, SWCommands nCmdShow);
 
         //Getting icons============================================================================
         [StructLayout(LayoutKind.Sequential, Pack=1, CharSet=CharSet.Ansi)]
@@ -353,18 +355,18 @@ namespace Power8
         [Flags]
         public enum SWCommands
         {
-            SW_HIDE = 0,
-            SW_MAXIMIZE = 3,
-            SW_MINIMIZE = 6,
-            SW_RESTORE = 9,
-            SW_SHOW = 5,
-            SW_SHOWDEFAULT = 10,
-            SW_SHOWMAXIMIZED = 3,
-            SW_SHOWMINIMIZED = 2,
-            SW_SHOWMINNOACTIVE = 7,
-            SW_SHOWNA = 8,
-            SW_SHOWNOACTIVATE = 4,
-            SW_SHOWNORMAL = 1,
+            HIDE = 0,
+            MAXIMIZE = 3,
+            MINIMIZE = 6,
+            RESTORE = 9,
+            SHOW = 5,
+            SHOWDEFAULT = 10,
+            SHOWMAXIMIZED = 3,
+            SHOWMINIMIZED = 2,
+            SHOWMINNOACTIVE = 7,
+            SHOWNA = 8,
+            SHOWNOACTIVATE = 4,
+            SHOWNORMAL = 1,
         }
 
         public static class SEIVerbs
@@ -385,10 +387,15 @@ namespace Power8
 
 
         //Resolving links==========================================================================
-        const string CLSID_ShellLink = "00021401-0000-0000-C000-000000000046";
-        const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
-        const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
-        const string IID_IShellLinkW = "000214F9-0000-0000-C000-000000000046";
+        public const string CLSID_ShellLink = "00021401-0000-0000-C000-000000000046";
+        public const string SID_STopLevelBrowser = "4C96BE40-915C-11CF-99D3-00AA004AE837";
+        public const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
+        public const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
+        public const string IID_IShellLinkW = "000214F9-0000-0000-C000-000000000046";
+        public const string IID_IShellFolder = "000214E6-0000-0000-C000-000000000046";
+        public const string IID_IShellView = "000214E3-0000-0000-C000-000000000046";
+        public const string IID_IShellBrowser = "000214e2-0000-0000-c000-000000000046";
+        public const string IID_IServiceProvider = "6d5140c1-7436-11ce-8034-00aa006009fa";
 
         [Flags]
         public enum SLGP_FLAGS
@@ -752,6 +759,331 @@ namespace Power8
         public static extern
         void SHGetKnownFolderPath([MarshalAs(UnmanagedType.LPStruct)] Guid rfid, KFF dwFlags, IntPtr hToken, out IntPtr ppwszPath);
 
+        [Flags]
+        public enum SFGAO : uint
+        {
+            CANCOPY = 0x00000001, // Objects can be copied    (0x1)
+            CANMOVE = 0x00000002, // Objects can be moved     (0x2)
+            CANLINK = 0x00000004, // Objects can be linked    (0x4)
+            STORAGE = 0x00000008, // supports BindToObject(IID_IStorage)
+            CANRENAME = 0x00000010, // Objects can be renamed
+            CANDELETE = 0x00000020, // Objects can be deleted
+            HASPROPSHEET = 0x00000040, // Objects have property sheets
+            DROPTARGET = 0x00000100, // Objects are drop target
+            CAPABILITYMASK = 0x00000177,
+            SYSTEM = 0x00001000, // System object
+            ENCRYPTED = 0x00002000, // Object is encrypted (use alt color)
+            ISSLOW = 0x00004000, // 'Slow' object
+            GHOSTED = 0x00008000, // Ghosted icon
+            LINK = 0x00010000, // Shortcut (link)
+            SHARE = 0x00020000, // Shared
+            READONLY = 0x00040000, // Read-only
+            HIDDEN = 0x00080000, // Hidden object
+            DISPLAYATTRMASK = 0x000FC000,
+            FILESYSANCESTOR = 0x10000000, // May contain children with SFGAO_FILESYSTEM
+            FOLDER = 0x20000000, // Support BindToObject(IID_IShellFolder)
+            FILESYSTEM = 0x40000000, // Is a win32 file system object (file/folder/root)
+            HASSUBFOLDER = 0x80000000, // May contain children with SFGAO_FOLDER (may be slow)
+            CONTENTSMASK = 0x80000000,
+            VALIDATE = 0x01000000, // Invalidate cached information (may be slow)
+            REMOVABLE = 0x02000000, // Is this removeable media?
+            COMPRESSED = 0x04000000, // Object is compressed (use alt color)
+            BROWSABLE = 0x08000000, // Supports IShellFolder, but only implements CreateViewObject() (non-folder view)
+            NONENUMERATED = 0x00100000, // Is a non-enumerated object (should be hidden)
+            NEWCONTENT = 0x00200000, // Should show bold in explorer tree
+            CANMONIKER = 0x00400000, // Obsolete
+            HASSTORAGE = 0x00400000, // Obsolete
+            STREAM = 0x00400000, // Supports BindToObject(IID_IStream)
+            STORAGEANCESTOR = 0x00800000, // May contain children with SFGAO_STORAGE or SFGAO_STREAM
+            STORAGECAPMASK = 0x70C50008, // For determining storage capabilities, ie for open/save semantics
+            PKEYSFGAOMASK = 0x81044000 // Attributes that are masked out for PKEY_SFGAOFlags because they are considered to
+            //cause slow calculations or lack context (SFGAO_VALIDATE | SFGAO_ISSLOW | SFGAO_HASSUBFOLDER and others)
+        }
+
+        [Flags]
+        public enum SHCONTF
+        {
+            SHCONTF_CHECKING_FOR_CHILDREN = 0x10,
+            SHCONTF_FOLDERS = 0x20,
+            SHCONTF_NONFOLDERS = 0x40,
+            SHCONTF_INCLUDEHIDDEN = 0x80,
+            SHCONTF_INIT_ON_FIRST_NEXT = 0x100,
+            SHCONTF_NETPRINTERSRCH = 0x200,
+            SHCONTF_SHAREABLE = 0x400,
+            SHCONTF_STORAGE = 0x800,
+            SHCONTF_NAVIGATION_ENUM = 0x1000,
+            SHCONTF_FASTITEMS = 0x2000,
+            SHCONTF_FLATLIST = 0x4000,
+            SHCONTF_ENABLE_ASYNC = 0x8000,
+            SHCONTF_INCLUDESUPERHIDDEN = 0x10000
+        }
+
+        [Flags]
+        public enum SHGNO
+        {
+            NORMAL = 0x0000,
+            INFOLDER = 0x0001,
+            FOREDITING = 0x1000,
+            FORADDRESSBAR = 0x4000,
+            FORPARSING = 0x8000
+        }
+
+        [DllImport("shell32.dll", CharSet=CharSet.Unicode)]
+        public static extern
+        int SHGetDesktopFolder(out IShellFolder ppShFldr);
+
+        [ComImport, Guid(IID_IShellFolder)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IShellFolder
+        {
+            /// <summary>
+            /// Translates a file object's or folder's display name into an item identifier list.
+            /// </summary>
+            /// <returns>Error code, if any</returns>
+            [PreserveSig]
+            int ParseDisplayName(
+                IntPtr hwnd,
+                IntPtr pbc,
+                [MarshalAs(UnmanagedType.LPWStr)] string pszDisplayName,
+                ref uint pchEaten,
+                out IntPtr ppidl,
+                ref SFGAO pdwAttributes);
+
+            /// <summary>
+            /// Allows a client to determine the contents of a folder by creating an item
+            /// identifier enumeration object and returning its IEnumIDList interface.
+            /// </summary>
+            /// <returns>Error code, if any</returns>
+            [PreserveSig]
+            int EnumObjects(IntPtr hwnd, SHCONTF grfFlags, out IntPtr enumIDList);
+
+            /// <summary>
+            /// Retrieves an IShellFolder object for a subfolder.
+            /// </summary>
+            /// <returns>Error code, if any</returns>
+            [PreserveSig]
+            int BindToObject(IntPtr pidl, IntPtr pbc, ref Guid riid, out IntPtr ppv);
+
+            /// <summary>
+            /// Requests a pointer to an object's storage interface. 
+            /// </summary>
+            /// <returns>Error code, if any</returns>
+            [PreserveSig]
+            int BindToStorage(IntPtr pidl, IntPtr pbc, ref Guid riid, out IntPtr ppv);
+
+            /// <summary>
+            /// Determines the relative order of two file objects or folders, given their item identifier lists.
+            /// </summary>
+            /// <returns>If this method is successful, the CODE field of the HRESULT contains one of the following
+            /// values (the code can be retrived using the helper function GetHResultCode): 
+            /// <ul>
+            /// <li>negative return value indicates that the first item should precedethe second (pidl1 &lt; pidl2).</li>
+            /// <li>positive return value indicates that the first item should follow the second (pidl1 &gt; pidl2).</li>
+            /// <li>return value of zero indicates that the two items are the same (pidl1 = pidl2).</li>
+            /// </ul></returns> 
+            [PreserveSig]
+            int CompareIDs(IntPtr lParam, IntPtr pidl1, IntPtr pidl2);
+
+            /// <summary>
+            /// Requests an object that can be used to obtain information from or interact with a folder object.
+            /// </summary>
+            /// <returns>Error code, if any</returns>
+            [PreserveSig]
+            int CreateViewObject(IntPtr hwndOwner, ref Guid riid, out IntPtr ppv);
+
+            /// <summary>
+            /// Retrieves the attributes of one or more file objects or subfolders.
+            /// </summary>
+            /// <returns> error code, if any</returns>
+            [PreserveSig]
+            int GetAttributesOf(uint cidl, [MarshalAs(UnmanagedType.LPArray)] IntPtr[] apidl, ref SFGAO rgfInOut);
+
+            /// <summary>
+            /// Retrieves an OLE interface that can be used to carry out actions on the specified file objects or folders.
+            /// </summary>
+            /// <returns>error code, if any</returns>
+            [PreserveSig]
+            int GetUIObjectOf(
+                IntPtr hwndOwner,
+                uint cidl,
+                [MarshalAs(UnmanagedType.LPArray)] IntPtr[] apidl,
+                ref Guid riid,
+                IntPtr rgfReserved,
+                out IntPtr ppv);
+
+            /// <summary>
+            /// Retrieves the display name for the specified file object or subfolder. 
+            /// </summary>
+            /// <returns>Return value: error code, if any</returns>
+            [PreserveSig]
+            int GetDisplayNameOf(IntPtr pidl, SHGNO uFlags, IntPtr lpName);
+
+            /// <summary>
+            /// Sets the display name of a file object or subfolder, changing the item identifier in the process.
+            /// </summary>
+            /// <returns>error code, if any</returns>
+            [PreserveSig]
+            int SetNameOf(
+                IntPtr hwnd,
+                IntPtr pidl,
+                [MarshalAs(UnmanagedType.LPWStr)] string pszName,
+                SHGNO uFlags,
+                out IntPtr ppidlOut);
+        }
+
+        public enum SVUIA : uint
+        {
+            DEACTIVATE = 0,
+            ACTIVATE_NOFOCUS = 1,
+            ACTIVATE_FOCUS = 2,
+            INPLACEACTIVATE = 3
+        }
+
+        public enum SVSIF : uint
+        {
+            SVSI_DESELECT = 0,
+            SVSI_SELECT = 0x1,
+            SVSI_EDIT = 0x3,
+            SVSI_DESELECTOTHERS = 0x4,
+            SVSI_ENSUREVISIBLE = 0x8,
+            SVSI_FOCUSED = 0x10,
+            SVSI_TRANSLATEPT = 0x20,
+            SVSI_SELECTIONMARK = 0x40,
+            SVSI_POSITIONITEM = 0x80,
+            SVSI_CHECK = 0x100,
+            SVSI_CHECK2 = 0x200,
+            SVSI_KEYBOARDSELECT = 0x401,
+            SVSI_NOTAKEFOCUS = 0x40000000
+        }
+
+        public enum FOLDERVIEWMODE
+        {
+            FVM_AUTO = -1,
+            FVM_FIRST = 1,
+            FVM_ICON = 1,
+            FVM_SMALLICON = 2,
+            FVM_LIST = 3,
+            FVM_DETAILS = 4,
+            FVM_THUMBNAIL = 5,
+            FVM_TILE = 6,
+            FVM_THUMBSTRIP = 7,
+            FVM_CONTENT = 8,
+            FVM_LAST = 8
+        }
+
+        public enum FOLDERFLAGS : uint
+        {
+            FWF_NONE = 0x00000000,
+            FWF_AUTOARRANGE = 0x00000001,
+            FWF_ABBREVIATEDNAMES = 0x00000002,
+            FWF_SNAPTOGRID = 0x00000004,
+            FWF_OWNERDATA = 0x00000008,
+            FWF_BESTFITWINDOW = 0x00000010,
+            FWF_DESKTOP = 0x00000020,
+            FWF_SINGLESEL = 0x00000040,
+            FWF_NOSUBFOLDERS = 0x00000080,
+            FWF_TRANSPARENT = 0x00000100,
+            FWF_NOCLIENTEDGE = 0x00000200,
+            FWF_NOSCROLL = 0x00000400,
+            FWF_ALIGNLEFT = 0x00000800,
+            FWF_NOICONS = 0x00001000,
+            FWF_SHOWSELALWAYS = 0x00002000,
+            FWF_NOVISIBLE = 0x00004000,
+            FWF_SINGLECLICKACTIVATE = 0x00008000,
+            FWF_NOWEBVIEW = 0x00010000,
+            FWF_HIDEFILENAMES = 0x00020000,
+            FWF_CHECKSELECT = 0x00040000,
+            FWF_NOENUMREFRESH = 0x00080000,
+            FWF_NOGROUPING = 0x00100000,
+            FWF_FULLROWSELECT = 0x00200000,
+            FWF_NOFILTERS = 0x00400000,
+            FWF_NOCOLUMNHEADER = 0x00800000,
+            FWF_NOHEADERINALLVIEWS = 0x01000000,
+            FWF_EXTENDEDTILES = 0x02000000,
+            FWF_TRICHECKSELECT = 0x04000000,
+            FWF_AUTOCHECKSELECT = 0x08000000,
+            FWF_NOBROWSERVIEWSTATE = 0x10000000,
+            FWF_SUBSETGROUPS = 0x20000000,
+            FWF_USESEARCHFOLDER = 0x40000000,
+            FWF_ALLOWRTLREADING = 0x80000000
+        }
+
+        public struct FOLDERSETTINGS
+        {
+            public FOLDERVIEWMODE viewMode;
+            public FOLDERFLAGS vFlags;
+        }
+
+        [ComImport, Guid(IID_IShellView)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IShellView
+        {//IShellView : public IOleWindow
+            void TranslateAccelerator([In] MSG pmsg);
+            void EnableModeless([In] bool fEnable);
+            void UIActivate([In] SVUIA uState);
+            void Refresh();
+            [PreserveSig]
+            int CreateViewWindow(
+                [In] IShellView psvPrevious,
+                [In] ref FOLDERSETTINGS pfs,
+                [In] IShellBrowser psb,
+                [In] ref RECT prcView,
+                [Out] out IntPtr phWnd);
+            void DestroyViewWindow();
+            void GetCurrentInfo([Out] out FOLDERSETTINGS pfs);
+            void AddPropertySheetPages(
+                [In] uint dwReserved,
+                [In, MarshalAs(UnmanagedType.FunctionPtr)] IntPtr pfn,
+                [In] IntPtr lparam);
+            void SaveViewState();
+            void SelectItem([In] IntPtr pidlItem, [In] SVSIF uFlags);
+            void GetItemObject([In] uint uItem, [In] ref Guid riid, [Out] out IntPtr ppv);
+        };
+
+        [ComImport, Guid(IID_IShellBrowser)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IShellBrowser
+        {
+            [PreserveSig]
+            int GetWindow(out IntPtr hwnd);
+            [PreserveSig]
+            int ContextSensitiveHelp(int fEnterMode);
+            [PreserveSig]
+            int InsertMenusSB(IntPtr hmenuShared, IntPtr lpMenuWidths);
+            [PreserveSig]
+            int SetMenuSB(IntPtr hmenuShared, IntPtr holemenuRes, IntPtr hwndActiveObject);
+            [PreserveSig]
+            int RemoveMenusSB(IntPtr hmenuShared);
+            [PreserveSig]
+            int SetStatusTextSB(IntPtr pszStatusText);
+            [PreserveSig]
+            int EnableModelessSB(bool fEnable);
+            [PreserveSig]
+            int TranslateAcceleratorSB(IntPtr pmsg, short wID);
+            [PreserveSig]
+            int BrowseObject(IntPtr pidl, [MarshalAs(UnmanagedType.U4)] uint wFlags);
+            [PreserveSig]
+            int GetViewStateStream(uint grfMode, IntPtr ppStrm);
+            [PreserveSig]
+            int GetControlWindow(uint id, out IntPtr phwnd);
+            [PreserveSig]
+            int SendControlMsg(uint id, uint uMsg, uint wParam, uint lParam, IntPtr pret);
+            [PreserveSig]
+            int QueryActiveShellView([MarshalAs(UnmanagedType.Interface)] ref IShellView ppshv);
+            [PreserveSig]
+            int OnViewWindowActive([MarshalAs(UnmanagedType.Interface)] IShellView pshv);
+            [PreserveSig]
+            int SetToolbarItems(IntPtr lpButtons, uint nButtons, uint uFlags);
+        }
+
+        [ComImport, Guid(IID_IServiceProvider)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IServiceProvider
+        {
+            [PreserveSig]
+            int QueryService(ref Guid guidService, 
+                             ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IShellBrowser ppvObject);
+        }
 
         //CPLs ====================================================================================
         public delegate int CplAppletProc (IntPtr hwndCpl, CplMsg msg, IntPtr lParam1, IntPtr lParam2);
