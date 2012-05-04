@@ -38,6 +38,17 @@ namespace Power8
             public int Bottom;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT {
+            public int X;
+            public int Y;
+        }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetCursorPos(ref POINT lpPoint);
+
+
         //Aero Glass===============================================================================
         [DllImport("dwmapi.dll")]
         public static extern void DwmEnableBlurBehindWindow (IntPtr hWnd, DwmBlurbehind pBlurBehind);
