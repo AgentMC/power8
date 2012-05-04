@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using Power8.Properties;
 using System.Linq;
 
@@ -186,6 +187,36 @@ namespace Power8
 
         public void InvokeVerb(string verb)
         {
+            if (string.IsNullOrEmpty(Argument) && SpecialFolderId != API.Csidl.INVALID)
+            {
+                //API.IShellFolder isf, isf2;
+                //var res = API.SHGetDesktopFolder(out isf);
+                //var pidl = IntPtr.Zero;
+                //res = API.SHGetSpecialFolderLocation(IntPtr.Zero, SpecialFolderId, ref pidl);
+                //var iidSf = new Guid(API.IID_IShellFolder);
+                //IntPtr isf2Ptr, isvPtr, hWnd;
+                //res = isf.BindToObject(pidl, IntPtr.Zero, ref iidSf, out isf2Ptr);
+                //isf2 = (API.IShellFolder) Marshal.GetObjectForIUnknown(isf2Ptr);
+                //var iidSv = new Guid(API.IID_IShellView);
+                //res = isf2.CreateViewObject(IntPtr.Zero, ref iidSv, out isvPtr);
+                //var isv = (API.IShellView) Marshal.GetObjectForIUnknown(isvPtr);
+
+                //var prov = (API.IServiceProvider) isv;
+                //API.IShellBrowser browser;
+                //var sidGuid = new Guid(API.SID_STopLevelBrowser);
+                //var browserGuid = new Guid(API.IID_IShellBrowser);
+                //res = prov.QueryService(ref browserGuid, ref browserGuid, out browser);
+                //var settings = new API.FOLDERSETTINGS
+                //                   {vFlags = API.FOLDERFLAGS.FWF_NONE, viewMode = API.FOLDERVIEWMODE.FVM_AUTO};
+                //var r = new API.RECT();
+                //res = isv.CreateViewWindow(isv, ref settings, browser, ref r, out hWnd);
+                //if (hWnd == IntPtr.Zero)
+                //    res = browser.GetWindow(out hWnd);
+                //API.ShowWindow(hWnd, API.SWCommands.SHOW);
+
+                //Fuck it...
+                return;
+            }
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);
             if (!string.IsNullOrEmpty(verb) && IsFile)
                 psi.Verb = verb;
