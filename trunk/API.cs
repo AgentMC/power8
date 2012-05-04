@@ -399,6 +399,7 @@ namespace Power8
 
         //Resolving links==========================================================================
         public const string CLSID_ShellLink = "00021401-0000-0000-C000-000000000046";
+        public const string CLSID_ExplorerBrowser = "71f96385-ddd6-48d3-a0c1-ae06e8b055fb";
         public const string SID_STopLevelBrowser = "4C96BE40-915C-11CF-99D3-00AA004AE837";
         public const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
         public const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
@@ -407,7 +408,7 @@ namespace Power8
         public const string IID_IShellView = "000214E3-0000-0000-C000-000000000046";
         public const string IID_IShellBrowser = "000214e2-0000-0000-c000-000000000046";
         public const string IID_IServiceProvider = "6d5140c1-7436-11ce-8034-00aa006009fa";
-        public const string CLSID_ExplorerBrowser = "71f96385-ddd6-48d3-a0c1-ae06e8b055fb";
+        public const string IID_ExplorerBrowser = "dfd3b6b5-c10c-4be9-85f6-a66969f402f6";
 
         [Flags]
         public enum SLGP_FLAGS
@@ -1097,72 +1098,63 @@ namespace Power8
                              ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IShellBrowser ppvObject);
         }
 
+        [Flags]
+        public enum SBSP : uint
+        {
+            DEFBROWSER = 0x0000,
+            SAMEBROWSER = 0x0001,
+            NEWBROWSER = 0x0002,
+            DEFMODE = 0x0000,
+            OPENMODE = 0x0010,
+            EXPLOREMODE = 0x0020,
+            HELPMODE = 0x0040,
+            NOTRANSFERHIST = 0x0080,
+            ABSOLUTE = 0x0000,
+            RELATIVE = 0x1000,
+            PARENT = 0x2000,
+            NAVIGATEBACK = 0x4000,
+            NAVIGATEFORWARD = 0x8000,
+            ALLOW_AUTONAVIGATE = 0x00010000,
+            KEEPSAMETEMPLATE = 0x00020000,
+            KEEPWORDWHEELTEXT = 0x00040000,
+            ACTIVATE_NOFOCUS = 0x00080000,
+            CREATENOHISTORY = 0x00100000,
+            PLAYNOSOUND = 0x00200000,
+            CALLERUNTRUSTED = 0x00800000,
+            TRUSTFIRSTDOWNLOAD = 0x01000000,
+            UNTRUSTEDFORDOWNLOAD = 0x02000000,
+            NOAUTOSELECT = 0x04000000,
+            WRITENOHISTORY = 0x08000000,
+            TRUSTEDFORACTIVEX = 0x10000000,
+            FEEDNAVIGATION = 0x20000000,
+            REDIRECT = 0x40000000,
+            INITIATEDBYHLINKFRAME = 0x80000000,
+        }
+
         [ComImport, ClassInterface(ClassInterfaceType.None)]
         [Guid(CLSID_ExplorerBrowser)]
         public class ExplorerBrowser {}
 
-
-    //       MIDL_INTERFACE("dfd3b6b5-c10c-4be9-85f6-a66969f402f6")
-    //IExplorerBrowser : public IUnknown
-    //{
-    //public:
-    //    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Initialize( 
-    //        /* [annotation][in] */ 
-    //        __in  HWND hwndParent,
-    //        /* [annotation][in] */ 
-    //        __in  const RECT *prc,
-    //        /* [annotation][unique][in] */ 
-    //        __in_opt  const FOLDERSETTINGS *pfs) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE Destroy( void) = 0;
-        
-    //    virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetRect( 
-    //        /* [annotation][unique][out][in] */ 
-    //        __inout_opt  HDWP *phdwp,
-    //        /* [annotation][in] */ 
-    //        __in  RECT rcBrowser) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE SetPropertyBag( 
-    //        /* [string][in] */ __RPC__in_string LPCWSTR pszPropertyBag) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE SetEmptyText( 
-    //        /* [string][in] */ __RPC__in_string LPCWSTR pszEmptyText) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE SetFolderSettings( 
-    //        /* [in] */ __RPC__in const FOLDERSETTINGS *pfs) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE Advise( 
-    //        /* [in] */ __RPC__in_opt IExplorerBrowserEvents *psbe,
-    //        /* [out] */ __RPC__out DWORD *pdwCookie) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE Unadvise( 
-    //        /* [in] */ DWORD dwCookie) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE SetOptions( 
-    //        /* [in] */ EXPLORER_BROWSER_OPTIONS dwFlag) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE GetOptions( 
-    //        /* [out] */ __RPC__out EXPLORER_BROWSER_OPTIONS *pdwFlag) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE BrowseToIDList( 
-    //        /* [in] */ __RPC__in PCUIDLIST_RELATIVE pidl,
-    //        /* [in] */ UINT uFlags) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE BrowseToObject( 
-    //        /* [in] */ __RPC__in_opt IUnknown *punk,
-    //        /* [in] */ UINT uFlags) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE FillFromObject( 
-    //        /* [unique][in] */ __RPC__in_opt IUnknown *punk,
-    //        /* [in] */ EXPLORER_BROWSER_FILL_FLAGS dwFlags) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
-        
-    //    virtual HRESULT STDMETHODCALLTYPE GetCurrentView( 
-    //        /* [in] */ __RPC__in REFIID riid,
-    //        /* [iid_is][out] */ __RPC__deref_out_opt void **ppv) = 0;
-        
-    //};
+        [ComImport, Guid(IID_ExplorerBrowser)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IExplorerBrowser
+        {
+            void Initialize([In] IntPtr hwndParent, [In] ref RECT prc, [In] ref FOLDERSETTINGS pfs);
+            void Destroy();
+            void SetRect([In] [Out] ref HDWP phdwp, [In] RECT rcBrowser);
+            void SetPropertyBag([MarshalAs(UnmanagedType.LPWStr)] string pszPropertyBag);
+            void SetEmptyText([MarshalAs(UnmanagedType.LPWStr)] string pszEmptyText);
+            void SetFolderSettings([In] ref FOLDERSETTINGS pfs);
+            void Advise([In] IExplorerBrowserEvents psbe, [Out] out uint pdwCookie);
+            void Unadvise([In] uint dwCookie);
+            void SetOptions([In] EXPLORER_BROWSER_OPTIONS dwFlag);
+            void GetOptions([Out] ref EXPLORER_BROWSER_OPTIONS pdwFlag);
+            void BrowseToIDList([In] IntPtr pidl, [In] SBSP uFlags);
+            void BrowseToObject([In] IntPtr punk, [In] SBSP uFlags);
+            void FillFromObject([In] IntPtr punk, [In] EXPLORER_BROWSER_FILL_FLAGS dwFlags);
+            void RemoveAll();
+            void GetCurrentView([In] ref Guid riid, [Out] out IntPtr ppv);
+        }
 
         //CPLs ====================================================================================
         public delegate int CplAppletProc (IntPtr hwndCpl, CplMsg msg, IntPtr lParam1, IntPtr lParam2);
