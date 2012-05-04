@@ -1141,17 +1141,17 @@ namespace Power8
         {
             void Initialize([In] IntPtr hwndParent, [In] ref RECT prc, [In] ref FOLDERSETTINGS pfs);
             void Destroy();
-            void SetRect([In] [Out] ref HDWP phdwp, [In] RECT rcBrowser);
+            void SetRect(/*[In] [Out] ref HDWP*/ IntPtr phdwp, [In] RECT rcBrowser);
             void SetPropertyBag([MarshalAs(UnmanagedType.LPWStr)] string pszPropertyBag);
             void SetEmptyText([MarshalAs(UnmanagedType.LPWStr)] string pszEmptyText);
             void SetFolderSettings([In] ref FOLDERSETTINGS pfs);
-            void Advise([In] IExplorerBrowserEvents psbe, [Out] out uint pdwCookie);
+            void Advise([In] /*IExplorerBrowserEvents*/ IntPtr psbe, [Out] out uint pdwCookie);
             void Unadvise([In] uint dwCookie);
-            void SetOptions([In] EXPLORER_BROWSER_OPTIONS dwFlag);
-            void GetOptions([Out] ref EXPLORER_BROWSER_OPTIONS pdwFlag);
+            void SetOptions([In] /*EXPLORER_BROWSER_OPTIONS*/ IntPtr dwFlag);
+            void GetOptions([In][Out] ref /*EXPLORER_BROWSER_OPTIONS*/ IntPtr pdwFlag);
             void BrowseToIDList([In] IntPtr pidl, [In] SBSP uFlags);
             void BrowseToObject([In] IntPtr punk, [In] SBSP uFlags);
-            void FillFromObject([In] IntPtr punk, [In] EXPLORER_BROWSER_FILL_FLAGS dwFlags);
+            void FillFromObject([In] IntPtr punk, [In] /*EXPLORER_BROWSER_FILL_FLAGS*/ IntPtr dwFlags);
             void RemoveAll();
             void GetCurrentView([In] ref Guid riid, [Out] out IntPtr ppv);
         }

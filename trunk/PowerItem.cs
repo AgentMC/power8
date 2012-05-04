@@ -189,10 +189,14 @@ namespace Power8
         {
             if (string.IsNullOrEmpty(Argument) && SpecialFolderId != API.Csidl.INVALID)
             {
-                //API.IShellFolder isf, isf2;
-                //var res = API.SHGetDesktopFolder(out isf);
-                //var pidl = IntPtr.Zero;
-                //res = API.SHGetSpecialFolderLocation(IntPtr.Zero, SpecialFolderId, ref pidl);
+                API.IShellFolder isf, isf2;
+                var res = API.SHGetDesktopFolder(out isf);
+                var pidl = IntPtr.Zero;
+                res = API.SHGetSpecialFolderLocation(IntPtr.Zero, SpecialFolderId, ref pidl);
+                var browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
+                browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
+                
+                
                 //var iidSf = new Guid(API.IID_IShellFolder);
                 //IntPtr isf2Ptr, isvPtr, hWnd;
                 //res = isf.BindToObject(pidl, IntPtr.Zero, ref iidSf, out isf2Ptr);
