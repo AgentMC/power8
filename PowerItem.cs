@@ -215,6 +215,22 @@ namespace Power8
                 //API.ShowWindow(hWnd, API.SWCommands.SHOW);
 
                 //Fuck it...
+                /* BOOL fSuccess = FALSE;
+     RECT rc;
+     PIDLIST_ABSOLUTE pidl = NULL;
+     if (SUCCEEDED(CoCreateInstance(CLSID_ExplorerBrowser, NULL,
+                          CLSCTX_INPROC, IID_PPV_ARGS(&g_peb))) &&
+         GetClientRect(hwnd, &rc) &&
+         SUCCEEDED(g_peb->Initialize(hwnd, &rc, NULL)) &&
+         SUCCEEDED(SHParseDisplayName(
+                          L"C:\\Program Files\\Internet Explorer",
+                                         NULL, &pidl, 0, NULL)) &&
+         SUCCEEDED(g_peb->SetOptions(EBO_NAVIGATEONCE)) &&
+         SUCCEEDED(g_peb->BrowseToIDList(pidl, SBSP_ABSOLUTE))) {
+         fSuccess = TRUE;
+     }
+     ILFree(pidl);
+     return fSuccess;*/
                 return;
             }
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);
