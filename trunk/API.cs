@@ -407,6 +407,7 @@ namespace Power8
         public const string IID_IShellView = "000214E3-0000-0000-C000-000000000046";
         public const string IID_IShellBrowser = "000214e2-0000-0000-c000-000000000046";
         public const string IID_IServiceProvider = "6d5140c1-7436-11ce-8034-00aa006009fa";
+        public const string CLSID_ExplorerBrowser = "71f96385-ddd6-48d3-a0c1-ae06e8b055fb";
 
         [Flags]
         public enum SLGP_FLAGS
@@ -1095,6 +1096,73 @@ namespace Power8
             int QueryService(ref Guid guidService, 
                              ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IShellBrowser ppvObject);
         }
+
+        [ComImport, ClassInterface(ClassInterfaceType.None)]
+        [Guid(CLSID_ExplorerBrowser)]
+        public class ExplorerBrowser {}
+
+
+    //       MIDL_INTERFACE("dfd3b6b5-c10c-4be9-85f6-a66969f402f6")
+    //IExplorerBrowser : public IUnknown
+    //{
+    //public:
+    //    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Initialize( 
+    //        /* [annotation][in] */ 
+    //        __in  HWND hwndParent,
+    //        /* [annotation][in] */ 
+    //        __in  const RECT *prc,
+    //        /* [annotation][unique][in] */ 
+    //        __in_opt  const FOLDERSETTINGS *pfs) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE Destroy( void) = 0;
+        
+    //    virtual /* [local] */ HRESULT STDMETHODCALLTYPE SetRect( 
+    //        /* [annotation][unique][out][in] */ 
+    //        __inout_opt  HDWP *phdwp,
+    //        /* [annotation][in] */ 
+    //        __in  RECT rcBrowser) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE SetPropertyBag( 
+    //        /* [string][in] */ __RPC__in_string LPCWSTR pszPropertyBag) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE SetEmptyText( 
+    //        /* [string][in] */ __RPC__in_string LPCWSTR pszEmptyText) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE SetFolderSettings( 
+    //        /* [in] */ __RPC__in const FOLDERSETTINGS *pfs) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE Advise( 
+    //        /* [in] */ __RPC__in_opt IExplorerBrowserEvents *psbe,
+    //        /* [out] */ __RPC__out DWORD *pdwCookie) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE Unadvise( 
+    //        /* [in] */ DWORD dwCookie) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE SetOptions( 
+    //        /* [in] */ EXPLORER_BROWSER_OPTIONS dwFlag) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE GetOptions( 
+    //        /* [out] */ __RPC__out EXPLORER_BROWSER_OPTIONS *pdwFlag) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE BrowseToIDList( 
+    //        /* [in] */ __RPC__in PCUIDLIST_RELATIVE pidl,
+    //        /* [in] */ UINT uFlags) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE BrowseToObject( 
+    //        /* [in] */ __RPC__in_opt IUnknown *punk,
+    //        /* [in] */ UINT uFlags) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE FillFromObject( 
+    //        /* [unique][in] */ __RPC__in_opt IUnknown *punk,
+    //        /* [in] */ EXPLORER_BROWSER_FILL_FLAGS dwFlags) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE RemoveAll( void) = 0;
+        
+    //    virtual HRESULT STDMETHODCALLTYPE GetCurrentView( 
+    //        /* [in] */ __RPC__in REFIID riid,
+    //        /* [iid_is][out] */ __RPC__deref_out_opt void **ppv) = 0;
+        
+    //};
 
         //CPLs ====================================================================================
         public delegate int CplAppletProc (IntPtr hwndCpl, CplMsg msg, IntPtr lParam1, IntPtr lParam2);
