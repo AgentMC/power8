@@ -264,6 +264,7 @@ namespace Power8
                         Argument = API.ShNs.NetworkNeighbourhood,
                         Parent = ControlPanelRoot
                     };
+
                     var conString = Util.ResolveSpecialFolderName(API.Csidl.CONNECTIONS);
                     var connections =
                         ControlPanelRoot.Items.FirstOrDefault(i => i.FriendlyName == conString) ??
@@ -275,6 +276,7 @@ namespace Power8
                                 Argument = API.ShNs.NetworkConnections,
                                 Parent = ControlPanelRoot
                             };
+
                     var xpWrkgrp7Net = new PowerItem
                     {
                         SpecialFolderId = API.Csidl.COMPUTERSNEARME,
