@@ -154,7 +154,7 @@ namespace Power8
             var pwstr = IntPtr.Zero;
             var info = new API.Shfileinfo();
             var zeroFails = new IntPtr(1);
-            if (hRes == 0 
+            if (hRes == 0 && Environment.OSVersion.Version.Major > 5
                 && API.SHGetNameFromIDList(ppIdl, API.SIGDN.NORMALDISPLAY, ref pwstr) == 0)
             {
                 info.szDisplayName = Marshal.PtrToStringUni(pwstr);
@@ -185,17 +185,50 @@ namespace Power8
 #endif
                 return;
             }
-            API.IExplorerBrowser browser = null;
-            try
+
+            if (Environment.OSVersion.Version.Major < 6)
             {
-                browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
-                browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
+                API.IShellWindows shWndList = null;
+                API.IServiceProvider provider = null;
+                API.IShellBrowser browser = null;
+                try
+                {
+                    shWndList  = (API.IShellWindows)new API.ShellWindows();
+                    var wndCount = shWndList.Count;
+                    if (wndCount > 0)
+                    {
+                        provider = (API.IServiceProvider)shWndList.Item(0);
+                        var sidBrowser = new Guid(API.SID_STopLevelBrowser);
+                        var iidBrowser = new Guid(API.IID_IShellBrowser);
+                        provider.QueryService(ref sidBrowser, ref iidBrowser, out browser);
+                        browser.BrowseObject(pidl, API.SBSP.NEWBROWSER);
+                    }
+                }
+                finally
+                {
+                    if(shWndList != null)
+                        Marshal.ReleaseComObject(shWndList);
+                    if(provider != null)
+                        Marshal.ReleaseComObject(provider);
+                    if(browser != null)
+                        Marshal.ReleaseComObject(browser);
+                    Marshal.FreeCoTaskMem(pidl);
+                }
             }
-            finally
+            else
             {
-                if (browser != null) 
-                    Marshal.ReleaseComObject(browser);
-                Marshal.FreeCoTaskMem(pidl);
+                API.IExplorerBrowser browser = null;
+                try
+                {
+                    browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
+                    browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
+                }
+                finally
+                {
+                    if (browser != null) 
+                        Marshal.ReleaseComObject(browser);
+                    Marshal.FreeCoTaskMem(pidl);
+                }
             }
         }
 

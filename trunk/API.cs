@@ -416,6 +416,7 @@ namespace Power8
         //Resolving links==========================================================================
         public const string CLSID_ShellLink = "00021401-0000-0000-C000-000000000046";
         public const string CLSID_ExplorerBrowser = "71f96385-ddd6-48d3-a0c1-ae06e8b055fb";
+        public const string CLSID_ShellWindows = "9BA05972-F6A8-11CF-A442-00A0C90A8F39";
         public const string SID_STopLevelBrowser = "4C96BE40-915C-11CF-99D3-00AA004AE837";
         public const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
         public const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
@@ -423,6 +424,7 @@ namespace Power8
         public const string IID_IShellFolder = "000214E6-0000-0000-C000-000000000046";
         public const string IID_IShellView = "000214E3-0000-0000-C000-000000000046";
         public const string IID_IShellBrowser = "000214e2-0000-0000-c000-000000000046";
+        public const string IID_IShellWindows = "85CB6900-4D95-11CF-960C-0080C7F4EE85";
         public const string IID_IServiceProvider = "6d5140c1-7436-11ce-8034-00aa006009fa";
         public const string IID_ExplorerBrowser = "dfd3b6b5-c10c-4be9-85f6-a66969f402f6";
 
@@ -1090,7 +1092,7 @@ namespace Power8
             [PreserveSig]
             int TranslateAcceleratorSB(IntPtr pmsg, short wID);
             [PreserveSig]
-            int BrowseObject(IntPtr pidl, [MarshalAs(UnmanagedType.U4)] uint wFlags);
+            int BrowseObject(IntPtr pidl, SBSP wFlags);
             [PreserveSig]
             int GetViewStateStream(uint grfMode, IntPtr ppStrm);
             [PreserveSig]
@@ -1113,6 +1115,31 @@ namespace Power8
             int QueryService(ref Guid guidService, 
                              ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IShellBrowser ppvObject);
         }
+
+        [ComImport, Guid(IID_IShellWindows)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
+        public interface IShellWindows
+        {
+            //void get_Count([Out] out int Count);
+            int Count { get; }
+            object Item([In] /*VARIANT*/ int index/*, [Out] out IntPtr Folder*/);
+            void _NewEnum([Out] out IntPtr ppunk);
+            void Register([In] IntPtr pid, [In] IntPtr hwnd, [In] int swClass, [Out] out int plCookie);
+            void RegisterPending([In] int lThreadId, [In] IntPtr pvarloc, [In] IntPtr pvarlocRoot, [In] int swClass,
+                                 [Out] out int plCookie);
+            void Revoke([In] int lCookie);
+            void OnNavigate([In] int lCookie, [In] IntPtr pvarLoc);
+            void OnActivated([In] int lCookie, [In] bool fActive);
+            void FindWindowSW([In] IntPtr pvarLoc, [In] IntPtr pvarLocRoot, [In] int swClass, [Out] out IntPtr phwnd,
+                              [In] int swfwOptions, [Out] out IntPtr ppdispOut);
+
+            void OnCreated([In] int lCookie, [Out] out IntPtr punk);
+            void ProcessAttachDetach([In] bool fAttach);
+        }
+
+        [ComImport, ClassInterface(ClassInterfaceType.AutoDispatch)]
+        [Guid(CLSID_ShellWindows)]
+        public class ShellWindows { }
 
         [Flags]
         public enum SBSP : uint
