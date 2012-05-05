@@ -176,8 +176,13 @@ namespace Power8
 
         public static void DisplaySpecialFolder(API.Csidl id)
         {
+            new Thread(DisplaySpecialFolderSync).Start(id);
+        }
+
+        public static void DisplaySpecialFolderSync(object id)
+        {
             var pidl = IntPtr.Zero;
-            var res = API.SHGetSpecialFolderLocation(IntPtr.Zero, id, ref pidl);
+            var res = API.SHGetSpecialFolderLocation(IntPtr.Zero, (API.Csidl)id, ref pidl);
             if (res != 0)
             {
 #if DEBUG
@@ -195,14 +200,19 @@ namespace Power8
                 {
                     shWndList  = (API.IShellWindows)new API.ShellWindows();
                     var wndCount = shWndList.Count;
-                    if (wndCount > 0)
+                    var launchNew = true;
+                    if (wndCount == 0)
                     {
-                        provider = (API.IServiceProvider)shWndList.Item(0);
-                        var sidBrowser = new Guid(API.SID_STopLevelBrowser);
-                        var iidBrowser = new Guid(API.IID_IShellBrowser);
-                        provider.QueryService(ref sidBrowser, ref iidBrowser, out browser);
-                        browser.BrowseObject(pidl, API.SBSP.NEWBROWSER);
+                        launchNew = false;
+                        Process.Start("explorer.exe","/N");
+                        while (shWndList.Count == 0)
+                            Thread.Sleep(40);
                     }
+                    provider = (API.IServiceProvider)shWndList.Item(0);
+                    var sidBrowser = new Guid(API.SID_STopLevelBrowser);
+                    var iidBrowser = new Guid(API.IID_IShellBrowser);
+                    provider.QueryService(ref sidBrowser, ref iidBrowser, out browser);
+                    browser.BrowseObject(pidl, launchNew ? API.SBSP.NEWBROWSER : API.SBSP.SAMEBROWSER);
                 }
                 finally
                 {

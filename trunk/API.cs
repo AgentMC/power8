@@ -1116,24 +1116,40 @@ namespace Power8
                              ref Guid riid, [MarshalAs(UnmanagedType.Interface)] out IShellBrowser ppvObject);
         }
 
+        public enum SWC
+        {
+            EXPLORER = 0x0,
+            BROWSER = 0x00000001,
+            THIRDPARTY = 0x00000002,
+            CALLBACK = 0x00000004,
+            DESKTOP = 0x00000008
+        }
+
+        public enum SWFO
+        {
+            NEEDDISPATCH = 0x00000001,
+            INCLUDEPENDING = 0x00000002,
+            COOKIEPASSED = 0x00000004
+        }
+
         [ComImport, Guid(IID_IShellWindows)]
         [InterfaceType(ComInterfaceType.InterfaceIsIDispatch)]
         public interface IShellWindows
         {
-            //void get_Count([Out] out int Count);
             int Count { get; }
-            object Item([In] /*VARIANT*/ int index/*, [Out] out IntPtr Folder*/);
-            void _NewEnum([Out] out IntPtr ppunk);
-            void Register([In] IntPtr pid, [In] IntPtr hwnd, [In] int swClass, [Out] out int plCookie);
-            void RegisterPending([In] int lThreadId, [In] IntPtr pvarloc, [In] IntPtr pvarlocRoot, [In] int swClass,
-                                 [Out] out int plCookie);
+            object Item([In] int index);
+            IntPtr _NewEnum();
+            int Register([In] IntPtr pid, [In] IntPtr hwnd, [In] int swClass);
+            int RegisterPending(/*[In] int lThreadId ????,*/ [In] ref IntPtr pidl, [In] IntPtr nullHere, [In] SWC swClass);
             void Revoke([In] int lCookie);
             void OnNavigate([In] int lCookie, [In] IntPtr pvarLoc);
             void OnActivated([In] int lCookie, [In] bool fActive);
-            void FindWindowSW([In] IntPtr pvarLoc, [In] IntPtr pvarLocRoot, [In] int swClass, [Out] out IntPtr phwnd,
-                              [In] int swfwOptions, [Out] out IntPtr ppdispOut);
-
-            void OnCreated([In] int lCookie, [Out] out IntPtr punk);
+            IntPtr FindWindowSW([In] ref IntPtr pidl, [In] IntPtr nullHere, [In] SWC swClass, [Out] out IntPtr phwnd,
+                              [In] SWFO swfwOptions);
+            IntPtr FindWindowSW([In] int cookie, [In] IntPtr nullHere, [In] SWC swClass, [Out] out IntPtr phwnd,
+                              [In] SWFO swfwOptions);
+            IntPtr OnCreated([In] int lCookie);
+            [Obsolete("Returns true always")]
             void ProcessAttachDetach([In] bool fAttach);
         }
 
