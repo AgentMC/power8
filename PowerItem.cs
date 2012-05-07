@@ -201,9 +201,16 @@ namespace Power8
 
         public void InvokeVerb(string verb)
         {
-            if (string.IsNullOrEmpty(Argument) && SpecialFolderId != API.Csidl.INVALID)
+            if (SpecialFolderId != API.Csidl.INVALID)
             {
-                Util.DisplaySpecialFolder(SpecialFolderId);
+                if (string.IsNullOrEmpty(Argument))
+                {
+                    Util.DisplaySpecialFolder(SpecialFolderId);
+                }
+                else if (SpecialFolderId == API.Csidl.POWER8CLASS)
+                {
+                    Util.InstanciateClass(Argument);
+                }
                 return;
             }
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);

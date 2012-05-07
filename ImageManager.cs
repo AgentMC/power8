@@ -73,11 +73,15 @@ namespace Power8
             }
         }
 
-        public static void AddContainerToCache(string description, ImageContainer container)
+        public static ImageContainer GetImageContainerForIconSync(string description, IntPtr unmanagedIcon)
         {
             lock (Cache)
             {
+                if (Cache.ContainsKey(description))
+                    return (ImageContainer)Cache[description];
+                var container = new ImageContainer(unmanagedIcon);
                 Cache.Add(description, container);
+                return container;
             }
         }
 
@@ -144,7 +148,6 @@ namespace Power8
                 SmallBitmap = ExtractInternal(unmanagedIcon);
                 SmallBitmap.Freeze();
                 LargeBitmap = SmallBitmap;
-                Util.PostBackgroundIconDestroy(unmanagedIcon);
             }
 
             public void ExtractSmall()
