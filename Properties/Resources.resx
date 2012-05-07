@@ -217,4 +217,11 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_MWExit" xml:space="preserve">
     <value>Exit</value>
   </data>
+    <data name="CantInstanciateClassFormatString">
+        <value xml:space="preserve">Unable to instanciate class {0}
+{1}</value>
+    </data>
+    <data name="ShowMore">
+        <value xml:space="preserve">Show more...</value>
+    </data>
 </root>
