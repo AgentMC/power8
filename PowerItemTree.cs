@@ -310,6 +310,11 @@ namespace Power8
                                            names = NetManager.ComputersNearby;
                                        }
 
+                                       if (names.Count == 0) //remove separator if no items were added
+                                       {
+                                           _networkRoot.Items.RemoveAt(_networkRoot.Items.Count - 1);
+                                           return;
+                                       }
                                        names.Select(e => new PowerItem
                                                              {
                                                                  Argument = "\\\\" + e,
@@ -329,7 +334,8 @@ namespace Power8
                                                     SpecialFolderId = API.Csidl.POWER8CLASS,
                                                     Argument = "Power8.ComputerList"
                                                 })));
-                                   }).Start();
+
+                                   }) { Name = "Network Scan Thread" }.Start();
                 }
                 return _networkRoot;
             }
