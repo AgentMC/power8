@@ -247,7 +247,9 @@ namespace Power8
         {
             try
             {
+// ReSharper disable AssignNullToNotNullAttribute
                 var inst = Activator.CreateInstance(Type.GetType(className));
+// ReSharper restore AssignNullToNotNullAttribute
                 var wnd = inst as Window;
                 if(wnd != null)
                 {
@@ -532,7 +534,7 @@ namespace Power8
 
         public static void Die(string becauseString)
         {
-            Environment.FailFast(string.Format(Properties.Resources.FailFastFormat, becauseString));
+            Environment.FailFast(string.Format(Resources.FailFastFormat, becauseString));
         }
     }
 }
