@@ -242,6 +242,26 @@ namespace Power8
             }
         }
 
+        public static void InstanciateClass(string className)
+        {
+            try
+            {
+                var inst = Activator.CreateInstance(Type.GetType(className));
+                var wnd = inst as Window;
+                if(wnd != null)
+                {
+                    wnd.Show();
+                    return;
+                }
+                var frm = inst as System.Windows.Forms.Form;
+                if (frm != null)
+                    frm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to instanciate class " + className + "\r\n" + ex.Message);
+            }
+        }
 
 
         public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs, bool fallbackToInfoTip = false)
@@ -446,8 +466,8 @@ namespace Power8
                                     unmanagedIcon = API.LoadIcon(hModule, idIcon);
                                 if(unmanagedIcon != IntPtr.Zero)
                                 {
-                                    container = new ImageManager.ImageContainer(unmanagedIcon);//freeing icon here
-                                    ImageManager.AddContainerToCache(cplFileName, container);
+                                    container = ImageManager.GetImageContainerForIconSync(cplFileName, unmanagedIcon);
+                                    PostBackgroundIconDestroy(unmanagedIcon);
                                 }
                             
                                 cplProc(hWnd, API.CplMsg.STOP, IntPtr.Zero, info.lData);

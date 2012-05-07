@@ -131,16 +131,16 @@ namespace Power8
                                                 && !string.IsNullOrEmpty(cplName)
                                                 && File.Exists(cplArg))
                                             {
+                                                var pIcon = Util.ResolveIconicResource("@" + cplArg + ",-" + cplIconIdx);
                                                 var item = new PowerItem
                                                 {
                                                     Argument = cplArg,
                                                     Parent = _controlPanelRoot,
                                                     FriendlyName = cplName,
-                                                    Icon = new ImageManager.ImageContainer(
-                                                        Util.ResolveIconicResource("@" + cplArg + ",-" + cplIconIdx))
+                                                    Icon = ImageManager.GetImageContainerForIconSync(cplArg, pIcon)
                                                 };
                                                 _controlPanelRoot.Items.Add(item);
-                                                ImageManager.AddContainerToCache(item.Argument, item.Icon);
+                                                Util.PostBackgroundIconDestroy(pIcon);
                                                 cplCache.Add(cplArg);
                                             }
                                         }
@@ -292,26 +292,42 @@ namespace Power8
 
                     new Thread(() =>
                                    {
-                                       string wkgrpName = null;
-                                       foreach (var obj in new ManagementObjectSearcher("select Domain from Win32_ComputerSystem").Get())
-                                           wkgrpName = obj.GetPropertyValue("Domain").ToString();//only 1 item available
                                        if (Environment.OSVersion.Version.Major >= 6)
-                                           xpNet7Wrkgrp.FriendlyName = wkgrpName;
-                                       using (var workgroup = new DirectoryEntry("WinNT://" + wkgrpName))
+                                           xpNet7Wrkgrp.FriendlyName = NetManager.DomainOrWorkgroup;
+
+                                       List<string> names;
+                                       bool addMoreItem = false;
+                                       if (NetManager.ComputersNearby.Count > 10)
                                        {
-                                           workgroup.Children
-                                               .Cast<DirectoryEntry>()
-                                               .Where(e => e.SchemaClassName == "Computer")
-                                               .Select(e => new PowerItem
-                                                                {
-                                                                    Argument = "\\\\" + e.Name,
-                                                                    IsFolder = true,
-                                                                    Parent = _networkRoot,
-                                                                    Icon = MyComputerRoot.Icon
-                                                                })
-                                               .ToList()
-                                               .ForEach(i => Util.Post(new Action(() => _networkRoot.Items.Add(i))));
+                                           addMoreItem = true;
+                                           names = new List<string>();
+                                           for (int i = 0; i < 10; i++)
+                                               names.Add(NetManager.ComputersNearby[i]);
                                        }
+                                       else
+                                       {
+                                           names = NetManager.ComputersNearby;
+                                       }
+
+                                       names.Select(e => new PowerItem
+                                                             {
+                                                                 Argument = "\\\\" + e,
+                                                                 IsFolder = true,
+                                                                 Parent = _networkRoot,
+                                                                 Icon = MyComputerRoot.Icon
+                                                             })
+                                           .ToList()
+                                           .ForEach(i => Util.Post(new Action(() => _networkRoot.Items.Add(i))));
+
+                                       if (addMoreItem)
+                                           Util.Post(new Action(() =>
+                                               _networkRoot.Items.Add(new PowerItem
+                                                {
+                                                    FriendlyName = "Show more...",
+                                                    Parent = _networkRoot,
+                                                    SpecialFolderId = API.Csidl.POWER8CLASS,
+                                                    Argument = "Power8.ComputerList"
+                                                })));
                                    }).Start();
                 }
                 return _networkRoot;

@@ -93,11 +93,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ComputerList.xaml.cs">
+      <DependentUpon>ComputerList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MenuedButton.xaml.cs">
       <DependentUpon>MenuedButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="MenuItemClickCommand.cs" />
     <Compile Include="NameToResourceConverter.cs" />
+    <Compile Include="NetManager.cs" />
     <Compile Include="RestartExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +114,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="BtnStck.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ComputerList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

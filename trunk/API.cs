@@ -271,8 +271,9 @@ namespace Power8
             RESOURCES_LOCALIZED       = 0x0039,        // Localized Resource Direcotry
             COMMON_OEM_LINKS          = 0x003a,        // Links to All Users OEM specific apps
             CDBURN_AREA               = 0x003b,        // USERPROFILE\Local Settings\Application Data\Microsoft\CD Burning
-            INVALID                   = 0x003c,        // Incorrect, used for init of IconContainer, reserved in API
+            INVALID                   = 0x003c,        // Incorrect, used internally in Power8, reserved in API
             COMPUTERSNEARME           = 0x003d,        // Computers Near Me (computered from Workgroup membership)
+            POWER8CLASS               = 0x003e,        // Incorrect, used internally in Power8, unknown to API
             FLAG_CREATE               = 0x8000,        // combine with CSIDL_ value to force folder creation in SHGetFolderPath()
             FLAG_DONT_VERIFY          = 0x4000,        // combine with CSIDL_ value to return an unverified folder path
             FLAG_DONT_UNEXPAND        = 0x2000,        // combine with CSIDL_ value to avoid unexpanding environment variables
