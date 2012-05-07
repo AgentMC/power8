@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Power8.Properties;
 using Application = System.Windows.Forms.Application;
 
 namespace Power8
@@ -259,7 +260,7 @@ namespace Power8
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Unable to instanciate class " + className + "\r\n" + ex.Message);
+                MessageBox.Show(string.Format(Resources.CantInstanciateClassFormatString, className, ex.Message));
             }
         }
 

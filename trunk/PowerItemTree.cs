@@ -8,6 +8,7 @@ using System.Linq;
 using System.Management;
 using System.Threading;
 using System.Xml;
+using Power8.Properties;
 
 namespace Power8
 {
@@ -323,7 +324,7 @@ namespace Power8
                                            Util.Post(new Action(() =>
                                                _networkRoot.Items.Add(new PowerItem
                                                 {
-                                                    FriendlyName = "Show more...",
+                                                    FriendlyName = Resources.ShowMore,
                                                     Parent = _networkRoot,
                                                     SpecialFolderId = API.Csidl.POWER8CLASS,
                                                     Argument = "Power8.ComputerList"
