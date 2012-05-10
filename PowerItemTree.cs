@@ -506,7 +506,11 @@ namespace Power8
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
         {
             var argStr = fsObject.Substring(basePath.Length);
-            var child = isFolder && !autoExpand ? item.Items.FirstOrDefault(i => i.Argument == argStr && i.IsFolder) : null;
+            var child = isFolder && !autoExpand
+                ? item.Items.FirstOrDefault(i => 
+                    string.Equals(i.Argument, argStr, StringComparison.CurrentCultureIgnoreCase) 
+                    && i.IsFolder)
+                : null;
             if(child == null)
             {
                 child = new PowerItem

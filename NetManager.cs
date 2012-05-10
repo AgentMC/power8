@@ -27,22 +27,29 @@ namespace Power8
             }
         }
 
-        private static readonly List<string> _computerNames = new List<string>();
+        private static readonly List<string> ComputerNames = new List<string>();
         public static List<string> ComputersNearby
         {
             get
             {
-                if (_computerNames.Count == 0)
+                if (ComputerNames.Count == 0)
                 {
+#if DEBUG
+                    for (int i = 0; i < 3000; i++)
+                    {
+                        ComputerNames.Add("computer" + i);
+                    }
+#else
                     using (var workgroup = new DirectoryEntry("WinNT://" + DomainOrWorkgroup))
                     {
-                        _computerNames.AddRange(workgroup.Children
+                        ComputerNames.AddRange(workgroup.Children
                                                     .Cast<DirectoryEntry>()
                                                     .Where(e => e.SchemaClassName == "Computer")
-                                                    .Select(e => e.Name));
+                                                    .Select(e => e.Name.ToUpper()));
                     }
+#endif
                 }
-                return _computerNames;
+                return ComputerNames;
             }
         }
     }
