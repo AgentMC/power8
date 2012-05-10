@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.DirectoryServices;
 using System.IO;
 using System.Linq;
-using System.Management;
 using System.Threading;
 using System.Xml;
 using Power8.Properties;
@@ -20,7 +18,7 @@ namespace Power8
 
         private static readonly List<FileSystemWatcher> Watchers = new List<FileSystemWatcher>();
 
-        private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true, AutoExpand = false};
+        private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true};
         private static readonly ObservableCollection<PowerItem> StartMenuCollection =
             new ObservableCollection<PowerItem> {StartMenuRootItem};
         public static ObservableCollection<PowerItem> StartMenuRoot { get { return StartMenuCollection; } }
@@ -394,7 +392,7 @@ namespace Power8
                         {
                             case WatcherChangeTypes.Deleted:
                             case WatcherChangeTypes.Changed:
-                                item = item.IsAutoExpandPending 
+                                item = item.AutoExpandIsPending 
                                     ? null
                                     : item.Items.FirstOrDefault(
                                         j =>
@@ -499,6 +497,10 @@ namespace Power8
             { }//Don't care if user is not allowed to access fileor directory or it's contents
             catch (IOException)
             { }//Don't care as well if file was deleted on-the-fly, watcher will notify list
+            finally
+            {  //Explicitly set marker showing that enumeration operations may occur on Items from this moment
+                item.AutoExpandIsPending = false;
+            }
         }
 
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
@@ -641,7 +643,7 @@ namespace Power8
             for (int i = 0; i < sourceSplitted.Length - 1; i++)
             {
                 var prevItem = item;
-                item = item.IsAutoExpandPending 
+                item = item.AutoExpandIsPending 
                     ? null
                     : item.Items.FirstOrDefault(j =>
                                                 j.IsFolder &&
@@ -663,7 +665,7 @@ namespace Power8
 
         private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container)
         {
-            if(container.IsAutoExpandPending)
+            if(container.AutoExpandIsPending)
                 return null;
             var endExpr = Path.GetFileName(argument) ?? argument;
             return container.Items.FirstOrDefault(i =>

@@ -47,6 +47,7 @@ namespace Power8
                 mb.Item = GetSpecialItems(mb.Name);
         }
 
+// ReSharper disable RedundantAssignment
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             handled = false;
@@ -71,6 +72,7 @@ namespace Power8
             }
             return IntPtr.Zero;
         }
+// ReSharper restore RedundantAssignment
 
         protected override void OnSourceInitialized(EventArgs e)
         {

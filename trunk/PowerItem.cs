@@ -14,12 +14,12 @@ namespace Power8
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
         private string _friendlyName, _resIdString;
-        private bool _expanding, _hasLargeIcon;
+        private bool _expanding, _hasLargeIcon, _autoExpand;
 
         public string Argument { get; set; }
         public PowerItem Parent { get; set; }
         public bool IsFolder { get; set; }
-        public bool AutoExpand { get; set; }
+        public bool AutoExpandIsPending { get; set; }
         public API.Csidl SpecialFolderId { get; set; }
 
 
@@ -74,7 +74,7 @@ namespace Power8
         {
             get
             {
-                if (_items.Count == 0 && AutoExpand && !_expanding)
+                if (_items.Count == 0 && !_expanding && AutoExpandIsPending)
                 {
                     _expanding = true;
                     PowerItemTree.ScanFolder(this, string.Empty, false);
@@ -83,10 +83,21 @@ namespace Power8
             }
         }
 
-        public bool IsAutoExpandPending
+        public bool AutoExpand
         {
-            get { return AutoExpand && !_expanding; }
+            get { return _autoExpand; }
+            set
+            {
+                if (_autoExpand != value)
+                {
+                    _autoExpand = value;
+                    AutoExpandIsPending = value;
+                }
+            }
         }
+
+
+
 
 
 

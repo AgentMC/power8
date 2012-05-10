@@ -56,6 +56,7 @@ namespace Power8
             ComponentDispatcher.ThreadFilterMessage += WndProc;
         }
 
+// ReSharper disable RedundantAssignment
         private void WndProc(ref MSG msg, ref bool handled)
         {
             if (msg.message == (int)API.WM.DWMCOMPOSITIONCHANGED)
@@ -66,6 +67,7 @@ namespace Power8
             }
             handled = false;
         }
+// ReSharper restore RedundantAssignment
 
         public event EventHandler DwmCompositionChanged ;
 

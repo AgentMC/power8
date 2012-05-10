@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.DirectoryServices;
 using System.Linq;
 using System.Management;
 using System.Net;
-using System.Text;
 
 namespace Power8
 {
@@ -30,7 +27,7 @@ namespace Power8
             }
         }
 
-        private static List<string> _computerNames = new List<string>();
+        private static readonly List<string> _computerNames = new List<string>();
         public static List<string> ComputersNearby
         {
             get
