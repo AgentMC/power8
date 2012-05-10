@@ -43,6 +43,7 @@ namespace Power8
                 UpdateCheckThreadInit();
         }
 
+// ReSharper disable RedundantAssignment
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             handled = false;
@@ -56,6 +57,7 @@ namespace Power8
             }
             return IntPtr.Zero;
         }
+// ReSharper restore RedundantAssignment
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {

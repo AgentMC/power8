@@ -98,7 +98,9 @@ namespace Power8
 
         public static PowerItem ExtractRelatedPowerItem(object o)
         {
+// ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
             if (o is MenuItem)
+// ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
                 return (PowerItem)((MenuItem)o).DataContext;
             if (o is ContextMenuEventArgs)
             {
