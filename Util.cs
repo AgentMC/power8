@@ -1,17 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Power8
 {
@@ -20,6 +26,7 @@ namespace Power8
         public static Dispatcher MainDisp;
 
         private static readonly StringBuilder Buffer = new StringBuilder(1024);
+        private static readonly Dictionary<Type, IComponent> Instances = new Dictionary<Type, IComponent>();
 
 
         public static void Send(Delegate method)
@@ -249,18 +256,41 @@ namespace Power8
         {
             try
             {
-// ReSharper disable AssignNullToNotNullAttribute
-                var inst = Activator.CreateInstance(Type.GetType(className));
-// ReSharper restore AssignNullToNotNullAttribute
+                var t = Type.GetType(className);
+                if (t == null)
+                    throw new Exception("Type constructor did not return the type object.");
+
+                if(!t.GetInterfaces().Contains(typeof(IComponent)))
+                    throw new Exception("Type disposition event cannot be reacted on.");
+
+                IComponent inst;
+                if (Instances.ContainsKey(t))
+                {
+                    inst = Instances[t];
+                }
+                else
+                {
+                    inst = (IComponent) Activator.CreateInstance(t);
+                    inst.Disposed += (sender, args) => Instances.Remove(sender.GetType());
+                    Instances.Add(t, inst);
+                }
                 var wnd = inst as Window;
                 if(wnd != null)
                 {
                     wnd.Show();
+                    if(wnd.WindowState == WindowState.Minimized)
+                        wnd.WindowState = WindowState.Normal;
+                    wnd.Activate();
                     return;
                 }
-                var frm = inst as System.Windows.Forms.Form;
+                var frm = inst as Form;
                 if (frm != null)
+                {
                     frm.Show();
+                    if(frm.WindowState == FormWindowState.Minimized)
+                        frm.WindowState = FormWindowState.Normal;
+                    frm.Activate();
+                }
             }
             catch (Exception ex)
             {
