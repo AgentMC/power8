@@ -174,7 +174,7 @@ namespace Power8
                             dialog.ShowDialog();
                             if (dialog.DialogResult == System.Windows.Forms.DialogResult.OK)
                             {
-                                Process.Start("explorer.exe");
+                                Util.StartExplorer();
                                 Thread.Sleep(2000);
                                 Util.Restart("user have chosen to restart.");
                             }
@@ -217,7 +217,7 @@ namespace Power8
                     {
                         var info =
                             new System.IO.StringReader(
-                                client.DownloadString(Properties.Resources.Power8URI + Properties.Resources.AssemblyInfoURI));
+                                client.DownloadString(Properties.Resources.Stg_Power8URI + Properties.Resources.Stg_AssemblyInfoURI));
                         string line;
                         while ((line = info.ReadLine()) != null)
                         {
@@ -227,8 +227,8 @@ namespace Power8
                                 if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
                                 {
                                     switch (MessageBox.Show(string.Format(
-                                                Properties.Resources.UpdateAvailableFormat, Application.ProductVersion, verLine),
-                                            Properties.Resources.AppShortName + Properties.Resources.UpdateAvailable,
+                                                Properties.Resources.Str_UpdateAvailableFormat, Application.ProductVersion, verLine),
+                                            Properties.Resources.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable,
                                             MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
                                     {
                                         case MessageBoxResult.Cancel:
@@ -236,7 +236,7 @@ namespace Power8
                                             Settings.Default.Save();
                                             break;
                                         case MessageBoxResult.Yes:
-                                            Process.Start(Properties.Resources.Power8URI);
+                                            Process.Start(Properties.Resources.Stg_Power8URI);
                                             break;
                                     }
                                 }
@@ -246,8 +246,8 @@ namespace Power8
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(Properties.Resources.CantCheckUpdates + ex.Message,
-                                        Properties.Resources.AppShortName, MessageBoxButton.OK,
+                        MessageBox.Show(Properties.Resources.Err_CantCheckUpdates + ex.Message,
+                                        Properties.Resources.Stg_AppShortName, MessageBoxButton.OK,
                                         MessageBoxImage.Exclamation);
                     }
                 }
@@ -264,21 +264,21 @@ namespace Power8
             get
             {
                 var k = Microsoft.Win32.Registry.CurrentUser;
-                k = k.OpenSubKey(Properties.Resources.RegKeyRun, false);
-                return k != null && k.GetValue(Properties.Resources.AppShortName) != null;
+                k = k.OpenSubKey(Properties.Resources.Stg_RegKeyRun, false);
+                return k != null && k.GetValue(Properties.Resources.Stg_AppShortName) != null;
             }
             set
             {
                 if (value == AutoStartEnabled)
                     return;
                 var k = Microsoft.Win32.Registry.CurrentUser;
-                k = k.OpenSubKey(Properties.Resources.RegKeyRun, true);
+                k = k.OpenSubKey(Properties.Resources.Stg_RegKeyRun, true);
                 if (k == null) 
                     return;
                 if (value)
-                    k.SetValue(Properties.Resources.AppShortName, Application.ExecutablePath);
+                    k.SetValue(Properties.Resources.Stg_AppShortName, Application.ExecutablePath);
                 else
-                    k.DeleteValue(Properties.Resources.AppShortName);
+                    k.DeleteValue(Properties.Resources.Stg_AppShortName);
             }
         }
 

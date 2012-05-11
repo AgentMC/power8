@@ -5,46 +5,6 @@
     <!-- Resource dictionary entries should be defined here. -->
     <my:NameToResourceConverter x:Key="localizer"/>
 
-
-    <Style x:Key="TransparentButtonStyle" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource ButtonFocusVisual}"/>
-        <Setter Property="Background" Value="{DynamicResource ButtonNormalBackground}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource ButtonNormalBorder}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="1"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" Width="Auto" BorderThickness="1" BorderBrush="{DynamicResource BlackBrush}" SnapsToDevicePixels="True">
-                        <Grid x:Name="grid" Height="Auto">
-                            <Border x:Name="NormalBorder" BorderThickness="1" BorderBrush="{DynamicResource ButtonBorderBrush}">
-                                <Border x:Name="NormalBG" Height="10" VerticalAlignment="Top" MinWidth="40" Background="{DynamicResource ButtonBackgroundBrush}" OpacityMask="{DynamicResource ButtonOpacityMask}" SnapsToDevicePixels="False"/>
-                            </Border>
-                            <Border x:Name="MouseOverState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource MouseOverBrush}"/>
-                            <Border x:Name="PressedState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource PressedBrush}"/>
-                            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Visibility" TargetName="MouseOverState" Value="Visible"/>
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="true"/>
-                        <Trigger Property="ToggleButton.IsChecked" Value="true"/>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Foreground" Value="#ADADAD"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Visibility" TargetName="PressedState" Value="Visible"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
     <Style TargetType="{x:Type Button}">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3,1"/>
@@ -148,115 +108,45 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
-    	<DockPanel IsItemsHost="True"/>
-    </ItemsPanelTemplate>
-    
-	<Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
-        <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
-        <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
-        <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
-        <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
+    <Style TargetType="{x:Type Button}" x:Key="TransparentButtonStyle">
+        <Setter Property="FocusVisualStyle" Value="{DynamicResource ButtonFocusVisual}"/>
+        <Setter Property="Background" Value="{DynamicResource ButtonNormalBackground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource ButtonNormalBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource BlackBrush}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Menu}">
-                    <Grid x:Name="grid" Height="Auto" SnapsToDevicePixels="true" Width="Auto">
-                  <Border BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="2">
-                      <Grid>
-                       <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                       </Grid.RowDefinitions>
-                       <Border BorderThickness="1,1,1,0" CornerRadius="1,1,0,0" Background="{DynamicResource WhiteRoundGradient}"/>
-                       <Border BorderBrush="{DynamicResource WhiteAlfa60}" BorderThickness="1" CornerRadius="2" Grid.RowSpan="2"/>
-                       <Border x:Name="MouseOverBorder" BorderBrush="{DynamicResource WhiteSolidBrush}" BorderThickness="1" CornerRadius="1" Grid.RowSpan="2" Visibility="Collapsed"/>
-                       <Border Grid.RowSpan="1" Background="{DynamicResource WhiteAlfa30}" CornerRadius="1"/>
-                       <Border BorderThickness="1" CornerRadius="1" Background="{DynamicResource WhiteRoundGradient}" Grid.Row="1" RenderTransformOrigin="0.5,0.5">
-                        <Border.RenderTransform>
-                         <TransformGroup>
-                          <ScaleTransform ScaleY="-1" ScaleX="1"/>
-                          <SkewTransform AngleY="0" AngleX="0"/>
-                          <RotateTransform Angle="0"/>
-                          <TranslateTransform/>
-                         </TransformGroup>
-                        </Border.RenderTransform>
-                       </Border>
-                      </Grid>
-                     </Border>
-                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" d:LayoutOverrides="Width, Height"/>
-                 </Grid>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border" Width="Auto" BorderThickness="1" BorderBrush="{DynamicResource BlackBrush}" SnapsToDevicePixels="True">
+                        <Grid x:Name="grid" Height="Auto">
+                            <Border x:Name="NormalBorder" BorderThickness="1" BorderBrush="{DynamicResource ButtonBorderBrush}">
+                                <Border x:Name="NormalBG" Height="10" VerticalAlignment="Top" MinWidth="40" Background="{DynamicResource ButtonBackgroundBrush}" OpacityMask="{DynamicResource ButtonOpacityMask}" SnapsToDevicePixels="False"/>
+                            </Border>
+                            <Border x:Name="MouseOverState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource MouseOverBrush}"/>
+                            <Border x:Name="PressedState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource PressedBrush}"/>
+                            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Visibility" TargetName="MouseOverState" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="true"/>
+                        <Trigger Property="ToggleButton.IsChecked" Value="true"/>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="#ADADAD"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Visibility" TargetName="PressedState" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="ItemsPanel" Value="{DynamicResource ItemsPanelTemplate}"/>
     </Style>
-	
-	<Style x:Key="RightMenuStyle" TargetType="{x:Type Menu}">
-        <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
-        <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
-        <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
-        <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
-        <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Menu}">
-                    <Grid x:Name="grid" Height="Auto" SnapsToDevicePixels="true" Width="Auto">
-                  <Border BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="0,2,2,0">
-                      <Grid>
-                       <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                       </Grid.RowDefinitions>
-                       <Border BorderThickness="1,1,1,0" CornerRadius="0,1,0,0" Background="{DynamicResource WhiteRoundGradient}"/>
-                       <Border BorderBrush="{DynamicResource WhiteAlfa60}" BorderThickness="1" CornerRadius="0,1,1,0" Grid.RowSpan="2"/>
-                       <Border x:Name="MouseOverBorder" BorderBrush="{DynamicResource WhiteSolidBrush}" BorderThickness="1" CornerRadius="0,1,1,0" Grid.RowSpan="2" Visibility="Collapsed"/>
-                       <Border Grid.RowSpan="1" Background="{DynamicResource WhiteAlfa30}" CornerRadius="0,1,0,0"/>
-                       <Border BorderThickness="1" CornerRadius="0,1,1,1" Background="{DynamicResource WhiteRoundGradient}" Grid.Row="1" RenderTransformOrigin="0.5,0.5">
-                        <Border.RenderTransform>
-                         <TransformGroup>
-                          <ScaleTransform ScaleY="-1" ScaleX="1"/>
-                          <SkewTransform AngleY="0" AngleX="0"/>
-                          <RotateTransform Angle="0"/>
-                          <TranslateTransform/>
-                         </TransformGroup>
-                        </Border.RenderTransform>
-                       </Border>
-                      </Grid>
-                     </Border>
-                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" d:LayoutOverrides="Width, Height"/>
-                 </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="ItemsPanel" Value="{DynamicResource MenuItemsPanelTemplate}"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="MinWidth" Value="0"/>
-        <Setter Property="MinHeight" Value="0"/>
-    </Style>
-
-	
-    <Style x:Key="MenuItemStyle" TargetType="{x:Type MenuItem}">
-        <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
-        <Setter Property="Header" Value="{Binding FriendlyName}"/>
-        <Setter Property="ItemsSource" Value="{Binding Items}"/>
-        <Setter Property="Command" Value="{DynamicResource globalClickCommand}"/>
-        <Setter Property="CommandParameter" Value="{Binding}"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="Padding" Value="6,3"/>
-        <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
-        <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
-    </Style>
-    <Style x:Key="ContextMenuItemStyle" TargetType="{x:Type MenuItem}">
-        <Setter Property="Header" Value="{Binding Path=Name, 
-                                                  RelativeSource={RelativeSource Self}, 
-                                                  Mode=OneWay, 
-                                                  Converter={StaticResource localizer}}"/>
-        <Setter Property="Padding" Value="6,3"/>
-    </Style>
-
     <Style TargetType="{x:Type Button}" x:Key="RightMenuButtonStyle">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3"/>
@@ -349,7 +239,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     <Style TargetType="{x:Type Button}" x:Key="LeftMenuButtonStyle">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3"/>
@@ -442,4 +331,111 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
+        <DockPanel IsItemsHost="True"/>
+    </ItemsPanelTemplate>
+    
+    <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
+        <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
+        <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
+        <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Menu}">
+                    <Grid x:Name="grid" Height="Auto" SnapsToDevicePixels="true" Width="Auto">
+                  <Border BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="2">
+                      <Grid>
+                       <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                       </Grid.RowDefinitions>
+                       <Border BorderThickness="1,1,1,0" CornerRadius="1,1,0,0" Background="{DynamicResource WhiteRoundGradient}"/>
+                       <Border BorderBrush="{DynamicResource WhiteAlfa60}" BorderThickness="1" CornerRadius="2" Grid.RowSpan="2"/>
+                       <Border x:Name="MouseOverBorder" BorderBrush="{DynamicResource WhiteSolidBrush}" BorderThickness="1" CornerRadius="1" Grid.RowSpan="2" Visibility="Collapsed"/>
+                       <Border Grid.RowSpan="1" Background="{DynamicResource WhiteAlfa30}" CornerRadius="1"/>
+                       <Border BorderThickness="1" CornerRadius="1" Background="{DynamicResource WhiteRoundGradient}" Grid.Row="1" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                         <TransformGroup>
+                          <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                          <SkewTransform AngleY="0" AngleX="0"/>
+                          <RotateTransform Angle="0"/>
+                          <TranslateTransform/>
+                         </TransformGroup>
+                        </Border.RenderTransform>
+                       </Border>
+                      </Grid>
+                     </Border>
+                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" d:LayoutOverrides="Width, Height"/>
+                 </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="ItemsPanel" Value="{DynamicResource ItemsPanelTemplate}"/>
+    </Style>
+    <Style x:Key="RightMenuStyle" TargetType="{x:Type Menu}">
+        <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
+        <Setter Property="FontSize" Value="{DynamicResource {x:Static SystemFonts.MenuFontSizeKey}}"/>
+        <Setter Property="FontStyle" Value="{DynamicResource {x:Static SystemFonts.MenuFontStyleKey}}"/>
+        <Setter Property="FontWeight" Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Menu}">
+                    <Grid x:Name="grid" Height="Auto" SnapsToDevicePixels="true" Width="Auto">
+                  <Border BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="0,2,2,0">
+                      <Grid>
+                       <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                       </Grid.RowDefinitions>
+                       <Border BorderThickness="1,1,1,0" CornerRadius="0,1,0,0" Background="{DynamicResource WhiteRoundGradient}"/>
+                       <Border BorderBrush="{DynamicResource WhiteAlfa60}" BorderThickness="1" CornerRadius="0,1,1,0" Grid.RowSpan="2"/>
+                       <Border x:Name="MouseOverBorder" BorderBrush="{DynamicResource WhiteSolidBrush}" BorderThickness="1" CornerRadius="0,1,1,0" Grid.RowSpan="2" Visibility="Collapsed"/>
+                       <Border Grid.RowSpan="1" Background="{DynamicResource WhiteAlfa30}" CornerRadius="0,1,0,0"/>
+                       <Border BorderThickness="1" CornerRadius="0,1,1,1" Background="{DynamicResource WhiteRoundGradient}" Grid.Row="1" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                         <TransformGroup>
+                          <ScaleTransform ScaleY="-1" ScaleX="1"/>
+                          <SkewTransform AngleY="0" AngleX="0"/>
+                          <RotateTransform Angle="0"/>
+                          <TranslateTransform/>
+                         </TransformGroup>
+                        </Border.RenderTransform>
+                       </Border>
+                      </Grid>
+                     </Border>
+                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" d:LayoutOverrides="Width, Height"/>
+                 </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemsPanel" Value="{DynamicResource MenuItemsPanelTemplate}"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="MinWidth" Value="0"/>
+        <Setter Property="MinHeight" Value="0"/>
+    </Style>
+
+    <Style x:Key="MenuItemStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
+        <Setter Property="Header" Value="{Binding FriendlyName}"/>
+        <Setter Property="ItemsSource" Value="{Binding Items}"/>
+        <Setter Property="Command" Value="{DynamicResource globalClickCommand}"/>
+        <Setter Property="CommandParameter" Value="{Binding}"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="6,3"/>
+        <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
+        <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
+    </Style>
+    <Style x:Key="ContextMenuItemStyle" TargetType="{x:Type MenuItem}">
+        <Setter Property="Header" Value="{Binding Path=Name, 
+                                                  RelativeSource={RelativeSource Self}, 
+                                                  Mode=OneWay, 
+                                                  Converter={StaticResource localizer}}"/>
+        <Setter Property="Padding" Value="6,3"/>
+    </Style>
+    
 </ResourceDictionary>

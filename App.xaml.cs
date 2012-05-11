@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -21,8 +20,8 @@ namespace Power8
             if(Environment.OSVersion.Version.ToString().StartsWith("6.0"))
             {
                 MessageBox.Show(
-                    "Windows (R) Vista (R) is not intended to be used with Power8. Please use normal operating system.",
-                    Power8.Properties.Resources.AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
+                    Power8.Properties.Resources.Err_VistaDetected,
+                    Power8.Properties.Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(2);
             }
             Util.MainDisp = Dispatcher;
@@ -90,7 +89,7 @@ namespace Power8
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), Power8.Properties.Resources.AppShortName);
+                MessageBox.Show(ex.ToString(), Power8.Properties.Resources.Stg_AppShortName);
             }
         }
 
@@ -114,7 +113,7 @@ namespace Power8
                 var executer = new Util.ShellExecuteHelper(info);
                 if (!executer.ShellExecuteOnSTAThread())
                     throw new ExternalException(string.Format(
-                        Power8.Properties.Resources.ShellExecExErrorFormatString, executer.ErrorCode));
+                        Power8.Properties.Resources.Err_ShellExecExErrorFormatString, executer.ErrorCode));
             }
             catch (Exception ex)
             {
@@ -136,7 +135,7 @@ namespace Power8
                 arg = PowerItemTree.GetResolvedArgument(item, false);
             if (item.IsLink && ((MenuItem)sender).Name == "AppOpenTargetContainer")
                 arg = Util.ResolveLink(arg);
-            Process.Start("explorer.exe", "/select,\"" + arg + "\"");
+            Util.StartExplorer("/select,\"" + arg + "\"");
         }
 
 

@@ -327,7 +327,7 @@ namespace Power8
                                            Util.Post(new Action(() =>
                                                _networkRoot.Items.Add(new PowerItem
                                                 {
-                                                    FriendlyName = Resources.ShowMore,
+                                                    FriendlyName = Resources.Str_ShowMore,
                                                     Parent = _networkRoot,
                                                     SpecialFolderId = API.Csidl.POWER8CLASS,
                                                     Argument = "Power8.ComputerList"
@@ -578,7 +578,7 @@ namespace Power8
                         if (Directory.Exists(arg2))
                             psi.Arguments = arg2;
                         else
-                            throw new IOException("Directory not found for " + item.Argument);
+                            throw new IOException(Resources.Err_GotNoFolder + item.Argument);
                     }
                 }
                 else
@@ -590,7 +590,7 @@ namespace Power8
                         if (File.Exists(arg2))
                             psi.FileName = arg2;
                         else
-                            throw new IOException("File not found for " + item.Argument);
+                            throw new IOException(Resources.Err_GotNoFile + item.Argument);
                     }
                 }
 

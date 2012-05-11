@@ -136,7 +136,7 @@ namespace Power8
 
                 if (string.IsNullOrEmpty(Argument))
                 {
-                    _friendlyName = Resources.AllPrograms;
+                    _friendlyName = Resources.Str_AllPrograms;
                 }
                 else
                 {
@@ -239,7 +239,7 @@ namespace Power8
                 {
                     psi.Verb = null;
                     Process.Start(psi);
-                    throw new InvalidProgramException(Resources.StartAsAdminFailed);
+                    throw new InvalidProgramException(Resources.Err_StartAsAdminFailed);
                 }
                 throw;
             }
