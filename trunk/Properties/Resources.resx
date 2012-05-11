@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppShortName" xml:space="preserve">
+  <data name="Stg_AppShortName" xml:space="preserve">
     <value>Power8</value>
   </data>
-  <data name="RegKeyRun" xml:space="preserve">
+  <data name="Stg_RegKeyRun" xml:space="preserve">
     <value>Software\Microsoft\Windows\CurrentVersion\Run</value>
   </data>
-  <data name="UpdateAvailableFormat" xml:space="preserve">
+  <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>An update available to Power8!
 
 Your version: {0}
@@ -135,29 +135,29 @@ Yes: go to web site and update now!
 No: remind me later, please.
 Cancel: I skip this update, never notify me about this version.</value>
   </data>
-  <data name="AssemblyInfoURI" xml:space="preserve">
+  <data name="Stg_AssemblyInfoURI" xml:space="preserve">
     <value>svn/trunk/Properties/AssemblyInfo.cs</value>
   </data>
-  <data name="UpdateAvailable" xml:space="preserve">
+  <data name="Str_UpdateAvailable" xml:space="preserve">
     <value>: update available!</value>
   </data>
-  <data name="Power8URI" xml:space="preserve">
+  <data name="Stg_Power8URI" xml:space="preserve">
     <value>http://power8.googlecode.com/</value>
   </data>
-  <data name="ShellExecExErrorFormatString" xml:space="preserve">
+  <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
     <value>Error {0} caused while trying to call ShellExecuteEx()!</value>
   </data>
-  <data name="FailFastFormat" xml:space="preserve">
+  <data name="Str_FailFastFormat" xml:space="preserve">
     <value>Exiting because {0}</value>
   </data>
-  <data name="CantCheckUpdates" xml:space="preserve">
+  <data name="Err_CantCheckUpdates" xml:space="preserve">
     <value>Unable to check for updates.
 </value>
   </data>
-  <data name="AllPrograms" xml:space="preserve">
+  <data name="Str_AllPrograms" xml:space="preserve">
     <value>All Programs</value>
   </data>
-  <data name="StartAsAdminFailed" xml:space="preserve">
+  <data name="Err_StartAsAdminFailed" xml:space="preserve">
     <value>Unable to start specified object as Administrator. Process launched with regular user rights.</value>
   </data>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
@@ -217,11 +217,35 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_MWExit" xml:space="preserve">
     <value>Exit</value>
   </data>
-    <data name="CantInstanciateClassFormatString">
-        <value xml:space="preserve">Unable to instanciate class {0}
+  <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
+    <value>Unable to instanciate class {0}
 {1}</value>
-    </data>
-    <data name="ShowMore">
-        <value xml:space="preserve">Show more...</value>
-    </data>
+  </data>
+  <data name="Str_ShowMore" xml:space="preserve">
+    <value>Show more...</value>
+  </data>
+  <data name="CR_CLCleanerBtn" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="CR_CLTextbox" xml:space="preserve">
+    <value>Filter...</value>
+  </data>
+  <data name="CR_CLWindow" xml:space="preserve">
+    <value>Computers list</value>
+  </data>
+  <data name="Err_VistaDetected" xml:space="preserve">
+    <value>Windows (R) Vista (R) is not intended to be used with Power8. Please use normal operating system.</value>
+  </data>
+  <data name="Err_GotNoFolder" xml:space="preserve">
+    <value>Directory not found for </value>
+  </data>
+  <data name="Err_GotNoFile" xml:space="preserve">
+    <value>File not found for </value>
+  </data>
+  <data name="Err_GotNoTypeObject" xml:space="preserve">
+    <value>Type constructor did not return the type object.</value>
+  </data>
+  <data name="Err_TypeIsNotIComponent" xml:space="preserve">
+    <value>Type disposition event cannot be reacted on.</value>
+  </data>
 </root>

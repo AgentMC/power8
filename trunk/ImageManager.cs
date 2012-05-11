@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace Power8
 {

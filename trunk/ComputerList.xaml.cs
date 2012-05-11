@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace Power8
 {
@@ -74,12 +76,12 @@ namespace Power8
 
         private void CleanerBtnClick(object sender, RoutedEventArgs e)
         {
-            textbox1.Text = "";
+            CLTextbox.Text = "";
         }
 
         private void Textbox1TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
-            var txt = textbox1.Text.ToUpper();
+            var txt = CLTextbox.Text.ToUpper();
             listBox1.Items.Clear();
             foreach (var comp in NetManager.ComputersNearby.Where(comp => comp.Contains(txt)))
             {
@@ -89,7 +91,7 @@ namespace Power8
 
         private void ListBox1MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Process.Start("explorer.exe", "\\\\" + listBox1.SelectedItem);
+            Util.StartExplorer("\\\\" + listBox1.SelectedItem);
         }
 
 

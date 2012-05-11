@@ -214,7 +214,7 @@ namespace Power8
                     if (wndCount == 0)
                     {
                         launchNew = false;
-                        Process.Start("explorer.exe","/N");
+                        StartExplorer("/N");
                         while (shWndList.Count == 0)
                             Thread.Sleep(40);
                     }
@@ -258,10 +258,10 @@ namespace Power8
             {
                 var t = Type.GetType(className);
                 if (t == null)
-                    throw new Exception("Type constructor did not return the type object.");
+                    throw new Exception(Resources.Err_GotNoTypeObject);
 
                 if(!t.GetInterfaces().Contains(typeof(IComponent)))
-                    throw new Exception("Type disposition event cannot be reacted on.");
+                    throw new Exception(Resources.Err_TypeIsNotIComponent);
 
                 IComponent inst;
                 if (Instances.ContainsKey(t))
@@ -294,7 +294,7 @@ namespace Power8
             }
             catch (Exception ex)
             {
-                MessageBox.Show(string.Format(Resources.CantInstanciateClassFormatString, className, ex.Message));
+                MessageBox.Show(string.Format(Resources.Err_CantInstanciateClassFormatString, className, ex.Message));
             }
         }
 
@@ -566,7 +566,16 @@ namespace Power8
 
         public static void Die(string becauseString)
         {
-            Environment.FailFast(string.Format(Resources.FailFastFormat, becauseString));
+            Environment.FailFast(string.Format(Resources.Str_FailFastFormat, becauseString));
+        }
+
+        public static void StartExplorer(string command = null)
+        {
+            const string explorerString = "explorer.exe";
+            if (command != null)
+                Process.Start(explorerString, command);
+            else
+                Process.Start(explorerString);
         }
     }
 }
