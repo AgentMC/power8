@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.DirectoryServices;
-using System.Linq;
 using System.Management;
 using System.Net;
+#if !DEBUG
+using System.DirectoryServices;
+using System.Linq;
+#endif
 
 namespace Power8
 {
@@ -37,7 +39,7 @@ namespace Power8
 #if DEBUG
                     for (int i = 0; i < 3000; i++)
                     {
-                        ComputerNames.Add("computer" + i);
+                        ComputerNames.Add("COMPUTER" + i);
                     }
 #else
                     using (var workgroup = new DirectoryEntry("WinNT://" + DomainOrWorkgroup))
