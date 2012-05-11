@@ -376,7 +376,7 @@ namespace Power8
                 return;
 
             var roots = new List<PowerItem> {MyComputerRoot, StartMenuRootItem};
-            foreach (var lib in LibrariesRoot.Items)
+            foreach (var lib in LibrariesRoot.Items.Where(lib => !lib.AutoExpandIsPending))
                 roots.AddRange(lib.Items);
 
             foreach (var root in roots)
@@ -681,7 +681,10 @@ namespace Power8
         {
             var xdoc = new XmlDocument();
             xdoc.Load(libraryMs);
-            var nodeList = xdoc["libraryDescription"]["searchConnectorDescriptionList"];
+            var nodeList = xdoc["libraryDescription"];
+            if(nodeList == null)
+                return new string[0];
+            nodeList = nodeList["searchConnectorDescriptionList"];
             if(nodeList == null)
                 return new string[0];
             var nodeList2 = nodeList.GetElementsByTagName("searchConnectorDescription");
@@ -689,9 +692,11 @@ namespace Power8
                 return new string[0];
             var temp = (from XmlNode node
                         in nodeList2
-                        select node["simpleLocation"]
-                                   ["url"]
-                                   .InnerText
+                        let xmlElement = node["simpleLocation"]
+                        where xmlElement != null
+                        let element = xmlElement["url"]
+                        where element != null
+                        select element.InnerText
                         ).ToList();
             var arr = new string[temp.Count];
             for (var i = 0; i < temp.Count; i++)
