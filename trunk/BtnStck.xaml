@@ -4,9 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Power8="clr-namespace:Power8"
         AllowsTransparency="False" Background="Transparent" 
-        Title="BtnStck0" Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
+        Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated" Loaded="WindowLoaded"
-        mc:Ignorable="d" d:DesignHeight="407" d:DesignWidth="494" Name="Mnu">
+        mc:Ignorable="d" d:DesignHeight="407" d:DesignWidth="494" Name="ButtonStack"
+        Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}">
     <Grid Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -17,11 +18,11 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Menu ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
-              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="22" 
-              Style="{DynamicResource MenuStyle}" ItemContainerStyle="{DynamicResource MenuItemStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}"/>
+        <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
+              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="22" Style="{DynamicResource MenuStyle}" 
+              ItemContainerStyle="{DynamicResource MenuItemStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}"/>
         <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
-                  ItemsSource="{Binding ElementName=Mnu, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
+                  ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
                   CanUserAddRows="False">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->

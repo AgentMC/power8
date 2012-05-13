@@ -119,6 +119,7 @@
   </resheader>
   <data name="Stg_AppShortName" xml:space="preserve">
     <value>Power8</value>
+    <comment>Default message box title. May not be localized.</comment>
   </data>
   <data name="Stg_RegKeyRun" xml:space="preserve">
     <value>Software\Microsoft\Windows\CurrentVersion\Run</value>
@@ -150,13 +151,16 @@ Cancel: I skip this update, never notify me about this version.</value>
   </data>
   <data name="Str_FailFastFormat" xml:space="preserve">
     <value>Exiting because {0}</value>
+    <comment>String written to App event log. May not be localized.</comment>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
     <value>Unable to check for updates.
 </value>
+    <comment>Leave trailing \r\n!</comment>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>All Programs</value>
+    <comment>Default label instead of "Start menu". Currently sems useless</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
     <value>Unable to start specified object as Administrator. Process launched with regular user rights.
@@ -225,6 +229,7 @@ Cancel: I skip this update, never notify me about this version.</value>
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
     <value>Show more...</value>
+    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
   </data>
   <data name="CR_CLCleanerBtn" xml:space="preserve">
     <value>Clear</value>
@@ -240,14 +245,20 @@ Cancel: I skip this update, never notify me about this version.</value>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
     <value>Directory not found for </value>
+    <comment>Leave trailing space!</comment>
   </data>
   <data name="Err_GotNoFile" xml:space="preserve">
     <value>File not found for </value>
+    <comment>Leave trailing space!</comment>
   </data>
   <data name="Err_GotNoTypeObject" xml:space="preserve">
     <value>Type constructor did not return the type object.</value>
   </data>
   <data name="Err_TypeIsNotIComponent" xml:space="preserve">
     <value>Type disposition event cannot be reacted on.</value>
+  </data>
+  <data name="CR_ButtonStack" xml:space="preserve">
+    <value>Power8 - Start Menu replacer for Windows XP, Se7en and 8</value>
+    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
 </root>

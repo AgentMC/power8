@@ -205,6 +205,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Power8 - Start Menu replacer for Windows XP, Se7en and 8.
+        /// </summary>
+        internal static string CR_ButtonStack {
+            get {
+                return ResourceManager.GetString("CR_ButtonStack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         internal static string CR_CLCleanerBtn {
