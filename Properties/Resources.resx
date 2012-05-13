@@ -145,7 +145,8 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>http://power8.googlecode.com/</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>Error {0} caused while trying to call ShellExecuteEx()!</value>
+    <value>Error {0} caused while trying to call ShellExecuteEx()
+{1}</value>
   </data>
   <data name="Str_FailFastFormat" xml:space="preserve">
     <value>Exiting because {0}</value>
@@ -158,7 +159,8 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>All Programs</value>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>Unable to start specified object as Administrator. Process launched with regular user rights.</value>
+    <value>Unable to start specified object as Administrator. Process launched with regular user rights.
+</value>
   </data>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
     <value>Open All Users Folder</value>

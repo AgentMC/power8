@@ -217,12 +217,13 @@ namespace Power8
                 if (string.IsNullOrEmpty(Argument))
                 {
                     Util.DisplaySpecialFolder(SpecialFolderId);
+                    return;
                 }
-                else if (SpecialFolderId == API.Csidl.POWER8CLASS)
+                if (SpecialFolderId == API.Csidl.POWER8CLASS)
                 {
                     Util.InstanciateClass(Argument);
+                    return;
                 }
-                return;
             }
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);
             if (!string.IsNullOrEmpty(verb) && IsFile)
@@ -235,11 +236,11 @@ namespace Power8
             }
             catch (Win32Exception w32E)
             {
-                if (w32E.ErrorCode == -2147467259)
+                if (w32E.NativeErrorCode == 0x483) //1155, e.g. when doing "runas" on "*.hlp"
                 {
                     psi.Verb = null;
                     Process.Start(psi);
-                    throw new InvalidProgramException(Resources.Err_StartAsAdminFailed);
+                    throw new InvalidProgramException(Resources.Err_StartAsAdminFailed + w32E.Message);
                 }
                 throw;
             }

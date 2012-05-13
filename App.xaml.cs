@@ -89,7 +89,7 @@ namespace Power8
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), Power8.Properties.Resources.Stg_AppShortName);
+                Util.DispatchCaughtException(ex);
             }
         }
 
@@ -113,11 +113,11 @@ namespace Power8
                 var executer = new Util.ShellExecuteHelper(info);
                 if (!executer.ShellExecuteOnSTAThread())
                     throw new ExternalException(string.Format(
-                        Power8.Properties.Resources.Err_ShellExecExErrorFormatString, executer.ErrorCode));
+                        Power8.Properties.Resources.Err_ShellExecExErrorFormatString, executer.ErrorCode, executer.ErrorText));
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                Util.DispatchCaughtException(ex);
             }
         }
 
