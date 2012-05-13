@@ -64,6 +64,7 @@ namespace Power8
         }
 
 
+
         public static IntPtr GetHandle(this Window w)
         {
             return new WindowInteropHelper(w).Handle;
@@ -99,6 +100,11 @@ namespace Power8
         public static void RegisterHook(this Window w, HwndSourceHook hook)
         {
             w.GetHwndSource().AddHook(hook);
+        }
+
+        public static void DispatchCaughtException(Exception ex)
+        {
+            MessageBox.Show(ex.Message, Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
 
@@ -297,6 +303,7 @@ namespace Power8
                 MessageBox.Show(string.Format(Resources.Err_CantInstanciateClassFormatString, className, ex.Message));
             }
         }
+
 
 
         public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs, bool fallbackToInfoTip = false)
@@ -522,10 +529,10 @@ namespace Power8
         public class ShellExecuteHelper
         {
             private readonly API.ShellExecuteInfo _executeInfo;
-            private int _errorCode;
             private bool _succeeded;
 
-            public int ErrorCode{get { return _errorCode; }}
+            public int ErrorCode { get; private set; }
+            public string ErrorText { get; private set; }
 
             public ShellExecuteHelper(API.ShellExecuteInfo executeInfo)
             {
@@ -534,11 +541,11 @@ namespace Power8
 
             private void ShellExecuteFunction()
             {
-// ReSharper disable RedundantBoolCompare
-                if ((_succeeded = API.ShellExecuteEx(_executeInfo)) == true)
+                _succeeded = API.ShellExecuteEx(_executeInfo);
+                if (_succeeded)
                     return;
-                _errorCode = Marshal.GetLastWin32Error();
-// ReSharper restore RedundantBoolCompare
+                ErrorCode = Marshal.GetLastWin32Error();
+                ErrorText = new Win32Exception(ErrorCode).Message;
             }
 
             public bool ShellExecuteOnSTAThread()

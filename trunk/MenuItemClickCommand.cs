@@ -1,4 +1,5 @@
 using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Power8
@@ -10,7 +11,14 @@ namespace Power8
             var powerItem = parameter as PowerItem;
             if (powerItem == null || (powerItem.Parent == null && string.IsNullOrEmpty(powerItem.Argument)))
                 return;
-            powerItem.Invoke();
+            try
+            {
+                powerItem.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Util.DispatchCaughtException(ex);
+            }
             BtnStck.Instance.Hide();
         }
 

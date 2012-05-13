@@ -306,7 +306,8 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error {0} caused while trying to call ShellExecuteEx()!.
+        ///   Looks up a localized string similar to Error {0} caused while trying to call ShellExecuteEx()
+        ///{1}.
         /// </summary>
         internal static string Err_ShellExecExErrorFormatString {
             get {
@@ -315,7 +316,8 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to start specified object as Administrator. Process launched with regular user rights..
+        ///   Looks up a localized string similar to Unable to start specified object as Administrator. Process launched with regular user rights.
+        ///.
         /// </summary>
         internal static string Err_StartAsAdminFailed {
             get {
