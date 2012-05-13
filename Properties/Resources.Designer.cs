@@ -214,15 +214,6 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter....
-        /// </summary>
-        internal static string CR_CLTextbox {
-            get {
-                return ResourceManager.GetString("CR_CLTextbox", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Computers list.
         /// </summary>
         internal static string CR_CLWindow {
@@ -255,6 +246,15 @@ namespace Power8.Properties {
         internal static string CR_MWExit {
             get {
                 return ResourceManager.GetString("CR_MWExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        internal static string CR_SearchBox {
+            get {
+                return ResourceManager.GetString("CR_SearchBox", resourceCulture);
             }
         }
         
