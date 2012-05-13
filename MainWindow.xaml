@@ -6,7 +6,7 @@
         Name="Root" Closed="WindowClosed" Loaded="WindowLoaded"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         AllowsTransparency="False" Background="Transparent" SizeToContent="WidthAndHeight">
-    <Button Name="b1" Style="{DynamicResource TransparentButtonStyle}" Click="ShowButtonStack">
+    <Button Name="b1" Style="{DynamicResource MainButtonTransparentStyle}" Click="ShowButtonStack">
         <Button.ContextMenu>
             <ContextMenu Name="menu" >
                 <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{DynamicResource ContextMenuItemStyle}"/>
