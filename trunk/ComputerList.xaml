@@ -16,26 +16,7 @@
         
         <ListBox Grid.Row="0" Grid.ColumnSpan="2" Name="listBox1" BorderThickness="0"
                  VerticalContentAlignment="Top" MouseDoubleClick="ListBox1MouseDoubleClick" />
-        <TextBox Grid.Row="1" Name="CLTextbox" TextChanged="Textbox1TextChanged" 
-                 DataContext="{Binding RelativeSource={RelativeSource Self}}" Height="24">
-            <!--TODO: move this to template, and use for BtnStack-->
-            <TextBox.Background>
-                <VisualBrush Stretch="None" AlignmentX="Left" Opacity="0.33">
-                    <VisualBrush.Visual>
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="6"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Foreground="White">padding</TextBlock>
-                            <TextBlock Grid.Column="1" Foreground="Silver" 
-                                Text="{Binding Path=Name, 
-                                Mode=OneWay, Converter={StaticResource localizer}}"/>
-                        </Grid>
-                    </VisualBrush.Visual>
-                </VisualBrush>
-            </TextBox.Background>
-        </TextBox>
+        <TextBox Grid.Row="1" Name="CLTextbox" TextChanged="Textbox1TextChanged" Style="{DynamicResource SearchBoxStyle}"/>
         <Button Grid.Row="1" Grid.Column="1" Name="CLCleanerBtn" Height="24" Padding="4" 
                 Margin="0" HorizontalContentAlignment="Center" Click="CleanerBtnClick"/>
         

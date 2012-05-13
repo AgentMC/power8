@@ -227,8 +227,8 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_CLCleanerBtn" xml:space="preserve">
     <value>Clear</value>
   </data>
-  <data name="CR_CLTextbox" xml:space="preserve">
-    <value>Filter...</value>
+  <data name="CR_SearchBox" xml:space="preserve">
+    <value>Search...</value>
   </data>
   <data name="CR_CLWindow" xml:space="preserve">
     <value>Computers list</value>
