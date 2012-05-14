@@ -27,7 +27,7 @@ namespace Power8
 
         public static ImageContainer GetImageContainer(PowerItem item, API.Shgfi iconNeeded)
         {
-            Util.Post(new Action(() => item.Icon = GetImageContainerSync(item, iconNeeded)));
+            Util.Post(() => item.Icon = GetImageContainerSync(item, iconNeeded));
             return null;
         }
 

@@ -39,14 +39,14 @@ namespace Power8
                     return;
                 _disposing = true;
             }
-            Util.Send(new Action(() =>
-                                     {
-                                         if(IsVisible)
-                                            Close();
-                                         var handler = Disposed;
-                                         if (handler != null)
-                                             handler(this, null);
-                                     }));
+            Util.Send(() =>
+                          {
+                              if(IsVisible)
+                                  Close();
+                              var handler = Disposed;
+                              if (handler != null)
+                                  handler(this, null);
+                          });
         }
         public event EventHandler Disposed;
 
