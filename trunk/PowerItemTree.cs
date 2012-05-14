@@ -310,28 +310,28 @@ namespace Power8
 
                                        if (names.Count == 0) //remove separator if no items were added
                                        {
-                                           _networkRoot.Items.RemoveAt(_networkRoot.Items.Count - 1);
+                                           Util.Post(() => _networkRoot.Items.RemoveAt(_networkRoot.Items.Count - 1));
                                            return;
                                        }
                                        names.Select(e => new PowerItem
-                                                             {
-                                                                 Argument = "\\\\" + e,
-                                                                 IsFolder = true,
-                                                                 Parent = _networkRoot,
-                                                                 Icon = MyComputerRoot.Icon
-                                                             })
+                                                        {
+                                                            Argument = "\\\\" + e,
+                                                            IsFolder = true,
+                                                            Parent = _networkRoot,
+                                                            Icon = MyComputerRoot.Icon
+                                                        })
                                            .ToList()
-                                           .ForEach(i => Util.Post(new Action(() => _networkRoot.Items.Add(i))));
+                                           .ForEach(i => Util.Post(() => _networkRoot.Items.Add(i)));
 
                                        if (addMoreItem)
-                                           Util.Post(new Action(() =>
-                                               _networkRoot.Items.Add(new PowerItem
-                                                {
-                                                    FriendlyName = Resources.Str_ShowMore,
-                                                    Parent = _networkRoot,
-                                                    SpecialFolderId = API.Csidl.POWER8CLASS,
-                                                    Argument = "Power8.ComputerList"
-                                                })));
+                                           Util.Post(() =>
+                                                    _networkRoot.Items.Add(new PowerItem
+                                                    {
+                                                        FriendlyName = Resources.Str_ShowMore,
+                                                        Parent = _networkRoot,
+                                                        SpecialFolderId = API.Csidl.POWER8CLASS,
+                                                        Argument = "Power8.ComputerList"
+                                                    }));
 
                                    }) { Name = "Network Scan Thread" }.Start();
                 }
@@ -369,7 +369,7 @@ namespace Power8
                 return;
             }
             //Ensuring buttonstack is created on Main thread
-            Util.Send(new Action(() => BtnStck.Instance.InvalidateVisual()));
+            Util.Send(() => BtnStck.Instance.InvalidateVisual());
             var isDir = Directory.Exists(e.FullPath);
             var baseAndArg = PathToBaseAndArg(e.FullPath);
             if (baseAndArg.Item2 == null) 
@@ -386,7 +386,7 @@ namespace Power8
                                                         root == StartMenuRootItem);
                 if (item != null)
                 {
-                    Util.Send(new Action(() =>
+                    Util.Send(() =>
                     {
                         switch (e.ChangeType)
                         {
@@ -407,7 +407,7 @@ namespace Power8
                                 AddSubItem(item, baseAndArg.Item1, e.FullPath, isDir);
                                 break;
                         }
-                    }));
+                    });
                 }
             }
         }
@@ -427,7 +427,7 @@ namespace Power8
 #if DEBUG
             Debug.WriteLine("InitTree - scanned in {0}", s.ElapsedMilliseconds);
 #endif
-            Util.Send(new Action(() => BtnStck.Instance.InvalidateVisual()));
+            Util.Send(() => BtnStck.Instance.InvalidateVisual());
 #if DEBUG
             Debug.WriteLine("InitTree - done in {0}", s.ElapsedMilliseconds);
             s.Stop();
@@ -521,7 +521,7 @@ namespace Power8
                                 ResourceIdString = resourceId,
                                 AutoExpand = autoExpand
                             };
-                Util.Send(new Action(()=>item.Items.Add(child)));
+                Util.Send(() => item.Items.Add(child));
             }
             return child;
         }

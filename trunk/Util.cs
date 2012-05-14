@@ -29,33 +29,33 @@ namespace Power8
         private static readonly Dictionary<Type, IComponent> Instances = new Dictionary<Type, IComponent>();
 
 
-        public static void Send(Delegate method)
+        public static void Send(Action method)
         {
             MainDisp.Invoke(DispatcherPriority.Render, method);
         }
 
-        public static void Post(Delegate method)
+        public static void Post(Action method)
         {
             MainDisp.BeginInvoke(DispatcherPriority.Background, method);
         }
 
-        public static void PostBackgroundReleaseResourceCall(Delegate method)
+        public static void PostBackgroundReleaseResourceCall(Action method)
         {
 #if DEBUG
             var mName = method.Method;
-            method = Delegate.Combine(method, new Action(() => Debug.WriteLine("PBRRC invoked for " + mName)));
+            method = (Action) Delegate.Combine(method, new Action(() => Debug.WriteLine("PBRRC invoked for " + mName)));
 #endif
             MainDisp.BeginInvoke(DispatcherPriority.ApplicationIdle, method);
         }
 
         public static void PostBackgroundDllUnload(IntPtr hModule)
         {
-            PostBackgroundReleaseResourceCall(new Action(() => API.FreeLibrary(hModule)));
+            PostBackgroundReleaseResourceCall(() => API.FreeLibrary(hModule));
         }
 
         public static void PostBackgroundIconDestroy(IntPtr hIcon)
         {
-            PostBackgroundReleaseResourceCall(new Action(() => API.DestroyIcon(hIcon)));
+            PostBackgroundReleaseResourceCall(() => API.DestroyIcon(hIcon));
         }
 
         public static T Eval<T>(Func<T> method)
