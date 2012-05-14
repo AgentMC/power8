@@ -10,3 +10,27 @@ After that, the check occurs every 12 hours.
 Each check downloads 2.26 KB file named "AssemblyInfo.cs" from the project source code and uses it to identify the version.
 
 At the moment, when version is found, only notification is available, later the auto-update will be implemented.
+
+== Alt+Z hotkey ==
+
+Power8 uses Alt+Z hotkey to show Start Window, like Windows itself reacts on "Windows" key. 
+
+The idea originally was to use "Win+Z" hotkey, but starting Windows8, Win+* combinations are prohibited.
+
+When you press Alt+Z, Power8 determines the location of the Mouse cursor and shows the window in the closest desktop corner possible.
+
+Pressing Alt+Z again will close the window.
+
+== Menu buttons ==
+
+http://i38.fastpic.ru/big/2012/0514/81/ab0350800653efe4cb25dba1f7dfc081.png
+
+All 5 menu buttons have submenus that contain items. 
+
+For Computer and Libraries (Documents on XP) the items are read and expanded only on demand (when you hover the parent menu item with mouse).
+
+Computer, Libraries and Administrative tools are updated automatically when a file system change occurs and this or parent item was already extracted/shown to the user.
+
+Network and Control panel items aren't refreshed. Restart Power8 when you installed new control panel element or changed network location if needed.
+
+All menu items have a context menu that will allow you to Open item, show it's Properties and so on.
