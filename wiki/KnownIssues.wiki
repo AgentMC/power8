@@ -1,0 +1,19 @@
+#summary Known issues of the project
+
+= Introduction =
+
+This is a list of known product issues.
+
+This list is maintained internally, if you want to report an issue that is not on list, please use [http://code.google.com/p/power8/issues/list Issues] tab of the project.
+
+= The list of issues =
+
+  #  Icons for Administrative tools, Network connections and computers may not be shown
+  #  Separators don't have a template, not disabled and show different unrelated stuff on invokation
+  #  Style for Start Menu menuitem is wrong and hardly readable on dark themes
+  #  Ctrl+Click may not invoke Run dialog, depending on focused control
+  #  Styles for menu-buttons and simple buttons differ
+  #  Menu from menu-button may show in unapropriate position
+  #  Context menu from Main button may show in unapropriate position
+  #  (?) W8 immersive links aren't run properly - have to investigate, postpone to RTM
+  #  (warning) investigate why the process requires Exit() call to quit 
