@@ -34,3 +34,13 @@ Computer, Libraries and Administrative tools are updated automatically when a fi
 Network and Control panel items aren't refreshed. Restart Power8 when you installed new control panel element or changed network location if needed.
 
 All menu items have a context menu that will allow you to Open item, show it's Properties and so on.
+
+== Computers List ==
+
+http://i37.fastpic.ru/big/2012/0514/04/e15e89453863e54f2dcaecc0ebbdc504.png
+
+When there are more than 10 computers over network available (like if you're in Enterprize-size domain), only 1st ten entries will be shown. All others are accessible via "Computers List" window, that is shown when you click "Show more..." menu item.
+
+This window allows you to quickly search for required computer and open it by double-clicking the entry. Note that when computer is unreachable, "My Documents" window may be opened, or an error message may be shown.
+
+It is planned that there will be a specific configurable context menu with items such as "Start Remote Desktop here" and similar. Fell free to post suggestions for the out-of-box preconfigured items.
