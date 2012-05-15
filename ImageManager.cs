@@ -91,17 +91,20 @@ namespace Power8
 
         public class ImageContainer
         {
-            private readonly string _objectDescriptor;
+// ReSharper disable NotAccessedField.Local
+            private readonly string _objectDescriptor; //needed for debug purposes
+// ReSharper restore NotAccessedField.Local
             private readonly string _initialObject;
             private readonly API.Csidl _id;
             private ImageSource _smallBitmap, _largeBitmap;
             private System.Windows.Controls.Image _smallImage, _largeImage;
+            private bool _smallExtracted, _largeExtracted;
 
             public ImageSource SmallBitmap
             {
                 get
                 {
-                    if (_smallBitmap == null)
+                    if (!_smallExtracted)
                         ExtractSmall();
                     return _smallBitmap;
                 } 
@@ -111,7 +114,7 @@ namespace Power8
             { 
                 get
                 {
-                    if (_largeBitmap == null)
+                    if (!_largeExtracted)
                         ExtractLarge();
                     return _largeBitmap;
                 }
@@ -169,6 +172,7 @@ namespace Power8
                     Debug.WriteLine("!!!ExtractSmall failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
                 }
 #endif
+                _smallExtracted = true;
             }
 
             public void GenerateSmallImage()
@@ -193,6 +197,7 @@ namespace Power8
                     Debug.WriteLine("!!!ExtractLarge failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
                 }
 #endif
+                _largeExtracted = true;
             }
 
             public void GenerateLargeImage()

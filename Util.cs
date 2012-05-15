@@ -348,11 +348,15 @@ namespace Power8
             {
                 try
                 {
-                    using (var k = Microsoft.Win32.Registry.ClassesRoot
-                            .OpenSubKey("CLSID\\" + NameSpaceToGuidWithBraces(clsidOrApiShNs) + subkey, false))
+                    var key = GetRegistryContainer(clsidOrApiShNs);
+                    if (key != null)
                     {
-                        if (k != null)
-                            return ((string)k.GetValue(valueName, null));
+                        using (var k = Microsoft.Win32.Registry.ClassesRoot
+                                .OpenSubKey(key + subkey, false))
+                        {
+                            if (k != null)
+                                return ((string)k.GetValue(valueName, null));
+                        }
                     }
                 }
                 catch (Exception){}
@@ -361,10 +365,28 @@ namespace Power8
             return null;
         }
 
+        private static string GetRegistryContainer(string pathClsidGuidOrApishnamespace)
+        {
+            var i = pathClsidGuidOrApishnamespace.LastIndexOf(".", StringComparison.Ordinal);
+            if (i < 0)
+            {
+                return "CLSID\\" + NameSpaceToGuidWithBraces(pathClsidGuidOrApishnamespace);
+            }
+            using (var k = Microsoft.Win32.Registry.ClassesRoot
+                .OpenSubKey(pathClsidGuidOrApishnamespace.Substring(i), false))
+            {
+                return (k != null)
+                           ? ((string) k.GetValue(String.Empty, null))
+                           : null;
+            }
+        }
+
+
         private static string NameSpaceToGuidWithBraces(string ns)
         {
             ns = ns.Substring(ns.LastIndexOf('\\') + 1);
-            ns = ns.TrimStart(':', '\\');
+            //TODO: check if commented is really nonsence
+            ns = ns.TrimStart(':'/*, '\\'*/);
             if (!ns.StartsWith("{"))
                 ns = "{" + ns + "}";
             return ns;
