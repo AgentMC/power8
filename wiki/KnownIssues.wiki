@@ -12,12 +12,13 @@ This list is maintained internally, if you want to report an issue that is not o
   #  Separators don't have a template, not disabled and show different unrelated stuff on invokation
   #  Ram drives and Removable drives not supported now, drives list is static
   #  Style for Start Menu menuitem is wrong and hardly readable on dark themes
-  #  Ctrl+Click may not invoke Run dialog, depending on focused control
   #  Styles for menu-buttons and simple buttons differ
   #  Settings aren/t preserved through versions
-  #  Cannot display properties of a Computer object
-  #  "Open all users folder" item should be disabled for non-start-menu folders
   #  Menu from menu-button may show in unapropriate position
   #  Context menu from Main button may show in unapropriate position
+  #  Menu-buttons arrow-boxes are too narrow
+  #  Ctrl+Click may not invoke Run dialog, depending on focused control
+  #  Cannot display properties of a Computer object
+  #  "Open all users folder" item should be disabled for non-start-menu folders
   #  (?) W8 immersive links aren't run properly - have to investigate, postpone to RTM
   #  (warning) investigate why the process requires Exit() call to quit 
