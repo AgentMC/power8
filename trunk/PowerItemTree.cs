@@ -488,7 +488,8 @@ namespace Power8
                         continue;
 
                     var fn = Path.GetFileName(file);
-                    var fileIsLib = file.EndsWith(".library-ms");
+                    var fileIsLib = (Path.GetExtension(file) ?? "")
+                                         .Equals(".library-ms", StringComparison.InvariantCultureIgnoreCase);
                     AddSubItem(item, basePath, file, fileIsLib,
                                 fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
                                 fileIsLib);
@@ -681,7 +682,14 @@ namespace Power8
         private static string[] GetLibraryDirectories(string libraryMs)
         {
             var xdoc = new XmlDocument();
-            xdoc.Load(libraryMs);
+            try
+            {
+                xdoc.Load(libraryMs);
+            }
+            catch (XmlException) //malformed libraries XMLs hanlded
+            {
+                return new string[0];
+            }
             var nodeList = xdoc["libraryDescription"];
             if(nodeList == null)
                 return new string[0];
@@ -704,7 +712,7 @@ namespace Power8
             {
                 if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
                     arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12));
-                else
+                else if (!temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
                     arr[i] = temp[i];
             }
             return arr;
