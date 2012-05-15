@@ -26,6 +26,14 @@ namespace Power8
             }
             Util.MainDisp = Dispatcher;
             DispatcherUnhandledException += (sender, args) => MessageBox.Show(args.Exception.ToString());
+            //Move settings from previous ver
+            var std = Power8.Properties.Settings.Default;
+            if (!std.FirstRunDone)
+            {
+                std.Upgrade();
+                std.FirstRunDone = true;
+                std.Save();
+            }
             //Initialize standard folder icon
             foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))
             {
