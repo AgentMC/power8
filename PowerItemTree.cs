@@ -219,9 +219,10 @@ namespace Power8
                     {
                         switch (drive.DriveType)
                         {
-                            case DriveType.Removable:
+                            //TODO: implement drive list changing watcher and test with RAM drives, also check for Floppy, try-catch watchers generator;
+                            //case DriveType.Removable:
+                            //case DriveType.Ram:
                             case DriveType.Fixed:
-                            case DriveType.Ram:
                             case DriveType.Network:
                                 _myComputerItem.Items.Add(new PowerItem
                                 {
