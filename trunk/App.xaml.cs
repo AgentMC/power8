@@ -25,6 +25,7 @@ namespace Power8
                 Environment.Exit(2);
             }
             Util.MainDisp = Dispatcher;
+            DispatcherUnhandledException += (sender, args) => MessageBox.Show(args.Exception.ToString());
             //Initialize standard folder icon
             foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))
             {
