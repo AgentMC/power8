@@ -1,5 +1,11 @@
 #summary History of Power8 development/changelog.
 
+==Alpha 3 Hotfix 1 (v.0.3.1.0): 15.05.2012==
+  
+  # `[changed]` A message will be shown to user if unhandled exception occurs;
+  # `[fixed]` Startup failing on systems with Floppy drives;
+
+
 ==Alpha 3 (v.0.3.0.0): 14.05.2012==
   
   # `[new]` Significant speedup in displaying menus, including start menu;
