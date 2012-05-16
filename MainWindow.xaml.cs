@@ -265,7 +265,10 @@ namespace Power8
             {
                 var k = Microsoft.Win32.Registry.CurrentUser;
                 k = k.OpenSubKey(Properties.Resources.Stg_RegKeyRun, false);
-                return k != null && k.GetValue(Properties.Resources.Stg_AppShortName) != null;
+                return k != null &&
+                       string.Equals((string) k.GetValue(Properties.Resources.Stg_AppShortName),
+                                     Application.ExecutablePath,
+                                     StringComparison.InvariantCultureIgnoreCase);
             }
             set
             {
