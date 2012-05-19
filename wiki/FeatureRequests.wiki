@@ -1,0 +1,6 @@
+#summary Feature requests currently not put on backlog
+
+= List of ideas and requests we not commited yet =
+  * Skins/styles;
+  * Configurable user menus;
+  * Configuration dialog for example, to set up search engine;
