@@ -337,6 +337,17 @@
         <Setter Property="Padding" Value="6,3"/>
         <Setter Property="MinWidth" Value="{Binding MinWidth}"/>
         <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding FriendlyName}" Value="{x:Static my:PowerItemTree.SEPARATOR_NAME}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Separator Style="{StaticResource {x:Static MenuItem.SeparatorStyleKey}}"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
     <Style x:Key="ContextMenuItemStyle" TargetType="{x:Type MenuItem}">
         <Setter Property="Header" Value="{Binding Path=Name, 
@@ -345,7 +356,7 @@
                                                   Converter={StaticResource localizer}}"/>
         <Setter Property="Padding" Value="6,3"/>
     </Style>
-    
+
     <Style TargetType="{x:Type TextBox}" x:Key="SearchBoxStyle">
         <Setter Property="Height" Value="24"/>
         <Setter Property="Background">
