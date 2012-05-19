@@ -1,0 +1,36 @@
+#summary Page describes when features are planned to be implemented
+
+This page shows which features are planned to be implemented in upcoming release.
+For all other feature requests, currently not prioritized, please consult [FeatureRequests] page.
+
+
+= _Alpha_ =
+
+== Alpha 3 enhancement pack ==
+*estimated release date: 27.05.12*
+  * work with dynamic list of drives;
+  * installer;
+  * various bugfixes and UI enhancements;
+
+== Alpha 4 ==
+*estimated release date: 10.06.12*
+  * search using Power8 data;
+  * search using Windows Search engine;
+  * various bugfixes and UI enhancements missed in 0.3.5;
+  * (stretch-goal) theme for non-aero mode;
+
+
+= _Beta_ =
+
+== B1 ==
+*estimated release date: 24.06.12*
+  * launched items list;
+  * items can be pinned;
+  * each item has possible command lines obtainable by process event dispatcher;
+  * object jump lists also used as launch commands for items;
+  * theme for non-Aero if missed in 0.4;
+
+
+= _Power8 v.1.0 Release_ =
+*estimated release date: 01.07.12*
+  * various bugfixes and UI enhancements;
