@@ -9,7 +9,7 @@ For all other feature requests, currently not prioritized, please consult [Featu
 == Alpha 3 enhancement pack ==
 *estimated release date: 27.05.12*
   * work with dynamic list of drives;
-  * installer;
+  * installer and msi-based auto-updater
   * various bugfixes and UI enhancements;
 
 == Alpha 4 ==
