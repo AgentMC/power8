@@ -12,6 +12,7 @@ namespace Power8
 {
     static class PowerItemTree
     {
+        public const string SEPARATOR_NAME = "----";
 
         private static readonly string PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
         private static readonly string PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
@@ -185,10 +186,9 @@ namespace Power8
                             IsFolder = true
                         });
 
-                        //TODO: separator in binded ObservableCollection?
                         _controlPanelRoot.Items.Insert(1, new PowerItem
                         {
-                            FriendlyName = "----", 
+                            FriendlyName = SEPARATOR_NAME, 
                             Parent = _controlPanelRoot
                         });
                     }
@@ -288,7 +288,7 @@ namespace Power8
                     _networkRoot = Environment.OSVersion.Version.Major >= 6 ? xpWrkgrp7Net : xpNet7Wrkgrp;
                     _networkRoot.Items.Add(_networkRoot == xpWrkgrp7Net ? xpNet7Wrkgrp : xpWrkgrp7Net);
                     _networkRoot.Items.Add(connections);
-                    _networkRoot.Items.Add(new PowerItem {FriendlyName = "----", Parent = _networkRoot});
+                    _networkRoot.Items.Add(new PowerItem {FriendlyName = SEPARATOR_NAME, Parent = _networkRoot});
 
                     new Thread(() =>
                                    {
