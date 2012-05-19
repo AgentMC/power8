@@ -9,7 +9,6 @@ This list is maintained internally, if you want to report an issue that is not o
 = The list of issues =
 
   #  Icons for Administrative tools, Network connections and computers may not be shown
-  #  Separators don't have a template, not disabled and show different unrelated stuff on invokation
   #  Ram drives and Removable drives not supported now, drives list is static
   #  Style for Start Menu menuitem is wrong and hardly readable on dark themes
   #  Styles for menu-buttons and simple buttons differ
@@ -24,4 +23,5 @@ This list is maintained internally, if you want to report an issue that is not o
 
 = Done => goes to 0.3.5 / 0.4 =
 
-  #  Settings aren/t preserved through versions
+  #  Settings aren't preserved through versions
+  #  Separators don't have a template, not disabled and show different unrelated stuff on invocation
