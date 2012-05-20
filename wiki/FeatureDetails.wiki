@@ -1,4 +1,5 @@
 #summary Specific features of Power8 described in details
+#labels Featured
 =Specific features of Power8 described in details=
 
 == Check-for-update ==
