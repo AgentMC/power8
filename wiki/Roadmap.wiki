@@ -1,4 +1,5 @@
 #summary Page describes when features are planned to be implemented
+#labels Featured
 
 This page shows which features are planned to be implemented in upcoming release.
 For all other feature requests, currently not prioritized, please consult [FeatureRequests] page.
@@ -30,6 +31,7 @@ For all other feature requests, currently not prioritized, please consult [Featu
   * each item has possible command lines obtainable by process event dispatcher;
   * object jump lists also used as launch commands for items;
   * theme for non-Aero if missed in 0.4;
+  * icon and logo;
   * localization;
 
 
