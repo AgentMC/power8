@@ -1333,6 +1333,23 @@ namespace Power8
             public string szHelpFile; /* path to help file to use */
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
+        public class NewCplInfoA
+        {
+            public uint dwSize;    /* size, in bytes, of the structure */
+            public uint dwFlags;
+            public uint dwHelpContext; /* help context to use */
+            public IntPtr lData;   /* user defined data */
+            public IntPtr hIcon;   /* icon to use, this is owned by the Control Panel window (may be deleted) */
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+            public string szName;  /* display name */
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
+            public string szInfo;  /* description/tooltip/status bar string */
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
+            public string szHelpFile; /* path to help file to use */
+        }
+
+
 // ReSharper restore InconsistentNaming
     }
 }
