@@ -1,4 +1,5 @@
 #summary Feature requests currently not put on backlog
+#labels Featured
 
 = List of ideas and requests we not commited yet =
   * Skins/styles;
