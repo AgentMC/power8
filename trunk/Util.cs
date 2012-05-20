@@ -480,6 +480,9 @@ namespace Power8
             var info = new API.CplInfo {lData = new IntPtr(0xDEADC0D)};
             
             var hModule = API.LoadLibrary(cplFileName, IntPtr.Zero, API.LLF.AS_REGULAR_LOAD_LIBRARY);
+#if DEBUG
+            Debug.WriteLine("GCplI: begin 4 {1}, hModule<={0}", hModule, cplFileName);
+#endif
 
             if(hModule != IntPtr.Zero)
             {
@@ -492,15 +495,29 @@ namespace Power8
                     if (cplProc != null)
                     {
                         var hWnd = API.GetDesktopWindow();
+#if DEBUG
+                        Debug.WriteLine("GCplI: doing INIT...");
+#endif
                         var res = cplProc(hWnd, API.CplMsg.INIT, IntPtr.Zero, IntPtr.Zero);
                         if (res != 0)
                         {
+#if DEBUG
+                            Debug.WriteLine("GCplI: doing GETCOUNT...");
+#endif
                             res = cplProc(hWnd, API.CplMsg.GETCOUNT, IntPtr.Zero, IntPtr.Zero);
                             if (res > 0)
                             {
-                                var hMem = Marshal.AllocHGlobal(Marshal.SizeOf(typeof (API.CplInfo)));
+#if DEBUG
+                                Debug.WriteLine("GCplI: GETCOUNT returned {0}, doing INQUIRE...", res);
+#endif
+                                var structSize = Marshal.SizeOf(typeof (API.CplInfo));
+                                var hMem = Marshal.AllocHGlobal(structSize);
+                                ZeroMemory(hMem, structSize);
                                 cplProc(hWnd, API.CplMsg.INQUIRE, IntPtr.Zero, hMem);
                                 Marshal.PtrToStructure(hMem, info);
+#if DEBUG
+                                Debug.WriteLine("GCplI: INQUIRE returned {0},{1},{2}", info.idIcon, info.idInfo, info.idName);
+#endif
 
                                 var idIcon = info.idIcon;
                                 var idName = info.idName == 0 ? info.idInfo : info.idName;
@@ -508,14 +525,25 @@ namespace Power8
 
                                 if (idIcon == 0 || idName == 0)
                                 {
-                                    hMem = Marshal.ReAllocHGlobal(hMem,
-                                                                  new IntPtr(Marshal.SizeOf(typeof (API.NewCplInfoW))));
+                                    structSize = Marshal.SizeOf(typeof (API.NewCplInfoW));
+                                    hMem = Marshal.ReAllocHGlobal(hMem, new IntPtr(structSize));
+                                    ZeroMemory(hMem, structSize);
+#if DEBUG
+                                    Debug.WriteLine("GCplI: doing NEWINQUIRE...");
+#endif
                                     cplProc(hWnd, API.CplMsg.NEWINQUIRE, IntPtr.Zero, hMem);
-                                    var infoNew = (API.NewCplInfoW)Marshal.PtrToStructure(hMem,typeof(API.NewCplInfoW));
+                                    var infoNew =
+                                        (API.NewCplInfoW) Marshal.PtrToStructure(hMem, typeof (API.NewCplInfoW));
+#if DEBUG
+                                    Debug.WriteLine("GCplI: NEWINQUIRE returned {0},{1},{2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);
+#endif
                                     unmanagedIcon = infoNew.hIcon;
                                     name = infoNew.szName ?? infoNew.szInfo;
                                 }
                                 Marshal.FreeHGlobal(hMem);
+#if DEBUG
+                                Debug.WriteLine("GCplI: freed, conditional load string...");
+#endif
 
                                 if (name == null)
                                 {
@@ -525,17 +553,29 @@ namespace Power8
                                             name = Buffer.ToString();
                                     }
                                 }
+#if DEBUG
+                                Debug.WriteLine("GCplI: name={0}, conditional load icon...", new object[]{name});
+#endif
 
                                 if(unmanagedIcon == IntPtr.Zero)
                                     unmanagedIcon = API.LoadIcon(hModule, idIcon);
+#if DEBUG
+                                Debug.WriteLine("GCplI: icon={0}", unmanagedIcon);
+#endif
                                 if(unmanagedIcon != IntPtr.Zero)
                                 {
                                     container = ImageManager.GetImageContainerForIconSync(cplFileName, unmanagedIcon);
                                     PostBackgroundIconDestroy(unmanagedIcon);
                                 }
-                            
+
+#if DEBUG
+                                Debug.WriteLine("GCplI: doing STOP...");
+#endif
                                 cplProc(hWnd, API.CplMsg.STOP, IntPtr.Zero, info.lData);
                             }
+#if DEBUG
+                            Debug.WriteLine("GCplI: doing EXIT...");
+#endif
                             cplProc(hWnd, API.CplMsg.EXIT, IntPtr.Zero, IntPtr.Zero);
                         }
                     }
@@ -546,6 +586,12 @@ namespace Power8
             return new Tuple<string, ImageManager.ImageContainer>(name, container);
         }
 
+
+        private static void ZeroMemory (IntPtr hMem, int cb)
+        {
+            for (var i = 0; i < cb; i++)
+                Marshal.WriteByte(hMem, i, 0);
+        }
 
 
         public class ShellExecuteHelper

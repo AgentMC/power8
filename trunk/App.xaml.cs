@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -24,7 +25,14 @@ namespace Power8
                     Power8.Properties.Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(2);
             }
+
             Util.MainDisp = Dispatcher;
+            //Error handling and detection
+#if DEBUG
+            var l = new TextWriterTraceListener(Environment.ExpandEnvironmentVariables(@"%temp%\p8log.txt"));
+            Debug.AutoFlush = true;
+            Debug.Listeners.Add(l);
+#endif
             DispatcherUnhandledException += (sender, args) => MessageBox.Show(args.Exception.ToString());
             //Move settings from previous ver
             var std = Power8.Properties.Settings.Default;
