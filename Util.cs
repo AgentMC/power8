@@ -525,20 +525,40 @@ namespace Power8
 
                                 if (idIcon == 0 || idName == 0)
                                 {
-                                    structSize = Marshal.SizeOf(typeof (API.NewCplInfoW));
-                                    hMem = Marshal.ReAllocHGlobal(hMem, new IntPtr(structSize));
-                                    ZeroMemory(hMem, structSize);
+                                    structSize = Marshal.SizeOf(typeof (API.NewCplInfoW)); //v- just in case...
+                                    hMem = Marshal.ReAllocHGlobal(hMem, new IntPtr(structSize*2));
+                                    ZeroMemory(hMem, structSize*2);
 #if DEBUG
                                     Debug.WriteLine("GCplI: doing NEWINQUIRE...");
 #endif
                                     cplProc(hWnd, API.CplMsg.NEWINQUIRE, IntPtr.Zero, hMem);
                                     var infoNew =
                                         (API.NewCplInfoW) Marshal.PtrToStructure(hMem, typeof (API.NewCplInfoW));
+
+                                    if (infoNew.dwSize == structSize)
+                                    {
 #if DEBUG
-                                    Debug.WriteLine("GCplI: NEWINQUIRE returned {0},{1},{2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);
+                                        Debug.WriteLine("GCplI: got NewCplInfoW: {0},{1},{2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);
 #endif
-                                    unmanagedIcon = infoNew.hIcon;
-                                    name = infoNew.szName ?? infoNew.szInfo;
+                                        unmanagedIcon = infoNew.hIcon;
+                                        name = infoNew.szName ?? infoNew.szInfo;
+                                    }
+                                    else if (infoNew.dwSize == Marshal.SizeOf(typeof(API.NewCplInfoA)))
+                                    {
+                                        var infoNewA =
+                                            (API.NewCplInfoA)Marshal.PtrToStructure(hMem, typeof(API.NewCplInfoA));
+#if DEBUG
+                                        Debug.WriteLine("GCplI: got NewCplInfoA: {0},{1},{2}", infoNewA.hIcon, infoNewA.szInfo, infoNewA.szName);
+#endif
+                                        unmanagedIcon = infoNewA.hIcon;
+                                        name = infoNewA.szName ?? infoNewA.szInfo;
+                                    }
+#if DEBUG
+                                    else
+                                    {
+                                        Debug.WriteLine("GCplI: NEWINQUIRE: structure size not supported: 0x{0:x} with IntPtr size 0x{1:x}", infoNew.dwSize, IntPtr.Size);
+                                    }
+#endif
                                 }
                                 Marshal.FreeHGlobal(hMem);
 #if DEBUG
