@@ -1,4 +1,5 @@
 #summary Known issues of the project
+#labels Featured
 
 = Introduction =
 
