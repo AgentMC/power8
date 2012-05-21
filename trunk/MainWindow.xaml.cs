@@ -25,6 +25,8 @@ namespace Power8
         private IntPtr _taskBar, _showDesktopBtn;
         private Thread _updateThread;
 
+        private readonly EventWaitHandle _updateThreadLock = new EventWaitHandle(false, EventResetMode.AutoReset);
+
         #region Window (de)init 
 
         public MainWindow()
@@ -81,6 +83,8 @@ namespace Power8
             Top = 0;
             _watch = true;
             new Thread(WatchDesktopBtn){Name = "ShowDesktop button watcher"}.Start();
+            _updateThreadLock.Set();
+            _updateThreadLock.Close();
 
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
 
@@ -206,6 +210,8 @@ namespace Power8
 
         private void UpdateCheckThread()
         {
+            _updateThreadLock.WaitOne();
+
             int cycles = 0;
             var client = new WebClient();
             _update = true;
