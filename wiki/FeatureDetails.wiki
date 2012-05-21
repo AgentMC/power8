@@ -8,7 +8,7 @@ This feature checks for new version. When you check the corresponding menu item 
 
 After that, the check occurs every 12 hours.
 
-Each check downloads 2.26 KB file named "AssemblyInfo.cs" from the project source code and uses it to identify the version.
+Each check downloads 2.26 KB file named `"AssemblyInfo.cs"` from the project source code and uses it to identify the version.
 
 At the moment, when version is found, only notification is available, later the auto-update will be implemented.
 
