@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Power8", "Power8.csproj", "{010D2DA1-C477-4CFE-8171-EEE326E29FA0}"
 EndProject
+Project("{840C416C-B8F3-42BC-B0DD-F6BB14C9F8CB}") = "P8Installer", "P8Installer\P8Installer.aiproj", "{D3CA08E3-7269-4833-A0F7-1107C75BE830}"
+	ProjectSection(ProjectDependencies) = postProject
+		{010D2DA1-C477-4CFE-8171-EEE326E29FA0} = {010D2DA1-C477-4CFE-8171-EEE326E29FA0}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +24,13 @@ Global
 		{010D2DA1-C477-4CFE-8171-EEE326E29FA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{010D2DA1-C477-4CFE-8171-EEE326E29FA0}.Release|x86.ActiveCfg = Release|x86
 		{010D2DA1-C477-4CFE-8171-EEE326E29FA0}.Release|x86.Build.0 = Release|x86
+		{D3CA08E3-7269-4833-A0F7-1107C75BE830}.Debug|Any CPU.ActiveCfg = DefaultBuild|x86
+		{D3CA08E3-7269-4833-A0F7-1107C75BE830}.Debug|x86.ActiveCfg = All|x86
+		{D3CA08E3-7269-4833-A0F7-1107C75BE830}.Debug|x86.Build.0 = All|x86
+		{D3CA08E3-7269-4833-A0F7-1107C75BE830}.Release|Any CPU.ActiveCfg = DefaultBuild|x86
+		{D3CA08E3-7269-4833-A0F7-1107C75BE830}.Release|Any CPU.Build.0 = DefaultBuild|x86
+		{D3CA08E3-7269-4833-A0F7-1107C75BE830}.Release|x86.ActiveCfg = All|x86
+		{D3CA08E3-7269-4833-A0F7-1107C75BE830}.Release|x86.Build.0 = All|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

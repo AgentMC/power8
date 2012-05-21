@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">All</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{d3ca08e3-7269-4833-a0f7-1107c75be830}</ProjectGuid>
+    <OutputType>msi</OutputType>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>P8Installer.aip</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <IsWindowsApplication>True</IsWindowsApplication>
+    <AssemblyName>P8Installer</AssemblyName>
+    <Name>P8Installer</Name>
+    <RootNamespace>P8Installer</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'All' ">
+    <DebugSymbols>false</DebugSymbols>
+    <OutputPath>msi\</OutputPath>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'DefaultBuild' " />
+  <ItemGroup>
+    <Compile Include="P8Installer.aip">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Target Name="Build">
+    <!--Create the output directory-->
+    <!-- <MakeDir Directories="$(OutputPath)"  Condition="!Exists('$(OutputPath)')" /> -->
+    <!-- Run the advanced installer on the .aip project - build -->
+    <!-- Path to the Advanced Installer version used to build .aip is specified in the registry HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS -->
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'=='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.1.1))bin\x86\AdvancedInstaller.com&quot; /build &quot;%(Compile.Identity)&quot;" />
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'!='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.1.1))bin\x86\AdvancedInstaller.com&quot; /build &quot;%(Compile.Identity)&quot; -buildslist $(Configuration)" />
+  </Target>
+  <Target Name="Rebuild">
+    <!--Create the output directory-->
+    <!-- MakeDir Directories="$(OutputPath)"  Condition="!Exists('$(OutputPath)')" /> -->
+    <!-- Run the advanced installer on the .aip project - rebuild -->
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'=='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.1.1))bin\x86\AdvancedInstaller.com&quot; /rebuild &quot;%(Compile.Identity)&quot;" />
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'!='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.1.1))bin\x86\AdvancedInstaller.com&quot; /rebuild &quot;%(Compile.Identity)&quot; -buildslist $(Configuration)" />
+  </Target>
+  <Target Name="Clean">
+  </Target>
+  <Target Name="ResolveAssemblyReferences">
+  </Target>
+</Project>

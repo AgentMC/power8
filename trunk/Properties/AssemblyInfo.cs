@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Power8")]
 [assembly: AssemblyDescription("Start menu replacer for Windows 8")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("HACK-Design")]
+[assembly: AssemblyCompany("Power8 Team")]
 [assembly: AssemblyProduct("Power8")]
-[assembly: AssemblyCopyright("© HACK-Design 2012")]
+[assembly: AssemblyCopyright("© Power8 Team 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
