@@ -29,7 +29,4 @@ This list is maintained internally, if you want to report an issue that is not o
   #  (?) W8 immersive links aren't run properly - have to investigate, postpone to RTM
   #  (warning) investigate why the process requires Exit() call to quit 
 
-= Done => goes to 0.3.5 or earlier hotfix =
-
-  #  Settings aren't preserved through versions
-  #  Separators don't have a template, not disabled and show different unrelated stuff on invocation
+= Done => goes to 0.3.5 =
