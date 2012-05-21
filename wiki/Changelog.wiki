@@ -14,6 +14,7 @@
     * now detecting ".library-ms" case-insensitive,
     * won't parse malformed XML and not crash (W8 x86 Pictures problem),
     * skip "shell:" commands inside library - means library has not yet been processed by the system;
+  # `[fixed]` Startup synchronization issue: Power8 wouldn't check for updates on startup even if it is set in configuration. Uncheck and check back again was required to make it work.
 
 
 ==Alpha 3 Hotfix 1 (v.0.3.1.0): 15.05.2012==
