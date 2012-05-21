@@ -7,7 +7,7 @@
   # `[changed]` Enhanced and speed-up icons extraction:
     * fixes slow expanding C:\Windows\Fonts,
     * fixes 1 core loaded 100% on x86 systems in some cases;
-  # `[changed]` Enhanced detection of is "AutoStart" on or off;
+  # `[changed]` Enhanced detection of is "Auto Start" on or off;
   # `[fixed]` Startup failing on systems with specific Control Panel elements, specifically C-Media CPL (C-Media products, ASUS Xonar, and many others);
   # `[fixed]` Display of Separators in menus (Control Panel, Network items);
   # `[fixed]` Libraries fixes:
