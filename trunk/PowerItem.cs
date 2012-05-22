@@ -146,7 +146,7 @@ namespace Power8
                         if ((Argument.Length > 1 && Argument[Argument.Length - 1] == ':')
                             ||
                             (Argument.Length > 2 && Argument.EndsWith(":\\"))) //drive name
-                            _friendlyName = String.Format("{0}\t{1}", Argument, DriveManager.GetDriveLabel(Argument));
+                            _friendlyName = String.Format("{0} - {1}", Argument, DriveManager.GetDriveLabel(Argument));
                         else
                             _friendlyName = Argument;
                     }

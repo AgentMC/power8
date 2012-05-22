@@ -64,7 +64,8 @@ begin:
                                 DriveType.Ram, 
                                 DriveType.Removable }.Contains(driveInfo.DriveType)
                         && dNameUcase != "A:\\"
-                        && dNameUcase != "B:\\")
+                        && dNameUcase != "B:\\"
+                        && driveInfo.IsReady)
                     {
                         DriveNames.Add(dName);          //Add drive to collection
 

@@ -17,10 +17,9 @@ namespace Power8
         private static readonly string PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
         private static readonly string PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
 
-        private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true};
-        private static readonly ObservableCollection<PowerItem> StartMenuCollection =
-            new ObservableCollection<PowerItem> {StartMenuRootItem};
-        public static ObservableCollection<PowerItem> StartMenuRoot { get { return StartMenuCollection; } }
+        private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true, Argument = @"\"};
+        public static readonly ObservableCollection<PowerItem> StartMenuRoot
+            = new ObservableCollection<PowerItem> {StartMenuRootItem};
 
         private static PowerItem _adminToolsItem;
         public static PowerItem AdminToolsRoot
