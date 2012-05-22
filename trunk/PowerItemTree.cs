@@ -17,8 +17,6 @@ namespace Power8
         private static readonly string PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
         private static readonly string PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
 
-        private static readonly List<FileSystemWatcher> Watchers = new List<FileSystemWatcher>();
-
         private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true};
         private static readonly ObservableCollection<PowerItem> StartMenuCollection =
             new ObservableCollection<PowerItem> {StartMenuRootItem};
@@ -215,34 +213,7 @@ namespace Power8
                     };
                     _myComputerItem.Icon = ImageManager.GetImageContainerSync(_myComputerItem, API.Shgfi.LARGEICON);
                     _myComputerItem.Icon.ExtractSmall();
-                    foreach (var drive in DriveInfo.GetDrives())
-                    {
-                        switch (drive.DriveType)
-                        {
-                            //TODO: implement drive list changing watcher and test with RAM drives, also check for Floppy, try-catch watchers generator;
-                            //case DriveType.Removable:
-                            //case DriveType.Ram:
-                            case DriveType.Fixed:
-                            case DriveType.Network:
-                                _myComputerItem.Items.Add(new PowerItem
-                                {
-                                    Argument = drive.Name,
-                                    AutoExpand = true,
-                                    IsFolder = true,
-                                    Parent = _myComputerItem,
-                                    NonCachedIcon = true
-                                });
-                                var w = new FileSystemWatcher(drive.Name);
-                                w.Created += FileChanged;
-                                w.Deleted += FileChanged;
-                                w.Changed += FileChanged;
-                                w.Renamed += FileRenamed;
-                                w.IncludeSubdirectories = true;
-                                Watchers.Add(w);
-                                BtnStck.Instanciated += (sender, args) => w.EnableRaisingEvents = true;
-                                break;
-                        }
-                    }
+                    DriveManager.Init(FileChanged, FileRenamed, _myComputerItem);
                 }
                 return _myComputerItem;
             }
