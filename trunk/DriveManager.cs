@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace Power8
@@ -14,6 +12,7 @@ namespace Power8
         private static FileSystemEventHandler _fileChanged;
         private static RenamedEventHandler _fileRenamed;
         private static PowerItem _drivesRoot;
+        private static DriveInfo[] _drives;
 
         public static void Init(FileSystemEventHandler changedHandler, RenamedEventHandler renamedHandler, PowerItem drivesRoot)
         {
@@ -26,13 +25,14 @@ namespace Power8
         private static void Worker ()
         {
 begin:
-            var drives = DriveInfo.GetDrives();
+            lock(DriveNames)
+                _drives = DriveInfo.GetDrives();
 
             //Have some drives been removed?
             for (int i = DriveNames.Count - 1; i >= 0; i--)
             {
                 var dName = DriveNames[i];
-                if (drives.All(d => d.Name != dName))   //drive removed
+                if (_drives.All(d => d.Name != dName))   //drive removed
                 {
                     var watcher = Watchers.FirstOrDefault(w => w.Path == dName);
                     if (watcher != null)                //stop drive watcher
@@ -53,18 +53,18 @@ begin:
             }
 
             //Have some drives been addded?
-            foreach (var driveInfo in drives)
+            foreach (var driveInfo in _drives)
             {
                 var dName = driveInfo.Name;
                 if (DriveNames.All(d => d != dName))     //drive added
                 {
-                    var dNameLcase = dName.ToLowerInvariant();
+                    var dNameUcase = dName.ToUpperInvariant();
                     if (new[]{  DriveType.Fixed, 
                                 DriveType.Network, 
                                 DriveType.Ram, 
                                 DriveType.Removable }.Contains(driveInfo.DriveType)
-                        && dNameLcase != "A:\\"
-                        && dNameLcase != "B:\\")
+                        && dNameUcase != "A:\\"
+                        && dNameUcase != "B:\\")
                     {
                         DriveNames.Add(dName);          //Add drive to collection
 
@@ -99,5 +99,16 @@ begin:
                 goto begin;
         }
 
+        public static string GetDriveLabel(string driveName)
+        {
+            DriveInfo drv;
+            lock (DriveNames)
+            {
+                if(_drives == null)
+                    _drives = DriveInfo.GetDrives();
+                drv = _drives.FirstOrDefault(d => d.Name == driveName);
+            }
+            return (drv != null) ? drv.VolumeLabel : string.Empty;
+        }
     }
 }
