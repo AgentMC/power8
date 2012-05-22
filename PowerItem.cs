@@ -141,7 +141,19 @@ namespace Power8
                 else
                 {
                     var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
-                    _friendlyName = string.IsNullOrEmpty(path) ? Argument : path;
+                    if(string.IsNullOrEmpty(path))
+                    {
+                        if ((Argument.Length > 1 && Argument[Argument.Length - 1] == ':')
+                            ||
+                            (Argument.Length > 2 && Argument.EndsWith(":\\"))) //drive name
+                            _friendlyName = String.Format("{0}\t{1}", Argument, DriveManager.GetDriveLabel(Argument));
+                        else
+                            _friendlyName = Argument;
+                    }
+                    else
+                    {
+                        _friendlyName = path;
+                    }
                 }
                 
                 return _friendlyName;
