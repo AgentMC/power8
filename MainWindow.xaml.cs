@@ -210,7 +210,8 @@ namespace Power8
 
         private void UpdateCheckThread()
         {
-            _updateThreadLock.WaitOne();
+            if(!_updateThreadLock.SafeWaitHandle.IsClosed)
+                _updateThreadLock.WaitOne();
 
             int cycles = 0;
             var client = new WebClient();
