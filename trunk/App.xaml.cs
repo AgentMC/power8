@@ -14,7 +14,7 @@ namespace Power8
     /// </summary>
     public partial class App
     {
-        internal readonly Thread InitTreeThread = new Thread(PowerItemTree.InitTree) {Name = "InitTree"};
+        private readonly Thread _initTreeThread = new Thread(PowerItemTree.InitTree) {Name = "InitTree"};
         
         public App()
         {
@@ -67,7 +67,7 @@ namespace Power8
                     break;
             }
             //Build tree
-            InitTreeThread.Start();
+            _initTreeThread.Start();
             //react on DwmCompositionChanged event
             ComponentDispatcher.ThreadFilterMessage += WndProc;
         }
@@ -87,7 +87,7 @@ namespace Power8
 
         public event EventHandler DwmCompositionChanged ;
 
-        protected virtual void OnDwmCompositionChanged()
+        protected void OnDwmCompositionChanged()
         {
             var handler = DwmCompositionChanged;
             if (handler != null) handler(this, null);
