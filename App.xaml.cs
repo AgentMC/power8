@@ -114,19 +114,16 @@ namespace Power8
         {
             try
             {
-                var pi = Util.ExtractRelatedPowerItem(sender);
                 var info = new API.ShellExecuteInfo
                 {
                     fMask =
                         API.SEIFlags.SEE_MASK_INVOKEIDLIST | API.SEIFlags.SEE_MASK_NOCLOSEPROCESS |
                         API.SEIFlags.SEE_MASK_FLAG_NO_UI | API.SEIFlags.SEE_MASK_NOASYNC,
                     hwnd = BtnStck.Instance.GetHandle(),
+                    nShow = API.SWCommands.HIDE,
                     lpVerb = API.SEIVerbs.SEV_Properties,
-                    lpFile = PowerItemTree.GetResolvedArgument(pi, false),
-                    nShow = API.SWCommands.HIDE
+                    lpFile = Args4PropsAndCont(Util.ExtractRelatedPowerItem(sender), ((MenuItem)sender).Name)
                 };
-                if (pi.IsLink && ((MenuItem)sender).Name == "AppShowTargetProperties")
-                    info.lpFile = Util.ResolveLink(info.lpFile);
                 var executer = new Util.ShellExecuteHelper(info);
                 if (!executer.ShellExecuteOnSTAThread())
                     throw new ExternalException(string.Format(
@@ -140,19 +137,26 @@ namespace Power8
 
         private void OpenContainerClick(object sender, RoutedEventArgs e)
         {
-            var item = Util.ExtractRelatedPowerItem(sender);
+            Util.StartExplorer("/select,\""
+                               + Args4PropsAndCont(Util.ExtractRelatedPowerItem(sender), ((MenuItem) sender).Name)
+                               + "\"");
+        }
+
+        private static string Args4PropsAndCont(PowerItem item, string callerName)
+        {
             string arg = null;
-            if (!item.IsNotControlPanelFlowItem)
+            if (item.IsControlPanelChildItem)
             {
                 var executor = Util.GetOpenCommandForClass(item.Argument);
                 if (executor != null && File.Exists(executor.Item1))
                     arg = executor.Item1;
             }
-            if(arg == null)
-                arg = PowerItemTree.GetResolvedArgument(item, false);
-            if (item.IsLink && ((MenuItem)sender).Name == "AppOpenTargetContainer")
+            if (arg == null)
+                arg = PowerItemTree.GetResolvedArgument(item);
+            if (item.IsLink && (callerName == "AppOpenTargetContainer" 
+                                || callerName == "AppShowTargetProperties"))
                 arg = Util.ResolveLink(arg);
-            Util.StartExplorer("/select,\"" + arg + "\"");
+            return arg;
         }
 
 

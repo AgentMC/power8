@@ -146,7 +146,7 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>http://power8.googlecode.com/</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>Error {0} caused while trying to call ShellExecuteEx()
+    <value>Error {0} caused while trying to show object Properties
 {1}</value>
   </data>
   <data name="Str_FailFastFormat" xml:space="preserve">
