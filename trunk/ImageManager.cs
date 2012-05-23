@@ -40,7 +40,7 @@ namespace Power8
             string resolvedArg, descr;
             try
             {
-                resolvedArg = PowerItemTree.GetResolvedArgument(item, false);
+                resolvedArg = PowerItemTree.GetResolvedArgument(item);
                 descr = GetObjectDescriptor(item, resolvedArg);
             }
             catch (IOException)

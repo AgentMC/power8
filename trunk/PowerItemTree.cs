@@ -506,7 +506,7 @@ namespace Power8
             if (item.IsSpecialObject || arg1 == null)
             {
                 bool cplSucceeded = false;
-                if (!item.IsFolder && item.Parent != null && item.Parent.SpecialFolderId == API.Csidl.CONTROLS)
+                if (item.IsControlPanelChildItem)
                 {
                     //Control panel flow item
                     var command = Util.GetOpenCommandForClass(arg1);
@@ -570,11 +570,11 @@ namespace Power8
             return psi;
         }
 
-        public static string GetResolvedArgument(PowerItem item, bool prioritizeCommons)
+        public static string GetResolvedArgument(PowerItem item)
         {
             if(item.IsSpecialObject)
                 return item.Argument;
-            var psi = ResolveItem(item, prioritizeCommons);
+            var psi = ResolveItem(item, false);
             return item.IsFolder ? psi.Arguments : psi.FileName;
         }
 

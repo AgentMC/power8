@@ -14,7 +14,7 @@ namespace Power8
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
         private string _friendlyName, _resIdString;
-        private bool _expanding, _hasLargeIcon, _autoExpand;
+        private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon;
 
         public string Argument { get; set; }
         public PowerItem Parent { get; set; }
@@ -23,12 +23,14 @@ namespace Power8
         public API.Csidl SpecialFolderId { get; set; }
 
 
+
         public PowerItem()
         {
             SpecialFolderId = API.Csidl.INVALID;
         }
     
 
+        //1st block - icon
         public ImageManager.ImageContainer Icon
         {
             get
@@ -60,7 +62,6 @@ namespace Power8
             }
          }
 
-        private bool _nonCachedIcon;
         public bool NonCachedIcon
         {
             get { return IsLibrary || _nonCachedIcon; } 
@@ -68,8 +69,7 @@ namespace Power8
         }
 
 
-
-
+        //3rd block - children
         public ObservableCollection<PowerItem> Items
         {
             get
@@ -97,10 +97,7 @@ namespace Power8
         }
 
 
-
-
-
-
+        //2nd block - text
         public string ResourceIdString
         {
             get { return _resIdString; } 
@@ -110,7 +107,6 @@ namespace Power8
                 FriendlyName = null;
             }
         }
-
 
         public string FriendlyName
         {
@@ -170,6 +166,8 @@ namespace Power8
             get { return Parent == null ? 300 : 0; }
         }
 
+
+        //Not a visual block - binding and resolving helpers
         public bool IsFile
         {
             get { return Argument != null && !IsFolder; }
@@ -195,16 +193,34 @@ namespace Power8
                   Argument.EndsWith(".library-ms", StringComparison.InvariantCultureIgnoreCase); }
         }
 
-        public bool IsNotControlPanelFlowItem
+        public bool IsNotPureControlPanelFlowItem
         {
             get
             {
-                return Parent == null 
-                    || Parent.SpecialFolderId != API.Csidl.CONTROLS 
-                    || (Argument != null 
-                        && Argument.EndsWith(".cpl", StringComparison.InvariantCultureIgnoreCase));
+                if (!IsControlPanelChildItem)
+                    return true;
+                if(Argument != null)
+                {
+                    if(Argument.EndsWith(".cpl", StringComparison.InvariantCultureIgnoreCase))
+                        return true;
+                    var cmd = Util.GetOpenCommandForClass(Argument);
+                    if(cmd != null && cmd.Item1 != null && !cmd.Item1.ToLower().Contains("rundll"))
+                        return true;
+                }
+                return false;
             }
         }
+
+        public bool IsControlPanelChildItem
+        {
+            get { return !IsFolder && Parent != null && Parent.SpecialFolderId == API.Csidl.CONTROLS; }
+        }
+
+        public bool IsFolderUnderStartMenu
+        {
+            get { return IsFolder && Argument.StartsWith(@"\"); }
+        }
+
 
 
         public int CompareTo(PowerItem other)
@@ -216,6 +232,8 @@ namespace Power8
         {
             return FriendlyName;
         }
+
+
 
         public void Invoke()
         {
