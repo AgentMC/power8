@@ -11,12 +11,12 @@ This list is maintained internally, if you want to report an issue that is not o
 
 == Planned for upcoming release == 
 
-  #  (AK) Icons for Administrative tools, Network connections and computers may not be shown (template creation required)
-  #  (AK) Style for Start Menu menuitem is wrong and hardly readable on dark themes
+  #  (AK) Style for Start Menu menuitem: hide icon, make text readable on dark themes
+  #  (??) Dynamic margins in new MI templates?
   #  (AK) Styles for menu-buttons and simple buttons differ
   #  (MM) Installer required, msi-based auto-update should be implemented
-  #  (AK) Menu from menu-button may show in unapropriate position
-  #  (AK) Context menu from Main button may show in unapropriate position
+  #  (AK) Menu from menu-button may show in inappropriate position
+  #  (AK) Context menu from Main button may show in inappropriate position
   #  (AK) Menu-buttons arrow-boxes are too narrow
 
 == Other known ==
@@ -31,3 +31,4 @@ This list is maintained internally, if you want to report an issue that is not o
   #  Ram drives and Removable drives not supported now, drives list is static
   #  "Open"/"Open all users folder" doesn't work for root start menu item
   #  "Open all users folder" item should be disabled for non-start-menu folders
+  #  Icons for Administrative tools, Network connections and computers may not be shown (template creation required)
