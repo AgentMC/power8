@@ -63,11 +63,6 @@ namespace Power8
                     else
                         container.ExtractLarge();
                 }
-                //TODO: after templating all items with <Image> there'll be no need in this:
-                if (iconNeeded == API.Shgfi.SMALLICON)
-                    container.GenerateSmallImage();
-                else
-                    container.GenerateLargeImage();
 #if DEBUG
                 Debug.WriteLine(dbgLine + "end<<<<<<<<<<<<<<");
 #endif
@@ -97,7 +92,6 @@ namespace Power8
             private readonly string _initialObject;
             private readonly API.Csidl _id;
             private ImageSource _smallBitmap, _largeBitmap;
-            private System.Windows.Controls.Image _smallImage, _largeImage;
             private bool _smallExtracted, _largeExtracted;
 
             public ImageSource SmallBitmap
@@ -119,26 +113,6 @@ namespace Power8
                     return _largeBitmap;
                 }
                 private set { _largeBitmap = value; }
-            }
-            public System.Windows.Controls.Image SmallImage
-            {
-                get
-                {
-                    if (_smallImage == null)
-                        GenerateSmallImage();
-                    return _smallImage;
-                }
-                private set { _smallImage = value; }
-            }
-            public System.Windows.Controls.Image LargeImage 
-            {
-                get
-                {
-                    if(_largeImage == null)
-                        GenerateLargeImage();
-                    return _largeImage;
-                } 
-                private set { _largeImage = value; } 
             }
 
             public ImageContainer(string objectToGetIcons, string typeDescriptor, API.Csidl specialId)
@@ -175,11 +149,6 @@ namespace Power8
                 _smallExtracted = true;
             }
 
-            public void GenerateSmallImage()
-            {
-                SmallImage = new System.Windows.Controls.Image {Source = SmallBitmap, Width=16, Height=16};
-            }
-
             public void ExtractLarge()
             {
                 if(_largeBitmap != null)
@@ -198,11 +167,6 @@ namespace Power8
                 }
 #endif
                 _largeExtracted = true;
-            }
-
-            public void GenerateLargeImage()
-            {
-                LargeImage = new System.Windows.Controls.Image {Source = LargeBitmap, Width=32, Height=32};
             }
 
             private static BitmapSource ExtractInternal(IntPtr handle)

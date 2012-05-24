@@ -4,7 +4,8 @@
  xmlns:my="clr-namespace:Power8" mc:Ignorable="d">
     <!-- Resource dictionary entries should be defined here. -->
     <my:NameToResourceConverter x:Key="localizer"/>
-
+    
+    <!-- Buttons -->
     <Style TargetType="{x:Type Button}">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3,0"/>
@@ -108,6 +109,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
     <Style TargetType="{x:Type Button}" x:Key="MainButtonTransparentStyle">
         <Setter Property="FocusVisualStyle" Value="{DynamicResource ButtonFocusVisual}"/>
         <Setter Property="Background" Value="{DynamicResource ButtonNormalBackground}"/>
@@ -147,6 +149,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
     <Style TargetType="{x:Type Button}" x:Key="LeftMenuButtonStyle">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3"/>
@@ -239,11 +242,22 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Buttons End -->
+
 
     <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
         <DockPanel IsItemsHost="True"/>
     </ItemsPanelTemplate>
     
+    <HierarchicalDataTemplate ItemsSource="{Binding Items}" x:Key="MenuDataTemaplte">  
+        <StackPanel Orientation="Horizontal">  
+            <Image Source="{Binding Icon.SmallBitmap}" Margin="-30,0,10,0" Width="16" Height="16" Stretch="Uniform"/>  
+            <TextBlock Text="{Binding FriendlyName}"/>  
+        </StackPanel>     
+    </HierarchicalDataTemplate>             
+    
+    <!-- Menu -->
     <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
         <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
@@ -283,7 +297,9 @@
         </Setter>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="ItemsPanel" Value="{DynamicResource ItemsPanelTemplate}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource MenuDataTemaplte}"/>
     </Style>
+    
     <Style x:Key="RightMenuStyle" TargetType="{x:Type Menu}">
         <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
         <Setter Property="FontFamily" Value="{DynamicResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
@@ -328,9 +344,6 @@
     </Style>
 
     <Style x:Key="MenuItemStyle" TargetType="{x:Type MenuItem}">
-        <Setter Property="Icon" Value="{Binding Icon.SmallImage}"/>
-        <Setter Property="Header" Value="{Binding FriendlyName}"/>
-        <Setter Property="ItemsSource" Value="{Binding Items}"/>
         <Setter Property="Command" Value="{DynamicResource globalClickCommand}"/>
         <Setter Property="CommandParameter" Value="{Binding}"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -349,6 +362,7 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+    
     <Style x:Key="ContextMenuItemStyle" TargetType="{x:Type MenuItem}">
         <Setter Property="Header" Value="{Binding Path=Name, 
                                                   RelativeSource={RelativeSource Self}, 
@@ -357,6 +371,9 @@
         <Setter Property="Padding" Value="6,3"/>
     </Style>
 
+    <!-- Menu End -->
+
+    
     <Style TargetType="{x:Type TextBox}" x:Key="SearchBoxStyle">
         <Setter Property="Height" Value="24"/>
         <Setter Property="Background">
