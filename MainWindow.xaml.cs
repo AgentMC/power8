@@ -221,17 +221,25 @@ namespace Power8
                 if (cycles == 0)
                 {
                     try
-                    {
+                    {//parsing
                         var info =
                             new System.IO.StringReader(
                                 client.DownloadString(Properties.Resources.Stg_Power8URI + Properties.Resources.Stg_AssemblyInfoURI));
-                        string line;
+                        string line, verLine = null, uri7z = null, uriMsi = null;
                         while ((line = info.ReadLine()) != null)
                         {
                             if (line.StartsWith("[assembly: AssemblyVersion("))
-                            {
-                                var verLine = line.Substring(28).TrimEnd(new[] {']', ')', '"'});
-                                if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
+                                verLine = line.Substring(28).TrimEnd(new[] { ']', ')', '"' });
+                            else if (line.StartsWith(@"//7zuri="))
+                                uri7z = line.Substring(8);
+                            else if (line.StartsWith(@"//msuri="))
+                                uriMsi = line.Substring(8);
+                        }
+                        if(verLine != null)
+                        {//updating?
+                            if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
+                            {//updating!
+                                if (uri7z == null || uriMsi == null) //old approach
                                 {
                                     switch (MessageBox.Show(string.Format(
                                                 Properties.Resources.Str_UpdateAvailableFormat, Application.ProductVersion, verLine),
@@ -247,8 +255,13 @@ namespace Power8
                                             break;
                                     }
                                 }
-                                break;
+                                else
+                                {
+                                    Util.Send(()=> new UpdateNotifier(Application.ProductVersion, verLine, uri7z,
+                                                                      uriMsi).Show());
+                                }
                             }
+
                         }
                     }
                     catch (Exception ex)

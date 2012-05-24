@@ -672,5 +672,10 @@ namespace Power8
             else
                 Process.Start(explorerString);
         }
+
+        public static void StartExplorerSelect(string objectToSelect)
+        {
+            StartExplorer("/select,\"" + objectToSelect + "\"");
+        }
     }
 }
