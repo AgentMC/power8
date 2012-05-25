@@ -49,13 +49,13 @@
             <Button Click="ButtonRunClick" Name="ButtonRun" Margin="0"/>
             <Separator Margin="0,5"/>
             <!--Completely different design here-->
-            <Button Click="ButtonShutdownClick" Name="ButtonShutdown" Margin="0"/>
-            <Button Click="ButtonRestartClick" Name="ButtonRestart" Margin="0"/>
-            <Button Click="ButtonSleepClick" Name="ButtonSleep" Margin="0"/>
-            <Button Click="ButtonHibernateClick" Name="ButtonHibernate" Margin="0"/>
-            <Button Click="ButtonLogOffClick" Name="ButtonLogOff" Margin="0"/>
-            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave" Margin="0"/>
-            <Button Click="ButtonLockClick" Name="ButtonLock" Margin="0"/>
+            <Button Click="ButtonShutdownClick" Name="ButtonShutdown"/>
+            <Button Click="ButtonRestartClick" Name="ButtonRestart"/>
+            <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
+            <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
+            <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
+            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
+            <Button Click="ButtonLockClick" Name="ButtonLock"/>
         </StackPanel>
     </Grid>
 </Window>
