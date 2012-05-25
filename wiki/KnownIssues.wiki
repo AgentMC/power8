@@ -12,10 +12,8 @@ This list is maintained internally, if you want to report an issue that is not o
 == Planned for upcoming release == 
 
   #  (AK) Style for Start Menu menuitem: hide icon, make text readable on dark themes
-  #  (AK) Styles for menu-buttons and simple buttons differ
   #  (AK) Menu from menu-button may show in inappropriate position
   #  (AK) Context menu from Main button may show in inappropriate position
-  #  (AK) Menu-buttons arrow-boxes are too narrow
 
 == Other known ==
 
@@ -31,3 +29,5 @@ This list is maintained internally, if you want to report an issue that is not o
   #  "Open all users folder" item should be disabled for non-start-menu folders
   #  Icons for Administrative tools, Network connections and computers may not be shown (template creation required)
   #  Installer required, msi-based auto-update should be implemented
+  #  Styles for menu-buttons and simple buttons differ
+  #  Menu-buttons arrow-boxes are too narrow
