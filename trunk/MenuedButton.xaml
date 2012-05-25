@@ -42,12 +42,12 @@
                 	<ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1" HorizontalAlignment="Left" Height="{Binding ActualHeight, ElementName=textBlock, Mode=OneWay}" Margin="0,0,8,0" Width="{Binding ActualWidth, ElementName=textBlock, Mode=OneWay}">
-            		<Rectangle StrokeThickness="5" Stroke="#99000000" RadiusX="5" RadiusY="5" Fill="#99000000" Margin="-6,3,-6,2">
+            		<Rectangle StrokeThickness="5" Stroke="#99000000" RadiusX="5" RadiusY="5" Fill="#99000000" Margin="-4,3,-4,2">
             			<Rectangle.Effect>
             				<BlurEffect Radius="15"/>
             			</Rectangle.Effect>
             		</Rectangle>
-            		<Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#99FFFFFF" Margin="-6,3,-6,2">
+            		<Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#99FFFFFF" Margin="-4,3,-4,2">
             			<Rectangle.Effect>
             				<BlurEffect Radius="15"/>
             			</Rectangle.Effect>
