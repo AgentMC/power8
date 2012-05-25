@@ -6,7 +6,7 @@
         AllowsTransparency="False" Background="Transparent" 
         Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated" Loaded="WindowLoaded"
-        mc:Ignorable="d" d:DesignHeight="407" d:DesignWidth="494" Name="ButtonStack"
+        mc:Ignorable="d" d:DesignHeight="515" d:DesignWidth="494" Name="ButtonStack"
         Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}">
     <Grid Name="LayoutRoot">
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
-              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="22" Style="{DynamicResource MenuStyle}" 
+              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{DynamicResource MenuStyle}" 
               ItemContainerStyle="{DynamicResource MenuItemStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}"/>
         <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
