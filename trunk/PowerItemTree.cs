@@ -574,7 +574,7 @@ namespace Power8
         {
             if(item.IsSpecialObject)
                 return item.Argument;
-            var psi = ResolveItem(item, false);
+            var psi = ResolveItem(item);
             return item.IsFolder ? psi.Arguments : psi.FileName;
         }
 

@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace Power8
 {

@@ -101,6 +101,7 @@
       <DependentUpon>MenuedButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="MenuItemClickCommand.cs" />
+    <Compile Include="MenuWidthToMarginConverter.cs" />
     <Compile Include="NameToResourceConverter.cs" />
     <Compile Include="NetManager.cs" />
     <Compile Include="RestartExplorer.cs">

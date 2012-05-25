@@ -20,21 +20,22 @@ namespace Power8
             InitializeComponent();
         }
 
-        internal UpdateNotifier(string currentVer, string newVer, string uri7z, string uriMsi):this()
+        internal UpdateNotifier(string currentVer, string newVer, string uri7z, string uriMsi)
         {
             _curVer = currentVer;
             _newVer = newVer;
             _uri7z = uri7z;
             _uriMsi = uriMsi;
+            InitializeComponent();
             Title = Properties.Resources.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable;
         }
 
-        private string CurrentVersion
+        public string CurrentVersion
         {
             get { return _curVer; }
         }
 
-        private string NewVersion
+        public string NewVersion
         {
             get { return _newVer; }
         }
