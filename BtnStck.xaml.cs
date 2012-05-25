@@ -95,14 +95,6 @@ namespace Power8
             Hide();
         }
 
-        private void WindowLoaded(object sender, RoutedEventArgs e)
-        {
-            MinHeight = Height;
-            MaxHeight = MinHeight;
-            MinWidth = Width;
-            MaxWidth = MinWidth;
-        }
-
         #endregion
 
         #region Handlers

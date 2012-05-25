@@ -13,7 +13,7 @@
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="10,10"/>
+        <Setter Property="Padding" Value="10,8"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Content" Value="{Binding Path=Name, 
                                                   RelativeSource={RelativeSource Self}, 
