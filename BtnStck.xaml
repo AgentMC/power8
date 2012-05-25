@@ -40,22 +40,22 @@
         </DataGrid>
         <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{DynamicResource SearchBoxStyle}"/>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
-            <Power8:MenuedButton x:Name="MyComputer" Margin="3,1,1,3"/>
-            <Power8:MenuedButton x:Name="Libraries" Margin="3,1,1,3"/>
-            <Power8:MenuedButton x:Name="ControlPanel" Margin="3,1,1,3"/>
-            <Power8:MenuedButton x:Name="AdminTools" Margin="3,1,1,3"/>
-            <Power8:MenuedButton x:Name="NetItems" Margin="3,1,1,3"/>
+            <Power8:MenuedButton x:Name="MyComputer" Margin="0,1,0,0"/>
+            <Power8:MenuedButton x:Name="Libraries" Margin="0,1,0,0"/>
+            <Power8:MenuedButton x:Name="ControlPanel" Margin="0,1,0,0"/>
+            <Power8:MenuedButton x:Name="AdminTools" Margin="0,1,0,0"/>
+            <Power8:MenuedButton x:Name="NetItems" Margin="0,1,0,0"/>
             <Separator Margin="0,5"/>
-            <Button Click="ButtonRunClick" Name="ButtonRun"/>
+            <Button Click="ButtonRunClick" Name="ButtonRun" Margin="0"/>
             <Separator Margin="0,5"/>
             <!--Completely different design here-->
-            <Button Click="ButtonShutdownClick" Name="ButtonShutdown"/>
-            <Button Click="ButtonRestartClick" Name="ButtonRestart"/>
-            <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
-            <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
-            <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
-            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
-            <Button Click="ButtonLockClick" Name="ButtonLock"/>
+            <Button Click="ButtonShutdownClick" Name="ButtonShutdown" Margin="0"/>
+            <Button Click="ButtonRestartClick" Name="ButtonRestart" Margin="0"/>
+            <Button Click="ButtonSleepClick" Name="ButtonSleep" Margin="0"/>
+            <Button Click="ButtonHibernateClick" Name="ButtonHibernate" Margin="0"/>
+            <Button Click="ButtonLogOffClick" Name="ButtonLogOff" Margin="0"/>
+            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave" Margin="0"/>
+            <Button Click="ButtonLockClick" Name="ButtonLock" Margin="0"/>
         </StackPanel>
     </Grid>
 </Window>
