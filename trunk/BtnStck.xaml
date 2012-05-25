@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Power8="clr-namespace:Power8"
         AllowsTransparency="False" Background="Transparent" 
         Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
-        Closing="WindowClosing" Deactivated="WindowDeactivated" Loaded="WindowLoaded"
+        Closing="WindowClosing" Deactivated="WindowDeactivated"
         mc:Ignorable="d" d:DesignHeight="515" d:DesignWidth="494" Name="ButtonStack"
         Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}">
     <Grid Name="LayoutRoot">
@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
