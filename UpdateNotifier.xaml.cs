@@ -13,18 +13,18 @@ namespace Power8
     /// </summary>
     public partial class UpdateNotifier
     {
-        private readonly string _curVer, _newVer, _uri7z, _uriMsi;
+        private readonly string _curVer, _newVer, _uri7Z, _uriMsi;
 
         private UpdateNotifier()
         {
             InitializeComponent();
         }
 
-        internal UpdateNotifier(string currentVer, string newVer, string uri7z, string uriMsi)
+        internal UpdateNotifier(string currentVer, string newVer, string uri7Z, string uriMsi)
         {
             _curVer = currentVer;
             _newVer = newVer;
-            _uri7z = uri7z;
+            _uri7Z = uri7Z;
             _uriMsi = uriMsi;
             InitializeComponent();
             Title = Properties.Resources.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable;
@@ -40,19 +40,19 @@ namespace Power8
             get { return _newVer; }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CloseClick(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void IgnoreClick(object sender, RoutedEventArgs e)
         {
             Settings.Default.IgnoreVer = NewVersion;
             Settings.Default.Save();
             Close();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private void GoWebClick(object sender, RoutedEventArgs e)
         {
             Process.Start(Properties.Resources.Stg_Power8URI);
             Close();
@@ -61,18 +61,18 @@ namespace Power8
         private void InitDownload(string url, string where, Action successAction)
         {
             var wc = new WebClient();
-            wc.DownloadFileCompleted += wc_DownloadFileCompleted;
+            wc.DownloadFileCompleted += WcDownloadFileCompleted;
             wc.DownloadProgressChanged += (sender, args) => Util.Send(() => progress.Value = args.ProgressPercentage);
             wc.DownloadFileAsync(new Uri(url), where, successAction);
             IsEnabled = false;
         }
 
-        void wc_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        void WcDownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
             Util.Send(() => IsEnabled = true);
             if (e.Cancelled)
             {
-                MessageBox.Show("Download was cancelled." + (e.Error != null ? "\r\n" + e.Error.Message : ""),
+                MessageBox.Show(Properties.Resources.Err_DownloadCancelled + (e.Error != null ? "\r\n" + e.Error.Message : ""),
                                 Properties.Resources.Stg_AppShortName, 
                                 MessageBoxButton.OK, 
                                 MessageBoxImage.Error);
@@ -84,22 +84,23 @@ namespace Power8
             }
         }
 
-        private void Button_Click_3(object sender, RoutedEventArgs e)
+        private void DownloadFileClick(object sender, RoutedEventArgs e)
         {
-            var obj = (sender == downMsi ? _uriMsi : _uri7z);
+            var obj = (sender == UNdownMsi ? _uriMsi : _uri7Z);
             var ofd = new SaveFileDialog
                           {
                               AddExtension = true,
                               DefaultExt = Path.GetExtension(obj),
                               FileName = "",
-                              Title = Properties.Resources.Stg_AppShortName + ": choose where to download the file",
-                              Filter = "Power8 update|*" + Path.GetExtension(obj),
+                              Title = Properties.Resources.Stg_AppShortName + Properties.Resources.Str_SaveDialogDescription,
+                              Filter = Properties.Resources.Stg_AppShortName 
+                                       + Properties.Resources.Str_SaveDialogFilter + Path.GetExtension(obj),
                           };
             if (ofd.ShowDialog().Value)
                 InitDownload(obj, ofd.FileName, () => Util.StartExplorerSelect(ofd.FileName));
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e)
+        private void DownAndUpClick(object sender, RoutedEventArgs e)
         {
             var file = Environment.ExpandEnvironmentVariables("%temp%\\" + Path.GetFileName(_uriMsi));
             InitDownload(_uriMsi, file, () =>

@@ -225,13 +225,13 @@ namespace Power8
                         var info =
                             new System.IO.StringReader(
                                 client.DownloadString(Properties.Resources.Stg_Power8URI + Properties.Resources.Stg_AssemblyInfoURI));
-                        string line, verLine = null, uri7z = null, uriMsi = null;
+                        string line, verLine = null, uri7Z = null, uriMsi = null;
                         while ((line = info.ReadLine()) != null)
                         {
                             if (line.StartsWith("[assembly: AssemblyVersion("))
                                 verLine = line.Substring(28).TrimEnd(new[] { ']', ')', '"' });
                             else if (line.StartsWith(@"//7zuri="))
-                                uri7z = line.Substring(8);
+                                uri7Z = line.Substring(8);
                             else if (line.StartsWith(@"//msuri="))
                                 uriMsi = line.Substring(8);
                         }
@@ -239,9 +239,9 @@ namespace Power8
                         {//updating?
                             if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
                             {//updating!
-                                if (uri7z == null || uriMsi == null) //old approach
+                                if (uri7Z == null || uriMsi == null) //old approach
                                 {
-                                    switch (MessageBox.Show(string.Format(
+                                    switch (MessageBox.Show(Properties.Resources.CR_UNUpdateAvailableLong + string.Format(
                                                 Properties.Resources.Str_UpdateAvailableFormat, Application.ProductVersion, verLine),
                                             Properties.Resources.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable,
                                             MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
@@ -257,7 +257,7 @@ namespace Power8
                                 }
                                 else
                                 {
-                                    Util.Send(()=> new UpdateNotifier(Application.ProductVersion, verLine, uri7z,
+                                    Util.Send(()=> new UpdateNotifier(Application.ProductVersion, verLine, uri7Z,
                                                                       uriMsi).Show());
                                 }
                             }

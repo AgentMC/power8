@@ -125,16 +125,17 @@
     <value>Software\Microsoft\Windows\CurrentVersion\Run</value>
   </data>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
-    <value>An update available to Power8!
+    <value>
 
 Your version: {0}
 New version: {1}
 
-Do you want to go to the website and update? 
+Do you want to go to the website and update?
 
 Yes: go to web site and update now!
 No: remind me later, please.
 Cancel: I skip this update, never notify me about this version.</value>
+    <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Stg_AssemblyInfoURI" xml:space="preserve">
     <value>svn/trunk/Properties/AssemblyInfo.cs</value>
@@ -260,5 +261,47 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_ButtonStack" xml:space="preserve">
     <value>Power8 - Start Menu replacer for Windows XP, Se7en and 8</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
+  </data>
+  <data name="Err_DownloadCancelled" xml:space="preserve">
+    <value>Downloading was cancelled.</value>
+  </data>
+  <data name="Str_SaveDialogDescription" xml:space="preserve">
+    <value>: choose where to download the file</value>
+  </data>
+  <data name="Str_SaveDialogFilter" xml:space="preserve">
+    <value> update|*</value>
+  </data>
+  <data name="CR_UNDownAndUp" xml:space="preserve">
+    <value>Download MSI and update now!</value>
+  </data>
+  <data name="CR_UNNewVersion" xml:space="preserve">
+    <value>New version:</value>
+  </data>
+  <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
+    <value>An update is available to Power8!</value>
+  </data>
+  <data name="CR_UNwnd" xml:space="preserve">
+    <value>Update notification</value>
+  </data>
+  <data name="CR_UNYourVersion" xml:space="preserve">
+    <value>Your version:</value>
+  </data>
+  <data name="CR_UNdown7z" xml:space="preserve">
+    <value>Download 7z</value>
+  </data>
+  <data name="CR_UNdownMsi" xml:space="preserve">
+    <value>Download MSI</value>
+  </data>
+  <data name="CR_UNGoWeb" xml:space="preserve">
+    <value>Open project web site</value>
+  </data>
+  <data name="CR_UNIgnore" xml:space="preserve">
+    <value>Don't tell me again about this update</value>
+  </data>
+  <data name="CR_UNNextTime" xml:space="preserve">
+    <value>Remind me next time</value>
+  </data>
+  <data name="CR_UNOther" xml:space="preserve">
+    <value>Other options:</value>
   </data>
 </root>
