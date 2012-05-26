@@ -15,15 +15,14 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="300"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
-              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{DynamicResource MenuStyle}" 
-              ItemContainerStyle="{DynamicResource MenuItemStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}"/>
-        <DataGrid HeadersVisibility="None" Width="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
-                  ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
-                  CanUserAddRows="False">
+              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
+              ItemContainerStyle="{StaticResource MenuItemStyle}" ItemsPanel="{StaticResource ItemsPanelTemplate}"/>
+        <DataGrid HeadersVisibility="None" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" CanUserAddRows="False"
+                  ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" MinWidth="16">
@@ -38,7 +37,7 @@
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{DynamicResource SearchBoxStyle}"/>
+        <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{StaticResource SearchBoxStyle}"/>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
             <Power8:MenuedButton x:Name="MyComputer" Margin="0,1,0,0"/>
             <Power8:MenuedButton x:Name="Libraries" Margin="0,1,0,0"/>
