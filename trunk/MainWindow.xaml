@@ -6,13 +6,13 @@
         Name="Root" Closed="WindowClosed" Loaded="WindowLoaded"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         AllowsTransparency="False" Background="Transparent" SizeToContent="WidthAndHeight">
-    <Button Name="b1" Style="{DynamicResource MainButtonTransparentStyle}" Click="ShowButtonStack">
+    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack">
         <Button.ContextMenu>
             <ContextMenu Name="menu" >
-                <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{DynamicResource ContextMenuItemStyle}"/>
-                <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Style="{DynamicResource ContextMenuItemStyle}"/>
+                <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
+                <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
                 <Separator/>
-                <MenuItem Name="MWExit" Click="ExitClick" Style="{DynamicResource ContextMenuItemStyle}"/> 
+                <MenuItem Name="MWExit" Click="ExitClick" Style="{StaticResource ContextMenuItemStyle}"/> 
             </ContextMenu>
         </Button.ContextMenu>
     </Button>
