@@ -90,12 +90,12 @@
                         </Border>
                         <Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}" >
                             <Grid Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" VerticalAlignment="Bottom" Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}">
-                        		<Rectangle StrokeThickness="5" Stroke="#CC000000" RadiusX="5" RadiusY="5" Fill="#99000000" Margin="-4,3,-4,2">
+                        		<!--<Rectangle StrokeThickness="5" Stroke="#33000000" RadiusX="5" RadiusY="5" Fill="#33000000" Margin="-4,3,-4,2">
                             		<Rectangle.Effect>
                             			<BlurEffect Radius="15"/>
                             		</Rectangle.Effect>
-                            	</Rectangle>
-                            	<Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#99FFFFFF" Margin="-4,3,-4,2">
+                            	</Rectangle>-->
+                                <Rectangle StrokeThickness="5" Stroke="#7FFFFFFF" RadiusX="5" RadiusY="5" Fill="#7FFFFFFF" Margin="-4,3,-4,2">
                             		<Rectangle.Effect>
                             			<BlurEffect Radius="15"/>
                             		</Rectangle.Effect>
@@ -246,12 +246,12 @@
             <Grid Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
                   VerticalAlignment="Bottom" 
                   Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}">
-                <Rectangle StrokeThickness="5" Stroke="#CC000000" RadiusX="5" RadiusY="5" Fill="#99000000" Margin="-4,3,-4,2">
+                <!--<Rectangle StrokeThickness="5" Stroke="#33000000" RadiusX="5" RadiusY="5" Fill="#33000000" Margin="-4,3,-4,2">
                     <Rectangle.Effect>
                         <BlurEffect Radius="15"/>
                     </Rectangle.Effect>
-                </Rectangle>
-                <Rectangle StrokeThickness="5" Stroke="#CCFFFFFF" RadiusX="5" RadiusY="5" Fill="#99FFFFFF" Margin="-4,3,-4,2">
+                </Rectangle>-->
+                <Rectangle StrokeThickness="5" Stroke="#7FFFFFFF" RadiusX="5" RadiusY="5" Fill="#7FFFFFFF" Margin="-4,3,-4,2">
                     <Rectangle.Effect>
                         <BlurEffect Radius="15"/>
                     </Rectangle.Effect>

@@ -21,7 +21,7 @@
         <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
               ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{DynamicResource MenuStyle}" 
               ItemContainerStyle="{DynamicResource MenuItemStyle}" ItemsPanel="{DynamicResource ItemsPanelTemplate}"/>
-        <DataGrid HeadersVisibility="None" MinWidth="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
+        <DataGrid HeadersVisibility="None" Width="300" Grid.Row="1" Height="Auto" AutoGenerateColumns="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
                   CanUserAddRows="False">
             <DataGrid.Columns>
