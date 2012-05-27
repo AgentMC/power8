@@ -4,13 +4,25 @@
 
 == Check-for-update ==
 
-This feature checks for new version. When you check the corresponding menu item in context menu of Power8 button, the check begins the same moment.
+This feature checks for new version. When you check the corresponding menu item in context menu of Power8 button, the check begins the same moment. The check also starts when Power8 is launched if this setting was set previously.
 
 After that, the check occurs every 12 hours.
 
 Each check downloads 2.26 KB file named `"AssemblyInfo.cs"` from the project source code and uses it to identify the version.
 
-At the moment, when version is found, only notification is available, later the auto-update will be implemented.
+At the moment, when version is found, there are 2 possibilities. If update files are available, the update dialog will show up.
+
+http://i36.fastpic.ru/big/2012/0528/eb/674fe358014ee5902baafe50c8e897eb.png
+
+In this window, "Download and Update" means Power8 will download the current MSI package (download progress will be shown in progress bar), launch it and exit. At the moment it is not a silent install, you'll have to go through all the steps, though previous version will be removed automatically by installer. In future this may be changed, and silent install will be applied.
+
+Also, when choosing this option, the path to currently run Power8 copy will be passed to installer. This means, if you have 2 instances of P8 on PC, location1 is where P8 is installed, and you unpacked P8 to location2, and launched unpacked version, and the unpacked version triggers the update - the installed version will be removed, and P8 will suggest to install into location2. It is possible to change the default location, of course.
+
+"Download MSI" and "Download 7z" will put corresponding update packages to where you define, and navigate the system to this location.
+
+When any of update files is not available, the simplified message will be displayed<br/>http://i32.fastpic.ru/big/2012/0408/9c/9322a0036f890116bf1ff6e3c526509c.png
+
+This behavior is a subject to change in future.
 
 == Alt+Z hotkey ==
 
