@@ -1,6 +1,24 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+
+==Alpha 3 Release 2 (v.0.3.5.0): 27.05.2012==
+  
+  # `[new]` Added support for removable and ram drives. P8 will add new drives in list when they're available and remove them when they're disconnected;
+  # `[new]` MSI installer created. From now on you can install/update Power8 using MSI or still use 7z archive format;
+  # `[new]` Auto-update implemented. Update dialog added. For future versions, MSI auto-update is available;
+  # `[changed]` Enhanced menus internal structure:
+    * less memory consumption (theoretically :) ),
+    * fixes disappearing icons for Administrative tools, Network connections, etc.,
+    * allows to make "Start menu" text readable even on dark backgrounds;
+  # `[changed]` Polished the look. Styles contain tons of enhancements;
+  # `[changed]` Added drive labels to Computer sub-items;
+  # `[changed]` "Open container" and "Show Properties" can be called for all file system items Power8 can resolve/detect;
+  # `[fixed]` "Open" and "Open all users folder" doesn't work for Start menu root;
+  # `[fixed]` "Open all users folder" should be enabled for Start menu only;
+  # `[fixed]` Exception that occurred when user manually checked "Check for updates" Off and then back On.
+
+
 ==Alpha 3 Hotfix 2 (v.0.3.2.0): 21.05.2012==
   
   # `[new]` Settings are preserved and upgraded from previous version;
