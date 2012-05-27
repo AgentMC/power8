@@ -2,16 +2,12 @@
 #labels Featured
 
 This page shows which features are planned to be implemented in upcoming release.
+
 For all other feature requests, currently not prioritized, please consult [FeatureRequests] page.
 
+For already implemented features, see [Changelog] page.
 
 = _Alpha_ =
-
-== Alpha 3 enhancement pack ==
-*estimated release date: 27.05.12*
-  * work with dynamic list of drives;
-  * installer and msi-based auto-updater
-  * various bugfixes and UI enhancements;
 
 == Alpha 4 ==
 *estimated release date: 10.06.12*
@@ -19,7 +15,7 @@ For all other feature requests, currently not prioritized, please consult [Featu
   * search using Windows Search engine;
   * internet search (like "wiki driver");
   * various bugfixes and UI enhancements missed in 0.3.5;
-  * (stretch-goal) theme for non-aero mode;
+  * (stretch-goal) theme for non-aero mode (seems, for W7/XP/HC mode only);
 
 
 = _Beta_ =
