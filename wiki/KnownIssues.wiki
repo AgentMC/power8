@@ -9,7 +9,7 @@ This list is maintained internally, if you want to report an issue that is not o
 
 = The list of issues =
 
-== Planned for upcoming release == 
+== Planned to be fixed in upcoming release == 
 
 == Other known ==
 
@@ -24,13 +24,4 @@ This list is maintained internally, if you want to report an issue that is not o
   #  (?) W8 immersive links aren't run properly - have to investigate, postpone to RTM
   #  (warning) investigate why the process requires Exit() call to quit 
 
-= Done => goes to 0.3.5 =
-
-  #  Ram drives and Removable drives not supported now, drives list is static
-  #  "Open"/"Open all users folder" doesn't work for root start menu item
-  #  "Open all users folder" item should be disabled for non-start-menu folders
-  #  Icons for Administrative tools, Network connections and computers may not be shown (template creation required)
-  #  Installer required, msi-based auto-update should be implemented
-  #  Styles for menu-buttons and simple buttons differ
-  #  Menu-buttons arrow-boxes are too narrow
-  #  Style for Start Menu menuitem: hide icon, make text readable on dark themes
+= Done => goes to next release =
