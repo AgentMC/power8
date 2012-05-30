@@ -310,6 +310,17 @@ namespace Power8
             }
         }
 
+        private static IEnumerable<PowerItem> Roots
+        {
+            get
+            {
+                var roots = new Collection<PowerItem> { MyComputerRoot, StartMenuRootItem };
+                foreach (var lib in LibrariesRoot.Items.Where(lib => !lib.AutoExpandIsPending))
+                    roots.Add(lib);
+                return roots;
+            }
+        }
+
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
             FileChanged(sender,
@@ -649,11 +660,20 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public static void SearchItems(string query, PowerItem source, ObservableCollection<PowerItem> destination)
+        public static void SearchTree(string query, ICollection<PowerItem> destination)
         {
-            if(source.FriendlyName.ToLowerInvariant().Contains(query))
-                destination.Add(source);
-            if(!source.AutoExpandIsPending)
+            foreach (var root in Roots)
+            {
+                var r = root;
+                new Thread(() => SearchItems(query, r, destination)).Start();
+            }
+        }
+
+        private static void SearchItems(string query, PowerItem source, ICollection<PowerItem> destination)
+        {
+            if (source.Match(query))
+                Util.Post(() => destination.Add(source));
+            if (!source.AutoExpandIsPending)
                 foreach (var powerItem in source.Items)
                     SearchItems(query, powerItem, destination);
         }

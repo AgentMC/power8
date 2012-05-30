@@ -147,6 +147,21 @@ namespace Power8
                 handler(this, null);
         }
 
+        private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            _searchData.Clear();
+            var q = SearchBox.Text.Trim().ToLowerInvariant();
+            if (!String.IsNullOrWhiteSpace(q) && Items.Count > 0)
+            {
+                dataGrid.ItemsSource = _searchData;
+                PowerItemTree.SearchTree(SearchBox.Text, _searchData);
+            }
+            else if (String.IsNullOrWhiteSpace(q))
+            {
+                dataGrid.ItemsSource = Items;
+            }
+        }
+
         #endregion
 
         #region Helpers
@@ -223,21 +238,5 @@ namespace Power8
             get { return _cmd; }
         }
         #endregion
-
-        private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
-        {
-            _searchData.Clear();
-            var q = SearchBox.Text.Trim().ToLowerInvariant();
-            if (!String.IsNullOrWhiteSpace(q) && Items.Count > 0)
-            {
-                dataGrid.ItemsSource = _searchData;
-                PowerItemTree.SearchItems(SearchBox.Text, Items[0], _searchData);
-            }
-            else if (String.IsNullOrWhiteSpace(q))
-            {
-                dataGrid.ItemsSource = Items;
-            }
-        }
-
     }
 }

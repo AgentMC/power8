@@ -297,6 +297,10 @@ namespace Power8
             li.ForEach(_items.Add);
         }
 
+        public bool Match(string query)
+        {
+            return FriendlyName.ToLowerInvariant().Contains(query);
+        }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
