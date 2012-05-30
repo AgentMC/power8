@@ -649,6 +649,15 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public static void SearchItems(string query, PowerItem source, ObservableCollection<PowerItem> destination)
+        {
+            if(source.FriendlyName.ToLowerInvariant().Contains(query))
+                destination.Add(source);
+            if(!source.AutoExpandIsPending)
+                foreach (var powerItem in source.Items)
+                    SearchItems(query, powerItem, destination);
+        }
+
         private static string[] GetLibraryDirectories(string libraryMs)
         {
             var xdoc = new XmlDocument();

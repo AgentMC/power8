@@ -33,6 +33,7 @@ namespace Power8
         private static readonly Dictionary<string, PowerItem> SpecialItems = new Dictionary<string, PowerItem>();
 
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
+        private readonly ObservableCollection<PowerItem> _searchData = new ObservableCollection<PowerItem>();
 
         public event EventHandler RunCalled;
         public static event EventHandler Instanciated;
@@ -212,11 +213,31 @@ namespace Power8
             get { return PowerItemTree.StartMenuRoot; }
         } 
 
+        public ObservableCollection<PowerItem> SearchData
+        {
+            get { return _searchData; }
+        } 
+
         public MenuItemClickCommand ClickCommand
         {
             get { return _cmd; }
         }
         #endregion
+
+        private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            _searchData.Clear();
+            var q = SearchBox.Text.Trim().ToLowerInvariant();
+            if (!String.IsNullOrWhiteSpace(q) && Items.Count > 0)
+            {
+                dataGrid.ItemsSource = _searchData;
+                PowerItemTree.SearchItems(SearchBox.Text, Items[0], _searchData);
+            }
+            else if (String.IsNullOrWhiteSpace(q))
+            {
+                dataGrid.ItemsSource = Items;
+            }
+        }
 
     }
 }
