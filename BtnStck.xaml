@@ -21,8 +21,8 @@
         <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
               ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
               ItemContainerStyle="{StaticResource MenuItemStyle}" ItemsPanel="{StaticResource ItemsPanelTemplate}"/>
-        <DataGrid HeadersVisibility="None" Grid.Row="1" Height="Auto" AutoGenerateColumns="False" CanUserAddRows="False"
-                  ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" MaxHeight="600" 
+        <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
+                  ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
                   x:Name="dataGrid">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
@@ -40,22 +40,24 @@
         </DataGrid>
         <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{StaticResource SearchBoxStyle}" TextChanged="SearchBoxTextChanged" />
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
-            <Power8:MenuedButton x:Name="MyComputer" Margin="0,1,0,0"/>
-            <Power8:MenuedButton x:Name="Libraries" Margin="0,1,0,0"/>
-            <Power8:MenuedButton x:Name="ControlPanel" Margin="0,1,0,0"/>
-            <Power8:MenuedButton x:Name="AdminTools" Margin="0,1,0,0"/>
-            <Power8:MenuedButton x:Name="NetItems" Margin="0,1,0,0"/>
-            <Separator Margin="0,5"/>
-            <Button Click="ButtonRunClick" Name="ButtonRun" Margin="0"/>
-            <Separator Margin="0,5"/>
-            <!--Completely different design here-->
-            <Button Click="ButtonShutdownClick" Name="ButtonShutdown"/>
-            <Button Click="ButtonRestartClick" Name="ButtonRestart"/>
-            <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
-            <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
-            <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
-            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
-            <Button Click="ButtonLockClick" Name="ButtonLock"/>
+            <Power8:MenuedButton x:Name="MyComputer" Margin="0,3,0,0"/>
+			<StackPanel x:Name="dataGridHeightMeasure">
+	            <Power8:MenuedButton x:Name="Libraries" Margin="0,1,0,0"/>
+	            <Power8:MenuedButton x:Name="ControlPanel" Margin="0,1,0,0"/>
+	            <Power8:MenuedButton x:Name="AdminTools" Margin="0,1,0,0"/>
+	            <Power8:MenuedButton x:Name="NetItems" Margin="0,1,0,0"/>
+	            <Separator Margin="0,5"/>
+	            <Button Click="ButtonRunClick" Name="ButtonRun" Margin="0"/>
+	            <Separator Margin="0,5"/>
+	            <!--Completely different design here-->
+	            <Button Click="ButtonShutdownClick" Name="ButtonShutdown"/>
+	            <Button Click="ButtonRestartClick" Name="ButtonRestart"/>
+	            <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
+	            <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
+	            <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
+	            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
+			</StackPanel>
+            <Button Click="ButtonLockClick" Name="ButtonLock" Margin="0,0,0,2"/>
         </StackPanel>
     </Grid>
 </Window>
