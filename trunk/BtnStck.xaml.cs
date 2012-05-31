@@ -44,7 +44,7 @@ namespace Power8
         {
             InitializeComponent();
             App.Current.DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
-            foreach (var mb in folderButtons.Children.OfType<MenuedButton>())
+            foreach (var mb in folderButtons.Children.OfType<MenuedButton>().Union(dataGridHeightMeasure.Children.OfType<MenuedButton>()))
                 mb.Item = GetSpecialItems(mb.Name);
         }
 
@@ -149,12 +149,11 @@ namespace Power8
 
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
         {
-            _searchData.Clear();
             var q = SearchBox.Text.Trim().ToLowerInvariant();
             if (!String.IsNullOrWhiteSpace(q) && Items.Count > 0)
             {
                 dataGrid.ItemsSource = _searchData;
-                PowerItemTree.SearchTree(SearchBox.Text, _searchData);
+                PowerItemTree.SearchTree(q, _searchData);
             }
             else if (String.IsNullOrWhiteSpace(q))
             {

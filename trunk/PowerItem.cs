@@ -182,8 +182,9 @@ namespace Power8
 
         public bool IsSpecialObject
         {
-            get { return IsLibrary || (!string.IsNullOrEmpty(Argument) && 
-                                       Argument.StartsWith("::{")); }
+            get { return IsLibrary 
+                        || (!string.IsNullOrEmpty(Argument) && Argument.StartsWith("::{")) 
+                        || SpecialFolderId == API.Csidl.POWER8CLASS; }
         }
 
         public bool IsLibrary
@@ -232,6 +233,21 @@ namespace Power8
         {
             return FriendlyName;
         }
+
+        public override int GetHashCode()
+        {
+            return (FriendlyName + IsFolder).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var p = obj as PowerItem;
+            if(p == null)
+                return false;
+            return p.GetHashCode() == GetHashCode();
+        }
+
+        
 
 
 

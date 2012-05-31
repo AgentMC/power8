@@ -156,7 +156,7 @@ namespace Power8
                         if (cplCache.Contains(cpl, StringComparer.InvariantCultureIgnoreCase)) 
                             continue;
                         var resolved = Util.GetCplInfo(cpl);
-                        if (resolved.Item2 != null && _controlPanelRoot.Items.FirstOrDefault(p => p.FriendlyName == resolved.Item1) == null)
+                        if (resolved.Item2 != null && _controlPanelRoot.Items.All(p => p.FriendlyName != resolved.Item1))
                             _controlPanelRoot.Items.Add(new PowerItem
                             {
                                 Argument = cpl,
@@ -310,16 +310,6 @@ namespace Power8
             }
         }
 
-        private static IEnumerable<PowerItem> Roots
-        {
-            get
-            {
-                var roots = new Collection<PowerItem> { MyComputerRoot, StartMenuRootItem };
-                foreach (var lib in LibrariesRoot.Items.Where(lib => !lib.AutoExpandIsPending))
-                    roots.Add(lib);
-                return roots;
-            }
-        }
 
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
@@ -660,22 +650,34 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        private static CancellationTokenSource _lastSearchToken;
+
         public static void SearchTree(string query, ICollection<PowerItem> destination)
         {
-            foreach (var root in Roots)
+            lock (destination)
             {
-                var r = root;
-                new Thread(() => SearchItems(query, r, destination)).Start();
+                if(_lastSearchToken != null)
+                    _lastSearchToken.Cancel();
+                destination.Clear();
+                _lastSearchToken = new CancellationTokenSource();
+                foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, NetworkRoot, LibrariesRoot })
+                {
+                    var r = root;
+                    new Thread(() => SearchItems(query, r, destination, _lastSearchToken.Token)).Start();
+                }
+                
             }
         }
 
-        private static void SearchItems(string query, PowerItem source, ICollection<PowerItem> destination)
+        private static void SearchItems(string query, PowerItem source, ICollection<PowerItem> destination, CancellationToken stop)
         {
-            if (source.Match(query))
-                Util.Post(() => destination.Add(source));
+            if(stop.IsCancellationRequested)
+                return;
+            if (source.Match(query) && !destination.Contains(source))
+                    Util.Send(() => destination.Add(source));
             if (!source.AutoExpandIsPending)
                 foreach (var powerItem in source.Items)
-                    SearchItems(query, powerItem, destination);
+                    SearchItems(query, powerItem, destination, stop);
         }
 
         private static string[] GetLibraryDirectories(string libraryMs)
