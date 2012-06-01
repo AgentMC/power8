@@ -167,7 +167,7 @@ namespace Power8
         
         private static void LaunchShForced(string arg)
         {
-            StartConsoleHidden("shutdown.exe", arg + " -f -t 0");
+            StartConsoleHidden("shutdown.exe", arg + " -f" + (arg == "-l" ? "" : " -t 0"));
         }
 
         private static void StartConsoleHidden(string exe, string args)
