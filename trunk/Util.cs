@@ -324,6 +324,11 @@ namespace Power8
         public static Tuple<string, string> GetOpenCommandForClass(string clsidOrApiShNs)
         {
             var command = GetResourceIdForClassCommon(clsidOrApiShNs, "\\Shell\\Open\\Command", "");
+            return CommandToFilenameAndArgs(command);
+        }
+
+        public static Tuple<string, string> CommandToFilenameAndArgs(string command)
+        {
             if (!string.IsNullOrEmpty(command))
             {
                 if (File.Exists(command))
