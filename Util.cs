@@ -113,7 +113,6 @@ namespace Power8
         {
 // ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
             if (o is MenuItem)
-// ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
                 return (PowerItem)((MenuItem)o).DataContext;
             if (o is ContextMenuEventArgs)
             {
@@ -124,6 +123,9 @@ namespace Power8
                 if(mi != null)
                     return (PowerItem)(mi.DataContext);
             }
+            if (o is System.Windows.Controls.DataGrid)
+                return (PowerItem)((System.Windows.Controls.DataGrid)o).SelectedItem;
+// ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
             return null;
         }
 

@@ -23,17 +23,17 @@
               ItemContainerStyle="{StaticResource MenuItemStyle}" ItemsPanel="{StaticResource ItemsPanelTemplate}"/>
         <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
-                  x:Name="dataGrid">
+                  x:Name="dataGrid" GridLinesVisibility="None" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" MouseDoubleClick="dataGrid_MouseDoubleClick">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
-                <DataGridTemplateColumn Header="Icon" MinWidth="16">
+                <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
-                            <Image Source="{Binding Icon.SmallBitmap}" />
+                            <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Item" Width="*" Binding="{Binding Path=FriendlyName}"/>
+                <DataGridTextColumn Header="Item" Width="*" Binding="{Binding Path=FriendlyName}" IsReadOnly="True" />
                 <!--<DataGridTemplateColumn Header="Recent>" Width="0">
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>

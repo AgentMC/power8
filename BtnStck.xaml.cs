@@ -237,5 +237,10 @@ namespace Power8
             get { return _cmd; }
         }
         #endregion
+
+        private void dataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Util.ExtractRelatedPowerItem(sender).Invoke();
+        }
     }
 }
