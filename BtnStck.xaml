@@ -23,7 +23,7 @@
               ItemContainerStyle="{StaticResource MenuItemStyle}" ItemsPanel="{StaticResource ItemsPanelTemplate}"/>
         <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
-                  x:Name="dataGrid" GridLinesVisibility="None" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" MouseDoubleClick="dataGrid_MouseDoubleClick">
+                  x:Name="dataGrid" GridLinesVisibility="None" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" MouseDoubleClick="DataGridMouseDoubleClick">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
@@ -38,7 +38,7 @@
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
         </DataGrid>
-        <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{StaticResource SearchBoxStyle}" TextChanged="SearchBoxTextChanged" />
+        <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{StaticResource SearchBoxStyle}" TextChanged="SearchBoxTextChanged" PreviewKeyDown="SearchBoxPreviewKeyDown" />
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
             <Power8:MenuedButton x:Name="MyComputer" Margin="0,3,0,0"/>
 			<StackPanel x:Name="dataGridHeightMeasure">
