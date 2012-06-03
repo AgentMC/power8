@@ -16,7 +16,7 @@ namespace Power8
     /// </summary>
     public partial class App
     {
-        private readonly Thread _initTreeThread = new Thread(PowerItemTree.InitTree) {Name = "InitTree"};
+        private readonly Thread _initTreeThread = Util.Fork(PowerItemTree.InitTree, "InitTree");
         
         public App()
         {

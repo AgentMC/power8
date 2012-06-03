@@ -15,9 +15,9 @@ namespace Power8
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
         private string _friendlyName, _resIdString;
         private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon;
+        private PowerItem _root;
 
         public string Argument { get; set; }
-        public PowerItem Parent { get; set; }
         public bool IsFolder { get; set; }
         public bool AutoExpandIsPending { get; set; }
         public API.Csidl SpecialFolderId { get; set; }
@@ -28,6 +28,7 @@ namespace Power8
         {
             SpecialFolderId = API.Csidl.INVALID;
         }
+
     
 
         //1st block - icon
@@ -69,7 +70,8 @@ namespace Power8
         }
 
 
-        //3rd block - children
+
+        //3rd block - children and parents
         public ObservableCollection<PowerItem> Items
         {
             get
@@ -95,6 +97,23 @@ namespace Power8
                 }
             }
         }
+
+        public PowerItem Parent { get; set; }
+
+        public PowerItem Root
+        {
+            get
+            {
+                if (_root == null)
+                {
+                    _root = this;
+                    while (_root.Parent != null)
+                        _root = _root.Parent;
+                }
+                return _root;
+            }
+        }
+
 
 
         //2nd block - text
@@ -165,6 +184,7 @@ namespace Power8
         {
             get { return Parent == null ? 300 : 0; }
         }
+
 
 
         //Not a visual block - binding and resolving helpers
@@ -247,8 +267,6 @@ namespace Power8
             return p.GetHashCode() == GetHashCode();
         }
 
-        
-
 
 
         public void Invoke()
@@ -314,9 +332,12 @@ namespace Power8
         }
 
         public bool Match(string query)
-        {
-            return FriendlyName.ToLowerInvariant().Contains(query);
+        {//TODO: rewrite Match()!
+            return (FriendlyName != null && FriendlyName.ToLowerInvariant().Contains(query))
+                || (Argument != null && Argument.ToLowerInvariant().Contains(query))
+                || (IsLink && Util.ResolveLink(PowerItemTree.ResolveItem(this).FileName).ToLowerInvariant().Contains(query));
         }
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;
