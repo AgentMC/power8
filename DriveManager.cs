@@ -19,7 +19,7 @@ namespace Power8
             _fileChanged = changedHandler;
             _fileRenamed = renamedHandler;
             _drivesRoot = drivesRoot;
-            new Thread(Worker) {Name = "DriveWatchThread"}.Start();
+            Util.Fork(Worker, "DriveWatchThread").Start();
         }
 
         private static void Worker ()

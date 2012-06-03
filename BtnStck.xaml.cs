@@ -155,7 +155,7 @@ namespace Power8
             if (!String.IsNullOrWhiteSpace(q) && Items.Count > 0)
             {
                 dataGrid.ItemsSource = _searchData;
-                PowerItemTree.SearchTree(q, _searchData);
+                Util.Fork(() => PowerItemTree.SearchTree(q, _searchData), "Search root for " + q).Start();
             }
             else if (String.IsNullOrWhiteSpace(q))
             {
@@ -253,15 +253,22 @@ namespace Power8
                 {
                     case Key.Up:
                         if (dataGrid.Items.Count > 0)
+                        {
                             dataGrid.SelectedIndex = dataGrid.SelectedIndex <= 0
                                                      ? dataGrid.Items.Count - 1
                                                      : dataGrid.SelectedIndex - 1;
+                                             
+                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                        }
                         return;
                     case Key.Down:
                         if (dataGrid.Items.Count > 0)
+                        {
                             dataGrid.SelectedIndex = dataGrid.SelectedIndex >= dataGrid.Items.Count - 1
                                                      ? 0
                                                      : dataGrid.SelectedIndex + 1;
+                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                        }
                         return;
                     case Key.Enter:
                         if (dataGrid.SelectedItem != null)

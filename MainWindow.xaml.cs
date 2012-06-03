@@ -82,7 +82,7 @@ namespace Power8
             Left = 0;
             Top = 0;
             _watch = true;
-            new Thread(WatchDesktopBtn){Name = "ShowDesktop button watcher"}.Start();
+            Util.Fork(WatchDesktopBtn, "ShowDesktop button watcher").Start();
             _updateThreadLock.Set();
             _updateThreadLock.Close();
 
@@ -172,7 +172,7 @@ namespace Power8
                     }
                     else
                     {//seems, user killed explorer so hard it is dead to death :)
-                        var trd  = new Thread(() =>
+                        var trd  = Util.Fork(() =>
                         {
                             var dialog = new RestartExplorer();
                             dialog.ShowDialog();
@@ -184,7 +184,7 @@ namespace Power8
                             }
                             else
                                 Util.Die("no user-action was to restore normal workflow...");
-                        });
+                        }, "Restart explorer window");
                         trd.SetApartmentState(ApartmentState.STA);
                         trd.Start();
                         trd.Join();
@@ -337,11 +337,10 @@ namespace Power8
         private void UpdateCheckThreadInit()
         {
             if(_updateThread == null || _updateThread.ThreadState == ThreadState.Stopped)
-                _updateThread = new Thread(UpdateCheckThread)
-                {
-                    IsBackground = true,
-                    Name = "Update thread"
-                };
+            {
+                _updateThread = Util.Fork(UpdateCheckThread, "Update thread");
+                _updateThread.IsBackground = true;
+            }
             _updateThread.Start();
         }
         #endregion

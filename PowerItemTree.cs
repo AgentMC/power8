@@ -260,51 +260,51 @@ namespace Power8
                     _networkRoot.Items.Add(connections);
                     _networkRoot.Items.Add(new PowerItem {FriendlyName = SEPARATOR_NAME, Parent = _networkRoot});
 
-                    new Thread(() =>
-                                   {
-                                       if (Environment.OSVersion.Version.Major >= 6)
-                                           xpNet7Wrkgrp.FriendlyName = NetManager.DomainOrWorkgroup;
+                    Util.Fork(() =>
+                                  {
+                                      if (Environment.OSVersion.Version.Major >= 6)
+                                          xpNet7Wrkgrp.FriendlyName = NetManager.DomainOrWorkgroup;
 
-                                       List<string> names;
-                                       bool addMoreItem = false;
-                                       if (NetManager.ComputersNearby.Count > 10)
-                                       {
-                                           addMoreItem = true;
-                                           names = new List<string>();
-                                           for (int i = 0; i < 10; i++)
-                                               names.Add(NetManager.ComputersNearby[i]);
-                                       }
-                                       else
-                                       {
-                                           names = NetManager.ComputersNearby;
-                                       }
+                                      List<string> names;
+                                      bool addMoreItem = false;
+                                      if (NetManager.ComputersNearby.Count > 10)
+                                      {
+                                          addMoreItem = true;
+                                          names = new List<string>();
+                                          for (int i = 0; i < 10; i++)
+                                              names.Add(NetManager.ComputersNearby[i]);
+                                      }
+                                      else
+                                      {
+                                          names = NetManager.ComputersNearby;
+                                      }
 
-                                       if (names.Count == 0) //remove separator if no items were added
-                                       {
-                                           Util.Post(() => _networkRoot.Items.RemoveAt(_networkRoot.Items.Count - 1));
-                                           return;
-                                       }
-                                       names.Select(e => new PowerItem
-                                                        {
-                                                            Argument = "\\\\" + e,
-                                                            IsFolder = true,
-                                                            Parent = _networkRoot,
-                                                            Icon = MyComputerRoot.Icon
-                                                        })
-                                           .ToList()
-                                           .ForEach(i => Util.Post(() => _networkRoot.Items.Add(i)));
+                                      if (names.Count == 0) //remove separator if no items were added
+                                      {
+                                          Util.Post(() => _networkRoot.Items.RemoveAt(_networkRoot.Items.Count - 1));
+                                          return;
+                                      }
+                                      names.Select(e => new PowerItem
+                                                            {
+                                                                Argument = "\\\\" + e,
+                                                                IsFolder = true,
+                                                                Parent = _networkRoot,
+                                                                Icon = MyComputerRoot.Icon
+                                                            })
+                                          .ToList()
+                                          .ForEach(i => Util.Post(() => _networkRoot.Items.Add(i)));
 
-                                       if (addMoreItem)
-                                           Util.Post(() =>
+                                      if (addMoreItem)
+                                          Util.Post(() =>
                                                     _networkRoot.Items.Add(new PowerItem
-                                                    {
-                                                        FriendlyName = Resources.Str_ShowMore,
-                                                        Parent = _networkRoot,
-                                                        SpecialFolderId = API.Csidl.POWER8CLASS,
-                                                        Argument = "Power8.ComputerList"
-                                                    }));
-
-                                   }) { Name = "Network Scan Thread" }.Start();
+                                                                               {
+                                                                                   FriendlyName = Resources.Str_ShowMore,
+                                                                                   Parent = _networkRoot,
+                                                                                   SpecialFolderId =
+                                                                                       API.Csidl.POWER8CLASS,
+                                                                                   Argument = "Power8.ComputerList"
+                                                                               }));
+                                  }, "Network Scan Thread").Start();
                 }
                 return _networkRoot;
             }
@@ -650,40 +650,53 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static CancellationTokenSource _lastSearchToken;
+        private static CancellationTokenSource _lastSearchToken = new CancellationTokenSource();
 
-        public static void SearchTree(string query, ICollection<PowerItem> destination)
+        public static void SearchTree(string query, IList<PowerItem> destination)
         {
             lock (destination)
             {
-                if(_lastSearchToken != null)
-                    _lastSearchToken.Cancel();
-                destination.Clear();
+                _lastSearchToken.Cancel();
+                Util.Send(destination.Clear);
                 _lastSearchToken = new CancellationTokenSource();
                 foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, NetworkRoot, LibrariesRoot })
                 {
-                    var r = root;
-                    new Thread(() => SearchItems(query, r, destination, _lastSearchToken.Token)).Start();
+                    PowerItem tl = null, r = root;
+                    Util.Fork(() => SearchItems(query, r, destination, _lastSearchToken.Token, ref tl),
+                              "Tree search for " + r.FriendlyName).Start();
                 }
-                
             }
         }
 
-        private static void SearchItems(string query, PowerItem source, ICollection<PowerItem> destination, CancellationToken stop)
+        private static void SearchItems(string query, PowerItem source, IList<PowerItem> destination, CancellationToken stop, ref PowerItem threadLast)
         {
             if(stop.IsCancellationRequested)
                 return;
-            if (source.Match(query))
+            if ((!source.IsFolder || source.Root != StartMenuRootItem) && source.Match(query))
             {
                 lock (destination)
                 {
-                    if (!destination.Contains(source))
-                        Util.Send(() => destination.Add(source));
+                    if (!stop.IsCancellationRequested && !destination.Contains(source))
+                    {
+                        int insIdx;
+                        if (threadLast == null)
+                        {
+                            Util.Send(() => destination.Add(new PowerItem
+                                                {FriendlyName = "vvv"+ SEPARATOR_NAME + source.Root.FriendlyName}));
+                            insIdx = destination.Count;
+                        }
+                        else
+                        {
+                            insIdx = destination.IndexOf(threadLast) + 1;
+                        }
+                        Util.Send(() => destination.Insert(insIdx, source));
+                        threadLast = source;
+                    }
                 }
             }
             if (!source.AutoExpandIsPending)
                 foreach (var powerItem in source.Items)
-                    SearchItems(query, powerItem, destination, stop);
+                    SearchItems(query, powerItem, destination, stop, ref threadLast);
         }
 
         private static string[] GetLibraryDirectories(string libraryMs)

@@ -64,6 +64,11 @@ namespace Power8
             return (T) MainDisp.Invoke(DispatcherPriority.DataBind, method);
         }
 
+        public static Thread Fork(ThreadStart method, string name = "P8 forked")
+        {
+            return new Thread(method) {Name = name};
+        }
+
 
 
         public static IntPtr GetHandle(this Window w)
@@ -650,7 +655,7 @@ namespace Power8
             {
                 if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
                 {
-                    var thread = new Thread(ShellExecuteFunction);
+                    var thread = Fork(ShellExecuteFunction, "ShExec");
                     thread.SetApartmentState(ApartmentState.STA);
                     thread.Start();
                     thread.Join();
