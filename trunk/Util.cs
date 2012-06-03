@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
 using MenuItem = System.Windows.Controls.MenuItem;
+using DataGrid = System.Windows.Controls.DataGrid;
 using MessageBox = System.Windows.MessageBox;
 
 namespace Power8
@@ -119,12 +120,14 @@ namespace Power8
                 var mi = o.GetType()
                           .GetProperty("TargetElement",
                                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
-                          .GetValue(o, null) as MenuItem;
-                if(mi != null)
-                    return (PowerItem)(mi.DataContext);
+                          .GetValue(o, null);
+                if(mi is MenuItem)
+                    return (PowerItem) ((MenuItem) mi).DataContext;
+                if(mi is DataGrid)
+                    o = mi; //And see below
             }
-            if (o is System.Windows.Controls.DataGrid)
-                return (PowerItem)((System.Windows.Controls.DataGrid)o).SelectedItem;
+            if (o is DataGrid)
+                return (PowerItem) ((DataGrid) o).SelectedItem;
 // ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
             return null;
         }
