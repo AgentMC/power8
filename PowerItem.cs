@@ -236,7 +236,7 @@ namespace Power8
 
         public override int GetHashCode()
         {
-            return (FriendlyName + IsFolder + Argument).GetHashCode();
+            return (FriendlyName + IsFolder).GetHashCode();
         }
 
         public override bool Equals(object obj)

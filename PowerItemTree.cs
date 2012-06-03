@@ -673,8 +673,14 @@ namespace Power8
         {
             if(stop.IsCancellationRequested)
                 return;
-            if (source.Match(query) && !destination.Contains(source))
-                    Util.Send(() => destination.Add(source));
+            if (source.Match(query))
+            {
+                lock (destination)
+                {
+                    if (!destination.Contains(source))
+                        Util.Send(() => destination.Add(source));
+                }
+            }
             if (!source.AutoExpandIsPending)
                 foreach (var powerItem in source.Items)
                     SearchItems(query, powerItem, destination, stop);
