@@ -253,13 +253,13 @@ namespace Power8
                 {
                     case Key.Up:
                         if (dataGrid.Items.Count > 0)
-                            dataGrid.SelectedIndex = dataGrid.SelectedIndex == 0
+                            dataGrid.SelectedIndex = dataGrid.SelectedIndex <= 0
                                                      ? dataGrid.Items.Count - 1
                                                      : dataGrid.SelectedIndex - 1;
                         return;
                     case Key.Down:
                         if (dataGrid.Items.Count > 0)
-                            dataGrid.SelectedIndex = dataGrid.SelectedIndex == dataGrid.Items.Count - 1
+                            dataGrid.SelectedIndex = dataGrid.SelectedIndex >= dataGrid.Items.Count - 1
                                                      ? 0
                                                      : dataGrid.SelectedIndex + 1;
                         return;
