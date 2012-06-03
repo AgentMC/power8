@@ -277,7 +277,10 @@ namespace Power8
                                 Hide();
                             }
                         }
-                    return;
+                        return;
+                    case Key.Escape:
+                        SearchBox.Text = string.Empty;
+                        return;
                 }
             e.Handled = false;
         }
