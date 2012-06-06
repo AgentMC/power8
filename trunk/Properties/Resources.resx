@@ -308,4 +308,7 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_UNOther" xml:space="preserve">
     <value>Other options:</value>
   </data>
+    <data name="Err_NoPiExtracted">
+        <value xml:space="preserve">No data element available</value>
+    </data>
 </root>
