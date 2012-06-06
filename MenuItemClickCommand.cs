@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Input;
+using Power8.Properties;
 
 namespace Power8
 {
@@ -8,10 +9,10 @@ namespace Power8
         public void Execute(object parameter)
         {
             var powerItem = parameter as PowerItem;
-            if (powerItem == null || (powerItem.Parent == null && string.IsNullOrEmpty(powerItem.Argument)))
-                return;
             try
             {
+                if (powerItem == null)
+                    throw new Exception(Resources.Err_NoPiExtracted);
                 powerItem.Invoke();
             }
             catch (Exception ex)

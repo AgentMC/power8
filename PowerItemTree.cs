@@ -244,7 +244,6 @@ namespace Power8
                                 NonCachedIcon = true,
                                 IsFolder = true,
                                 Argument = API.ShNs.NetworkConnections,
-                                Parent = ControlPanelRoot
                             };
 
                     var xpWrkgrp7Net = new PowerItem
@@ -252,7 +251,6 @@ namespace Power8
                         SpecialFolderId = API.Csidl.COMPUTERSNEARME,
                         IsFolder = true,
                         NonCachedIcon = true,
-                        Parent = ControlPanelRoot
                     };
 
                     _networkRoot = Environment.OSVersion.Version.Major >= 6 ? xpWrkgrp7Net : xpNet7Wrkgrp;
