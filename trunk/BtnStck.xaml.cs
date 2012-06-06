@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace Power8
@@ -35,6 +36,7 @@ namespace Power8
 
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
         private readonly ObservableCollection<PowerItem> _searchData = new ObservableCollection<PowerItem>();
+        private readonly ListCollectionView _searchView;
 
         public event EventHandler RunCalled;
         public static event EventHandler Instanciated;
@@ -44,6 +46,11 @@ namespace Power8
         public BtnStck()
         {
             InitializeComponent();
+
+            _searchView = new ListCollectionView(_searchData);
+            if(_searchView.GroupDescriptions != null)
+                _searchView.GroupDescriptions.Add(new PropertyGroupDescription("Root.FriendlyName"));
+
             App.Current.DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
             foreach (var mb in folderButtons.Children.OfType<MenuedButton>().Union(dataGridHeightMeasure.Children.OfType<MenuedButton>()))
                 mb.Item = GetSpecialItems(mb.Name);
@@ -152,12 +159,12 @@ namespace Power8
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             var q = SearchBox.Text.Trim().ToLowerInvariant();
-            if (!String.IsNullOrWhiteSpace(q) && Items.Count > 0)
+            if (!String.IsNullOrWhiteSpace(q))
             {
-                dataGrid.ItemsSource = _searchData;
+                dataGrid.ItemsSource = _searchView;
                 Util.Fork(() => PowerItemTree.SearchTree(q, _searchData), "Search root for " + q).Start();
             }
-            else if (String.IsNullOrWhiteSpace(q))
+            else
             {
                 dataGrid.ItemsSource = Items;
             }
