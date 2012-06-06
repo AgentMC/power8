@@ -648,25 +648,26 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static CancellationTokenSource _lastSearchToken = new CancellationTokenSource();
+        private static CancellationTokenSource _lastSearchToken;
 
         public static void SearchTree(string query, IList<PowerItem> destination)
         {
             lock (destination)
             {
-                _lastSearchToken.Cancel();
+                if(_lastSearchToken != null)
+                    _lastSearchToken.Cancel();
                 Util.Send(destination.Clear);
                 _lastSearchToken = new CancellationTokenSource();
                 foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, NetworkRoot, LibrariesRoot })
                 {
-                    PowerItem tl = null, r = root;
-                    Util.Fork(() => SearchItems(query, r, destination, _lastSearchToken.Token, ref tl),
+                    var r = root;
+                    Util.Fork(() => SearchItems(query, r, destination, _lastSearchToken.Token),
                               "Tree search for " + r.FriendlyName).Start();
                 }
             }
         }
 
-        private static void SearchItems(string query, PowerItem source, IList<PowerItem> destination, CancellationToken stop, ref PowerItem threadLast)
+        private static void SearchItems(string query, PowerItem source, IList<PowerItem> destination, CancellationToken stop)
         {
             if(stop.IsCancellationRequested)
                 return;
@@ -675,26 +676,12 @@ namespace Power8
                 lock (destination)
                 {
                     if (!stop.IsCancellationRequested && !destination.Contains(source))
-                    {
-                        int insIdx;
-                        if (threadLast == null)
-                        {
-                            Util.Send(() => destination.Add(new PowerItem
-                                                {FriendlyName = "vvv"+ SEPARATOR_NAME + source.Root.FriendlyName}));
-                            insIdx = destination.Count;
-                        }
-                        else
-                        {
-                            insIdx = destination.IndexOf(threadLast) + 1;
-                        }
-                        Util.Send(() => destination.Insert(insIdx, source));
-                        threadLast = source;
-                    }
+                        Util.Send(() => destination.Add(source));
                 }
             }
             if (!source.AutoExpandIsPending)
                 foreach (var powerItem in source.Items)
-                    SearchItems(query, powerItem, destination, stop, ref threadLast);
+                    SearchItems(query, powerItem, destination, stop);
         }
 
         private static string[] GetLibraryDirectories(string libraryMs)
