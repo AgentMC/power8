@@ -27,6 +27,7 @@
                   x:Name="dataGrid" GridLinesVisibility="None" MouseDoubleClick="DataGridMouseDoubleClick"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" 
+                  
                   ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
@@ -38,6 +39,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Item" Width="*" Binding="{Binding Path=FriendlyName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Group" Binding="{Binding Root.FriendlyName}"/> 
                 <!--<DataGridTemplateColumn Header="Recent>" Width="0">
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
