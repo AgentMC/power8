@@ -57,6 +57,8 @@ namespace Power8
 
             PowerItemTree.WinSearchThreadCompleted +=
                 (sender, args) => Util.Send(() => searchMarker.Visibility = Visibility.Hidden);
+            PowerItemTree.WinSearchThreadStarted +=
+                (sender, args) => Util.Send(() => searchMarker.Visibility = Visibility.Visible);
         }
 
 // ReSharper disable RedundantAssignment
@@ -165,7 +167,6 @@ namespace Power8
             if (!String.IsNullOrWhiteSpace(q))
             {
                 dataGrid.ItemsSource = _searchView;
-                searchMarker.Visibility = Visibility.Visible;
                 Util.Fork(() => PowerItemTree.SearchTree(q, _searchData), "Search root for " + q).Start();
             }
             else
