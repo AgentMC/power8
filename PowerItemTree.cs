@@ -652,7 +652,7 @@ namespace Power8
 
         private static CancellationTokenSource _lastSearchToken;
 
-        public static event EventHandler WinSearchThreadCompleted ;
+        public static event EventHandler WinSearchThreadCompleted, WinSearchThreadStarted;
 
         public static void SearchTree(string query, IList<PowerItem> destination)
         {
@@ -705,21 +705,30 @@ namespace Power8
         {
             if(stop.IsCancellationRequested)
                 return;
+
             const string connText = "Provider=Search.CollatorDSO;Extended Properties='Application=Windows'";
-            var comText = @"SELECT TOP 50 System.ItemPathDisplay, System.ItemNameDisplay FROM SYSTEMINDEX WHERE " +
+            var comText = @"SELECT TOP 50 System.ItemPathDisplay FROM SYSTEMINDEX WHERE System.Search.Store='FILE' and " +
                 (ext == null ? string.Empty : "System.FileName like '%." + ext + "' and ") +
                 "(FREETEXT ('" + query + "') OR System.ItemNameDisplay like '%" + query + "%') " +
                 "ORDER BY RANK DESC"; 
+
             OleDbDataReader rdr = null;
             OleDbConnection connection = null;
+
             try
             {
                 connection = new OleDbConnection(connText);
                 connection.Open();
                 OleDbCommand command = new OleDbCommand(comText, connection);
-                Thread.Sleep(666);
+                Thread.Sleep(666); //let's give user the possibility to enter something more...
+
                 if(!stop.IsCancellationRequested)
+                {
+                    var h = WinSearchThreadStarted;
+                    if (h != null) h(null, null);
                     rdr = command.ExecuteReader();
+                }
+
                 if (rdr != null)
                 {
                     var groupItem = new PowerItem {FriendlyName = "Windows Search Results"};
@@ -754,6 +763,7 @@ namespace Power8
                 if(connection != null && connection.State == ConnectionState.Open)
                     connection.Close();
             }
+
             if (!stop.IsCancellationRequested)
             {
                 var h = WinSearchThreadCompleted;
