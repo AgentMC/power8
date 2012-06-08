@@ -54,6 +54,9 @@ namespace Power8
             App.Current.DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
             foreach (var mb in folderButtons.Children.OfType<MenuedButton>().Union(dataGridHeightMeasure.Children.OfType<MenuedButton>()))
                 mb.Item = GetSpecialItems(mb.Name);
+
+            PowerItemTree.WinSearchThreadCompleted +=
+                (sender, args) => Util.Send(() => searchMarker.Visibility = Visibility.Hidden);
         }
 
 // ReSharper disable RedundantAssignment
@@ -162,11 +165,13 @@ namespace Power8
             if (!String.IsNullOrWhiteSpace(q))
             {
                 dataGrid.ItemsSource = _searchView;
+                searchMarker.Visibility = Visibility.Visible;
                 Util.Fork(() => PowerItemTree.SearchTree(q, _searchData), "Search root for " + q).Start();
             }
             else
             {
                 dataGrid.ItemsSource = Items;
+                searchMarker.Visibility = Visibility.Hidden;
             }
         }
 

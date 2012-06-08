@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.OleDb;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -650,6 +652,8 @@ namespace Power8
 
         private static CancellationTokenSource _lastSearchToken;
 
+        public static event EventHandler WinSearchThreadCompleted ;
+
         public static void SearchTree(string query, IList<PowerItem> destination)
         {
             lock (destination)
@@ -658,12 +662,25 @@ namespace Power8
                     _lastSearchToken.Cancel();
                 Util.Send(destination.Clear);
                 _lastSearchToken = new CancellationTokenSource();
-                foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, NetworkRoot, LibrariesRoot })
+                string ext = null;
+                if(!query.Contains("|"))
                 {
-                    var r = root;
-                    Util.Fork(() => SearchItems(query, r, destination, _lastSearchToken.Token),
-                              "Tree search for " + r.FriendlyName).Start();
+                    foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, NetworkRoot, LibrariesRoot })
+                    {
+                        var r = root;
+                        Util.Fork(() => SearchItems(query, r, destination, _lastSearchToken.Token),
+                                  "Tree search for " + r.FriendlyName).Start();
+                    }
                 }
+                else
+                {
+                    var pair = query.Split(new[] {'|'}, 2);
+                    ext = pair[0];
+                    query = pair[1];
+                }
+                if (query.Length >= 3)
+                    Util.Fork(() => SearchWindows(query, ext, destination, _lastSearchToken.Token), 
+                                "WinSearch worker for " + ext + "/" + query).Start();
             }
         }
 
@@ -683,6 +700,67 @@ namespace Power8
                 foreach (var powerItem in source.Items)
                     SearchItems(query, powerItem, destination, stop);
         }
+
+        private static void SearchWindows(string query, string ext, IList<PowerItem> destination, CancellationToken stop)
+        {
+            if(stop.IsCancellationRequested)
+                return;
+            const string connText = "Provider=Search.CollatorDSO;Extended Properties='Application=Windows'";
+            var comText = @"SELECT TOP 50 System.ItemPathDisplay, System.ItemNameDisplay FROM SYSTEMINDEX WHERE " +
+                (ext == null ? string.Empty : "System.FileName like '%." + ext + "' and ") +
+                "(FREETEXT ('" + query + "') OR System.ItemNameDisplay like '%" + query + "%') " +
+                "ORDER BY RANK DESC"; 
+            OleDbDataReader rdr = null;
+            OleDbConnection connection = null;
+            try
+            {
+                connection = new OleDbConnection(connText);
+                connection.Open();
+                OleDbCommand command = new OleDbCommand(comText, connection);
+                Thread.Sleep(666);
+                if(!stop.IsCancellationRequested)
+                    rdr = command.ExecuteReader();
+                if (rdr != null)
+                {
+                    var groupItem = new PowerItem {FriendlyName = "Windows Search Results"};
+                    while (!stop.IsCancellationRequested && rdr.Read())
+                    {
+                        lock (destination)
+                        {
+                            var data = rdr[0].ToString();
+                            var source = new PowerItem
+                                             {
+                                                 Argument = data,
+                                                 Parent = groupItem,
+                                                 FriendlyName = data,
+                                                 IsFolder = Directory.Exists(data)
+                                             };
+                            if (!destination.Contains(source))
+                                Util.Send(() => destination.Add(source));
+                        }
+                    }
+                }
+            }
+#if DEBUG
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.ToString());
+            }
+#endif
+            finally
+            {
+                if(rdr != null)
+                    rdr.Close();
+                if(connection != null && connection.State == ConnectionState.Open)
+                    connection.Close();
+            }
+            if (!stop.IsCancellationRequested)
+            {
+                var h = WinSearchThreadCompleted;
+                if (h != null) h(null, null);
+            }
+        }
+
 
         private static string[] GetLibraryDirectories(string libraryMs)
         {
