@@ -310,6 +310,7 @@ namespace Power8
             }
         }
 
+        #region FS Events handlers
 
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
@@ -384,6 +385,9 @@ namespace Power8
             }
         }
 
+        #endregion
+
+        #region Tree builder methods
 
         public static void InitTree()
         {
@@ -499,6 +503,9 @@ namespace Power8
             return child;
         }
 
+        #endregion
+
+        #region Tree Utilities
 
         public static ProcessStartInfo ResolveItem(PowerItem item, bool prioritizeCommons = false)
         {
@@ -595,6 +602,52 @@ namespace Power8
                        : new Tuple<string, string>(string.Empty, itemFullPath);
         }
 
+        private static string[] GetLibraryDirectories(string libraryMs)
+        {
+            var xdoc = new XmlDocument();
+            try
+            {
+                xdoc.Load(libraryMs);
+            }
+            catch (XmlException) //malformed libraries XMLs hanlded
+            {
+                return new string[0];
+            }
+            var nodeList = xdoc["libraryDescription"];
+            if(nodeList == null)
+                return new string[0];
+            nodeList = nodeList["searchConnectorDescriptionList"];
+            if(nodeList == null)
+                return new string[0];
+            var nodeList2 = nodeList.GetElementsByTagName("searchConnectorDescription");
+            if (nodeList2.Count == 0)
+                return new string[0];
+            var temp = (from XmlNode node
+                        in nodeList2
+                        let xmlElement = node["simpleLocation"]
+                        where xmlElement != null
+                        let element = xmlElement["url"]
+                        where element != null
+                        select element.InnerText
+                        ).ToList();
+            var arr = new string[temp.Count];
+            for (var i = 0; i < temp.Count; i++)
+            {
+                if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
+                    arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12));
+                else if (!temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
+                    arr[i] = temp[i];
+            }
+            return arr;
+        }
+
+        #endregion
+
+        #region Search
+
+        private static CancellationTokenSource _lastSearchToken;
+        public static event EventHandler WinSearchThreadCompleted, WinSearchThreadStarted;
+
         /// <summary>
         /// From collection passed, searches for a parent item (i.e. container) of the one that would represent the object
         /// described by passed tuple. Optionally tries to generate items in the middle.
@@ -650,10 +703,6 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private static CancellationTokenSource _lastSearchToken;
-
-        public static event EventHandler WinSearchThreadCompleted, WinSearchThreadStarted;
-
         public static void SearchTree(string query, IList<PowerItem> destination)
         {
             lock (destination)
@@ -692,7 +741,8 @@ namespace Power8
             {
                 lock (destination)
                 {
-                    if (!stop.IsCancellationRequested && !destination.Contains(source))
+                    if (!stop.IsCancellationRequested &&
+                        !destination.Any(d => d.FriendlyName == source.FriendlyName && d.IsFolder == source.IsFolder))
                         Util.Send(() => destination.Add(source));
                 }
             }
@@ -707,9 +757,9 @@ namespace Power8
                 return;
 
             const string connText = "Provider=Search.CollatorDSO;Extended Properties='Application=Windows'";
-            var comText = @"SELECT TOP 50 System.ItemPathDisplay FROM SYSTEMINDEX WHERE System.Search.Store='FILE' and " +
+            var comText = @"SELECT TOP 100 System.ItemPathDisplay FROM SYSTEMINDEX WHERE System.Search.Store='FILE' and " +
                 (ext == null ? string.Empty : "System.FileName like '%." + ext + "' and ") +
-                "(FREETEXT ('" + query + "') OR System.ItemNameDisplay like '%" + query + "%') " +
+                "(FREETEXT ('" + query + "') OR System.FileName like '%" + query + "%') " +
                 "ORDER BY RANK DESC"; 
 
             OleDbDataReader rdr = null;
@@ -731,8 +781,9 @@ namespace Power8
 
                 if (rdr != null)
                 {
-                    var groupItem = new PowerItem {FriendlyName = "Windows Search Results"};
-                    while (!stop.IsCancellationRequested && rdr.Read())
+                    var groupItem = new PowerItem {FriendlyName = Resources.Str_WindowsSearchResults};
+                    var added = 0;
+                    while (!stop.IsCancellationRequested && added < 50 && rdr.Read())
                     {
                         lock (destination)
                         {
@@ -741,11 +792,14 @@ namespace Power8
                                              {
                                                  Argument = data,
                                                  Parent = groupItem,
-                                                 FriendlyName = data,
+                                                 //FriendlyName = data,
                                                  IsFolder = Directory.Exists(data)
                                              };
                             if (!destination.Contains(source))
+                            {
                                 Util.Send(() => destination.Add(source));
+                                added++;
+                            }
                         }
                     }
                 }
@@ -771,44 +825,6 @@ namespace Power8
             }
         }
 
-
-        private static string[] GetLibraryDirectories(string libraryMs)
-        {
-            var xdoc = new XmlDocument();
-            try
-            {
-                xdoc.Load(libraryMs);
-            }
-            catch (XmlException) //malformed libraries XMLs hanlded
-            {
-                return new string[0];
-            }
-            var nodeList = xdoc["libraryDescription"];
-            if(nodeList == null)
-                return new string[0];
-            nodeList = nodeList["searchConnectorDescriptionList"];
-            if(nodeList == null)
-                return new string[0];
-            var nodeList2 = nodeList.GetElementsByTagName("searchConnectorDescription");
-            if (nodeList2.Count == 0)
-                return new string[0];
-            var temp = (from XmlNode node
-                        in nodeList2
-                        let xmlElement = node["simpleLocation"]
-                        where xmlElement != null
-                        let element = xmlElement["url"]
-                        where element != null
-                        select element.InnerText
-                        ).ToList();
-            var arr = new string[temp.Count];
-            for (var i = 0; i < temp.Count; i++)
-            {
-                if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
-                    arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12));
-                else if (!temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
-                    arr[i] = temp[i];
-            }
-            return arr;
-        }
+        #endregion
     }
 }

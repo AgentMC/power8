@@ -377,6 +377,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to get tooltip for object.
+        /// </summary>
+        internal static string Err_CantGetTooltip {
+            get {
+                return ResourceManager.GetString("Err_CantGetTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to instanciate class {0}
         ///{1}.
         /// </summary>
@@ -515,6 +524,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Control panel element.
+        /// </summary>
+        internal static string Str_CplElement {
+            get {
+                return ResourceManager.GetString("Str_CplElement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exiting because {0}.
         /// </summary>
         internal static string Str_FailFastFormat {
@@ -574,6 +592,15 @@ namespace Power8.Properties {
         internal static string Str_UpdateAvailableFormat {
             get {
                 return ResourceManager.GetString("Str_UpdateAvailableFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Search Results.
+        /// </summary>
+        internal static string Str_WindowsSearchResults {
+            get {
+                return ResourceManager.GetString("Str_WindowsSearchResults", resourceCulture);
             }
         }
     }

@@ -33,11 +33,19 @@
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
-                            <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"/>
+                            <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"
+                                   ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Item" Width="Auto" Binding="{Binding Path=FriendlyName}" IsReadOnly="True" />
+                <DataGridTemplateColumn Header="Item" Width="Auto" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <TextBlock Text="{Binding FriendlyName}" 
+                                       ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <!--<DataGridTemplateColumn Header="Recent>" Width="0">
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>

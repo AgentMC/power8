@@ -97,6 +97,7 @@
     <Compile Include="ComputerList.xaml.cs">
       <DependentUpon>ComputerList.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PiToTooltipConverter.cs" />
     <Compile Include="DriveManager.cs" />
     <Compile Include="MenuedButton.xaml.cs">
       <DependentUpon>MenuedButton.xaml</DependentUpon>
