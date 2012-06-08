@@ -365,6 +365,7 @@
     
     <Style TargetType="{x:Type TextBox}" x:Key="SearchBoxStyle">
         <Setter Property="Height" Value="24"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Style.Triggers>
             <Trigger Property="Text" Value="">
                 <Setter Property="Background">

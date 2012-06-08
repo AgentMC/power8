@@ -757,7 +757,7 @@ namespace Power8
                 return;
 
             const string connText = "Provider=Search.CollatorDSO;Extended Properties='Application=Windows'";
-            var comText = @"SELECT TOP 100 System.ItemPathDisplay FROM SYSTEMINDEX WHERE System.Search.Store='FILE' and " +
+            var comText = @"SELECT TOP 100 System.ItemUrl FROM SYSTEMINDEX WHERE System.Search.Store='FILE' and " +
                 (ext == null ? string.Empty : "System.FileName like '%." + ext + "' and ") +
                 "(FREETEXT ('" + query + "') OR System.FileName like '%" + query + "%') " +
                 "ORDER BY RANK DESC"; 
@@ -783,16 +783,21 @@ namespace Power8
                 {
                     var groupItem = new PowerItem {FriendlyName = Resources.Str_WindowsSearchResults};
                     var added = 0;
+                    var bs = System.IO.Path.DirectorySeparatorChar;
                     while (!stop.IsCancellationRequested && added < 50 && rdr.Read())
                     {
                         lock (destination)
                         {
-                            var data = rdr[0].ToString();
+                            var data = rdr[0].ToString()
+                                             .Substring(5)
+                                             .TrimStart(new[] { '/' })
+                                             .Replace('/', bs); //uri => path
+                            if (data.Length > 1 && data[1] != ':') //UNC?
+                                data = bs + bs + data;
                             var source = new PowerItem
                                              {
                                                  Argument = data,
                                                  Parent = groupItem,
-                                                 //FriendlyName = data,
                                                  IsFolder = Directory.Exists(data)
                                              };
                             if (!destination.Contains(source))
