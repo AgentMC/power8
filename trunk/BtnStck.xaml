@@ -37,7 +37,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Item" Width="*" Binding="{Binding Path=FriendlyName}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Item" Width="Auto" Binding="{Binding Path=FriendlyName}" IsReadOnly="True" />
                 <!--<DataGridTemplateColumn Header="Recent>" Width="0">
                 </DataGridTemplateColumn>-->
             </DataGrid.Columns>
@@ -59,8 +59,9 @@
                                             <Expander.Header>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Path=Name}" />
-                                                    <TextBlock Text="{Binding Path=ItemCount}"/>
-                                                    <TextBlock Text="Items"/>
+                                                    <TextBlock Text=" - "/>
+                                                    <TextBlock Text="{Binding Path=ItemCount}" />
+                                                    <TextBlock Text=" Item(s)"/>
                                                 </StackPanel>
                                             </Expander.Header>
                                             <ItemsPresenter />
@@ -74,6 +75,7 @@
             </DataGrid.GroupStyle>
         </DataGrid>
         <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{StaticResource SearchBoxStyle}" TextChanged="SearchBoxTextChanged" PreviewKeyDown="SearchBoxPreviewKeyDown" />
+        <TextBlock Grid.Row="2" Name="searchMarker" Margin="10,3" HorizontalAlignment="Right" Text="Searching..." VerticalAlignment="Center" Foreground="Gray" Visibility="Hidden"/>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
             <Power8:MenuedButton x:Name="MyComputer" Margin="0,3,0,0"/>
 			<StackPanel x:Name="dataGridHeightMeasure">
