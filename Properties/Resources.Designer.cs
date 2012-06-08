@@ -268,6 +268,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Searching....
+        /// </summary>
+        internal static string CR_SearchMarker {
+            get {
+                return ResourceManager.GetString("CR_SearchMarker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download 7z.
         /// </summary>
         internal static string CR_UNdown7z {

@@ -308,16 +308,20 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_UNOther" xml:space="preserve">
     <value>Other options:</value>
   </data>
-    <data name="Err_NoPiExtracted">
-        <value xml:space="preserve">No data element available</value>
-    </data>
-    <data name="Err_CantGetTooltip">
-        <value xml:space="preserve">Unable to get tooltip for object</value>
-    </data>
-    <data name="Str_CplElement">
-        <value xml:space="preserve">Control panel element</value>
-    </data>
-    <data name="Str_WindowsSearchResults">
-        <value xml:space="preserve">Windows Search Results</value>
-    </data>
+  <data name="Err_NoPiExtracted" xml:space="preserve">
+    <value>No data element available</value>
+  </data>
+  <data name="Err_CantGetTooltip" xml:space="preserve">
+    <value>Unable to get tooltip for object</value>
+  </data>
+  <data name="Str_CplElement" xml:space="preserve">
+    <value>Control panel element</value>
+  </data>
+  <data name="Str_WindowsSearchResults" xml:space="preserve">
+    <value>Windows Search Results</value>
+  </data>
+  <data name="CR_SearchMarker" xml:space="preserve">
+    <value>Searching...</value>
+    <comment>Gray text indicating Windows search request was sent</comment>
+  </data>
 </root>

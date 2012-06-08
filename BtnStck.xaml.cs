@@ -56,9 +56,9 @@ namespace Power8
                 mb.Item = GetSpecialItems(mb.Name);
 
             PowerItemTree.WinSearchThreadCompleted +=
-                (sender, args) => Util.Send(() => searchMarker.Visibility = Visibility.Hidden);
+                (sender, args) => Util.Send(() => SearchMarker.Visibility = Visibility.Hidden);
             PowerItemTree.WinSearchThreadStarted +=
-                (sender, args) => Util.Send(() => searchMarker.Visibility = Visibility.Visible);
+                (sender, args) => Util.Send(() => SearchMarker.Visibility = Visibility.Visible);
         }
 
 // ReSharper disable RedundantAssignment
@@ -176,7 +176,7 @@ namespace Power8
             else
             {
                 dataGrid.ItemsSource = Items;
-                searchMarker.Visibility = Visibility.Hidden;
+                SearchMarker.Visibility = Visibility.Hidden;
             }
         }
 

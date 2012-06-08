@@ -82,8 +82,11 @@
                 </GroupStyle>
             </DataGrid.GroupStyle>
         </DataGrid>
-        <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{StaticResource SearchBoxStyle}" TextChanged="SearchBoxTextChanged" PreviewKeyDown="SearchBoxPreviewKeyDown" />
-        <TextBlock Grid.Row="2" Name="searchMarker" Margin="10,3" HorizontalAlignment="Right" Text="Searching..." VerticalAlignment="Center" Foreground="Gray" Visibility="Hidden"/>
+        <TextBox Grid.Row="2" Name="SearchBox" Margin="3"  Style="{StaticResource SearchBoxStyle}" 
+                 TextChanged="SearchBoxTextChanged" PreviewKeyDown="SearchBoxPreviewKeyDown" />
+        <TextBlock Grid.Row="2" Name="SearchMarker" Margin="10,3" HorizontalAlignment="Right" 
+                   VerticalAlignment="Center" Foreground="Gray" Visibility="Hidden"
+                   Text="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}"/>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
             <Power8:MenuedButton x:Name="MyComputer" Margin="0,3,0,0"/>
 			<StackPanel x:Name="dataGridHeightMeasure">
