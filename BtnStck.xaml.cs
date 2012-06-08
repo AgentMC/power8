@@ -148,11 +148,6 @@ namespace Power8
         {
             API.SendMessage(API.GetDesktopWindow(), API.WM.SYSCOMMAND, (int)API.SC.SCREENSAVE, 0);
         }
-
-        private void AllItemsMenuRootContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-            App.Current.MenuDataContext = Util.ExtractRelatedPowerItem(e);
-        }
         
         private void ButtonRunClick(object sender, RoutedEventArgs e)
         {
@@ -160,6 +155,15 @@ namespace Power8
             if (handler != null)
                 handler(this, null);
         }
+
+        //------------------------------------------
+
+        private void AllItemsMenuRootContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            App.Current.MenuDataContext = Util.ExtractRelatedPowerItem(e);
+        }
+
+        //------------------------------------------
 
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
         {
@@ -174,6 +178,58 @@ namespace Power8
                 dataGrid.ItemsSource = Items;
                 searchMarker.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void SearchBoxPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+                e.Handled = true;
+                switch (e.Key)
+                {
+                    case Key.Up:
+                        if (dataGrid.Items.Count > 0)
+                        {
+                            dataGrid.SelectedIndex = dataGrid.SelectedIndex <= 0
+                                                     ? dataGrid.Items.Count - 1
+                                                     : dataGrid.SelectedIndex - 1;
+                                             
+                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                        }
+                        return;
+                    case Key.Down:
+                        if (dataGrid.Items.Count > 0)
+                        {
+                            dataGrid.SelectedIndex = dataGrid.SelectedIndex >= dataGrid.Items.Count - 1
+                                                     ? 0
+                                                     : dataGrid.SelectedIndex + 1;
+                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                        }
+                        return;
+                    case Key.Enter:
+                        if (dataGrid.SelectedItem != null)
+                        {
+                            DataGridMouseDoubleClick(dataGrid, null);
+                        }
+                        else
+                        {
+                            var data = Util.CommandToFilenameAndArgs(SearchBox.Text);
+                            if(data != null)
+                            {
+                                Process.Start(data.Item1, data.Item2);
+                                Hide();
+                            }
+                        }
+                        return;
+                    case Key.Escape:
+                        SearchBox.Text = string.Empty;
+                        return;
+                }
+            e.Handled = false;
+        }
+
+        private void DataGridMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Util.ExtractRelatedPowerItem(sender).Invoke();
+            Hide();
         }
 
         #endregion
@@ -252,57 +308,5 @@ namespace Power8
             get { return _cmd; }
         }
         #endregion
-
-        private void DataGridMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            Util.ExtractRelatedPowerItem(sender).Invoke();
-            Hide();
-        }
-
-        private void SearchBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-                e.Handled = true;
-                switch (e.Key)
-                {
-                    case Key.Up:
-                        if (dataGrid.Items.Count > 0)
-                        {
-                            dataGrid.SelectedIndex = dataGrid.SelectedIndex <= 0
-                                                     ? dataGrid.Items.Count - 1
-                                                     : dataGrid.SelectedIndex - 1;
-                                             
-                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
-                        }
-                        return;
-                    case Key.Down:
-                        if (dataGrid.Items.Count > 0)
-                        {
-                            dataGrid.SelectedIndex = dataGrid.SelectedIndex >= dataGrid.Items.Count - 1
-                                                     ? 0
-                                                     : dataGrid.SelectedIndex + 1;
-                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
-                        }
-                        return;
-                    case Key.Enter:
-                        if (dataGrid.SelectedItem != null)
-                        {
-                            DataGridMouseDoubleClick(dataGrid, null);
-                        }
-                        else
-                        {
-                            var data = Util.CommandToFilenameAndArgs(SearchBox.Text);
-                            if(data != null)
-                            {
-                                Process.Start(data.Item1, data.Item2);
-                                Hide();
-                            }
-                        }
-                        return;
-                    case Key.Escape:
-                        SearchBox.Text = string.Empty;
-                        return;
-                }
-            e.Handled = false;
-        }
     }
 }

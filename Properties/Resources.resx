@@ -311,4 +311,13 @@ Cancel: I skip this update, never notify me about this version.</value>
     <data name="Err_NoPiExtracted">
         <value xml:space="preserve">No data element available</value>
     </data>
+    <data name="Err_CantGetTooltip">
+        <value xml:space="preserve">Unable to get tooltip for object</value>
+    </data>
+    <data name="Str_CplElement">
+        <value xml:space="preserve">Control panel element</value>
+    </data>
+    <data name="Str_WindowsSearchResults">
+        <value xml:space="preserve">Windows Search Results</value>
+    </data>
 </root>
