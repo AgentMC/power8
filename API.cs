@@ -56,6 +56,9 @@ namespace Power8
         [DllImport("dwmapi.dll")]
         public static extern void DwmExtendFrameIntoClientArea (IntPtr hWnd, Margins pMargins);
 
+        [DllImport("dwmapi.dll", PreserveSig = false)]
+        public static extern bool DwmIsCompositionEnabled();
+
         [StructLayout(LayoutKind.Sequential)]
         public class Margins
         {public int cxLeftWidth, cxRightWidth, cyTopHeight, cyBottomHeight;}

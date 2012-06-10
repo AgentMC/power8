@@ -19,6 +19,7 @@ using Application = System.Windows.Forms.Application;
 using MenuItem = System.Windows.Controls.MenuItem;
 using DataGrid = System.Windows.Controls.DataGrid;
 using MessageBox = System.Windows.MessageBox;
+using System.Xml;
 
 namespace Power8
 {
@@ -28,6 +29,7 @@ namespace Power8
 
         private static readonly StringBuilder Buffer = new StringBuilder(1024);
         private static readonly Dictionary<Type, IComponent> Instances = new Dictionary<Type, IComponent>();
+        private static Dictionary<char, string> _searchProviders;
 
 
         public static void Send(Action method)
@@ -84,10 +86,15 @@ namespace Power8
         public static IntPtr MakeGlassWpfWindow(this Window w)
         {
             var source = w.GetHwndSource();
-            if (source.CompositionTarget != null) 
-                source.CompositionTarget.BackgroundColor = Colors.Transparent;
-            if (Environment.OSVersion.Version.Major >= 6) 
+            if (Environment.OSVersion.Version.Major >= 6 &&  API.DwmIsCompositionEnabled())
+            {
+                if (source.CompositionTarget != null)
+                {
+                    w.Background = Brushes.Transparent;
+                    source.CompositionTarget.BackgroundColor = Colors.Transparent;
+                }
                 MakeGlass(source.Handle);
+            }
             return source.Handle;
         }
         
@@ -341,12 +348,29 @@ namespace Power8
             {
                 if (File.Exists(command))
                     return new Tuple<string, string>(command, "");
+                if (command[1] == ' ')//web search?
+                {
+                    if (_searchProviders == null)
+                    {
+                        _searchProviders = new Dictionary<char, string>();
+                        var doc = new XmlDocument();
+                        doc.LoadXml(Settings.Default.SearchProviders);
+                        foreach (XmlElement prov in doc["P8SearchProviders"].GetElementsByTagName("Provider"))
+                            _searchProviders.Add(prov.GetAttribute("key")[0], prov.InnerText);
+                    }
+
+                    string prefix = _searchProviders.ContainsKey(command[0]) ? _searchProviders[command[0]] : null;
+                    if (prefix != null)
+                        return new Tuple<string, string>(
+                            string.Format(prefix, Uri.EscapeUriString(command.Substring(2))), 
+                            null);
+                }
+                //normal file and args
                 var argPtr = command[0] == '"' ? command.IndexOf('"', 1) + 1 : command.IndexOf(' ');
                 if (argPtr > 0)
-                {
                     return new Tuple<string, string>(command.Substring(0, argPtr).Trim('"'),
                                                      command.Substring(argPtr).TrimStart(' '));
-                }
+                return new Tuple<string, string>(command, null);
             }
             return null;
         }
@@ -399,9 +423,7 @@ namespace Power8
 
         private static string NameSpaceToGuidWithBraces(string ns)
         {
-            ns = ns.Substring(ns.LastIndexOf('\\') + 1);
-            //TODO: check if commented is really nonsence
-            ns = ns.TrimStart(':'/*, '\\'*/);
+            ns = ns.Substring(ns.LastIndexOf('\\') + 1).TrimStart(':');
             if (!ns.StartsWith("{"))
                 ns = "{" + ns + "}";
             return ns;

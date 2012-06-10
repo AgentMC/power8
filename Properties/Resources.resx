@@ -324,4 +324,8 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>Searching...</value>
     <comment>Gray text indicating Windows search request was sent</comment>
   </data>
+  <data name="Str_Library" xml:space="preserve">
+    <value> (library)</value>
+    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
+  </data>
 </root>
