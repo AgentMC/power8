@@ -2,6 +2,15 @@
 #labels Featured
 
 
+==Alpha 4 (v.0.4.0.0): 11.06.2012==
+  
+  # `[new]` Added search functionality. 3 new ways to search, see details in [FeatureDetails] page;
+  # `[new]` When Aero is off / on XP / on High Contrast theme - now we look bit better (no more boring black);
+  # `[changed]` Icons in menu items under Windows 8 Release preview now placed properly;
+  # `[fixed]` Log Off command now works as expected;
+  # `[fixed]` Problems with "Show more" network item (visible if you have 11+ PCs on network);
+
+
 ==Alpha 3 Release 2 (v.0.3.5.0): 27.05.2012==
   
   # `[new]` Added support for removable and ram drives. P8 will add new drives in list when they're available and remove them when they're disconnected;
