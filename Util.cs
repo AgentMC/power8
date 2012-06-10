@@ -17,10 +17,8 @@ using System.Windows.Threading;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
 using MenuItem = System.Windows.Controls.MenuItem;
-using DataGrid = System.Windows.Controls.DataGrid;
 using MessageBox = System.Windows.MessageBox;
 using System.Xml;
-using System.Windows.Input;
 
 namespace Power8
 {
@@ -251,6 +249,12 @@ namespace Power8
                     provider.QueryService(ref sidBrowser, ref iidBrowser, out browser);
                     browser.BrowseObject(pidl, launchNew ? API.SBSP.NEWBROWSER : API.SBSP.SAMEBROWSER);
                 }
+                catch (Exception e)
+                {
+#if DEBUG
+                    Debug.WriteLine(e.ToString());
+#endif
+                }
                 finally
                 {
                     if(shWndList != null)
@@ -269,6 +273,12 @@ namespace Power8
                 {
                     browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
                     browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
+                }
+                catch (Exception e)
+                {
+#if DEBUG
+                    Debug.WriteLine(e.ToString());
+#endif
                 }
                 finally
                 {

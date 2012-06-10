@@ -821,12 +821,12 @@ namespace Power8
                     }
                 }
             }
-#if DEBUG
             catch (Exception e)
             {
+#if DEBUG
                 Debug.WriteLine(e.ToString());
-            }
 #endif
+            }
             finally
             {
                 if(rdr != null)
