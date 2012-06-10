@@ -82,7 +82,7 @@ Windows Search is used to search system-known FILE elements, with your query as 
   *  Wildcard search over files' names.
 Note that unlike Internal Search, your query is checked with file *names* only while using Windows Search (to make it faster).
 
-Minimum search length of query text is 3 characters, however since it is full-text search, you may prefer using somewhat longer queries for it. Compared with W7 Search window, Power8's queries to WindowsSearch service provide more results than in W7 Start Menu and less results than in Search system window. This search is deferred: when you type a query, it will start only when no key is pressed during 2/3 of second.
+Minimum search length of query text is 3 characters, however since it is full-text search, you may prefer using somewhat longer queries for it. Compared with W7 Search window, Power8's queries to Windows Search service provide more results than in W7 Start Menu and less results than in Search system window. This search is deferred: when you type a query, it will start only when no key is pressed during 2/3 of second.
 
 By default, Power8 will display only top 50 unique (on the file path level) results of top 100 returned by Windows search. When checking uniqueness, internally returned results are also taken into account.
 
