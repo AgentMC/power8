@@ -218,6 +218,8 @@ namespace Power8
         {
             get
             {
+                if (SpecialFolderId == API.Csidl.POWER8CLASS)
+                    return false; //Hide properties and Open Location for special class objects
                 if (!IsControlPanelChildItem)
                     return true;
                 if(Argument != null)
@@ -239,7 +241,12 @@ namespace Power8
 
         public bool IsFolderUnderStartMenu
         {
-            get { return IsFolder && Argument.StartsWith(@"\"); }
+            get
+            {
+                return IsFolder &&
+                       PowerItemTree.StartMenuRoot.Count > 0 &&
+                       Root == PowerItemTree.StartMenuRoot[0];
+            }
         }
 
 
