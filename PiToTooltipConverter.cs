@@ -22,11 +22,15 @@ namespace Power8
                 return Resources.Err_CantGetTooltip;
             if (!pi.IsNotPureControlPanelFlowItem)
                 return Resources.Str_CplElement;
-            return pi.IsSpecialObject
-                    ? (pi.IsLibrary 
-                        ? pi.FriendlyName + Resources.Str_Library 
-                        : Util.GetOpenCommandForClass(pi.Argument).Item1)
-                    : PowerItemTree.GetResolvedArgument(pi);
+            if( pi.IsSpecialObject)
+            {
+                var cmd = Util.GetOpenCommandForClass(pi.Argument);
+                if(cmd == null)
+                    return pi.FriendlyName + Resources.Str_Library;
+                else
+                    return cmd.Item1;
+            }
+            return PowerItemTree.GetResolvedArgument(pi);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
