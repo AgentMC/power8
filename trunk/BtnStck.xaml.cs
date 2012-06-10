@@ -168,10 +168,17 @@ namespace Power8
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             var q = SearchBox.Text.Trim().ToLowerInvariant();
-            if (!String.IsNullOrWhiteSpace(q))
+            if (!String.IsNullOrWhiteSpace(q) && q.Length > 1)
             {
-                dataGrid.ItemsSource = _searchView;
-                Util.Fork(() => PowerItemTree.SearchTree(q, _searchData), "Search root for " + q).Start();
+                if (q[1] != ' ')
+                {
+                    dataGrid.ItemsSource = _searchView;
+                    Util.Fork(() => PowerItemTree.SearchTree(q, _searchData), "Search root for " + q).Start();
+                }
+                else
+                {
+                    dataGrid.SelectedIndex = -1;
+                }
             }
             else
             {
@@ -214,7 +221,14 @@ namespace Power8
                             var data = Util.CommandToFilenameAndArgs(SearchBox.Text);
                             if(data != null)
                             {
-                                Process.Start(data.Item1, data.Item2);
+                                try
+                                {
+                                    Process.Start(data.Item1, data.Item2);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Util.DispatchCaughtException(ex);
+                                }
                                 Hide();
                             }
                         }

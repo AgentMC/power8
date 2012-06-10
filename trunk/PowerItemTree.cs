@@ -762,28 +762,29 @@ namespace Power8
                 "(FREETEXT ('" + query + "') OR System.FileName like '%" + query + "%') " +
                 "ORDER BY RANK DESC"; 
 
+            Thread.Sleep(666); //let's give user the possibility to enter something more...
             OleDbDataReader rdr = null;
             OleDbConnection connection = null;
 
             try
             {
-                connection = new OleDbConnection(connText);
-                connection.Open();
-                OleDbCommand command = new OleDbCommand(comText, connection);
-                Thread.Sleep(666); //let's give user the possibility to enter something more...
-
                 if(!stop.IsCancellationRequested)
                 {
+                    connection = new OleDbConnection(connText);
+                    connection.Open();
+                    var command = new OleDbCommand(comText, connection);
+
                     var h = WinSearchThreadStarted;
                     if (h != null) h(null, null);
-                    rdr = command.ExecuteReader();
+                    if(!stop.IsCancellationRequested)
+                        rdr = command.ExecuteReader();
                 }
 
                 if (rdr != null)
                 {
                     var groupItem = new PowerItem {FriendlyName = Resources.Str_WindowsSearchResults};
                     var added = 0;
-                    var bs = System.IO.Path.DirectorySeparatorChar;
+                    var bs = Path.DirectorySeparatorChar;
                     while (!stop.IsCancellationRequested && added < 50 && rdr.Read())
                     {
                         lock (destination)

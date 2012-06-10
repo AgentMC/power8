@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:Power8="clr-namespace:Power8"
-        AllowsTransparency="False" Background="Transparent" 
+        AllowsTransparency="False" Background="{x:Static SystemColors.ControlBrush}" 
         Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated"
         mc:Ignorable="d" d:DesignHeight="515" d:DesignWidth="494" Name="ButtonStack"
@@ -27,7 +27,7 @@
                   x:Name="dataGrid" GridLinesVisibility="None" MouseDoubleClick="DataGridMouseDoubleClick"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" 
-                  ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening">
+                  ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening" HorizontalScrollBarVisibility="Disabled">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
@@ -38,10 +38,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Item" Width="Auto" IsReadOnly="True">
+                <DataGridTemplateColumn Header="Item" IsReadOnly="True" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
-                            <TextBlock Text="{Binding FriendlyName}" 
+                            <TextBlock Text="{Binding FriendlyName}" TextOptions.TextFormattingMode="Display" 
+                                       TextTrimming="CharacterEllipsis" 
                                        ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -89,22 +90,22 @@
                    Text="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}"/>
         <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
             <Power8:MenuedButton x:Name="MyComputer" Margin="0,3,0,0"/>
-			<StackPanel x:Name="dataGridHeightMeasure">
-	            <Power8:MenuedButton x:Name="Libraries" Margin="0,1,0,0"/>
-	            <Power8:MenuedButton x:Name="ControlPanel" Margin="0,1,0,0"/>
-	            <Power8:MenuedButton x:Name="AdminTools" Margin="0,1,0,0"/>
-	            <Power8:MenuedButton x:Name="NetItems" Margin="0,1,0,0"/>
-	            <Separator Margin="0,5"/>
-	            <Button Click="ButtonRunClick" Name="ButtonRun" Margin="0"/>
-	            <Separator Margin="0,5"/>
-	            <!--Completely different design here-->
-	            <Button Click="ButtonShutdownClick" Name="ButtonShutdown"/>
-	            <Button Click="ButtonRestartClick" Name="ButtonRestart"/>
-	            <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
-	            <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
-	            <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
-	            <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
-			</StackPanel>
+            <StackPanel x:Name="dataGridHeightMeasure">
+                <Power8:MenuedButton x:Name="Libraries" Margin="0,1,0,0"/>
+                <Power8:MenuedButton x:Name="ControlPanel" Margin="0,1,0,0"/>
+                <Power8:MenuedButton x:Name="AdminTools" Margin="0,1,0,0"/>
+                <Power8:MenuedButton x:Name="NetItems" Margin="0,1,0,0"/>
+                <Separator Margin="0,5"/>
+                <Button Click="ButtonRunClick" Name="ButtonRun" Margin="0"/>
+                <Separator Margin="0,5"/>
+                <!--Completely different design here-->
+                <Button Click="ButtonShutdownClick" Name="ButtonShutdown"/>
+                <Button Click="ButtonRestartClick" Name="ButtonRestart"/>
+                <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
+                <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
+                <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
+                <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
+            </StackPanel>
             <Button Click="ButtonLockClick" Name="ButtonLock" Margin="0,0,0,2"/>
         </StackPanel>
     </Grid>

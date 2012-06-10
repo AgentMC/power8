@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         Name="Root" Closed="WindowClosed" Loaded="WindowLoaded"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
-        AllowsTransparency="False" Background="Transparent" SizeToContent="WidthAndHeight">
+        AllowsTransparency="False" Background="{x:Static SystemColors.ActiveCaptionBrush}" SizeToContent="WidthAndHeight">
     <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack">
         <Button.ContextMenu>
             <ContextMenu Name="menu" >

@@ -24,8 +24,10 @@ namespace Power8
             if (!pi.IsNotPureControlPanelFlowItem)
                 return Resources.Str_CplElement;
             return pi.IsSpecialObject
-                       ? Util.GetOpenCommandForClass(pi.Argument).Item1
-                       : PowerItemTree.GetResolvedArgument(pi);
+                    ? (pi.IsLibrary 
+                        ? pi.FriendlyName + Resources.Str_Library 
+                        : Util.GetOpenCommandForClass(pi.Argument).Item1)
+                    : PowerItemTree.GetResolvedArgument(pi);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

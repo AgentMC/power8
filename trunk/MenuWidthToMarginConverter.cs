@@ -13,18 +13,23 @@ namespace Power8
     [TypeConverter(typeof(double))]
     class MenuWidthToMarginConverter : IValueConverter
     {
+        private static Thickness Classic = new Thickness(-14, 2, 0, 2),
+                                 Regular = new Thickness(-30, 0, 0, 0),
+                                 W8RPMenuHack = new Thickness(-42, 0, 0, 0);
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             int dbl = (int) SystemParameters.MenuWidth;
-            if (dbl == 19) //Aero/7
+            if (dbl == 18 || //HighContrast on 8
+                (Environment.OSVersion.Version >= new Version(6, 2) && !API.DwmIsCompositionEnabled()))
             {
-                if(Environment.OSVersion.Version >= new Version(6,2,8400,0))
-                    return new Thickness(-42, 0, 0, 0);//W8 RP 1
-                return new Thickness(-30, 0, 0, 0);
+                return Classic;
             }
-            if (dbl == 18) //Classic/7
-            { 
-                return new Thickness(-14, 2, 0, 2); 
+            if (dbl == 19) //Aero/7 basic/XP theme
+            {
+                if (Environment.OSVersion.Version >= new Version(6, 2, 8400, 0))
+                    return W8RPMenuHack;
+                return Regular;
             }
 #if DEBUG
             Debug.WriteLine("dbl="+dbl);
