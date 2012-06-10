@@ -296,14 +296,20 @@ namespace Power8
 
                                       if (addMoreItem)
                                           Util.Post(() =>
-                                                    _networkRoot.Items.Add(new PowerItem
-                                                                               {
-                                                                                   FriendlyName = Resources.Str_ShowMore,
-                                                                                   Parent = _networkRoot,
-                                                                                   SpecialFolderId =
-                                                                                       API.Csidl.POWER8CLASS,
-                                                                                   Argument = "Power8.ComputerList"
-                                                                               }));
+                                            {
+                                                _networkRoot.Items[0].Icon = 
+                                                    ImageManager.GetImageContainerSync(_networkRoot.Items[0], API.Shgfi.SMALLICON);
+                                                _networkRoot.Items.Add(new PowerItem
+                                                                        {
+                                                                            FriendlyName = Resources.Str_ShowMore,
+                                                                            Parent = _networkRoot,
+                                                                            SpecialFolderId =
+                                                                                API.Csidl.POWER8CLASS,
+                                                                            IsFolder = true,
+                                                                            Argument = "Power8.ComputerList",
+                                                                            Icon = _networkRoot.Items[0].Icon
+                                                                        });
+                                            });
                                   }, "Network Scan Thread").Start();
                 }
                 return _networkRoot;
