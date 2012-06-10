@@ -7,30 +7,19 @@ For all other feature requests, currently not prioritized, please consult [Featu
 
 For already implemented features, see [Changelog] page.
 
-= _Alpha_ =
-
-== Alpha 4 ==
-*estimated release date: 10.06.12*
-  * search using Power8 data;
-  * search using Windows Search engine;
-  * internet search (like "wiki driver");
-  * various bugfixes and UI enhancements missed in 0.3.5;
-  * (stretch-goal) theme for non-aero mode (seems, for W7/XP/HC mode only);
-
-
 = _Beta_ =
 
 == B1 ==
-*estimated release date: 24.06.12*
+*estimated release date: 01.07.12* (moved `cause everyone on vacation :))
   * launched items list;
   * items can be pinned;
   * each item has possible command lines obtainable by process event dispatcher;
   * object jump lists also used as launch commands for items;
-  * theme for non-Aero if missed in 0.4;
+  * theme for non-Aero better implementation;
   * icon and logo;
   * localization;
 
 
 = _Power8 v.1.0 Release_ =
-*estimated release date: 01.07.12*
+*estimated release date: 08.07.12*
   * various bugfixes and UI enhancements;
