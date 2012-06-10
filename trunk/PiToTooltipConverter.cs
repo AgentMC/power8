@@ -4,10 +4,9 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Data;
+using Power8.Properties;
 #if DEBUG
 using System.Diagnostics;
-using Power8.Properties;
-
 #endif
 
 namespace Power8
