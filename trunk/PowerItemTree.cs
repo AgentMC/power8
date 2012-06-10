@@ -233,31 +233,36 @@ namespace Power8
                         IsFolder = true,
                         HasLargeIcon = true,
                         NonCachedIcon = true,
-                        Argument = API.ShNs.NetworkNeighbourhood,
-                        Parent = ControlPanelRoot
+                        Argument = API.ShNs.NetworkNeighbourhood
                     };
-
-                    var conString = Util.ResolveSpecialFolderName(API.Csidl.CONNECTIONS);
-                    var connections =
-                        ControlPanelRoot.Items.FirstOrDefault(i => i.FriendlyName == conString) ??
-                        new PowerItem
-                            {
-                                SpecialFolderId = API.Csidl.CONNECTIONS,
-                                NonCachedIcon = true,
-                                IsFolder = true,
-                                Argument = API.ShNs.NetworkConnections,
-                            };
 
                     var xpWrkgrp7Net = new PowerItem
                     {
                         SpecialFolderId = API.Csidl.COMPUTERSNEARME,
                         IsFolder = true,
                         NonCachedIcon = true,
+                        HasLargeIcon = true
                     };
 
                     _networkRoot = Environment.OSVersion.Version.Major >= 6 ? xpWrkgrp7Net : xpNet7Wrkgrp;
-                    _networkRoot.Items.Add(_networkRoot == xpWrkgrp7Net ? xpNet7Wrkgrp : xpWrkgrp7Net);
+
+                    var child = _networkRoot == xpWrkgrp7Net ? xpNet7Wrkgrp : xpWrkgrp7Net;
+                    _networkRoot.Items.Add(child);
+                    child.Parent = _networkRoot;
+
+                    var conString = Util.ResolveSpecialFolderName(API.Csidl.CONNECTIONS);
+                    var connections =
+                        ControlPanelRoot.Items.FirstOrDefault(i => i.FriendlyName == conString) ??
+                        new PowerItem
+                        {
+                            SpecialFolderId = API.Csidl.CONNECTIONS,
+                            NonCachedIcon = true,
+                            IsFolder = true,
+                            Argument = API.ShNs.NetworkConnections,
+                            Parent = _networkRoot
+                        };
                     _networkRoot.Items.Add(connections);
+                                        
                     _networkRoot.Items.Add(new PowerItem {FriendlyName = SEPARATOR_NAME, Parent = _networkRoot});
 
                     Util.Fork(() =>
