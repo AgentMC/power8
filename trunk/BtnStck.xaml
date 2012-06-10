@@ -27,14 +27,15 @@
                   x:Name="dataGrid" GridLinesVisibility="None" MouseDoubleClick="DataGridMouseDoubleClick"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" 
-                  ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening" HorizontalScrollBarVisibility="Disabled">
+                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="dataGrid_PreviewKeyDown">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
                             <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"
-                                   ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"/>
+                                   ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
+                                   ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -42,8 +43,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
                             <TextBlock Text="{Binding FriendlyName}" TextOptions.TextFormattingMode="Display" 
-                                       TextTrimming="CharacterEllipsis" 
-                                       ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}" />
+                                       TextTrimming="CharacterEllipsis" ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
+                                       ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -67,10 +68,12 @@
                                         <Expander>
                                             <Expander.Header>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Path=Name}" />
+                                                    <TextBlock Text="{Binding Name}" />
                                                     <TextBlock Text=" - "/>
-                                                    <TextBlock Text="{Binding Path=ItemCount}" />
-                                                    <TextBlock Text=" Item(s)"/>
+                                                    <TextBlock Text="{Binding ItemCount}" />
+                                                    <TextBlock Name="GroupItemsText"
+                                                               Text="{Binding Path=Name, RelativeSource={RelativeSource Self}, 
+                                                               Mode=OneWay, Converter={StaticResource localizer}}"/>
                                                 </StackPanel>
                                             </Expander.Header>
                                             <ItemsPresenter />

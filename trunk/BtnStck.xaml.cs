@@ -214,7 +214,7 @@ namespace Power8
                     case Key.Enter:
                         if (dataGrid.SelectedItem != null)
                         {
-                            DataGridMouseDoubleClick(dataGrid, null);
+                            InvokeFromDataGrid((PowerItem)dataGrid.SelectedItem);
                         }
                         else
                         {
@@ -242,8 +242,9 @@ namespace Power8
 
         private void DataGridMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Util.ExtractRelatedPowerItem(sender).Invoke();
-            Hide();
+            var i = Util.ExtractRelatedPowerItem(e);
+            if (i != null)
+                InvokeFromDataGrid(i);
         }
 
         #endregion
@@ -322,5 +323,40 @@ namespace Power8
             get { return _cmd; }
         }
         #endregion
+
+        private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var pi = Util.ExtractRelatedPowerItem(e);
+                if (pi != null)
+                {
+                    e.Handled = true;
+                    InvokeFromDataGrid(pi);
+                }
+            }
+            if (e.Key == Key.Tab)
+            {
+                e.Handled = true;
+                if (Keyboard.IsKeyDown(Key.LeftShift))
+                    AllItemsMenuRoot.Focus();
+                else
+                    SearchBox.Focus();
+            }
+
+        }
+
+        private void InvokeFromDataGrid(PowerItem item)
+        {
+            try
+            {
+                item.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Util.DispatchCaughtException(ex);
+            }
+            Hide();
+        }
     }
 }

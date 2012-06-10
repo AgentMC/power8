@@ -232,6 +232,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  Item(s).
+        /// </summary>
+        internal static string CR_GroupItemsText {
+            get {
+                return ResourceManager.GetString("CR_GroupItemsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Start.
         /// </summary>
         internal static string CR_MWAutoStart {
