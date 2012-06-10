@@ -57,3 +57,50 @@ When there are more than 10 computers over network available (like if you're in 
 This window allows you to quickly search for required computer and open it by double-clicking the entry. Note that when computer is unreachable, "My Documents" window may be opened, or an error message may be shown.
 
 It is planned that there will be a specific configurable context menu with items such as "Start Remote Desktop here" and similar. Fell free to post suggestions for the out-of-box preconfigured items.
+
+== Search ==
+
+http://i36.fastpic.ru/big/2012/0611/10/0676baa21d7d64618a44081ebfa37b10.png
+
+There are 3 ways to search using Power8.
+
+=== Internal search ===
+This is the search over everything known to Power8 itself: 
+  *  Start menu;
+  *  Items displayed in Computer or Documents menu-butons;
+  *  Control panel elements;
+  *  Network neighborhood.
+
+Minimum search length for this search is 2 characters, so "no" will already bring you Notepad up. Query string is being looked for in elements' path, description or target path if current element is a Link.
+This search is immediate. Found elements are grouped according to item under which they were found. Example of the internal search is on screenshot above.
+
+=== Windows Search ===
+This search type uses Windows Search engine and can be launched along with internal search. However, to run it, you must have Windows Search enabled on your PC. It is done on W7/W8 by default, but can be switched off. In this case there will be no search results using this search.
+
+Windows Search is used to search system-known FILE elements, with your query as both:
+  *  Full-text search (Caption/Header/Title *and* content of documents);
+  *  Wildcard search over files' names.
+Note that unlike Internal Search, your query is checked with file *names* only while using Windows Search (to make it faster).
+
+Minimum search length of query text is 3 characters, however since it is full-text search, you may prefer using somewhat longer queries for it. Compared with W7 Search window, Power8's queries to WindowsSearch service provide more results than in W7 Start Menu and less results than in Search system window. This search is deferred: when you type a query, it will start only when no key is pressed during 2/3 of second.
+
+By default, Power8 will display only top 50 unique (on the file path level) results of top 100 returned by Windows search. When checking uniqueness, internally returned results are also taken into account.
+
+You can also limit the search results to specific file extension. The format of such query is "extension|query text". When Power8 detects a separator ("|") in a query, only Windows Search occurs, you'll receive no Internal Search results. 
+
+The rule about 3 search text chars is still valid for Limited Windows Search, thus the search won't occur for query "mp3|wh".
+
+=== Internet search ===
+This is completely different search type. No results will be produced in P8 window, instead you use it like a shortcut to your favorite search engines. 
+
+The format of query is "key query" (with space inside), where key is 1 character (case sensitive, "a" not equal to "A") from the table below, and query is your search string. At the moment keys are only changeable manually in settings file, in future the settings dialog will be added to set 'em up. By default, the following list is provided:
+||b||Bing||
+||d||Baidu||
+||g||Google.com (https)||
+||w||Wikipedia (english)||
+||y||Yandex.com||
+||в||Wikipedia (русский)||
+||г||Google.ru (https)||
+||я||Яndex.ru||
+
+This search is not even deferred - it's manual. When you press enter, the default system browser will be launched to show you the results of the search query using the site chosen.
