@@ -328,4 +328,8 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value> (library)</value>
     <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
   </data>
+  <data name="CR_GroupItemsText" xml:space="preserve">
+    <value> Item(s)</value>
+    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
+  </data>
 </root>
