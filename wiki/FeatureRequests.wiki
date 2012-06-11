@@ -3,6 +3,7 @@
 
 = List of ideas and requests we not commited yet =
   * Skins/styles;
+    * In particular, Metro style.
   * Configurable user menus;
   * Configuration dialog for example, to set up search engine;
   * Context menu (configurable) for computer list, specific items for each computer item;
