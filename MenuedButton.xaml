@@ -116,5 +116,11 @@
         <EventTrigger RoutedEvent="Mouse.MouseLeave">
             <BeginStoryboard x:Name="MouseLeave_BeginStoryboard" Storyboard="{StaticResource MouseLeave}"/>
         </EventTrigger>
+        <EventTrigger RoutedEvent="FocusManager.GotFocus">
+        	<BeginStoryboard Storyboard="{StaticResource OnMouseEnter1}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="FocusManager.LostFocus">
+        	<BeginStoryboard x:Name="MouseLeave_BeginStoryboard2" Storyboard="{StaticResource MouseLeave}"/>
+        </EventTrigger>
     </UserControl.Triggers>
 </UserControl>
