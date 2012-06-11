@@ -247,6 +247,28 @@ namespace Power8
                 InvokeFromDataGrid(i);
         }
 
+        private void DataGridPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var pi = Util.ExtractRelatedPowerItem(e);
+                if (pi != null)
+                {
+                    e.Handled = true;
+                    InvokeFromDataGrid(pi);
+                }
+            }
+            if (e.Key == Key.Tab)
+            {
+                e.Handled = true;
+                if (Keyboard.IsKeyDown(Key.LeftShift))
+                    AllItemsMenuRoot.Focus();
+                else
+                    SearchBox.Focus();
+            }
+
+        }
+
         #endregion
 
         #region Helpers
@@ -305,6 +327,19 @@ namespace Power8
             return SpecialItems[containerName];
         }
 
+        private void InvokeFromDataGrid(PowerItem item)
+        {
+            try
+            {
+                item.Invoke();
+            }
+            catch (Exception ex)
+            {
+                Util.DispatchCaughtException(ex);
+            }
+            Hide();
+        }
+
         #endregion
 
         #region Bindable props
@@ -323,40 +358,5 @@ namespace Power8
             get { return _cmd; }
         }
         #endregion
-
-        private void dataGrid_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                var pi = Util.ExtractRelatedPowerItem(e);
-                if (pi != null)
-                {
-                    e.Handled = true;
-                    InvokeFromDataGrid(pi);
-                }
-            }
-            if (e.Key == Key.Tab)
-            {
-                e.Handled = true;
-                if (Keyboard.IsKeyDown(Key.LeftShift))
-                    AllItemsMenuRoot.Focus();
-                else
-                    SearchBox.Focus();
-            }
-
-        }
-
-        private void InvokeFromDataGrid(PowerItem item)
-        {
-            try
-            {
-                item.Invoke();
-            }
-            catch (Exception ex)
-            {
-                Util.DispatchCaughtException(ex);
-            }
-            Hide();
-        }
     }
 }
