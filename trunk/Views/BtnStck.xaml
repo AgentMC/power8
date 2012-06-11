@@ -27,7 +27,7 @@
                   x:Name="dataGrid" GridLinesVisibility="None" MouseDoubleClick="DataGridMouseDoubleClick"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" 
-                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="dataGrid_PreviewKeyDown">
+                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
