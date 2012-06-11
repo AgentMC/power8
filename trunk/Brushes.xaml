@@ -39,6 +39,30 @@
         <GradientStop Color="#DCD9D9" Offset="0.8"/>
         <GradientStop Color="White" Offset="1"/>
     </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PressedGradientBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+    	<GradientStop/>
+    	<GradientStop Color="#66FFFFFF" Offset="1"/>
+    </LinearGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientBrush" RadiusY="2.18" Center="0.889,0.202" GradientOrigin="0.889,0.202" RadiusX="0.879">
+    	<GradientStop Offset="1"/>
+    	<GradientStop Color="#99FFFFFF"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientBlueBrush" RadiusY="1.323" RadiusX="1.336" Center="0.771,0.236" GradientOrigin="0.771,0.236">
+    	<GradientStop Color="#FF004E83" Offset="1"/>
+    	<GradientStop Color="#CC004E83"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientGreenBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#FF416C00" Offset="1"/>
+    	<GradientStop Color="#CC416C00"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientRedBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#FFDA0300" Offset="1"/>
+    	<GradientStop Color="#CCDA0300" Offset="0.006"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientOrangeBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#FFE47B00" Offset="1"/>
+    	<GradientStop Color="#CCE47B00" Offset="0.006"/>
+    </RadialGradientBrush>
 
     <!-- Resource dictionary entries should be defined here. -->
 </ResourceDictionary>

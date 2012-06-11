@@ -6,7 +6,7 @@
         Name="Root" Closed="WindowClosed" Loaded="WindowLoaded"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         AllowsTransparency="False" Background="{x:Static SystemColors.ActiveCaptionBrush}" SizeToContent="WidthAndHeight">
-    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack">
+    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
         <Button.ContextMenu>
             <ContextMenu Name="menu" >
                 <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
@@ -15,5 +15,27 @@
                 <MenuItem Name="MWExit" Click="ExitClick" Style="{StaticResource ContextMenuItemStyle}"/> 
             </ContextMenu>
         </Button.ContextMenu>
+    	<Grid Opacity="0.8">
+    		<Grid.RowDefinitions>
+    			<RowDefinition/>
+    			<RowDefinition/>
+    		</Grid.RowDefinitions>
+    		<Grid.ColumnDefinitions>
+    			<ColumnDefinition/>
+    			<ColumnDefinition/>
+    		</Grid.ColumnDefinitions>
+    		<Border Background="{DynamicResource RoundGradientBlueBrush}">
+    			<Border Background="{DynamicResource RoundGradientBrush}"/>
+    		</Border>
+    		<Border Grid.Row="1" Background="{DynamicResource RoundGradientGreenBrush}">
+    			<Border Background="{DynamicResource RoundGradientBrush}"/>
+    		</Border>
+    		<Border Grid.Column="1" Background="{DynamicResource RoundGradientRedBrush}">
+    			<Border Background="{DynamicResource RoundGradientBrush}"/>
+    		</Border>
+    		<Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource RoundGradientOrangeBrush}">
+    			<Border Background="{DynamicResource RoundGradientBrush}"/>
+    		</Border>
+    	</Grid>
     </Button>
 </Window>
