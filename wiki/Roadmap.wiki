@@ -18,6 +18,7 @@ For already implemented features, see [Changelog] page.
   * theme for non-Aero better implementation;
   * icon and logo;
   * localization;
+  * possible: notification arrow for users when P8 launched 1st time.
 
 
 = _Power8 v.1.0 Release_ =
