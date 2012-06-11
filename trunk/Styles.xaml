@@ -152,15 +152,47 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Width="Auto" BorderThickness="1" BorderBrush="{DynamicResource BlackBrush}" SnapsToDevicePixels="True">
-                        <Grid x:Name="grid" Height="Auto">
-                            <Border x:Name="NormalBorder" BorderThickness="1" BorderBrush="{DynamicResource ButtonBorderBrush}">
-                                <Border x:Name="NormalBG" Height="10" VerticalAlignment="Top" MinWidth="40" Background="{DynamicResource ButtonBackgroundBrush}" OpacityMask="{DynamicResource ButtonOpacityMask}" SnapsToDevicePixels="False"/>
-                            </Border>
-                            <Border x:Name="MouseOverState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource MouseOverBrush}"/>
-                            <Border x:Name="PressedState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource PressedBrush}"/>
-                            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Grid>
-                    </Border>
+                		<VisualStateManager.VisualStateGroups>
+                			<VisualStateGroup x:Name="CommonStates">
+                				<VisualState x:Name="Normal"/>
+                				<VisualState x:Name="MouseOver">
+                					<Storyboard>
+                						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="MouseOverState">
+                							<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                						</ObjectAnimationUsingKeyFrames>
+                					</Storyboard>
+                				</VisualState>
+                				<VisualState x:Name="Pressed">
+                					<Storyboard>
+                						<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PressedState">
+                							<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                						</ObjectAnimationUsingKeyFrames>
+                						<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PressedState">
+                							<EasingDoubleKeyFrame KeyTime="0" Value="0.6"/>
+                						</DoubleAnimationUsingKeyFrames>
+                					</Storyboard>
+                				</VisualState>
+                				<VisualState x:Name="Disabled"/>
+                			</VisualStateGroup>
+                			<VisualStateGroup x:Name="FocusStates">
+                				<VisualState x:Name="Unfocused"/>
+                				<VisualState x:Name="Focused"/>
+                			</VisualStateGroup>
+                			<VisualStateGroup x:Name="ValidationStates">
+                				<VisualState x:Name="Valid"/>
+                				<VisualState x:Name="InvalidFocused"/>
+                				<VisualState x:Name="InvalidUnfocused"/>
+                			</VisualStateGroup>
+                		</VisualStateManager.VisualStateGroups>
+                		<Grid x:Name="grid" Height="Auto">
+                			<ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                			<Border x:Name="NormalBorder" BorderThickness="1" BorderBrush="{DynamicResource ButtonBorderBrush}">
+                				<Border x:Name="NormalBG" Height="10" VerticalAlignment="Top" MinWidth="40" Background="{DynamicResource ButtonBackgroundBrush}" OpacityMask="{DynamicResource ButtonOpacityMask}" SnapsToDevicePixels="False"/>
+                			</Border>
+                			<Border x:Name="MouseOverState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource MouseOverBrush}"/>
+                			<Border x:Name="PressedState" BorderThickness="1" Visibility="Collapsed" Background="{DynamicResource PressedGradientBrush}"/>
+                		</Grid>
+                	</Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Visibility" TargetName="MouseOverState" Value="Visible"/>
