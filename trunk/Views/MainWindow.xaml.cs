@@ -90,6 +90,14 @@ namespace Power8
 
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
             this.RegisterHook(WndProc);
+
+            var arrow = new Views.WelcomeArrow();
+            arrow.Show();
+            var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
+            GetSetWndPosition(arrow, new API.POINT {X = (int) p1.X, Y = (int) p1.Y}, false);
+            var p2 = new Point(arrow.Left + arrow.Width/2, arrow.Top + arrow.Height/2);
+            var initialAngle = p1.X < p2.X ? 135 : 45;
+            arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -103,6 +111,7 @@ namespace Power8
         #endregion
 
         #region Handlers
+
         private void ShowButtonStack(object sender, RoutedEventArgs e)
         {
             if (Keyboard.GetKeyStates(Key.LeftCtrl) == KeyStates.Down || Keyboard.GetKeyStates(Key.RightCtrl) == KeyStates.Down)
@@ -110,34 +119,11 @@ namespace Power8
                 ShowRunDialog(this, null);
                 return;
             }
+
             BtnStck.Instance.Show();
             var screenPoint = new API.POINT();
             API.GetCursorPos(ref screenPoint);
-            var screen = Screen.FromPoint(new System.Drawing.Point(screenPoint.X, screenPoint.Y));
-            //We show stack in the corner closest to the mouse
-            bool isHideTaskBarOptionOn = (screen.WorkingArea.Width == screen.Bounds.Width &&
-                                         screen.WorkingArea.Height == screen.Bounds.Height)
-                                         || (sender == Keyboard.PrimaryDevice);
-// ReSharper disable PossibleLossOfFraction
-                    //taskbar is vertical @ left or horizontal
-            if ((isHideTaskBarOptionOn && screenPoint.X <= screen.WorkingArea.X + screen.WorkingArea.Width / 2)
-                || screen.WorkingArea.X > screen.Bounds.X
-                || (screen.WorkingArea.Width == screen.Bounds.Width & !isHideTaskBarOptionOn))
-                screenPoint.X = screen.WorkingArea.X;
-            else    //vertical @ right
-                screenPoint.X = (int) (screen.WorkingArea.Width + screen.WorkingArea.X - BtnStck.Instance.Width);
-                    //taskbar is horizontal @ top or vertical
-            if ((isHideTaskBarOptionOn && screenPoint.Y <= screen.WorkingArea.Y + screen.WorkingArea.Height / 2) 
-                || screen.WorkingArea.Y > screen.Bounds.Y 
-                || (screen.WorkingArea.Height == screen.Bounds.Height & !isHideTaskBarOptionOn))
-                screenPoint.Y = screen.WorkingArea.Y;
-            else    //horizontal @ bottom
-                screenPoint.Y = (int) (screen.WorkingArea.Height + screen.WorkingArea.Y - BtnStck.Instance.Height);
-// ReSharper restore PossibleLossOfFraction
-            BtnStck.Instance.Left = screenPoint.X;
-            BtnStck.Instance.Top = screenPoint.Y;
-            BtnStck.Instance.Activate();
-            BtnStck.Instance.Focus();
+            GetSetWndPosition(BtnStck.Instance, screenPoint, sender == Keyboard.PrimaryDevice);
         }
 
         private void ShowRunDialog(object sender, EventArgs e)
@@ -151,6 +137,7 @@ namespace Power8
 #warning hackfix. Env.Exit() shouldn't be required.
             Environment.Exit(0); 
         }
+
         #endregion
 
         #region Background threads
@@ -343,6 +330,39 @@ namespace Power8
             }
             _updateThread.Start();
         }
+
+        private static void GetSetWndPosition(Window w, API.POINT screenPoint, bool ignoreTaskbarPosition)
+        {
+            var resPoint = new Point();
+            
+            var screen = Screen.FromPoint(new System.Drawing.Point(screenPoint.X, screenPoint.Y));
+            //We show stack in the corner closest to the mouse
+            bool isHideTaskBarOptionOn = (screen.WorkingArea.Width == screen.Bounds.Width &&
+                                         screen.WorkingArea.Height == screen.Bounds.Height)
+                                         || ignoreTaskbarPosition;
+            
+            //taskbar is vertical @ left or horizontal
+            if ((isHideTaskBarOptionOn && screenPoint.X <= screen.WorkingArea.X + screen.WorkingArea.Width / 2)
+                || screen.WorkingArea.X > screen.Bounds.X
+                || (screen.WorkingArea.Width == screen.Bounds.Width & !isHideTaskBarOptionOn))
+                resPoint.X = screen.WorkingArea.X;
+            else    //vertical @ right
+                resPoint.X = screen.WorkingArea.Width + screen.WorkingArea.X - w.Width;
+            
+            //taskbar is horizontal @ top or vertical
+            if ((isHideTaskBarOptionOn && screenPoint.Y <= screen.WorkingArea.Y + screen.WorkingArea.Height / 2)
+                || screen.WorkingArea.Y > screen.Bounds.Y
+                || (screen.WorkingArea.Height == screen.Bounds.Height & !isHideTaskBarOptionOn))
+                resPoint.Y = screen.WorkingArea.Y;
+            else    //horizontal @ bottom
+                resPoint.Y = screen.WorkingArea.Height + screen.WorkingArea.Y - w.Height;
+
+            w.Left = resPoint.X;
+            w.Top = resPoint.Y;
+            w.Activate();
+            w.Focus();
+        }
+
         #endregion
     }
 }
