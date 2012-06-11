@@ -2,6 +2,7 @@
 #labels Featured
 
 = List of ideas and requests we not commited yet =
+  * Investigate possibility of disabling Metro Start rectangle;
   * Skins/styles;
     * In particular, Metro style.
   * Configurable user menus;
