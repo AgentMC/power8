@@ -24,13 +24,13 @@
     			<ColumnDefinition/>
     			<ColumnDefinition/>
     		</Grid.ColumnDefinitions>
-    		<Border Background="{DynamicResource RoundGradientBlueBrush}">
+    		<Border Background="{DynamicResource RoundGradientBlueBrush}" Grid.Row="1">
     			<Border Background="{DynamicResource RoundGradientBrush}"/>
     		</Border>
-    		<Border Grid.Row="1" Background="{DynamicResource RoundGradientGreenBrush}">
+    		<Border Background="{DynamicResource RoundGradientGreenBrush}" Grid.Column="1">
     			<Border Background="{DynamicResource RoundGradientBrush}"/>
     		</Border>
-    		<Border Grid.Column="1" Background="{DynamicResource RoundGradientRedBrush}">
+    		<Border Background="{DynamicResource RoundGradientRedBrush}">
     			<Border Background="{DynamicResource RoundGradientBrush}"/>
     		</Border>
     		<Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource RoundGradientOrangeBrush}">
