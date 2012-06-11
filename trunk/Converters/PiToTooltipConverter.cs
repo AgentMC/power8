@@ -1,13 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
-using System.Windows;
 using System.Windows.Data;
 using Power8.Properties;
-#if DEBUG
-using System.Diagnostics;
-#endif
 
 namespace Power8
 {
@@ -27,8 +22,7 @@ namespace Power8
                 var cmd = Util.GetOpenCommandForClass(pi.Argument);
                 if(cmd == null)
                     return pi.FriendlyName + Resources.Str_Library;
-                else
-                    return cmd.Item1;
+                return cmd.Item1;
             }
             return PowerItemTree.GetResolvedArgument(pi);
         }
