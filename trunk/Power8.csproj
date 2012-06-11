@@ -94,25 +94,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ComputerList.xaml.cs">
+    <Compile Include="Views\ComputerList.xaml.cs">
       <DependentUpon>ComputerList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PiToTooltipConverter.cs" />
-    <Compile Include="DriveManager.cs" />
-    <Compile Include="MenuedButton.xaml.cs">
+    <Compile Include="Converters\PiToTooltipConverter.cs" />
+    <Compile Include="DataProviders\DriveManager.cs" />
+    <Compile Include="Views\MenuedButton.xaml.cs">
       <DependentUpon>MenuedButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MenuItemClickCommand.cs" />
-    <Compile Include="MenuWidthToMarginConverter.cs" />
-    <Compile Include="NameToResourceConverter.cs" />
-    <Compile Include="NetManager.cs" />
-    <Compile Include="RestartExplorer.cs">
+    <Compile Include="Commands\MenuItemClickCommand.cs" />
+    <Compile Include="Converters\MenuWidthToMarginConverter.cs" />
+    <Compile Include="Converters\NameToResourceConverter.cs" />
+    <Compile Include="DataProviders\NetManager.cs" />
+    <Compile Include="Views\RestartExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RestartExplorer.Designer.cs">
+    <Compile Include="Views\RestartExplorer.Designer.cs">
       <DependentUpon>RestartExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="UpdateNotifier.xaml.cs">
+    <Compile Include="Views\UpdateNotifier.xaml.cs">
       <DependentUpon>UpdateNotifier.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util.cs" />
@@ -120,15 +120,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BtnStck.xaml">
+    <Page Include="Views\BtnStck.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ComputerList.xaml">
+    <Page Include="Views\ComputerList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -137,15 +137,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BtnStck.xaml.cs">
+    <Compile Include="Views\BtnStck.xaml.cs">
       <DependentUpon>BtnStck.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ImageManager.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="DataProviders\ImageManager.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MenuedButton.xaml">
+    <Page Include="Views\MenuedButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,14 +153,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UpdateNotifier.xaml">
+    <Page Include="Views\UpdateNotifier.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PowerItem.cs" />
-    <Compile Include="PowerItemTree.cs" />
+    <Compile Include="DataProviders\PowerItemTree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,7 +179,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RestartExplorer.resx">
+    <EmbeddedResource Include="Views\RestartExplorer.resx">
       <DependentUpon>RestartExplorer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
@@ -189,6 +189,7 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
