@@ -24,5 +24,8 @@
   &lt;Provider key="я"&gt;http://yandex.ru/yandsearch?text={0}&lt;/Provider&gt;
 &lt;/P8SearchProviders&gt;</Value>
     </Setting>
+    <Setting Name="BlockMetro" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

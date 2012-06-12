@@ -332,4 +332,7 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value> Item(s)</value>
     <comment>Label in the group of search results in the grid (keep starting space!)</comment>
   </data>
+  <data name="CR_MWBlockMetro" xml:space="preserve">
+    <value>Block Metro features</value>
+  </data>
 </root>

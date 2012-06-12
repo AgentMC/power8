@@ -250,6 +250,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block Metro features.
+        /// </summary>
+        internal static string CR_MWBlockMetro {
+            get {
+                return ResourceManager.GetString("CR_MWBlockMetro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for Updates.
         /// </summary>
         internal static string CR_MWCheckForUpdates {
