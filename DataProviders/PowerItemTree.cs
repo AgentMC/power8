@@ -716,10 +716,10 @@ namespace Power8
 
         public static void SearchTree(string query, IList<PowerItem> destination)
         {
+            if(_lastSearchToken != null)
+                _lastSearchToken.Cancel();
             lock (destination)
             {
-                if(_lastSearchToken != null)
-                    _lastSearchToken.Cancel();
                 Util.Send(destination.Clear);
                 _lastSearchToken = new CancellationTokenSource();
                 string ext = null;
