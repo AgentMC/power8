@@ -80,5 +80,17 @@ namespace Power8.Properties {
                 this["SearchProviders"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BlockMetro {
+            get {
+                return ((bool)(this["BlockMetro"]));
+            }
+            set {
+                this["BlockMetro"] = value;
+            }
+        }
     }
 }

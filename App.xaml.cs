@@ -41,8 +41,7 @@ namespace Power8
             if (!std.FirstRunDone)
             {
                 std.Upgrade();
-                std.FirstRunDone = true;
-                std.Save();
+                std.Save();//FirstRunDone is updated later in Main Window code
             }
             //Initialize standard folder icon
             foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))

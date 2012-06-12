@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -21,11 +22,11 @@ namespace Power8
     {
         public static bool ClosedW;
 
-        private bool _watch, _update;
+        private bool _watch, _update, _blockMetro;
         private IntPtr _taskBar, _showDesktopBtn;
-        private Thread _updateThread;
+        private Thread _updateThread, _blockMetroThread;
 
-        private readonly EventWaitHandle _updateThreadLock = new EventWaitHandle(false, EventResetMode.AutoReset);
+        private readonly EventWaitHandle _bgrThreadLock = new EventWaitHandle(false, EventResetMode.ManualReset);
 
         #region Window (de)init 
 
@@ -43,6 +44,17 @@ namespace Power8
 
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
+            
+            if (BlockMetroEnabled && Environment.OSVersion.Version >= new Version(6, 2, 0, 0))
+            { 
+                BlockMetroThreadInit(); 
+            }
+            else if (Environment.OSVersion.Version < new Version(6, 2, 0, 0))
+            {
+                BlockMetroEnabled = false;
+                MWBlockMetro.Visibility = Visibility.Collapsed;
+            }
+                
         }
 
 // ReSharper disable RedundantAssignment
@@ -83,21 +95,26 @@ namespace Power8
             Top = 0;
             _watch = true;
             Util.Fork(WatchDesktopBtn, "ShowDesktop button watcher").Start();
-            _updateThreadLock.Set();
-            _updateThreadLock.Close();
+            _bgrThreadLock.Set();
 
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
 
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
             this.RegisterHook(WndProc);
 
-            var arrow = new Views.WelcomeArrow();
-            arrow.Show();
-            var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
-            GetSetWndPosition(arrow, new API.POINT {X = (int) p1.X, Y = (int) p1.Y}, false);
-            var p2 = new Point(arrow.Left + arrow.Width/2, arrow.Top + arrow.Height/2);
-            var initialAngle = p1.X < p2.X ? 135 : 45;
-            arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
+            if (!Settings.Default.FirstRunDone)
+            {
+                Settings.Default.FirstRunDone = true;
+                Settings.Default.Save();
+
+                var arrow = new Views.WelcomeArrow();
+                arrow.Show();
+                var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
+                GetSetWndPosition(arrow, new API.POINT {X = (int) p1.X, Y = (int) p1.Y}, false);
+                var p2 = new Point(arrow.Left + arrow.Width/2, arrow.Top + arrow.Height/2);
+                var initialAngle = p1.X < p2.X ? 135 : 45;
+                arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
+            }
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -134,13 +151,15 @@ namespace Power8
         private void ExitClick(object sender, RoutedEventArgs e)
         {
             Close();
-#warning hackfix. Env.Exit() shouldn't be required.
-            Environment.Exit(0); 
+            _bgrThreadLock.WaitOne();
+//#warning hackfix. Env.Exit() shouldn't be required.
+//            Environment.Exit(0);  looks like fixed already
         }
 
         #endregion
 
         #region Background threads
+
         private void WatchDesktopBtn()
         {
             double width = -1, height = -1;
@@ -197,8 +216,7 @@ namespace Power8
 
         private void UpdateCheckThread()
         {
-            if(!_updateThreadLock.SafeWaitHandle.IsClosed)
-                _updateThreadLock.WaitOne();
+            _bgrThreadLock.WaitOne();
 
             int cycles = 0;
             var client = new WebClient();
@@ -263,9 +281,51 @@ namespace Power8
                 cycles %= 43200;
             }
         }
+
+        private void BlockMetroThread()
+        {
+            _bgrThreadLock.WaitOne();
+
+            //search for all metro windows (9 on RP)
+            var handles = new Dictionary<IntPtr, API.RECT>();
+            IntPtr last = IntPtr.Zero, desk = API.GetDesktopWindow();
+            do
+            {
+                var current = API.FindWindowEx(desk, last, "EdgeUiInputWndClass", null);
+                if (current != IntPtr.Zero && !handles.ContainsKey(current))
+                {
+                    API.RECT r;
+                    API.GetWindowRect(current, out r);
+                    handles.Add(current, r);
+                    last = current;
+                }
+                else
+                {
+                    last = IntPtr.Zero;
+                }
+            } while (last != IntPtr.Zero);
+            
+            _blockMetro = true;
+            _bgrThreadLock.Reset();
+            while (_blockMetro && _watch) //MAIN CYCLE
+            {
+                foreach (var wnd in handles)
+                    API.MoveWindow(wnd.Key, wnd.Value.Left, wnd.Value.Top, 0, 0, false);
+                Thread.Sleep(1000);
+            }
+
+            //deinit - restore all window rects
+            foreach (var wnd in handles)
+                API.MoveWindow(wnd.Key, wnd.Value.Left, wnd.Value.Top, 
+                               wnd.Value.Right - wnd.Value.Left, 
+                               wnd.Value.Bottom - wnd.Value.Top, true);
+            _bgrThreadLock.Set();
+        }
+
         #endregion
 
         #region Bindable props
+
         public bool AutoStartEnabled
         {
             get
@@ -310,6 +370,26 @@ namespace Power8
                     _update = false;
             }
         }
+        
+        public bool BlockMetroEnabled
+        {
+            get
+            {
+                return Settings.Default.BlockMetro;
+            }
+            set
+            {
+                if (value == BlockMetroEnabled)
+                    return;
+                Settings.Default.BlockMetro = value;
+                Settings.Default.Save();
+                if (value)
+                    BlockMetroThreadInit();
+                else
+                    _blockMetro = false;
+            }
+        }
+
         #endregion
 
         #region Helpers
@@ -323,12 +403,22 @@ namespace Power8
         
         private void UpdateCheckThreadInit()
         {
-            if(_updateThread == null || _updateThread.ThreadState == ThreadState.Stopped)
+            BgrThreadInit(ref _updateThread, UpdateCheckThread, "Update thread");
+        }
+
+        private void BlockMetroThreadInit()
+        {
+            BgrThreadInit(ref _blockMetroThread, BlockMetroThread, "Block Metro thread");
+        }
+
+        private static void BgrThreadInit(ref Thread thread, ThreadStart pFunc, string threadName)
+        {
+            if (thread == null || thread.ThreadState == ThreadState.Stopped)
             {
-                _updateThread = Util.Fork(UpdateCheckThread, "Update thread");
-                _updateThread.IsBackground = true;
+                thread = Util.Fork(pFunc, threadName);
+                thread.IsBackground = true;
             }
-            _updateThread.Start();
+            thread.Start();
         }
 
         private static void GetSetWndPosition(Window w, API.POINT screenPoint, bool ignoreTaskbarPosition)
