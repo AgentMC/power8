@@ -494,10 +494,10 @@ namespace Power8
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
         {
             var argStr = fsObject.Substring(basePath.Length);
-            var child = isFolder && !autoExpand
+            var child = !autoExpand
                 ? item.Items.FirstOrDefault(i => 
                     string.Equals(i.Argument, argStr, StringComparison.CurrentCultureIgnoreCase) 
-                    && i.IsFolder)
+                    && i.IsFolder == isFolder)
                 : null;
             if(child == null)
             {
