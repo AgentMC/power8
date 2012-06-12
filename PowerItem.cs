@@ -13,6 +13,7 @@ namespace Power8
     {
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
+        private readonly ObservableCollection<String> _cmdLines = new ObservableCollection<string>();
         private string _friendlyName, _resIdString;
         private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon;
         private PowerItem _root;
@@ -183,6 +184,19 @@ namespace Power8
         public Double MinWidth
         {
             get { return Parent == null ? 300 : 0; }
+        }
+
+
+
+        //0th block - Pin
+        public bool IsPinned { get; set; }
+
+
+
+        //4th block - Arguments
+        public ObservableCollection<string> CommandLines
+        {
+            get { return _cmdLines; }
         }
 
 
