@@ -335,4 +335,9 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_MWBlockMetro" xml:space="preserve">
     <value>Block Metro features</value>
   </data>
+  <data name="Err_UnhandledGeneric" xml:space="preserve">
+    <value>an unhandled exceptoion occured in Power8. Details are below.
+</value>
+    <comment>String written to App event log. May not be localized. If you touch it, leave ending paragraph sign.</comment>
+  </data>
 </root>

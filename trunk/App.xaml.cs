@@ -32,10 +32,15 @@ namespace Power8
             //Error handling and detection
 #if DEBUG
             var l = new TextWriterTraceListener(Environment.ExpandEnvironmentVariables(@"%temp%\p8log.txt"));
+            l.Write("\r\n\r\nPower8 Log opened at " + DateTime.Now + "\r\n\r\n");
             Debug.AutoFlush = true;
             Debug.Listeners.Add(l);
 #endif
-            DispatcherUnhandledException += (sender, args) => MessageBox.Show(args.Exception.ToString());
+            DispatcherUnhandledException += (sender, args) =>
+            {
+                MessageBox.Show(args.Exception.ToString());
+                Util.Die(Power8.Properties.Resources.Err_UnhandledGeneric + args.Exception.ToString());
+            };
             //Move settings from previous ver
             var std = Power8.Properties.Settings.Default;
             if (!std.FirstRunDone)

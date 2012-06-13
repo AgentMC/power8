@@ -712,7 +712,9 @@ namespace Power8
 
         public static void Die(string becauseString)
         {
-            Environment.FailFast(string.Format(Resources.Str_FailFastFormat, becauseString));
+            EventLog.WriteEntry("Application Error", string.Format(Resources.Str_FailFastFormat, becauseString),
+                                EventLogEntryType.Error);
+            Environment.Exit(1);
         }
 
         public static void StartExplorer(string command = null)
