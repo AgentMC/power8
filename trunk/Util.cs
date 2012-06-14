@@ -67,7 +67,17 @@ namespace Power8
 
         public static Thread Fork(ThreadStart method, string name = "P8 forked")
         {
-            return new Thread(method) {Name = name};
+            return new Thread(() => 
+            {
+                try
+                {
+                    method(); 
+                }
+                catch (Exception ex)
+                {
+                    DispatchUnhandledException(ex);
+                }
+            }) { Name = name };
         }
 
 
@@ -112,11 +122,6 @@ namespace Power8
         public static void RegisterHook(this Window w, HwndSourceHook hook)
         {
             w.GetHwndSource().AddHook(hook);
-        }
-
-        public static void DispatchCaughtException(Exception ex)
-        {
-            MessageBox.Show(ex.Message, Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
 
@@ -703,7 +708,19 @@ namespace Power8
         }
 
 
-        
+
+        public static void DispatchCaughtException(Exception ex)
+        {
+            MessageBox.Show(ex.Message, Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        public static void DispatchUnhandledException(Exception ex)
+        {
+            var str = ex.ToString();
+            MessageBox.Show(str, Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
+            Die(Power8.Properties.Resources.Err_UnhandledGeneric + str);
+        }
+
         public static void Restart(string reason)
         {
             Process.Start(Application.ExecutablePath);
@@ -712,7 +729,8 @@ namespace Power8
 
         public static void Die(string becauseString)
         {
-            EventLog.WriteEntry("Application Error", string.Format(Resources.Str_FailFastFormat, becauseString),
+            EventLog.WriteEntry("Application Error", 
+                                string.Format(Resources.Str_FailFastFormat, becauseString),
                                 EventLogEntryType.Error);
             Environment.Exit(1);
         }

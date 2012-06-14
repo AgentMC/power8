@@ -36,11 +36,7 @@ namespace Power8
             Debug.AutoFlush = true;
             Debug.Listeners.Add(l);
 #endif
-            DispatcherUnhandledException += (sender, args) =>
-            {
-                MessageBox.Show(args.Exception.ToString());
-                Util.Die(Power8.Properties.Resources.Err_UnhandledGeneric + args.Exception.ToString());
-            };
+            DispatcherUnhandledException += (sender, e) => Util.DispatchUnhandledException(e.Exception);
             //Move settings from previous ver
             var std = Power8.Properties.Settings.Default;
             if (!std.FirstRunDone)
