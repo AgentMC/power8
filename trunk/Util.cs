@@ -718,7 +718,7 @@ namespace Power8
         {
             var str = ex.ToString();
             MessageBox.Show(str, Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
-            Die(Power8.Properties.Resources.Err_UnhandledGeneric + str);
+            Die(Resources.Err_UnhandledGeneric + str);
         }
 
         public static void Restart(string reason)
