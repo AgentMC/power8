@@ -22,7 +22,7 @@
               ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
               ItemContainerStyle="{StaticResource MenuItemStyle}" ItemsPanel="{StaticResource ItemsPanelTemplate}"/>
         <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
-                  ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" 
+                  ItemsSource="{Binding ElementName=ButtonStack, Path=MfuItems, Mode=OneWay}" Margin="3" 
                   Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
                   x:Name="dataGrid" GridLinesVisibility="None" MouseDoubleClick="DataGridMouseDoubleClick"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
