@@ -182,7 +182,7 @@ namespace Power8
             }
             else
             {
-                dataGrid.ItemsSource = Items;
+                dataGrid.ItemsSource = MfuItems;
                 SearchMarker.Visibility = Visibility.Hidden;
             }
         }
@@ -346,7 +346,12 @@ namespace Power8
         public ObservableCollection<PowerItem> Items
         {
             get { return PowerItemTree.StartMenuRoot; }
-        } 
+        }
+
+        public ObservableCollection<PowerItem> MfuItems
+        {
+            get { return MfuList.StartMfu; }
+        }
 
         public ObservableCollection<PowerItem> SearchData
         {

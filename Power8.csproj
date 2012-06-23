@@ -94,6 +94,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DataProviders\MfuList.cs" />
     <Compile Include="Views\ComputerList.xaml.cs">
       <DependentUpon>ComputerList.xaml</DependentUpon>
     </Compile>
