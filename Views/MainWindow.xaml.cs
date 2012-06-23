@@ -137,6 +137,7 @@ namespace Power8
                 return;
             }
 
+            MfuList.UpdateStartMfu();
             BtnStck.Instance.Show();
             var screenPoint = new API.POINT();
             API.GetCursorPos(ref screenPoint);
@@ -450,7 +451,9 @@ namespace Power8
             w.Left = resPoint.X;
             w.Top = resPoint.Y;
             w.Activate();
-            w.Focus();
+            var b = w as BtnStck;
+            if (b != null)
+                b.Focus();
         }
 
         #endregion
