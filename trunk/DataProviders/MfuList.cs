@@ -37,19 +37,16 @@ namespace Power8
             {
                 foreach (var k in new[]{k1, k2})
                 {
-                    list.AddRange(from mfu in
-                                      (from valueName in k.GetValueNames()
-                                       where valueName.Contains("\\")
-                                       let data = (byte[]) k.GetValue(valueName)
-                                       select new MfuElement
-                                                  {
-                                                      Arg = DeRot13AndKnwnFldr(valueName),
-                                                      LaunchCount = BitConverter.ToInt32(data, 4),
-                                                      LastLaunchTimeStamp =
-                                                          DateTime.FromFileTime(BitConverter.ToInt64(data, 60))
-                                                  })
-                                  where mfu.IsOk()
-                                  select mfu);
+                    list.AddRange((from valueName in k.GetValueNames()
+                                   where valueName.Contains("\\")
+                                   let data = (byte[]) k.GetValue(valueName)
+                                   select new MfuElement
+                                              {
+                                                  Arg = DeRot13AndKnwnFldr(valueName),
+                                                  LaunchCount = BitConverter.ToInt32(data, 4),
+                                                  LastLaunchTimeStamp =
+                                                      DateTime.FromFileTime(BitConverter.ToInt64(data, 60))
+                                              }).Where(mfu => mfu.IsOk()));
                 }
                 k1.Close();
                 k2.Close();

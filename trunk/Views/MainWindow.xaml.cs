@@ -40,7 +40,11 @@ namespace Power8
 
             App.Current.SessionEnding += (sender, args) => Close();
             //deferred btnstack instance generation
-            BtnStck.Instanciated += (sender, args) => BtnStck.Instance.RunCalled += ShowRunDialog;
+            BtnStck.Instanciated += (sender, args) =>
+                                        {
+                                            BtnStck.Instance.RunCalled += ShowRunDialog;
+                                            b1.Cursor = System.Windows.Input.Cursors.Hand;
+                                        };
 
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
@@ -121,7 +125,7 @@ namespace Power8
         {
             ClosedW = true;
             _watch = false;
-            if (BtnStck.IsInitDone)
+            if (BtnStck.IsInstantited)
                 BtnStck.Instance.Close();
         }
 
@@ -131,6 +135,9 @@ namespace Power8
 
         private void ShowButtonStack(object sender, RoutedEventArgs e)
         {
+            if(!BtnStck.IsInstantited)
+                return;
+
             if (Keyboard.GetKeyStates(Key.LeftCtrl) == KeyStates.Down || Keyboard.GetKeyStates(Key.RightCtrl) == KeyStates.Down)
             {
                 ShowRunDialog(this, null);

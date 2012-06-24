@@ -6,7 +6,8 @@
         Name="Root" Closed="WindowClosed" Loaded="WindowLoaded"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         AllowsTransparency="False" Background="{x:Static SystemColors.ActiveCaptionBrush}" SizeToContent="WidthAndHeight">
-    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+            Cursor="Wait"  ForceCursor="True">
         <Button.ContextMenu>
             <ContextMenu Name="menu" >
                 <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
