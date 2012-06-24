@@ -156,12 +156,14 @@ namespace Power8
                         return _friendlyName;
                 }
 
-                if (string.IsNullOrEmpty(Argument))
+                if (Parent == null) //main menu
                 {
                     _friendlyName = Resources.Str_AllPrograms;
+                    return _friendlyName;
                 }
-                else if (Parent == MfuList.MfuSearchRoot 
-                     && (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
+                
+                if (Parent == MfuList.MfuSearchRoot //so it must have ARGUMENT...
+                    && (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
                 {
                     var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument);
                     if (container != null)
@@ -179,7 +181,6 @@ namespace Power8
 
                 if (string.IsNullOrEmpty(_friendlyName)/*(still)*/)
                 {//use fallback...
-// ReSharper disable PossibleNullReferenceException
                     var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
                     if(string.IsNullOrEmpty(path))
                     {
@@ -194,7 +195,6 @@ namespace Power8
                     {
                         _friendlyName = path;
                     }
-// ReSharper restore PossibleNullReferenceException
                 }
                 
                 return _friendlyName;
