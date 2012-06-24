@@ -48,6 +48,7 @@ namespace Power8
         }
 
         private const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
+        //TODO: rewrite os-specific selection
         private static class Guids
         {
             public const string W7_1 = "{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}";
