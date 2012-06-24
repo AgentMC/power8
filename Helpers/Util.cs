@@ -177,11 +177,11 @@ namespace Power8
 
         public static string ResolveSpecialFolder(API.Csidl id)
         {
-            IntPtr pwstr;
-            API.SHGetSpecialFolderPath(IntPtr.Zero, out pwstr, id, false);
-            var res = Marshal.PtrToStringUni(pwstr);
-            Marshal.FreeCoTaskMem(pwstr);
-            return res;
+            lock (Buffer)
+            {
+                API.SHGetSpecialFolderPath(IntPtr.Zero, Buffer, id, false);
+                return Buffer.ToString();
+            }
         }
 
         public static string ResolveSpecialFolderName(API.Csidl id)

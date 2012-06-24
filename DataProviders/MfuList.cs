@@ -47,6 +47,15 @@ namespace Power8
             }
         }
 
+        private const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
+        private static class Guids
+        {
+            public const string W7_1 = "{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}";
+            public const string W7_2 = "{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}";
+            public const string XP_1 = "{75048700-EF1F-11D0-9888-006097DEACF9}";
+            public const string XP_2 = "{5E6AB780-7743-11CF-A12B-00AA004AE837}";
+        }
+
         private static List<MfuElement> _lastList;
         public static void UpdateStartMfu()
         {
@@ -55,27 +64,51 @@ namespace Power8
 # endif
             //Step 1: parse registry
             var list = new List<MfuElement>();
-            var k1 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
-                @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}\Count",
-                false);
-            var k2 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
-                @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}\Count",
-                false);
+            string ks1, ks2;
+            if (Environment.OSVersion.Version.Major == 5)
+            {
+                ks1 = string.Format(USERASSISTKEY, Guids.XP_1);
+                ks2 = string.Format(USERASSISTKEY, Guids.XP_2);
+            }
+            else
+            {
+                ks1 = string.Format(USERASSISTKEY, Guids.W7_1);
+                ks2 = string.Format(USERASSISTKEY, Guids.W7_2);
+            }
+            var k1 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks1, false);
+            var k2 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks2, false);
             if(k1 != null && k2 != null)
             {
                 foreach (var k in new[]{k1, k2})
                 {
-                    list.AddRange((from valueName in k.GetValueNames()
-                                   let data = (byte[]) k.GetValue(valueName)
-                                   let fileTime = BitConverter.ToInt64(data, 60)
-                                   where fileTime != 0 && valueName.Contains("\\")
-                                   select new MfuElement
-                                              {
-                                                  Arg = DeRot13AndKnwnFldr(valueName),
-                                                  LaunchCount = BitConverter.ToInt32(data, 4),
-                                                  LastLaunchTimeStamp =
-                                                      DateTime.FromFileTime(fileTime)
-                                              }).Where(mfu => mfu.IsOk()));
+                    if (Environment.OSVersion.Version.Major == 5)
+                    {
+                        list.AddRange((from valueName in k.GetValueNames()
+                                       let data = (byte[])k.GetValue(valueName)
+                                       let fileTime = data.Length == 16 ? BitConverter.ToInt64(data, 8) : 0
+                                       where fileTime != 0 && valueName.Contains("\\")
+                                       select new MfuElement
+                                       {
+                                           Arg = DeRot13AndKnwnFldr(valueName),
+                                           LaunchCount = BitConverter.ToInt32(data, 4) - 5,
+                                           LastLaunchTimeStamp =
+                                               DateTime.FromFileTime(fileTime)
+                                       }).Where(mfu => mfu.IsOk()));
+                    }
+                    else
+                    {
+                        list.AddRange((from valueName in k.GetValueNames()
+                                       let data = (byte[]) k.GetValue(valueName)
+                                       let fileTime = data.Length == 72 ?  BitConverter.ToInt64(data, 60) : 0
+                                       where fileTime != 0 && valueName.Contains("\\")
+                                       select new MfuElement
+                                                  {
+                                                      Arg = DeRot13AndKnwnFldr(valueName),
+                                                      LaunchCount = BitConverter.ToInt32(data, 4),
+                                                      LastLaunchTimeStamp =
+                                                          DateTime.FromFileTime(fileTime)
+                                                  }).Where(mfu => mfu.IsOk()));
+                    }
                 }
                 k1.Close();
                 k2.Close();
@@ -142,6 +175,15 @@ namespace Power8
             {
                 var pair = s.Split(new[] {'}'}, 2);
                 return Util.ResolveKnownFolder(pair[0].Substring(1)) + pair[1];
+            }
+            if (s.StartsWith("UEME_"))
+            {
+                s = s.Split(new[] {':'}, 2)[1];
+            }
+            if (s.StartsWith("%csidl"))
+            {
+                var pair = s.Split(new[] {'%'}, 2, StringSplitOptions.RemoveEmptyEntries);
+                s = Util.ResolveSpecialFolder((API.Csidl) int.Parse(pair[0].Substring(5))) + pair[1];
             }
             return s;
         }
