@@ -154,6 +154,11 @@ namespace Power8
                 {
                     _friendlyName = Resources.Str_AllPrograms;
                 }
+                else if (Parent == null && Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    _friendlyName =
+                        FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this)).FileDescription;
+                }
                 else
                 {
                     var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);

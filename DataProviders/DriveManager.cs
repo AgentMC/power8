@@ -85,7 +85,7 @@ begin:
                         w.Changed += _fileChanged;
                         w.Renamed += _fileRenamed;
                         w.IncludeSubdirectories = true;
-                        if (BtnStck.IsInitDone)
+                        if (BtnStck.IsInstantited)
                             w.EnableRaisingEvents = true;
                         else
                             BtnStck.Instanciated += (sender, args) => w.EnableRaisingEvents = true;

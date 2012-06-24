@@ -31,7 +31,7 @@ namespace Power8
             }
             private set { _instance = value; }
         }
-        public static bool IsInitDone { get { return _instance != null; } }
+        public static bool IsInstantited { get { return _instance != null; } }
         private static readonly Dictionary<string, PowerItem> SpecialItems = new Dictionary<string, PowerItem>();
 
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
