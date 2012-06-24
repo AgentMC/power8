@@ -714,6 +714,15 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        public static PowerItem SearchStartMenuItemSyncFast(string argument, bool isFolder)
+        {
+            var list = new Collection<PowerItem>();
+            SearchRootFastSync(argument.ToLowerInvariant(), StartMenuRootItem, list);
+            return list.Count == 1 ? list[0] : null;
+        }
+
+        //----------------
+
         public static void SearchTree(string query, IList<PowerItem> destination)
         {
             if(_lastSearchToken != null)
@@ -760,6 +769,15 @@ namespace Power8
             if (!source.AutoExpandIsPending)
                 foreach (var powerItem in source.Items)
                     SearchItems(query, powerItem, destination, stop);
+        }
+
+        private static void SearchRootFastSync(string query, PowerItem source, ICollection<PowerItem> destination)
+        {
+            if (!source.IsFolder && source.Match(query) && destination.All(d => d.FriendlyName != source.FriendlyName))
+                destination.Add(source);
+            if (!source.AutoExpandIsPending)
+                foreach (var powerItem in source.Items)
+                    SearchRootFastSync(query, powerItem, destination);
         }
 
         private static void SearchWindows(string query, string ext, IList<PowerItem> destination, CancellationToken stop)

@@ -12,9 +12,10 @@ namespace Power8
     public class PowerItem : INotifyPropertyChanged, IComparable<PowerItem>
     {
         private ImageManager.ImageContainer _icon;
-        private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
-        private readonly ObservableCollection<String> _cmdLines = new ObservableCollection<string>();
-        private string _friendlyName, _resIdString;
+        private readonly ObservableCollection<PowerItem> 
+            _items = new ObservableCollection<PowerItem>(),
+            _cmdLines = new ObservableCollection<PowerItem>();
+        private string _friendlyName, _resIdString, _resolvedLink;
         private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon;
         private PowerItem _root;
 
@@ -154,17 +155,24 @@ namespace Power8
                 {
                     _friendlyName = Resources.Str_AllPrograms;
                 }
-                else if (Parent == null && Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+                else if (Parent == null && (Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase) || IsLink))
                 {
-                    var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
-                    if (!string.IsNullOrWhiteSpace(ver.FileDescription))
-                        _friendlyName = ver.FileDescription;
-                    else if (!string.IsNullOrWhiteSpace(ver.ProductName))
-                        _friendlyName = ver.ProductName;
+                    var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument, false);
+                    if (container != null)
+                        _friendlyName = container.FriendlyName;
+
+                    if (string.IsNullOrEmpty(_friendlyName)/*(still)*/ && !IsLink)
+                    {
+                        var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
+                        if (!string.IsNullOrWhiteSpace(ver.FileDescription))
+                            _friendlyName = ver.FileDescription;
+                        else if (!string.IsNullOrWhiteSpace(ver.ProductName))
+                            _friendlyName = ver.ProductName;
+                    }
                 }
-                
-                if (string.IsNullOrEmpty(_friendlyName))
-                {
+
+                if (string.IsNullOrEmpty(_friendlyName)/*(still)*/)
+                {//use fallback...
                     var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
                     if(string.IsNullOrEmpty(path))
                     {
@@ -203,7 +211,7 @@ namespace Power8
 
 
         //4th block - Arguments
-        public ObservableCollection<string> CommandLines
+        public ObservableCollection<PowerItem> CommandLines
         {
             get { return _cmdLines; }
         }
@@ -221,6 +229,16 @@ namespace Power8
             get { return IsFile && 
                   !string.IsNullOrEmpty(Argument) && 
                   Argument.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase); }
+        }
+
+        public string ResolvedLink
+        {
+            get
+            {
+                if(IsLink && _resolvedLink == null)
+                    _resolvedLink = Util.ResolveLink(PowerItemTree.ResolveItem(this).FileName).ToLowerInvariant();
+                return _resolvedLink;
+            }
         }
 
         public bool IsSpecialObject
@@ -365,7 +383,7 @@ namespace Power8
         {//TODO: rewrite Match()!
             return (FriendlyName != null && FriendlyName.ToLowerInvariant().Contains(query))
                 || (Argument != null && Argument.ToLowerInvariant().Contains(query))
-                || (IsLink && Util.ResolveLink(PowerItemTree.ResolveItem(this).FileName).ToLowerInvariant().Contains(query));
+                || (IsLink && ResolvedLink.Contains(query));
         }
 
 
