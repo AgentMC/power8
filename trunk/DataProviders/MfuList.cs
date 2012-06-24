@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using Power8.Properties;
 
 namespace Power8
 {
@@ -16,13 +17,26 @@ namespace Power8
                 if(_startMfu == null)
                 {
                     _startMfu = new ObservableCollection<PowerItem>();
+                    MfuSearchRoot = new PowerItem(_startMfu) {FriendlyName = Resources.Str_Recent};
                     UpdateStartMfu();
                 }
                 return _startMfu;
             }
         }
+        public static PowerItem MfuSearchRoot;
 
+        private static readonly List<MfuElement> LastList = new List<MfuElement>();
         private static readonly string[] MsFilter;
+
+        const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
+        static class Guids
+        {
+            public const string W7_1 = "{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}";
+            public const string W7_2 = "{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}";
+            public const string XP_1 = "{75048700-EF1F-11D0-9888-006097DEACF9}";
+            public const string XP_2 = "{5E6AB780-7743-11CF-A12B-00AA004AE837}";
+        }
+        
         static MfuList()
         {
             using(var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
@@ -47,31 +61,27 @@ namespace Power8
             }
         }
 
-        private const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
-        //TODO: rewrite os-specific selection
-        private static class Guids
-        {
-            public const string W7_1 = "{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}";
-            public const string W7_2 = "{F4E57C4B-2036-45F0-A9AB-443BCFE33D9F}";
-            public const string XP_1 = "{75048700-EF1F-11D0-9888-006097DEACF9}";
-            public const string XP_2 = "{5E6AB780-7743-11CF-A12B-00AA004AE837}";
-        }
-
-        private static readonly List<MfuElement> LastList = new List<MfuElement>();
         public static void UpdateStartMfu()
         {
             //Step 1: parse registry
             var list = new List<MfuElement>();
             string ks1, ks2;
+            int dataWidthExpected, fileTimeOffset, launchCountCorrection;
             if (Environment.OSVersion.Version.Major == 5)
             {
                 ks1 = string.Format(USERASSISTKEY, Guids.XP_1);
                 ks2 = string.Format(USERASSISTKEY, Guids.XP_2);
+                dataWidthExpected = 16;
+                fileTimeOffset = 8;
+                launchCountCorrection = 5;
             }
             else
             {
                 ks1 = string.Format(USERASSISTKEY, Guids.W7_1);
                 ks2 = string.Format(USERASSISTKEY, Guids.W7_2);
+                dataWidthExpected = 72;
+                fileTimeOffset = 60;
+                launchCountCorrection = 0;
             }
             var k1 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks1, false);
             var k2 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks2, false);
@@ -79,34 +89,19 @@ namespace Power8
             {
                 foreach (var k in new[]{k1, k2})
                 {
-                    if (Environment.OSVersion.Version.Major == 5)
-                    {
-                        list.AddRange((from valueName in k.GetValueNames()
-                                       let data = (byte[])k.GetValue(valueName)
-                                       let fileTime = data.Length == 16 ? BitConverter.ToInt64(data, 8) : 0
-                                       where fileTime != 0 && valueName.Contains("\\")
-                                       select new MfuElement
-                                       {
-                                           Arg = DeRot13AndKnwnFldr(valueName),
-                                           LaunchCount = BitConverter.ToInt32(data, 4) - 5,
-                                           LastLaunchTimeStamp =
-                                               DateTime.FromFileTime(fileTime)
-                                       }).Where(mfu => mfu.IsOk()));
-                    }
-                    else
-                    {
-                        list.AddRange((from valueName in k.GetValueNames()
-                                       let data = (byte[]) k.GetValue(valueName)
-                                       let fileTime = data.Length == 72 ?  BitConverter.ToInt64(data, 60) : 0
-                                       where fileTime != 0 && valueName.Contains("\\")
-                                       select new MfuElement
-                                                  {
-                                                      Arg = DeRot13AndKnwnFldr(valueName),
-                                                      LaunchCount = BitConverter.ToInt32(data, 4),
-                                                      LastLaunchTimeStamp =
-                                                          DateTime.FromFileTime(fileTime)
-                                                  }).Where(mfu => mfu.IsOk()));
-                    }
+                    list.AddRange(
+                        (from valueName in k.GetValueNames()
+                        let data = (byte[])k.GetValue(valueName)
+                        let fileTime = data.Length == dataWidthExpected ? BitConverter.ToInt64(data, fileTimeOffset) : 0
+                        where fileTime != 0 && valueName.Contains("\\")
+                        select new MfuElement
+                        {
+                            Arg = DeRot13AndKnwnFldr(valueName),
+                            LaunchCount = BitConverter.ToInt32(data, 4) - launchCountCorrection,
+                            LastLaunchTimeStamp = DateTime.FromFileTime(fileTime)
+                        })
+                        .Where(mfu => mfu.IsOk())
+                    );
                 }
                 k1.Close();
                 k2.Close();
@@ -158,12 +153,7 @@ namespace Power8
                 //Step 3: update collection
                 _startMfu.Clear();
                 foreach (var mfuElement in list)
-                {
-                    _startMfu.Add(new PowerItem
-                                      {
-                                          Argument = mfuElement.Arg,
-                                      });
-                }
+                    _startMfu.Add(new PowerItem {Argument = mfuElement.Arg, Parent = MfuSearchRoot});
             }
         }
 

@@ -714,7 +714,7 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        public static PowerItem SearchStartMenuItemSyncFast(string argument, bool isFolder)
+        public static PowerItem SearchStartMenuItemSyncFast(string argument)
         {
             var list = new Collection<PowerItem>();
             SearchRootFastSync(argument.ToLowerInvariant(), StartMenuRootItem, list);
@@ -734,7 +734,8 @@ namespace Power8
                 string ext = null;
                 if(!query.Contains("|"))
                 {
-                    foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, NetworkRoot, LibrariesRoot })
+                    foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, 
+                                                 NetworkRoot, LibrariesRoot, MfuList.MfuSearchRoot })
                     {
                         var r = root;
                         Util.Fork(() => SearchItems(query, r, destination, _lastSearchToken.Token),
