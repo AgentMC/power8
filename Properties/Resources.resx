@@ -340,4 +340,7 @@ Cancel: I skip this update, never notify me about this version.</value>
 </value>
     <comment>String written to App event log. May not be localized. If you touch it, leave ending paragraph sign.</comment>
   </data>
+    <data name="Str_Recent">
+        <value xml:space="preserve">Recently started</value>
+    </data>
 </root>

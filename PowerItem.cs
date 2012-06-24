@@ -31,6 +31,11 @@ namespace Power8
             SpecialFolderId = API.Csidl.INVALID;
         }
 
+        public PowerItem (ObservableCollection<PowerItem> items ):this ()
+        {
+            _items = items;
+        }
+
     
 
         //1st block - icon
@@ -155,9 +160,10 @@ namespace Power8
                 {
                     _friendlyName = Resources.Str_AllPrograms;
                 }
-                else if (Parent == null && (Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase) || IsLink))
+                else if (Parent == MfuList.MfuSearchRoot 
+                     && (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument, false);
+                    var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument);
                     if (container != null)
                         _friendlyName = container.FriendlyName;
 
@@ -173,6 +179,7 @@ namespace Power8
 
                 if (string.IsNullOrEmpty(_friendlyName)/*(still)*/)
                 {//use fallback...
+// ReSharper disable PossibleNullReferenceException
                     var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
                     if(string.IsNullOrEmpty(path))
                     {
@@ -187,6 +194,7 @@ namespace Power8
                     {
                         _friendlyName = path;
                     }
+// ReSharper restore PossibleNullReferenceException
                 }
                 
                 return _friendlyName;
