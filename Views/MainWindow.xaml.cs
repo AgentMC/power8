@@ -145,7 +145,7 @@ namespace Power8
             }
 
             MfuList.UpdateStartMfu();
-            BtnStck.Instance.Show();
+            BtnStck.Instance.Show();//XP:955ms 0_o
             var screenPoint = new API.POINT();
             API.GetCursorPos(ref screenPoint);
             GetSetWndPosition(BtnStck.Instance, screenPoint, sender == Keyboard.PrimaryDevice);
