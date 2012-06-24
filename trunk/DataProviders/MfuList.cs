@@ -57,12 +57,9 @@ namespace Power8
             public const string XP_2 = "{5E6AB780-7743-11CF-A12B-00AA004AE837}";
         }
 
-        private static List<MfuElement> _lastList;
+        private static readonly List<MfuElement> LastList = new List<MfuElement>();
         public static void UpdateStartMfu()
         {
-#if DEBUG
-            var sss = System.Diagnostics.Stopwatch.StartNew();
-# endif
             //Step 1: parse registry
             var list = new List<MfuElement>();
             string ks1, ks2;
@@ -115,35 +112,59 @@ namespace Power8
                 k2.Close();
             }
 
-            //Step 2: filter and sort
-            var linx = list
-                .FindAll(m => m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
-                .Select(l => Util.ResolveLink(l.Arg))
-                .ToArray();
-            list.RemoveAll(l => linx.Contains(l.Arg, StringComparer.InvariantCultureIgnoreCase));
-            list.ApplyMsFilter();
-            if(_lastList == null || list.Except(_lastList).Any())
-            {
-                list.Sort();
+            if (!list.Except(LastList).Any()) 
+                return;
 
-                //Step 3: update collection
-                lock (_startMfu)
-                {
-                    _lastList = list;
-                    _startMfu.Clear();
-                    foreach (var mfuElement in list)
-                    {
-                        _startMfu.Add(new PowerItem
+            LastList.Clear();
+            LastList.AddRange(list);
+            lock (_startMfu)
+            {
+                //Step 2.1: filter out malformed paths
+                var malformed = list.FindAll(m => m.Arg.Contains("\\\\") && !m.Arg.StartsWith("\\"));
+                malformed.ForEach(mf =>
+                                      {
+                                          list.Remove(mf);
+                                          var properArg = mf.Arg.Replace("\\\\", "\\");
+                                          mf.Arg = properArg;
+                                          var existent = list.Find(m => m.Arg == properArg);
+                                          if (existent.Arg != null) //found, null otherwise `cause of def struct init
                                           {
-                                              Argument = mfuElement.Arg,
-                                          });
+                                              mf.LaunchCount += existent.LaunchCount;
+                                              if(mf.LastLaunchTimeStamp < existent.LastLaunchTimeStamp)
+                                                  mf.LastLaunchTimeStamp = existent.LastLaunchTimeStamp;
+                                              list.Remove(existent);
+                                          }
+                                          list.Add(mf);
+                                      });
+                //Step 2.2: filter out direct paths to the objects for which we have links
+                var linx = list
+                    .FindAll(m => m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
+                    .Select(l => Util.ResolveLink(l.Arg))
+                    .ToArray();
+                list.RemoveAll(l => linx.Contains(l.Arg, StringComparer.InvariantCultureIgnoreCase));
+                //Step 2.3: filter out setup, host apps and documentation files
+                list.ApplyMsFilter();
+                //Step 2.4: sort.
+                list.Sort();
+                //Step 2.5: limit single/zero-used to 20 items
+                for (int i = 0, j = 0; i < list.Count; i++)
+                {
+                    if (list[i].LaunchCount<2 && ++j > 20)
+                    {
+                        list.RemoveRange(i, list.Count - i);
+                        break;
                     }
-                }    
+                }
+                //Step 3: update collection
+                _startMfu.Clear();
+                foreach (var mfuElement in list)
+                {
+                    _startMfu.Add(new PowerItem
+                                      {
+                                          Argument = mfuElement.Arg,
+                                      });
+                }
             }
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("Update Start MFU: done in " + sss.ElapsedMilliseconds);
-            sss.Stop();
-#endif
         }
 
         private static string Rot13(string s)
@@ -216,6 +237,7 @@ namespace Power8
             {
                 return LaunchCount > -1
                        && LastLaunchTimeStamp != DateTime.MinValue
+                       && !Arg.Contains("\",")
                        && System.IO.File.Exists(Arg);
             }
         }
