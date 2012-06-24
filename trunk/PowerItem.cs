@@ -156,10 +156,14 @@ namespace Power8
                 }
                 else if (Parent == null && Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    _friendlyName =
-                        FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this)).FileDescription;
+                    var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
+                    if (!string.IsNullOrWhiteSpace(ver.FileDescription))
+                        _friendlyName = ver.FileDescription;
+                    else if (!string.IsNullOrWhiteSpace(ver.ProductName))
+                        _friendlyName = ver.ProductName;
                 }
-                else
+                
+                if (string.IsNullOrEmpty(_friendlyName))
                 {
                     var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
                     if(string.IsNullOrEmpty(path))

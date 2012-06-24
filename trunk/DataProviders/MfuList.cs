@@ -21,10 +21,38 @@ namespace Power8
                 return _startMfu;
             }
         }
-        
+
+        private static readonly string[] MsFilter;
+        static MfuList()
+        {
+            using(var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
+                   @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileAssociation", 
+                   false))
+            {
+                var col = new List<String>();
+// ReSharper disable AccessToDisposedClosure
+                if (k != null)
+                {
+                    foreach (var val in new[] {"AddRemoveApps", "AddRemoveNames", "HostApps"}
+                        .Select(kName => (string) k.GetValue(kName, null))
+                        .Where(val => !string.IsNullOrEmpty(val)))
+                    {
+                        col.AddRange(val.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries));
+                    }
+                }
+// ReSharper restore AccessToDisposedClosure
+                col.Add("APPLICATION SHORTCUTS");
+                col.Add("HOST.EXE");
+                MsFilter = col.ToArray();
+            }
+        }
+
+        private static List<MfuElement> _lastList;
         public static void UpdateStartMfu()
         {
+#if DEBUG
             var sss = System.Diagnostics.Stopwatch.StartNew();
+# endif
             //Step 1: parse registry
             var list = new List<MfuElement>();
             var k1 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(
@@ -38,14 +66,15 @@ namespace Power8
                 foreach (var k in new[]{k1, k2})
                 {
                     list.AddRange((from valueName in k.GetValueNames()
-                                   where valueName.Contains("\\")
                                    let data = (byte[]) k.GetValue(valueName)
+                                   let fileTime = BitConverter.ToInt64(data, 60)
+                                   where fileTime != 0 && valueName.Contains("\\")
                                    select new MfuElement
                                               {
                                                   Arg = DeRot13AndKnwnFldr(valueName),
                                                   LaunchCount = BitConverter.ToInt32(data, 4),
                                                   LastLaunchTimeStamp =
-                                                      DateTime.FromFileTime(BitConverter.ToInt64(data, 60))
+                                                      DateTime.FromFileTime(fileTime)
                                               }).Where(mfu => mfu.IsOk()));
                 }
                 k1.Close();
@@ -55,23 +84,32 @@ namespace Power8
             //Step 2: filter and sort
             var linx = list
                 .FindAll(m => m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
-                .Select(l => Util.ResolveLink(l.Arg)).ToArray();
+                .Select(l => Util.ResolveLink(l.Arg))
+                .ToArray();
             list.RemoveAll(l => linx.Contains(l.Arg, StringComparer.InvariantCultureIgnoreCase));
-            list.Sort();
-            
-            //Step 3: update collection
-            lock (_startMfu)
+            list.ApplyMsFilter();
+            if(_lastList == null || list.Except(_lastList).Any())
             {
-                _startMfu.Clear();
-                foreach (var mfuElement in list)
+                list.Sort();
+
+                //Step 3: update collection
+                lock (_startMfu)
                 {
-                    _startMfu.Add(new PowerItem
-                                      {
-                                          Argument = mfuElement.Arg,
-                                      });
-                }
+                    _lastList = list;
+                    _startMfu.Clear();
+                    foreach (var mfuElement in list)
+                    {
+                        _startMfu.Add(new PowerItem
+                                          {
+                                              Argument = mfuElement.Arg,
+                                          });
+                    }
+                }    
             }
+#if DEBUG
+            System.Diagnostics.Debug.WriteLine("Update Start MFU: done in " + sss.ElapsedMilliseconds);
             sss.Stop();
+#endif
         }
 
         private static string Rot13(string s)
@@ -108,6 +146,16 @@ namespace Power8
             return s;
         }
 
+        private static void ApplyMsFilter(this List<MfuElement> list )
+        {
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                var ucase = list[i].Arg.ToUpperInvariant();
+                if(MsFilter.Any(ucase.Contains))
+                    list.RemoveAt(i);
+            }
+        }
+
         private struct MfuElement : IComparable<MfuElement>
         {
             public string Arg;
@@ -123,7 +171,7 @@ namespace Power8
 
             public bool IsOk()
             {
-                return LaunchCount > 0
+                return LaunchCount > -1
                        && LastLaunchTimeStamp != DateTime.MinValue
                        && System.IO.File.Exists(Arg);
             }
