@@ -63,7 +63,12 @@ namespace Power8
 
         public static void UpdateStartMfu()
         {
-            //Step 1: parse registry
+            Util.Fork(UpdateStartMfuSync, "Update MFU").Start();
+        }
+
+        public static void UpdateStartMfuSync()
+        {
+        //Step 1: parse registry
             var list = new List<MfuElement>();
             string ks1, ks2;
             int dataWidthExpected, fileTimeOffset, launchCountCorrection;
@@ -151,9 +156,13 @@ namespace Power8
                     }
                 }
                 //Step 3: update collection
-                _startMfu.Clear();
-                foreach (var mfuElement in list)
-                    _startMfu.Add(new PowerItem {Argument = mfuElement.Arg, Parent = MfuSearchRoot});
+                Util.Post(() =>
+                              {
+                                  _startMfu.Clear();
+                                  foreach (var mfuElement in list)
+                                      _startMfu.Add(new PowerItem {Argument = mfuElement.Arg, Parent = MfuSearchRoot});
+                              }
+                            );
             }
         }
 
