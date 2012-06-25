@@ -428,6 +428,7 @@ namespace Power8
         public const string SID_STopLevelBrowser = "4C96BE40-915C-11CF-99D3-00AA004AE837";
         public const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
         public const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
+        public const string IID_IPropertyStore = "886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99";
         public const string IID_IShellLinkW = "000214F9-0000-0000-C000-000000000046";
         public const string IID_IShellFolder = "000214E6-0000-0000-C000-000000000046";
         public const string IID_IShellView = "000214E3-0000-0000-C000-000000000046";
@@ -564,7 +565,191 @@ namespace Power8
         [Guid(CLSID_ShellLink)]
         public class ShellLink {}
 
-        
+
+
+
+
+        [StructLayout(LayoutKind.Sequential, Pack = 4)]
+        public struct PKEY
+        {
+            public static readonly PKEY Title = new PKEY(new Guid("F29F85E0-4FF9-1068-AB91-08002B27B3D9"), 2U);
+            public static readonly PKEY AppUserModel_ID = new PKEY(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 5U);
+            public static readonly PKEY AppUserModel_IsDestListSeparator = new PKEY(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 6U);
+            public static readonly PKEY AppUserModel_RelaunchCommand = new PKEY(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 2U);
+            public static readonly PKEY AppUserModel_RelaunchDisplayNameResource = new PKEY(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 4U);
+            public static readonly PKEY AppUserModel_RelaunchIconResource = new PKEY(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 3U);
+
+            private readonly Guid _fmtid;
+            private readonly uint _pid;
+
+            private PKEY(Guid fmtid, uint pid)
+            {
+                _fmtid = fmtid;
+                _pid = pid;
+            }
+        }
+
+        [StructLayout(LayoutKind.Explicit)]
+        public class PROPVARIANT : IDisposable
+        {
+            [FieldOffset(0)]
+            private ushort vt;
+            [FieldOffset(8)]
+            private IntPtr pointerVal;
+            [FieldOffset(8)]
+            private byte byteVal;
+            [FieldOffset(8)]
+            private long longVal;
+            [FieldOffset(8)]
+            private short boolVal;
+
+            public VarEnum VarType
+            {
+                get { return (VarEnum) vt; }
+            }
+
+            ~PROPVARIANT()
+            {
+                Dispose(false);
+            }
+
+            public string GetValue()
+            {
+                return vt == 31 ? Marshal.PtrToStringUni(pointerVal) : null;
+            }
+
+            public void SetValue(bool f)
+            {
+                Clear();
+                vt = 11;
+                boolVal = f ? (short)-1 : (short)0;
+            }
+
+            public void SetValue(string val)
+            {
+                Clear();
+                vt = 31;
+                pointerVal = Marshal.StringToCoTaskMemUni(val);
+            }
+
+            public void Clear()
+            {
+                NativeMethods.PropVariantClear(this);
+            }
+
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            private void Dispose(bool disposing)
+            {
+                Clear();
+            }
+
+            private static class NativeMethods
+            {
+                [DllImport("ole32.dll")]
+                internal static extern int PropVariantClear(PROPVARIANT pvar);
+            }
+        }
+
+        [ComImport, Guid(IID_IPropertyStore), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IPropertyStore
+        {
+            uint GetCount();
+            PKEY GetAt(uint iProp);
+            void GetValue([In] ref PKEY pkey, [In, Out] PROPVARIANT pv);
+            void SetValue([In] ref PKEY pkey, PROPVARIANT pv);
+            void Commit();
+        }
+
+        public enum GETPROPERTYSTOREFLAGS
+        {
+            GPS_DEFAULT = 0,
+            GPS_HANDLERPROPERTIESONLY = 0x1,
+            GPS_READWRITE = 0x2,
+            GPS_TEMPORARY = 0x4,
+            GPS_FASTPROPERTIESONLY = 0x8,
+            GPS_OPENSLOWITEM = 0x10,
+            GPS_DELAYCREATION = 0x20,
+            GPS_BESTEFFORT = 0x40,
+            GPS_NO_OPLOCK = 0x80,
+            GPS_PREFERQUERYPROPERTIES = 0x100,
+            GPS_MASK_VALID = 0x1ff
+        }
+
+        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
+        public static extern uint SHGetPropertyStoreFromParsingName(
+            string pszPath,
+            IntPtr zeroWorks,
+            GETPROPERTYSTOREFLAGS flags,
+            ref Guid iIdPropStore,
+            [Out] out IPropertyStore propertyStore);
+
+        //TODO: guid->IID
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("92CA9DCD-5622-4bba-A805-5E9F541BD8C9")]
+        [ComImport]
+        internal interface IObjectArray
+        {
+            uint GetCount();
+            [return: MarshalAs(UnmanagedType.IUnknown)]
+            object GetAt([In] uint uiIndex, [In] ref Guid riid);
+        }
+        [Flags]
+        internal enum SICHINT : uint
+        {
+            DISPLAY = 0U,
+            ALLFIELDS = 2147483648U,
+            CANONICAL = 268435456U,
+            TEST_FILESYSPATH_IF_NOT_EQUAL = 536870912U,
+        }
+
+        //TODO: guid->IID
+        [Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [ComImport]
+        internal interface IShellItem
+        {
+            [return: MarshalAs(UnmanagedType.Interface)]
+            object BindToHandler(IntPtr pbc, [In] ref Guid bhid, [In] ref Guid riid);
+
+            IShellItem GetParent();
+
+            [return: MarshalAs(UnmanagedType.LPWStr)]
+            string GetDisplayName(SIGDN sigdnName);
+
+            uint GetAttributes(SFGAO sfgaoMask);
+
+            int Compare(IShellItem psi, SICHINT hint);
+        }
+
+        internal enum ADLT
+        {
+            RECENT,
+            FREQUENT,
+        }
+
+        //TODO: guid->IID
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [Guid("3c594f9f-9f30-47a1-979a-c9e83d3d0a06")]
+        [ComImport]
+        internal interface IApplicationDocumentLists
+        {
+            void SetAppID([MarshalAs(UnmanagedType.LPWStr)] string pszAppID);
+
+            [return: MarshalAs(UnmanagedType.IUnknown)]
+            object GetList(ADLT listtype, uint cItemsDesired, [In] ref Guid riid);
+        }
+
+        [ComImport, ClassInterface(ClassInterfaceType.None)]
+        [Guid("77f10cf0-3db5-4966-b520-b7c54fd35ed6")]
+        public class ApplicationDocumentLists { }
+
+
+
         //Loading native resources=================================================================
         [Flags]
         public enum LLF:uint
