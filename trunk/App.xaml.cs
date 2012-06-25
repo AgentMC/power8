@@ -20,6 +20,19 @@ namespace Power8
         
         public App()
         {
+            //var p =
+            //    @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Visual Studio 2012\Visual Studio 2012, версия-кандидат.lnk";
+
+            //var g = new Guid(API.IID_IPropertyStore);
+            //API.IPropertyStore store;
+            //var res = API.SHGetPropertyStoreFromParsingName(p, IntPtr.Zero, API.GETPROPERTYSTOREFLAGS.GPS_DEFAULT,
+            //                                                  ref g, out store);
+            //var pv2 = new API.PROPVARIANT();
+            //store.GetValue(API.PKEY.AppUserModel_ID, pv2);
+            //Marshal.FinalReleaseComObject(store);
+            
+
+
             if(Environment.OSVersion.Version.ToString().StartsWith("6.0"))
             {
                 MessageBox.Show(
