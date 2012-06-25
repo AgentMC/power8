@@ -228,6 +228,8 @@ namespace Power8
                 return LaunchCount > -1
                        && LastLaunchTimeStamp != DateTime.MinValue
                        && !Arg.Contains("\",")
+                       && !Arg.StartsWith("::")
+                       && !Arg.StartsWith("\\\\")
                        && System.IO.File.Exists(Arg);
             }
         }
