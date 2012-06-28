@@ -48,8 +48,16 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!--<DataGridTemplateColumn Header="Recent>" Width="0">
-                </DataGridTemplateColumn>-->
+                <DataGridTemplateColumn Header="Recent>" Width="0">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" IsMainMenu="False">
+                                <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemaplte}" 
+                                          ItemContainerStyle="{StaticResource MenuItemStyle}" Padding="0" Margin="0" Header=">"/>
+                            </Menu>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             <DataGrid.GroupStyle>
                 <GroupStyle>

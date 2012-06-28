@@ -280,7 +280,8 @@ namespace Power8
             CDBURN_AREA               = 0x003b,        // USERPROFILE\Local Settings\Application Data\Microsoft\CD Burning
             INVALID                   = 0x003c,        // Incorrect, used internally in Power8, reserved in API
             COMPUTERSNEARME           = 0x003d,        // Computers Near Me (computered from Workgroup membership)
-            POWER8CLASS               = 0x003e,        // Incorrect, used internally in Power8, unknown to API
+            POWER8CLASS               = 0x003e,        // Power8 internal, unknown to API. Argument == name of P8 class
+            POWER8JLITEM              = 0x003f,        // Power8 internal, unknown to API. Item is a JumpList item for parent
             FLAG_CREATE               = 0x8000,        // combine with CSIDL_ value to force folder creation in SHGetFolderPath()
             FLAG_DONT_VERIFY          = 0x4000,        // combine with CSIDL_ value to return an unverified folder path
             FLAG_DONT_UNEXPAND        = 0x2000,        // combine with CSIDL_ value to avoid unexpanding environment variables
@@ -425,9 +426,9 @@ namespace Power8
         public const string CLSID_ShellLink = "00021401-0000-0000-C000-000000000046";
         public const string CLSID_ExplorerBrowser = "71f96385-ddd6-48d3-a0c1-ae06e8b055fb";
         public const string CLSID_ShellWindows = "9BA05972-F6A8-11CF-A442-00A0C90A8F39";
-        public const string CLSID_ApplicationDocumentsList = "86bec222-30f2-47e0-9f25-60d11cd75c28";
+        public const string CLSID_ApplicationDocumentLists = "86bec222-30f2-47e0-9f25-60d11cd75c28";
         public const string SID_STopLevelBrowser = "4C96BE40-915C-11CF-99D3-00AA004AE837";
-        public const string IID_IApplicationDocumentsList = "3c594f9f-9f30-47a1-979a-c9e83d3d0a06";
+        public const string IID_IApplicationDocumentLists = "3c594f9f-9f30-47a1-979a-c9e83d3d0a06";
         public const string IID_IObjectArray = "92CA9DCD-5622-4bba-A805-5E9F541BD8C9";
         public const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
         public const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
@@ -737,7 +738,7 @@ namespace Power8
         }
 
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid(IID_IApplicationDocumentsList)]
+        [Guid(IID_IApplicationDocumentLists)]
         [ComImport]
         internal interface IApplicationDocumentLists
         {
@@ -748,7 +749,7 @@ namespace Power8
         }
 
         [ComImport, ClassInterface(ClassInterfaceType.None)]
-        [Guid(CLSID_ApplicationDocumentsList)]
+        [Guid(CLSID_ApplicationDocumentLists)]
         public class ApplicationDocumentLists { }
 
         [DllImport("shell32.dll")]
