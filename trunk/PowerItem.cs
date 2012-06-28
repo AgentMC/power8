@@ -12,9 +12,8 @@ namespace Power8
     public class PowerItem : INotifyPropertyChanged, IComparable<PowerItem>
     {
         private ImageManager.ImageContainer _icon;
-        private readonly ObservableCollection<PowerItem> 
-            _items = new ObservableCollection<PowerItem>(),
-            _cmdLines = new ObservableCollection<PowerItem>();
+        private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
+        private ObservableCollection<PowerItem> _cmdLines;
         private string _friendlyName, _resIdString, _resolvedLink;
         private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon;
         private PowerItem _root;
@@ -219,9 +218,35 @@ namespace Power8
 
 
         //4th block - Arguments
-        public ObservableCollection<PowerItem> CommandLines
+        public ObservableCollection<PowerItem> JumpList
         {
-            get { return _cmdLines; }
+            get
+            {
+                if(_cmdLines == null)
+                {
+                    _cmdLines = new ObservableCollection<PowerItem>();
+                    var recent = Util.GetJumpList(Argument, API.ADLT.RECENT);
+                    var frequent = Util.GetJumpList(Argument, API.ADLT.FREQUENT);
+                    IEnumerable<string> jl;
+                    if(recent != null && frequent != null)
+                        jl = recent.Union(frequent);
+                    else
+                        jl = recent ?? frequent;
+                    if(jl != null)
+                    {
+                        foreach(var arg in jl)
+                        {
+                            _cmdLines.Add(new PowerItem
+                                              {
+                                                  Argument = arg, 
+                                                  Parent = this, 
+                                                  SpecialFolderId = API.Csidl.POWER8JLITEM
+                                              });
+                        }
+                    }
+                }
+                return _cmdLines;
+            }
         }
 
 

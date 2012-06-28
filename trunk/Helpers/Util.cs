@@ -157,11 +157,17 @@ namespace Power8
         {
             var shLink = new API.ShellLink();
             ((API.IPersistFile)shLink).Load(link, 0);
+            var res = ResolveLink(((API.IShellLink) shLink));
+            Marshal.FinalReleaseComObject(shLink);
+            return res;
+        }
+        
+        private static string ResolveLink(API.IShellLink shellLink)
+        {
             lock (Buffer)
             {
                 API.WIN32_FIND_DATAW sd;
-                ((API.IShellLink) shLink).GetPath(Buffer, 512, out sd, API.SLGP_FLAGS.SLGP_UNCPRIORITY);
-                Marshal.FinalReleaseComObject(shLink);
+                shellLink.GetPath(Buffer, 512, out sd, API.SLGP_FLAGS.SLGP_UNCPRIORITY);
                 return Buffer.ToString();
             }
         }
@@ -338,6 +344,77 @@ namespace Power8
             {
                 MessageBox.Show(string.Format(Resources.Err_CantInstanciateClassFormatString, className, ex.Message));
             }
+        }
+
+        public static string[] GetJumpList(string fsObject, API.ADLT listType)
+        {
+            var riidPropertyStore = new Guid(API.IID_IPropertyStore);
+            API.IPropertyStore store;
+            var res = API.SHGetPropertyStoreFromParsingName(fsObject, 
+                                                            IntPtr.Zero, 
+                                                            API.GETPROPERTYSTOREFLAGS.GPS_DEFAULT,
+                                                            ref riidPropertyStore, 
+                                                            out store);
+            if (res > 0)
+                return null;
+            using (var pv2 = new API.PROPVARIANT())
+            {
+                store.GetValue(API.PKEY.AppUserModel_ID, pv2);
+                Marshal.FinalReleaseComObject(store);
+                if (pv2.longVal == 0)
+                    return null;
+
+                var ret = new List<string>();
+                var listProvider = (API.IApplicationDocumentLists) new API.ApplicationDocumentLists();
+                listProvider.SetAppID(pv2.GetValue());
+                var riidObjectArray = new Guid(API.IID_IObjectArray);
+                var list = (API.IObjectArray) listProvider.GetList(listType, 0, ref riidObjectArray);
+
+                if(list!= null)
+                {
+                    var riidShellItem = new Guid(API.IID_IShellItem);
+                    for (uint i = 0; i < list.GetCount(); i++)
+                    {
+                        var item = list.GetAt(i, ref riidShellItem);
+                        if(item == null)
+                            continue;
+                        IntPtr ppIdl;
+                        API.SHGetIDListFromObject(item, out ppIdl);
+                        if(ppIdl != IntPtr.Zero)
+                        {
+                            var pwstr = IntPtr.Zero;
+                            API.SHGetNameFromIDList(ppIdl, API.SIGDN.FILESYSPATH, ref pwstr);
+                            if(pwstr != IntPtr.Zero)
+                            {
+                                var tmp = Marshal.PtrToStringUni(pwstr);
+                                Marshal.FreeCoTaskMem(pwstr);
+                                if(tmp != null)
+                                {
+                                    if(tmp.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        try
+                                        {
+                                            var riidShellLink = new Guid(API.IID_IShellLinkW);
+                                            var shLink = (API.IShellLink) list.GetAt(i, ref riidShellLink);
+                                            tmp = ResolveLink(shLink);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Debug.WriteLine("Unable to get IShellLink for lnk! " + e.Message);
+                                        }
+                                    }
+                                    ret.Add(tmp);
+                                }
+                            }
+                            Marshal.FreeCoTaskMem(ppIdl);
+                        }
+                        Marshal.ReleaseComObject(item);
+                    }
+                    Marshal.ReleaseComObject(list);
+                }
+                Marshal.FinalReleaseComObject(listProvider);
+                return ret.ToArray();
+            } 
         }
 
 

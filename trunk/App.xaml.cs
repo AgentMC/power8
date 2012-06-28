@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,37 +20,6 @@ namespace Power8
         
         public App()
         {
-            //var p =
-            //    @"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Visual Studio 2012\Visual Studio 2012, версия-кандидат.lnk";
-
-            //var g = new Guid(API.IID_IPropertyStore);
-            //API.IPropertyStore store;
-            //var res = API.SHGetPropertyStoreFromParsingName(p, IntPtr.Zero, API.GETPROPERTYSTOREFLAGS.GPS_DEFAULT,
-            //                                                  ref g, out store);
-            //var pv2 = new API.PROPVARIANT();
-            //store.GetValue(API.PKEY.AppUserModel_ID, pv2);
-            //Marshal.FinalReleaseComObject(store);
-
-            //var listProv = new API.ApplicationDocumentLists();
-            //((API.IApplicationDocumentLists)listProv).SetAppID(pv2.GetValue());
-
-            //var objArrGuid = new Guid(API.IID_IObjectArray);
-            //var list = (API.IObjectArray)((API.IApplicationDocumentLists) listProv).GetList(API.ADLT.RECENT, 0, ref objArrGuid);
-
-            //var riidShellItem = new Guid(API.IID_IShellItem);
-            //for (uint i = 0; i < list.GetCount(); i++)
-            //{
-            //    var item = list.GetAt(i, ref riidShellItem);
-            //    IntPtr ppIdl;
-            //    API.SHGetIDListFromObject(item, out ppIdl);
-            //    var pwstr = IntPtr.Zero;
-            //    API.SHGetNameFromIDList(ppIdl, API.SIGDN.FILESYSPATH, ref pwstr);
-            //    Debug.WriteLine(Marshal.PtrToStringUni(pwstr));
-            //    Marshal.FreeCoTaskMem(pwstr);
-            //}
-            
-
-
             if(Environment.OSVersion.Version.ToString().StartsWith("6.0"))
             {
                 MessageBox.Show(
