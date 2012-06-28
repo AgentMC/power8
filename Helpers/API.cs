@@ -425,10 +425,14 @@ namespace Power8
         public const string CLSID_ShellLink = "00021401-0000-0000-C000-000000000046";
         public const string CLSID_ExplorerBrowser = "71f96385-ddd6-48d3-a0c1-ae06e8b055fb";
         public const string CLSID_ShellWindows = "9BA05972-F6A8-11CF-A442-00A0C90A8F39";
+        public const string CLSID_ApplicationDocumentsList = "86bec222-30f2-47e0-9f25-60d11cd75c28";
         public const string SID_STopLevelBrowser = "4C96BE40-915C-11CF-99D3-00AA004AE837";
+        public const string IID_IApplicationDocumentsList = "3c594f9f-9f30-47a1-979a-c9e83d3d0a06";
+        public const string IID_IObjectArray = "92CA9DCD-5622-4bba-A805-5E9F541BD8C9";
         public const string IID_IPersistFile = "0000010b-0000-0000-C000-000000000046";
         public const string IID_IPersist = "0000010c-0000-0000-c000-000000000046";
         public const string IID_IPropertyStore = "886D8EEB-8CF2-4446-8D02-CDBA1DBDCF99";
+        public const string IID_IShellItem = "43826d1e-e718-42ee-bc55-a1e261c37bfe";
         public const string IID_IShellLinkW = "000214F9-0000-0000-C000-000000000046";
         public const string IID_IShellFolder = "000214E6-0000-0000-C000-000000000046";
         public const string IID_IShellView = "000214E3-0000-0000-C000-000000000046";
@@ -593,15 +597,15 @@ namespace Power8
         public class PROPVARIANT : IDisposable
         {
             [FieldOffset(0)]
-            private ushort vt;
+            public ushort vt;
             [FieldOffset(8)]
-            private IntPtr pointerVal;
+            public IntPtr pointerVal;
             [FieldOffset(8)]
-            private byte byteVal;
+            public byte byteVal;
             [FieldOffset(8)]
-            private long longVal;
+            public long longVal;
             [FieldOffset(8)]
-            private short boolVal;
+            public short boolVal;
 
             public VarEnum VarType
             {
@@ -643,10 +647,12 @@ namespace Power8
                 GC.SuppressFinalize(this);
             }
 
+// ReSharper disable UnusedParameter.Local
             private void Dispose(bool disposing)
             {
                 Clear();
             }
+// ReSharper restore UnusedParameter.Local
 
             private static class NativeMethods
             {
@@ -688,9 +694,8 @@ namespace Power8
             ref Guid iIdPropStore,
             [Out] out IPropertyStore propertyStore);
 
-        //TODO: guid->IID
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid("92CA9DCD-5622-4bba-A805-5E9F541BD8C9")]
+        [Guid(IID_IObjectArray)]
         [ComImport]
         internal interface IObjectArray
         {
@@ -699,7 +704,7 @@ namespace Power8
             object GetAt([In] uint uiIndex, [In] ref Guid riid);
         }
         [Flags]
-        internal enum SICHINT : uint
+        public enum SICHINT : uint
         {
             DISPLAY = 0U,
             ALLFIELDS = 2147483648U,
@@ -707,11 +712,10 @@ namespace Power8
             TEST_FILESYSPATH_IF_NOT_EQUAL = 536870912U,
         }
 
-        //TODO: guid->IID
-        [Guid("43826d1e-e718-42ee-bc55-a1e261c37bfe")]
+        [Guid(IID_IShellItem)]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [ComImport]
-        internal interface IShellItem
+        public interface IShellItem
         {
             [return: MarshalAs(UnmanagedType.Interface)]
             object BindToHandler(IntPtr pbc, [In] ref Guid bhid, [In] ref Guid riid);
@@ -732,9 +736,8 @@ namespace Power8
             FREQUENT,
         }
 
-        //TODO: guid->IID
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [Guid("3c594f9f-9f30-47a1-979a-c9e83d3d0a06")]
+        [Guid(IID_IApplicationDocumentsList)]
         [ComImport]
         internal interface IApplicationDocumentLists
         {
@@ -745,8 +748,12 @@ namespace Power8
         }
 
         [ComImport, ClassInterface(ClassInterfaceType.None)]
-        [Guid("77f10cf0-3db5-4966-b520-b7c54fd35ed6")]
+        [Guid(CLSID_ApplicationDocumentsList)]
         public class ApplicationDocumentLists { }
+
+        [DllImport("shell32.dll")]
+        public static extern uint SHGetIDListFromObject([MarshalAs(UnmanagedType.IUnknown)] object iUnknown,
+                                                        out IntPtr ppidl);
 
 
 
