@@ -95,7 +95,7 @@ namespace Power8
         public static IntPtr MakeGlassWpfWindow(this Window w)
         {
             var source = w.GetHwndSource();
-            if (Environment.OSVersion.Version.Major >= 6 &&  API.DwmIsCompositionEnabled())
+            if (OsIs.SevenOrMore &&  API.DwmIsCompositionEnabled())
             {
                 if (source.CompositionTarget != null)
                 {
@@ -162,7 +162,7 @@ namespace Power8
             return res;
         }
         
-        private static string ResolveLink(API.IShellLink shellLink)
+        public static string ResolveLink(API.IShellLink shellLink)
         {
             lock (Buffer)
             {
@@ -200,8 +200,7 @@ namespace Power8
             var pwstr = IntPtr.Zero;
             var info = new API.Shfileinfo();
             var zeroFails = new IntPtr(1);
-            if (hRes == 0 && Environment.OSVersion.Version.Major > 5
-                && API.SHGetNameFromIDList(ppIdl, API.SIGDN.NORMALDISPLAY, ref pwstr) == 0)
+            if (hRes == 0 && OsIs.SevenOrMore && API.SHGetNameFromIDList(ppIdl, API.SIGDN.NORMALDISPLAY, ref pwstr) == 0)
             {
                 info.szDisplayName = Marshal.PtrToStringUni(pwstr);
                 Marshal.FreeCoTaskMem(pwstr);
@@ -237,7 +236,7 @@ namespace Power8
                 return;
             }
 
-            if (Environment.OSVersion.Version.Major < 6)
+            if (OsIs.XPOrLess)
             {
                 API.IShellWindows shWndList = null;
                 API.IServiceProvider provider = null;
@@ -344,77 +343,6 @@ namespace Power8
             {
                 MessageBox.Show(string.Format(Resources.Err_CantInstanciateClassFormatString, className, ex.Message));
             }
-        }
-
-        public static string[] GetJumpList(string fsObject, API.ADLT listType)
-        {
-            var riidPropertyStore = new Guid(API.IID_IPropertyStore);
-            API.IPropertyStore store;
-            var res = API.SHGetPropertyStoreFromParsingName(fsObject, 
-                                                            IntPtr.Zero, 
-                                                            API.GETPROPERTYSTOREFLAGS.GPS_DEFAULT,
-                                                            ref riidPropertyStore, 
-                                                            out store);
-            if (res > 0)
-                return null;
-            using (var pv2 = new API.PROPVARIANT())
-            {
-                store.GetValue(API.PKEY.AppUserModel_ID, pv2);
-                Marshal.FinalReleaseComObject(store);
-                if (pv2.longVal == 0)
-                    return null;
-
-                var ret = new List<string>();
-                var listProvider = (API.IApplicationDocumentLists) new API.ApplicationDocumentLists();
-                listProvider.SetAppID(pv2.GetValue());
-                var riidObjectArray = new Guid(API.IID_IObjectArray);
-                var list = (API.IObjectArray) listProvider.GetList(listType, 0, ref riidObjectArray);
-
-                if(list!= null)
-                {
-                    var riidShellItem = new Guid(API.IID_IShellItem);
-                    for (uint i = 0; i < list.GetCount(); i++)
-                    {
-                        var item = list.GetAt(i, ref riidShellItem);
-                        if(item == null)
-                            continue;
-                        IntPtr ppIdl;
-                        API.SHGetIDListFromObject(item, out ppIdl);
-                        if(ppIdl != IntPtr.Zero)
-                        {
-                            var pwstr = IntPtr.Zero;
-                            API.SHGetNameFromIDList(ppIdl, API.SIGDN.FILESYSPATH, ref pwstr);
-                            if(pwstr != IntPtr.Zero)
-                            {
-                                var tmp = Marshal.PtrToStringUni(pwstr);
-                                Marshal.FreeCoTaskMem(pwstr);
-                                if(tmp != null)
-                                {
-                                    if(tmp.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
-                                    {
-                                        try
-                                        {
-                                            var riidShellLink = new Guid(API.IID_IShellLinkW);
-                                            var shLink = (API.IShellLink) list.GetAt(i, ref riidShellLink);
-                                            tmp = ResolveLink(shLink);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Debug.WriteLine("Unable to get IShellLink for lnk! " + e.Message);
-                                        }
-                                    }
-                                    ret.Add(tmp);
-                                }
-                            }
-                            Marshal.FreeCoTaskMem(ppIdl);
-                        }
-                        Marshal.ReleaseComObject(item);
-                    }
-                    Marshal.ReleaseComObject(list);
-                }
-                Marshal.FinalReleaseComObject(listProvider);
-                return ret.ToArray();
-            } 
         }
 
 
@@ -825,5 +753,21 @@ namespace Power8
         {
             StartExplorer("/select,\"" + objectToSelect + "\"");
         }
+
+
+
+
+        public static class OsIs
+        {
+            static readonly Version Ver = Environment.OSVersion.Version;
+
+            public static bool XPOrLess { get { return Ver.Major < 6; } }
+            public static bool VistaExact { get { return Ver.Major == 6 && Ver.Minor == 0; } }
+            public static bool SevenOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 1); } }
+            public static bool SevenOrBelow { get { return Ver.Major < 6 || (Ver.Major == 6 && Ver.Minor <= 1); } }
+            public static bool EightOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 2); } }
+            public static bool EightRpOrMore { get { return Ver >= new Version(6, 2, 8400); } }
+        }
+
     }
 }

@@ -20,7 +20,7 @@ namespace Power8
         
         public App()
         {
-            if(Environment.OSVersion.Version.ToString().StartsWith("6.0"))
+            if(Util.OsIs.VistaExact)
             {
                 MessageBox.Show(
                     Power8.Properties.Resources.Err_VistaDetected,

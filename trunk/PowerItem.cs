@@ -225,13 +225,7 @@ namespace Power8
                 if(_cmdLines == null)
                 {
                     _cmdLines = new ObservableCollection<PowerItem>();
-                    var recent = Util.GetJumpList(Argument, API.ADLT.RECENT);
-                    var frequent = Util.GetJumpList(Argument, API.ADLT.FREQUENT);
-                    IEnumerable<string> jl;
-                    if(recent != null && frequent != null)
-                        jl = recent.Union(frequent);
-                    else
-                        jl = recent ?? frequent;
+                    var jl = MfuList.GetRecentListFor(Argument);
                     if(jl != null)
                     {
                         foreach(var arg in jl)
