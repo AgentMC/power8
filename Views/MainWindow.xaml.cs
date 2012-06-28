@@ -49,11 +49,11 @@ namespace Power8
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
             
-            if (BlockMetroEnabled && Environment.OSVersion.Version >= new Version(6, 2, 0, 0))
+            if (BlockMetroEnabled && Util.OsIs.EightOrMore)
             { 
                 BlockMetroThreadInit(); 
             }
-            else if (Environment.OSVersion.Version < new Version(6, 2, 0, 0))
+            else if (Util.OsIs.SevenOrBelow)
             {
                 BlockMetroEnabled = false;
                 MWBlockMetro.Visibility = Visibility.Collapsed;
@@ -82,7 +82,7 @@ namespace Power8
 #warning context menu position should be handeled well
             _taskBar = API.FindWindow(API.TRAY_WND_CLASS, null);
             CheckWnd(_taskBar, API.TRAY_WND_CLASS);
-            if (Environment.OSVersion.Version.Major >= 6)
+            if (Util.OsIs.SevenOrMore)
             {
                 _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.TRAY_NTF_WND_CLASS, null);
                 CheckWnd(_showDesktopBtn, API.TRAY_NTF_WND_CLASS);

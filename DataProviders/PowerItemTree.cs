@@ -53,7 +53,7 @@ namespace Power8
                 if (_librariesOrMyDocsItem == null)
                 {
                     string path, ns;
-                    if (Environment.OSVersion.Version.Major >= 6) //Win7+ -> return libraries
+                    if (Util.OsIs.SevenOrMore) //Win7+ -> return libraries
                     {
                         path = Util.ResolveKnownFolder(API.KnFldrIds.Libraries);
                         ns = API.ShNs.Libraries;
@@ -89,7 +89,7 @@ namespace Power8
                     //the item itself
                     _controlPanelRoot = new PowerItem
                     {
-                        Argument = Environment.OSVersion.Version.Major > 5 ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
+                        Argument = Util.OsIs.SevenOrMore ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
                         SpecialFolderId = API.Csidl.CONTROLS,
                         ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.ControlPanel),
                         NonCachedIcon = true,
@@ -170,7 +170,7 @@ namespace Power8
 
                     _controlPanelRoot.SortItems();
 
-                    if (Environment.OSVersion.Version.Major > 5) //XP only supports "All items"
+                    if (Util.OsIs.SevenOrMore) //XP only supports "All items"
                     {
                         //for 7+ we add "All Control Panel Items" + separator
                         _controlPanelRoot.Icon = ImageManager.GetImageContainerSync(_controlPanelRoot, API.Shgfi.SMALLICON);
@@ -244,7 +244,7 @@ namespace Power8
                         HasLargeIcon = true
                     };
 
-                    _networkRoot = Environment.OSVersion.Version.Major >= 6 ? xpWrkgrp7Net : xpNet7Wrkgrp;
+                    _networkRoot = Util.OsIs.SevenOrMore ? xpWrkgrp7Net : xpNet7Wrkgrp;
 
                     var child = _networkRoot == xpWrkgrp7Net ? xpNet7Wrkgrp : xpWrkgrp7Net;
                     _networkRoot.Items.Add(child);
@@ -267,7 +267,7 @@ namespace Power8
 
                     Util.Fork(() =>
                                   {
-                                      if (Environment.OSVersion.Version.Major >= 6)
+                                      if (Util.OsIs.SevenOrMore)
                                           xpNet7Wrkgrp.FriendlyName = NetManager.DomainOrWorkgroup;
 
                                       List<string> names;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Power8.Properties;
 
@@ -72,7 +74,7 @@ namespace Power8
             var list = new List<MfuElement>();
             string ks1, ks2;
             int dataWidthExpected, fileTimeOffset, launchCountCorrection;
-            if (Environment.OSVersion.Version.Major == 5)
+            if (Util.OsIs.XPOrLess)
             {
                 ks1 = string.Format(USERASSISTKEY, Guids.XP_1);
                 ks2 = string.Format(USERASSISTKEY, Guids.XP_2);
@@ -166,6 +168,32 @@ namespace Power8
             }
         }
 
+        public static IEnumerable<string> GetRecentListFor(string fsObject)
+        {
+            IEnumerable<string> jl = null;
+            var p8R = GetP8Recent(fsObject);
+            if(Util.OsIs.SevenOrMore)
+            {
+                var recent = GetJumpList(fsObject, API.ADLT.RECENT);
+                var frequent = GetJumpList(fsObject, API.ADLT.FREQUENT);
+                if (recent != null && frequent != null)
+                    jl = recent.Union(frequent);
+                else
+                    jl = recent ?? frequent;
+            }
+            if (jl != null && p8R != null)
+                jl = jl.Union(p8R);
+            else
+                jl = jl ?? p8R;
+            return jl;
+        }
+
+
+
+
+
+
+
         private static string Rot13(string s)
         {
             var r13 = new StringBuilder(s.Length);
@@ -218,6 +246,86 @@ namespace Power8
                     list.RemoveAt(i);
             }
         }
+
+        private static IEnumerable<string> GetJumpList(string fsObject, API.ADLT listType)
+        {
+            var riidPropertyStore = new Guid(API.IID_IPropertyStore);
+            API.IPropertyStore store;
+            var res = API.SHGetPropertyStoreFromParsingName(fsObject,
+                                                            IntPtr.Zero,
+                                                            API.GETPROPERTYSTOREFLAGS.GPS_DEFAULT,
+                                                            ref riidPropertyStore,
+                                                            out store);
+            if (res > 0)
+                return null;
+            using (var pv2 = new API.PROPVARIANT())
+            {
+                store.GetValue(API.PKEY.AppUserModel_ID, pv2);
+                Marshal.FinalReleaseComObject(store);
+                if (pv2.longVal == 0)
+                    return null;
+
+                var ret = new Collection<string>();
+                var listProvider = (API.IApplicationDocumentLists)new API.ApplicationDocumentLists();
+                listProvider.SetAppID(pv2.GetValue());
+                var riidObjectArray = new Guid(API.IID_IObjectArray);
+                var list = (API.IObjectArray)listProvider.GetList(listType, 0, ref riidObjectArray);
+
+                if (list != null)
+                {
+                    var riidShellItem = new Guid(API.IID_IShellItem);
+                    for (uint i = 0; i < list.GetCount(); i++)
+                    {
+                        var item = list.GetAt(i, ref riidShellItem);
+                        if (item == null)
+                            continue;
+                        IntPtr ppIdl;
+                        API.SHGetIDListFromObject(item, out ppIdl);
+                        if (ppIdl != IntPtr.Zero)
+                        {
+                            var pwstr = IntPtr.Zero;
+                            API.SHGetNameFromIDList(ppIdl, API.SIGDN.FILESYSPATH, ref pwstr);
+                            if (pwstr != IntPtr.Zero)
+                            {
+                                var tmp = Marshal.PtrToStringUni(pwstr);
+                                Marshal.FreeCoTaskMem(pwstr);
+                                if (tmp != null)
+                                {
+                                    if (tmp.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        try
+                                        {
+                                            var riidShellLink = new Guid(API.IID_IShellLinkW);
+                                            var shLink = (API.IShellLink)list.GetAt(i, ref riidShellLink);
+                                            tmp = Util.ResolveLink(shLink);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Debug.WriteLine("Unable to get IShellLink for lnk! " + e.Message);
+                                        }
+                                    }
+                                    ret.Add(tmp);
+                                }
+                            }
+                            Marshal.FreeCoTaskMem(ppIdl);
+                        }
+                        Marshal.ReleaseComObject(item);
+                    }
+                    Marshal.ReleaseComObject(list);
+                }
+                Marshal.FinalReleaseComObject(listProvider);
+                return ret;
+            }
+        }
+
+        private static IEnumerable<string> GetP8Recent(string fsObject)
+        {
+            return null;
+        }
+
+
+
+
 
         private struct MfuElement : IComparable<MfuElement>
         {

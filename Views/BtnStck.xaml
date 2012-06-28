@@ -24,10 +24,10 @@
         <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=MfuItems, Mode=OneWay}" Margin="3" 
                   Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
-                  x:Name="dataGrid" GridLinesVisibility="None" MouseDoubleClick="DataGridMouseDoubleClick"
+                  x:Name="dataGrid" MouseDoubleClick="DataGridMouseDoubleClick" GridLinesVisibility="None"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single"
-                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown">
+                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown" >
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
@@ -39,7 +39,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Item" IsReadOnly="True" Width="*" MinWidth="250">
+                <DataGridTemplateColumn Header="Item" IsReadOnly="True" Width="*" MinWidth="200">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
                             <TextBlock Text="{Binding FriendlyName}" TextOptions.TextFormattingMode="Display" 
@@ -48,12 +48,13 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Recent>" Width="0">
+                <DataGridTemplateColumn Header="Recent>" Width="18">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" IsMainMenu="False">
                                 <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemaplte}" 
-                                          ItemContainerStyle="{StaticResource MenuItemStyle}" Padding="0" Margin="0" Header=">"/>
+                                          ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0"
+                                          Header=">"/>
                             </Menu>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

@@ -21,15 +21,13 @@ namespace Power8
         {
             var dbl = (int) SystemParameters.MenuWidth;
             if (dbl == 18 || //HighContrast on 8
-                (Environment.OSVersion.Version >= new Version(6, 2) && !API.DwmIsCompositionEnabled()))
+                (Util.OsIs.EightOrMore && !API.DwmIsCompositionEnabled()))
             {
                 return Classic;
             }
             if (dbl == 19) //Aero/7 basic/XP theme
             {
-                if (Environment.OSVersion.Version >= new Version(6, 2, 8400, 0))
-                    return W8RPMenuHack;
-                return Regular;
+                return Util.OsIs.EightRpOrMore ? W8RPMenuHack : Regular;
             }
 #if DEBUG
             Debug.WriteLine("dbl="+dbl);
