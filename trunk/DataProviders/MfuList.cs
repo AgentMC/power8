@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using Power8.Properties;
@@ -29,6 +30,8 @@ namespace Power8
 
         private static readonly List<MfuElement> LastList = new List<MfuElement>();
         private static readonly string[] MsFilter;
+        private static readonly ManagementEventWatcher WatchDog;
+        private static readonly int SessionId = Process.GetCurrentProcess().SessionId;
 
         const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
         static class Guids
@@ -60,7 +63,17 @@ namespace Power8
                 col.Add("APPLICATION SHORTCUTS");
                 col.Add("HOST.EXE");
                 MsFilter = col.ToArray();
+
+                WatchDog = new ManagementEventWatcher("SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
+                WatchDog.EventArrived += WatchDogOnEventArrived;
+                WatchDog.Start();
             }
+        }
+
+        private static void WatchDogOnEventArrived(object sender, EventArrivedEventArgs e)
+        {
+            var proc = e.NewEvent["TargetInstance"] as ManagementBaseObject;
+            Console.Out.WriteLine("Process Launched: {0} {1}", proc["CommandLine"], proc["SessionId"]);
         }
 
         public static void UpdateStartMfu()
@@ -121,7 +134,10 @@ namespace Power8
             LastList.AddRange(list);
             lock (_startMfu)
             {
-                //Step 2.1: filter out malformed paths
+                //Step 2.1: filter out setup, host apps and documentation files
+                list.ApplyMsFilter();
+                
+                //Step 2.2: filter out malformed paths
                 var malformed = list.FindAll(m => m.Arg.Contains("\\\\") && !m.Arg.StartsWith("\\"));
                 malformed.ForEach(mf =>
                                       {
@@ -129,25 +145,44 @@ namespace Power8
                                           var properArg = mf.Arg.Replace("\\\\", "\\");
                                           mf.Arg = properArg;
                                           var existent = list.Find(m => m.Arg == properArg);
-                                          if (existent.Arg != null) //found, null otherwise `cause of def struct init
-                                          {
-                                              mf.LaunchCount += existent.LaunchCount;
-                                              if(mf.LastLaunchTimeStamp < existent.LastLaunchTimeStamp)
-                                                  mf.LastLaunchTimeStamp = existent.LastLaunchTimeStamp;
-                                              list.Remove(existent);
-                                          }
-                                          list.Add(mf);
+                                          list.Remove(existent);
+                                          list.Add(mf.Mix(existent));
                                       });
-                //Step 2.2: filter out direct paths to the objects for which we have links
-                var linx = list
-                    .FindAll(m => m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
-                    .Select(l => Util.ResolveLink(l.Arg))
-                    .ToArray();
-                list.RemoveAll(l => linx.Contains(l.Arg, StringComparer.InvariantCultureIgnoreCase));
-                //Step 2.3: filter out setup, host apps and documentation files
-                list.ApplyMsFilter();
+                
+                //Step 2.3: filter out direct paths to the objects for which we have links
+                var linx = (from l in
+                                (from m in list
+                                 where m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase)
+                                 select Tuple.Create(Util.ResolveLink(m.Arg), m))
+                            orderby l.Item1
+                            select l).ToList();
+                //Step 2.3.1 : removing dupliocate links
+                for (int i = linx.Count - 1; i >= 0; i--)
+                {
+                    if(i > 0 && linx[i-1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        var t = Tuple.Create(linx[i].Item1, linx[i].Item2.Mix(linx[i - 1].Item2));
+                        linx.RemoveAt(i);
+                        linx.RemoveAt(i-1);
+                        linx.Add(t);
+                    }
+                }
+                //Step 2.3.2: really filter out
+                foreach (var tuple in linx)
+                {
+                    var directs =
+                        list.FindAll(q => q.Arg.Equals(tuple.Item1, StringComparison.InvariantCultureIgnoreCase));
+                    foreach (var direct in directs)
+                    {
+                        list.Add(tuple.Item2.Mix(direct));
+                        list.Remove(direct);
+                    }
+                    list.Remove(tuple.Item2);
+                }
+
                 //Step 2.4: sort.
                 list.Sort();
+                
                 //Step 2.5: limit single/zero-used to 20 items
                 for (int i = 0, j = 0; i < list.Count; i++)
                 {
@@ -157,6 +192,7 @@ namespace Power8
                         break;
                     }
                 }
+                
                 //Step 3: update collection
                 Util.Post(() =>
                               {
@@ -384,6 +420,14 @@ namespace Power8
                        && !Arg.StartsWith("::")
                        && !Arg.StartsWith("\\\\")
                        && System.IO.File.Exists(Arg);
+            }
+
+            public MfuElement Mix(MfuElement other)
+            {
+                LaunchCount += other.LaunchCount;
+                if (LastLaunchTimeStamp < other.LastLaunchTimeStamp)
+                    LastLaunchTimeStamp = other.LastLaunchTimeStamp;
+                return this;
             }
         }
     }
