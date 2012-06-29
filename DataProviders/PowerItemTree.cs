@@ -552,6 +552,11 @@ namespace Power8
                     psi.Arguments = "/N," + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
                 }
             }
+            else if (item.SpecialFolderId == API.Csidl.POWER8JLITEM)
+            {
+                psi = ResolveItem(item.Parent, prioritizeCommons);
+                psi.Arguments = item.Argument;
+            }
             else
             {
                 if (!(arg1.StartsWith("\\\\") || (arg1.Length > 1 && arg1[1] == ':')))
