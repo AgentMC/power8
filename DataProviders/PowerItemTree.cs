@@ -593,6 +593,8 @@ namespace Power8
         {
             if(item.IsSpecialObject)
                 return item.Argument;
+            if (item.SpecialFolderId == API.Csidl.POWER8JLITEM)
+                return GetResolvedArgument(item.Parent);
             var psi = ResolveItem(item);
             return item.IsFolder ? psi.Arguments : psi.FileName;
         }

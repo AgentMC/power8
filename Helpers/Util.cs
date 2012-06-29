@@ -159,16 +159,18 @@ namespace Power8
             ((API.IPersistFile)shLink).Load(link, 0);
             var res = ResolveLink(((API.IShellLink) shLink));
             Marshal.FinalReleaseComObject(shLink);
-            return res;
+            return res.Item1;
         }
         
-        public static string ResolveLink(API.IShellLink shellLink)
+        public static Tuple<string, string> ResolveLink(API.IShellLink shellLink)
         {
             lock (Buffer)
             {
                 API.WIN32_FIND_DATAW sd;
                 shellLink.GetPath(Buffer, 512, out sd, API.SLGP_FLAGS.SLGP_UNCPRIORITY);
-                return Buffer.ToString();
+                var i1 = Buffer.ToString();
+                shellLink.GetArguments(Buffer, 512);
+                return new Tuple<string, string>(i1, Buffer.ToString());
             }
         }
 

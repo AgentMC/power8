@@ -168,8 +168,14 @@ namespace Power8
             }
         }
 
-        public static IEnumerable<string> GetRecentListFor(string fsObject)
+        public static void GetRecentListFor(PowerItem item)
         {
+            Util.Fork(()=> GetRecentListForSync(item), "Recent List Getter for " + item.Argument).Start();
+        }
+
+        private static void GetRecentListForSync(PowerItem item)
+        {
+            var fsObject = PowerItemTree.GetResolvedArgument(item);
             IEnumerable<string> jl = null;
             var p8R = GetP8Recent(fsObject);
             if(Util.OsIs.SevenOrMore)
@@ -180,15 +186,36 @@ namespace Power8
                     jl = recent.Union(frequent);
                 else
                     jl = recent ?? frequent;
+                if (jl != null)
+                    jl = jl.Where(x => x.StartsWith("::") || System.IO.File.Exists(x));
             }
             if (jl != null && p8R != null)
                 jl = jl.Union(p8R);
             else
                 jl = jl ?? p8R;
-            return jl;
+            if (jl != null)
+            {
+                foreach (var arg in jl)
+                {
+                    var local = arg;
+                    Util.Post(() =>
+                              item.JumpList.Add(local.StartsWith("::")
+                                                    ? new PowerItem
+                                                          {
+                                                              Argument = local.Substring(2),
+                                                              Parent = item,
+                                                              SpecialFolderId = API.Csidl.POWER8JLITEM
+                                                          }
+                                                    : new PowerItem
+                                                          {
+                                                              Argument = local,
+                                                              Parent = item
+                                                          }
+                                  ));
+                }
+            }
+
         }
-
-
 
 
 
@@ -274,41 +301,50 @@ namespace Power8
                 if (list != null)
                 {
                     var riidShellItem = new Guid(API.IID_IShellItem);
+                    var riidShellLink = new Guid(API.IID_IShellLinkW);
                     for (uint i = 0; i < list.GetCount(); i++)
                     {
-                        var item = list.GetAt(i, ref riidShellItem);
+                        object item;
+                        try
+                        {
+                            item = list.GetAt(i, ref riidShellItem);
+                        }
+                        catch (InvalidCastException)
+                        {
+                            try
+                            {
+                                item = list.GetAt(i, ref riidShellLink);
+                            }
+                            catch (InvalidCastException)
+                            {
+                                item = null;
+                            }
+                        }
                         if (item == null)
                             continue;
-                        IntPtr ppIdl;
-                        API.SHGetIDListFromObject(item, out ppIdl);
-                        if (ppIdl != IntPtr.Zero)
+                        string tmp = null;
+                        if (item is API.IShellItem)
                         {
-                            var pwstr = IntPtr.Zero;
-                            API.SHGetNameFromIDList(ppIdl, API.SIGDN.FILESYSPATH, ref pwstr);
-                            if (pwstr != IntPtr.Zero)
+                            IntPtr ppIdl;
+                            API.SHGetIDListFromObject(item, out ppIdl);
+                            if (ppIdl != IntPtr.Zero)
                             {
-                                var tmp = Marshal.PtrToStringUni(pwstr);
-                                Marshal.FreeCoTaskMem(pwstr);
-                                if (tmp != null)
+                                var pwstr = IntPtr.Zero;
+                                API.SHGetNameFromIDList(ppIdl, API.SIGDN.FILESYSPATH, ref pwstr);
+                                if (pwstr != IntPtr.Zero)
                                 {
-                                    if (tmp.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase))
-                                    {
-                                        try
-                                        {
-                                            var riidShellLink = new Guid(API.IID_IShellLinkW);
-                                            var shLink = (API.IShellLink)list.GetAt(i, ref riidShellLink);
-                                            tmp = Util.ResolveLink(shLink);
-                                        }
-                                        catch (Exception e)
-                                        {
-                                            Debug.WriteLine("Unable to get IShellLink for lnk! " + e.Message);
-                                        }
-                                    }
-                                    ret.Add(tmp);
+                                    tmp = Marshal.PtrToStringUni(pwstr);
+                                    Marshal.FreeCoTaskMem(pwstr);
                                 }
+                                Marshal.FreeCoTaskMem(ppIdl);
                             }
-                            Marshal.FreeCoTaskMem(ppIdl);
                         }
+                        else
+                        {
+                            tmp = "::" + Util.ResolveLink(((API.IShellLink)item)).Item2;
+                        }
+                        if (!string.IsNullOrEmpty(tmp))
+                            ret.Add(tmp);
                         Marshal.ReleaseComObject(item);
                     }
                     Marshal.ReleaseComObject(list);
