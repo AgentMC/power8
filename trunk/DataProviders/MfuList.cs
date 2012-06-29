@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
@@ -28,10 +30,16 @@ namespace Power8
         }
         public static PowerItem MfuSearchRoot;
 
+
         private static readonly List<MfuElement> LastList = new List<MfuElement>();
+        private static readonly List<MfuElement> P8JlImpl = new List<MfuElement>();
         private static readonly string[] MsFilter;
         private static readonly ManagementEventWatcher WatchDog;
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;
+
+        private static readonly string DataBase =
+            Environment.ExpandEnvironmentVariables("%appdata%\\Power8\\LaunchData.csv");
+
 
         const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
         static class Guids
@@ -41,6 +49,8 @@ namespace Power8
             public const string XP_1 = "{75048700-EF1F-11D0-9888-006097DEACF9}";
             public const string XP_2 = "{5E6AB780-7743-11CF-A12B-00AA004AE837}";
         }
+
+
         
         static MfuList()
         {
@@ -64,17 +74,91 @@ namespace Power8
                 col.Add("HOST.EXE");
                 MsFilter = col.ToArray();
 
+                if(File.Exists(DataBase))
+                {
+                    using (var f = new StreamReader(DataBase, Encoding.UTF8))
+                    {
+                        while (!f.EndOfStream)
+                        {
+                            var l = f.ReadLine();
+                            if (string.IsNullOrEmpty(l)) 
+                                continue;
+                            var ls = l.Split(new[]{';'}, 4);
+                            P8JlImpl.Add(new MfuElement
+                                             {
+                                                 Arg = ls[0],
+                                                 Cmd = ls[1],
+                                                 LaunchCount = int.Parse(ls[2]),
+                                                 LastLaunchTimeStamp =
+                                                     DateTime.ParseExact(ls[3], "yyyyMMddHHmmss", CultureInfo.CurrentCulture)
+                                             });
+                        }
+                    }
+                }
+
+                Util.MainDisp.ShutdownStarted += MainDispOnShutdownStarted;
+
                 WatchDog = new ManagementEventWatcher("SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
                 WatchDog.EventArrived += WatchDogOnEventArrived;
                 WatchDog.Start();
             }
         }
 
+        private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
+        {
+// ReSharper disable AssignNullToNotNullAttribute
+            Directory.CreateDirectory(Path.GetDirectoryName(DataBase));
+// ReSharper restore AssignNullToNotNullAttribute
+            using (var f = new StreamWriter(DataBase, false, Encoding.UTF8))
+            {
+                foreach (var mfuElement in P8JlImpl)
+                {
+                    f.WriteLine("{0};{1};{2};{3}",
+                                mfuElement.Arg,
+                                mfuElement.Cmd,
+                                mfuElement.LaunchCount,
+                                mfuElement.LastLaunchTimeStamp.ToString("yyyyMMddHHmmss"));
+                }
+            }
+        }
+
         private static void WatchDogOnEventArrived(object sender, EventArrivedEventArgs e)
         {
             var proc = e.NewEvent["TargetInstance"] as ManagementBaseObject;
-            Console.Out.WriteLine("Process Launched: {0} {1}", proc["CommandLine"], proc["SessionId"]);
+            if(proc != null)
+            {
+                var sId = (int)(uint) proc["SessionId"];
+                if(sId == SessionId)
+                {
+                    var cmd = (string) proc["CommandLine"];
+                    if(!string.IsNullOrEmpty(cmd) && !MsFilter.Any(cmd.ToUpper().Contains))
+                    {
+                        var pair = Util.CommandToFilenameAndArgs(cmd);
+                        pair = Tuple.Create(pair.Item1.ToLowerInvariant(), pair.Item2.ToLowerInvariant());
+                        var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
+                        if(t == null)
+                        {
+                            P8JlImpl.Add(new MfuElement
+                                         {
+                                             Arg = pair.Item1,
+                                             Cmd = pair.Item2,
+                                             LaunchCount = 1,
+                                             LastLaunchTimeStamp = DateTime.Now
+                                         });
+                        }
+                        else
+                        {
+                            t.LaunchCount += 1;
+                            t.LastLaunchTimeStamp = DateTime.Now;
+                        }
+                        Console.Out.WriteLine("Process Launched: {0} {1}", pair.Item1, pair.Item2);
+                    }
+                }
+                    
+            }
         }
+
+
 
         public static void UpdateStartMfu()
         {
@@ -131,7 +215,8 @@ namespace Power8
                 return;
 
             LastList.Clear();
-            LastList.AddRange(list);
+            list.ForEach(m => LastList.Add(m.Clone()));
+
             lock (_startMfu)
             {
                 //Step 2.1: filter out setup, host apps and documentation files
@@ -141,12 +226,11 @@ namespace Power8
                 var malformed = list.FindAll(m => m.Arg.Contains("\\\\") && !m.Arg.StartsWith("\\"));
                 malformed.ForEach(mf =>
                                       {
-                                          list.Remove(mf);
                                           var properArg = mf.Arg.Replace("\\\\", "\\");
                                           mf.Arg = properArg;
                                           var existent = list.Find(m => m.Arg == properArg);
                                           list.Remove(existent);
-                                          list.Add(mf.Mix(existent));
+                                          mf.Mix(existent);
                                       });
                 
                 //Step 2.3: filter out direct paths to the objects for which we have links
@@ -161,10 +245,9 @@ namespace Power8
                 {
                     if(i > 0 && linx[i-1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        var t = Tuple.Create(linx[i].Item1, linx[i].Item2.Mix(linx[i - 1].Item2));
+                        linx[i - 1].Item2.Mix((linx[i].Item2));
+                        list.Remove(linx[i].Item2);
                         linx.RemoveAt(i);
-                        linx.RemoveAt(i-1);
-                        linx.Add(t);
                     }
                 }
                 //Step 2.3.2: really filter out
@@ -174,10 +257,9 @@ namespace Power8
                         list.FindAll(q => q.Arg.Equals(tuple.Item1, StringComparison.InvariantCultureIgnoreCase));
                     foreach (var direct in directs)
                     {
-                        list.Add(tuple.Item2.Mix(direct));
                         list.Remove(direct);
+                        tuple.Item2.Mix(direct);
                     }
-                    list.Remove(tuple.Item2);
                 }
 
                 //Step 2.4: sort.
@@ -213,7 +295,7 @@ namespace Power8
         {
             var fsObject = PowerItemTree.GetResolvedArgument(item);
             IEnumerable<string> jl = null;
-            var p8R = GetP8Recent(fsObject);
+            var p8R = GetP8Recent(item.IsLink ? item.ResolvedLink : fsObject);
             if(Util.OsIs.SevenOrMore)
             {
                 var recent = GetJumpList(fsObject, API.ADLT.RECENT);
@@ -223,7 +305,7 @@ namespace Power8
                 else
                     jl = recent ?? frequent;
                 if (jl != null)
-                    jl = jl.Where(x => x.StartsWith("::") || System.IO.File.Exists(x));
+                    jl = jl.Where(x => x.StartsWith("::") || File.Exists(x));
             }
             if (jl != null && p8R != null)
                 jl = jl.Union(p8R);
@@ -392,16 +474,20 @@ namespace Power8
 
         private static IEnumerable<string> GetP8Recent(string fsObject)
         {
-            return null;
+            var l = P8JlImpl.Where(j => j.Arg == fsObject && !string.IsNullOrEmpty(j.Cmd)).ToList();
+            l.Sort();
+            return from mfuElement in l 
+                   select mfuElement.Cmd;
         }
 
 
 
 
 
-        private struct MfuElement : IComparable<MfuElement>
+        private class MfuElement : IComparable<MfuElement>
         {
             public string Arg;
+            public string Cmd = "";
             public int LaunchCount;
             public DateTime LastLaunchTimeStamp;
 
@@ -422,12 +508,36 @@ namespace Power8
                        && System.IO.File.Exists(Arg);
             }
 
-            public MfuElement Mix(MfuElement other)
+            public void Mix(MfuElement other)
             {
                 LaunchCount += other.LaunchCount;
                 if (LastLaunchTimeStamp < other.LastLaunchTimeStamp)
                     LastLaunchTimeStamp = other.LastLaunchTimeStamp;
-                return this;
+            }
+
+            
+
+            public override int GetHashCode()
+            {
+                return (Arg + Cmd + LaunchCount + LastLaunchTimeStamp).GetHashCode();
+            }
+
+            public MfuElement Clone()
+            {
+                return new MfuElement
+                           {
+                               Arg = Arg,
+                               Cmd = Cmd,
+                               LaunchCount = LaunchCount,
+                               LastLaunchTimeStamp = LastLaunchTimeStamp
+                           };
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (!(obj is MfuElement))
+                    return false;
+                return GetHashCode() == obj.GetHashCode();
             }
         }
     }
