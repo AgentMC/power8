@@ -150,9 +150,16 @@ namespace Power8
 
                 if (SpecialFolderId != API.Csidl.INVALID)
                 {
-                    _friendlyName = Util.ResolveSpecialFolderName(SpecialFolderId);
-                    if (_friendlyName != null)
-                        return _friendlyName;
+                    if (SpecialFolderId == API.Csidl.POWER8JLITEM)
+                    {
+                        _friendlyName = Argument;
+                    }
+                    else
+                    {
+                        _friendlyName = Util.ResolveSpecialFolderName(SpecialFolderId);
+                        if (_friendlyName != null)
+                            return _friendlyName;
+                    }
                 }
 
                 if (Parent == null) //main menu
@@ -225,19 +232,7 @@ namespace Power8
                 if(_cmdLines == null)
                 {
                     _cmdLines = new ObservableCollection<PowerItem>();
-                    var jl = MfuList.GetRecentListFor(Argument);
-                    if(jl != null)
-                    {
-                        foreach(var arg in jl)
-                        {
-                            _cmdLines.Add(new PowerItem
-                                              {
-                                                  Argument = arg, 
-                                                  Parent = this, 
-                                                  SpecialFolderId = API.Csidl.POWER8JLITEM
-                                              });
-                        }
-                    }
+                    MfuList.GetRecentListFor(this);
                 }
                 return _cmdLines;
             }
