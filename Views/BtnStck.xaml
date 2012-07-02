@@ -54,8 +54,13 @@
                             <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" IsMainMenu="False">
                                 <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemaplte}" 
                                           ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0"
-                                          Header=">"/>
+                                          Header=">" x:Name="showJump"/>
                             </Menu>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding JumpList.Count}" Value="0">
+                                    <Setter TargetName="showJump" Property="IsEnabled" Value="false"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

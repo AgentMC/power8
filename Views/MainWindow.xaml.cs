@@ -106,19 +106,19 @@ namespace Power8
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
             this.RegisterHook(WndProc);
 
-            if (!Settings.Default.FirstRunDone)
-            {
-                Settings.Default.FirstRunDone = true;
-                Settings.Default.Save();
+            //if (!Settings.Default.FirstRunDone)
+            //{
+            //    Settings.Default.FirstRunDone = true;
+            //    Settings.Default.Save();
 
-                var arrow = new Views.WelcomeArrow();
-                arrow.Show();
-                var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
-                GetSetWndPosition(arrow, new API.POINT {X = (int) p1.X, Y = (int) p1.Y}, false);
-                var p2 = new Point(arrow.Left + arrow.Width/2, arrow.Top + arrow.Height/2);
-                var initialAngle = p1.X < p2.X ? 135 : 45;
-                arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
-            }
+            //    var arrow = new Views.WelcomeArrow();
+            //    arrow.Show();
+            //    var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
+            //    GetSetWndPosition(arrow, new API.POINT {X = (int) p1.X, Y = (int) p1.Y}, false);
+            //    var p2 = new Point(arrow.Left + arrow.Width/2, arrow.Top + arrow.Height/2);
+            //    var initialAngle = p1.X < p2.X ? 135 : 45;
+            //    arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
+            //}
         }
 
         private void WindowClosed(object sender, EventArgs e)
