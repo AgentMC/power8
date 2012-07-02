@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Power8.Properties;
+using Power8.Views;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using ThreadState = System.Threading.ThreadState;
@@ -25,6 +26,7 @@ namespace Power8
         private bool _watch, _update, _blockMetro;
         private IntPtr _taskBar, _showDesktopBtn;
         private Thread _updateThread, _blockMetroThread;
+        private WelcomeArrow _arrow;
 
         private readonly EventWaitHandle _bgrThreadLock = new EventWaitHandle(false, EventResetMode.ManualReset);
 
@@ -106,19 +108,19 @@ namespace Power8
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
             this.RegisterHook(WndProc);
 
-            //if (!Settings.Default.FirstRunDone)
-            //{
-            //    Settings.Default.FirstRunDone = true;
-            //    Settings.Default.Save();
+            if (!Settings.Default.FirstRunDone)
+            {
+                Settings.Default.FirstRunDone = true;
+                Settings.Default.Save();
 
-            //    var arrow = new Views.WelcomeArrow();
-            //    arrow.Show();
-            //    var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
-            //    GetSetWndPosition(arrow, new API.POINT {X = (int) p1.X, Y = (int) p1.Y}, false);
-            //    var p2 = new Point(arrow.Left + arrow.Width/2, arrow.Top + arrow.Height/2);
-            //    var initialAngle = p1.X < p2.X ? 135 : 45;
-            //    arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
-            //}
+                _arrow = new WelcomeArrow();
+                _arrow.Show();
+                var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
+                GetSetWndPosition(_arrow, new API.POINT { X = (int)p1.X, Y = (int)p1.Y }, false);
+                var p2 = new Point(_arrow.Left + _arrow.Width / 2, _arrow.Top + _arrow.Height / 2);
+                var initialAngle = p1.X < p2.X ? 135 : 45;
+                _arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
+            }
         }
 
         private void WindowClosed(object sender, EventArgs e)
@@ -127,6 +129,9 @@ namespace Power8
             _watch = false;
             if (BtnStck.IsInstantited)
                 BtnStck.Instance.Close();
+            if(_arrow != null)
+                _arrow.Close();
+            Util.MainDisp.InvokeShutdown();
         }
 
         #endregion
