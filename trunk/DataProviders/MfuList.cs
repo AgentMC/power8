@@ -38,8 +38,8 @@ namespace Power8
         private static readonly ManagementEventWatcher WatchDog;
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;
 
-        private static readonly string DataBase =
-            Environment.ExpandEnvironmentVariables("%localappdata%\\Power8_Team\\LaunchData.csv");
+        private static readonly string DataBase = 
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\LaunchData.csv";
 
 
         const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
@@ -126,50 +126,41 @@ namespace Power8
         private static void WatchDogOnEventArrived(object sender, EventArrivedEventArgs e)
         {
             var proc = e.NewEvent["TargetInstance"] as ManagementBaseObject;
-            if(proc != null)
+            if (proc == null) 
+                return;
+            var sId = (int)(uint) proc["SessionId"];
+            if (sId != SessionId) 
+                return;
+            var cmd = (string) proc["CommandLine"];
+            if(!string.IsNullOrEmpty(cmd) && !MsFilter.Any(cmd.ToUpper().Contains))
             {
-                var sId = (int)(uint) proc["SessionId"];
-                if(sId == SessionId)
+                var pair = Util.CommandToFilenameAndArgs(cmd);
+                pair = Tuple.Create(pair.Item1.ToLowerInvariant(), pair.Item2.ToLowerInvariant());
+                if(string.IsNullOrEmpty(pair.Item2))
+                    return; //System will record usage, we don't need to monitor commandless launch
+                if (string.IsNullOrEmpty(pair.Item1) || pair.Item1.Length < 2 || pair.Item1[1] != ':' || !File.Exists(pair.Item1))
+                    return; //As a rule, user-launched applications have full path. Something as "rundll %1 %2 %3" won't make sence for P8
+                var prefix = File.Exists(pair.Item2) ? string.Empty : "::";
+                pair = Tuple.Create(pair.Item1.ToLowerInvariant(), prefix + pair.Item2.ToLowerInvariant());
+                var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
+                if(t == null)
                 {
-                    var cmd = (string) proc["CommandLine"];
-                    if(!string.IsNullOrEmpty(cmd) && !MsFilter.Any(cmd.ToUpper().Contains))
-                    {
-                        var pair = Util.CommandToFilenameAndArgs(cmd);
-                        string prefix = "::";
-                        try
-                        {
-                            if(File.Exists(pair.Item2))
-                                prefix = string.Empty;
-                        }
-                        catch (Exception)
-                        {
-#if DEBUG
-                            Debug.WriteLine("non-existent object detected: " + pair.Item2);
-#endif
-                        }
-                        pair = Tuple.Create(pair.Item1.ToLowerInvariant(), prefix + pair.Item2.ToLowerInvariant());
-                        var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
-                        if(t == null)
-                        {
-                            P8JlImpl.Add(new MfuElement
-                                         {
-                                             Arg = pair.Item1,
-                                             Cmd = pair.Item2,
-                                             LaunchCount = 1,
-                                             LastLaunchTimeStamp = DateTime.Now
-                                         });
-                        }
-                        else
-                        {
-                            t.LaunchCount += 1;
-                            t.LastLaunchTimeStamp = DateTime.Now;
-                        }
-#if DEBUG
-                        Debug.WriteLine("Process Launched: {0} {1}", pair.Item1, pair.Item2);
-#endif
-                    }
+                    P8JlImpl.Add(new MfuElement
+                                     {
+                                         Arg = pair.Item1,
+                                         Cmd = pair.Item2,
+                                         LaunchCount = 1,
+                                         LastLaunchTimeStamp = DateTime.Now
+                                     });
                 }
-                    
+                else
+                {
+                    t.LaunchCount += 1;
+                    t.LastLaunchTimeStamp = DateTime.Now;
+                }
+#if DEBUG
+                Debug.WriteLine("Process Launched: {0} {1}", pair.Item1, pair.Item2);
+#endif
             }
         }
 
@@ -304,7 +295,6 @@ namespace Power8
         public static void GetRecentListFor(PowerItem item)
         {
             ThreadPool.QueueUserWorkItem(o => GetRecentListForSync((PowerItem) o), item);
-            //Util.Fork(, "Recent List Getter for " + item.Argument).Start();
         }
 
         private static void GetRecentListForSync(PowerItem item)
@@ -490,7 +480,8 @@ namespace Power8
 
         private static IEnumerable<string> GetP8Recent(string fsObject)
         {
-            var l = P8JlImpl.Where(j => j.Arg == fsObject && !string.IsNullOrEmpty(j.Cmd)).ToList();
+            var o = fsObject.ToLowerInvariant();
+            var l = P8JlImpl.Where(j => j.Arg == o && !string.IsNullOrEmpty(j.Cmd)).ToList();
             l.Sort();
             return from mfuElement in l 
                    select mfuElement.Cmd;
