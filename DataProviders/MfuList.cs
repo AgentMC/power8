@@ -140,8 +140,17 @@ namespace Power8
                     return; //System will record usage, we don't need to monitor commandless launch
                 if (string.IsNullOrEmpty(pair.Item1) || pair.Item1.Length < 2 || pair.Item1[1] != ':' || !File.Exists(pair.Item1))
                     return; //As a rule, user-launched applications have full path. Something as "rundll %1 %2 %3" won't make sence for P8
-                var prefix = File.Exists(pair.Item2) ? string.Empty : "::";
-                pair = Tuple.Create(pair.Item1.ToLowerInvariant(), prefix + pair.Item2.ToLowerInvariant());
+                string checkPath = pair.Item2;
+                bool exists = File.Exists(checkPath);
+                if (!exists && checkPath.StartsWith("\"") && checkPath.EndsWith("\""))
+                {
+                    checkPath = checkPath.Substring(1, checkPath.Length - 2);
+                    exists = File.Exists(checkPath);
+                    if(!exists)
+                        checkPath = pair.Item2;
+                }
+                var prefix = exists ? string.Empty : "::";
+                pair = Tuple.Create(pair.Item1.ToLowerInvariant(), prefix + checkPath.ToLowerInvariant());
                 var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
                 if(t == null)
                 {
