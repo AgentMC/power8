@@ -8,6 +8,7 @@ using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using Power8.Properties;
 
 namespace Power8
@@ -38,7 +39,7 @@ namespace Power8
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;
 
         private static readonly string DataBase =
-            Environment.ExpandEnvironmentVariables("%appdata%\\Power8\\LaunchData.csv");
+            Environment.ExpandEnvironmentVariables("%localappdata%\\Power8_Team\\LaunchData.csv");
 
 
         const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
@@ -134,7 +135,19 @@ namespace Power8
                     if(!string.IsNullOrEmpty(cmd) && !MsFilter.Any(cmd.ToUpper().Contains))
                     {
                         var pair = Util.CommandToFilenameAndArgs(cmd);
-                        pair = Tuple.Create(pair.Item1.ToLowerInvariant(), pair.Item2.ToLowerInvariant());
+                        string prefix = "::";
+                        try
+                        {
+                            if(File.Exists(pair.Item2))
+                                prefix = string.Empty;
+                        }
+                        catch (Exception)
+                        {
+#if DEBUG
+                            Debug.WriteLine("non-existent object detected: " + pair.Item2);
+#endif
+                        }
+                        pair = Tuple.Create(pair.Item1.ToLowerInvariant(), prefix + pair.Item2.ToLowerInvariant());
                         var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
                         if(t == null)
                         {
@@ -151,7 +164,9 @@ namespace Power8
                             t.LaunchCount += 1;
                             t.LastLaunchTimeStamp = DateTime.Now;
                         }
-                        Console.Out.WriteLine("Process Launched: {0} {1}", pair.Item1, pair.Item2);
+#if DEBUG
+                        Debug.WriteLine("Process Launched: {0} {1}", pair.Item1, pair.Item2);
+#endif
                     }
                 }
                     
@@ -288,7 +303,8 @@ namespace Power8
 
         public static void GetRecentListFor(PowerItem item)
         {
-            Util.Fork(()=> GetRecentListForSync(item), "Recent List Getter for " + item.Argument).Start();
+            ThreadPool.QueueUserWorkItem(o => GetRecentListForSync((PowerItem) o), item);
+            //Util.Fork(, "Recent List Getter for " + item.Argument).Start();
         }
 
         private static void GetRecentListForSync(PowerItem item)
