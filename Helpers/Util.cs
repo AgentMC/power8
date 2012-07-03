@@ -221,6 +221,31 @@ namespace Power8
             return zeroFails == IntPtr.Zero ? null : info.szDisplayName;
         }
 
+        public static string GetLongPathOrDisplayName(string path)
+        {
+            if (path.Contains("~") || path.StartsWith("::"))
+            {
+                IntPtr ppidl;
+                lock (Buffer)
+                {
+                    API.SFGAO nul;
+                    API.SHParseDisplayName(path, IntPtr.Zero, out ppidl, API.SFGAO.NULL, out nul);
+                    API.SHGetPathFromIDList(ppidl, Buffer);
+                    path = Buffer.ToString();
+                }
+                if (string.IsNullOrEmpty(path))
+                {
+                    var info = new API.Shfileinfo();
+                    API.SHGetFileInfo(ppidl, 0, ref info, (uint) Marshal.SizeOf(info),
+                                      API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES);
+                    path = info.szDisplayName;
+                }
+            }
+            return path;
+        }
+
+
+
         public static void DisplaySpecialFolder(API.Csidl id)
         {
             new Thread(DisplaySpecialFolderSync).Start(id);

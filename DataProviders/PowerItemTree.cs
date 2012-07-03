@@ -16,8 +16,16 @@ namespace Power8
     {
         public const string SEPARATOR_NAME = "----";
 
-        private static readonly string PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu);
-        private static readonly string PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
+        private static readonly string 
+            PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
+            PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
+
+        //Ignore changed in
+        private static readonly string
+            IcrAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
+            IclAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
+            IcTemp = Util.GetLongPathOrDisplayName(Environment.ExpandEnvironmentVariables("%temp%")).ToLowerInvariant();
+
 
         private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true, Argument = @"\"};
         public static readonly ObservableCollection<PowerItem> StartMenuRoot
@@ -352,10 +360,7 @@ namespace Power8
 
             //Veryfying file changed not under any of appdata
             var fpLow = e.FullPath.ToLowerInvariant();
-            var rAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant();
-            var lAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant();
-            var tmp = Environment.ExpandEnvironmentVariables("%temp%").ToLowerInvariant();
-            if(fpLow.StartsWith(rAppData) || fpLow.StartsWith(lAppData) || fpLow.StartsWith(tmp))
+            if(fpLow.StartsWith(IcrAppData) || fpLow.StartsWith(IclAppData) || fpLow.StartsWith(IcTemp))
                 return;
 #if DEBUG
             Debug.WriteLine("File {0}: {1}", e.ChangeType, e.FullPath);
