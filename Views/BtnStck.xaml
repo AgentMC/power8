@@ -26,8 +26,9 @@
                   Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
                   x:Name="dataGrid" MouseDoubleClick="DataGridMouseDoubleClick" GridLinesVisibility="None"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
-                  AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single"
-                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown" >
+                  AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch"
+                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown"
+                  ItemsPanel="{StaticResource DataGridItemsPanelTemplate}">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
@@ -51,14 +52,14 @@
                 <DataGridTemplateColumn Header="Recent>" Width="18">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" IsMainMenu="False">
+                            <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" IsMainMenu="False" x:Name="showJump">
                                 <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemaplte}" 
                                           ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0"
-                                          Header=">" x:Name="showJump"/>
+                                          Header=">" />
                             </Menu>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding JumpList.Count}" Value="0">
-                                    <Setter TargetName="showJump" Property="IsEnabled" Value="false"/>
+                                    <Setter TargetName="showJump" Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </DataTemplate.Triggers>
                         </DataTemplate>
