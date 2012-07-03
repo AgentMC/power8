@@ -4,12 +4,41 @@
         Title="Welcome arrow" Name="ArrowWnd" Height="300" Width="300" 
         Background="Transparent" AllowsTransparency="True" 
         WindowStyle="None" ShowInTaskbar="False">
-    <Grid Width="100" Height="50" >
-    	<Path Data="M0,10L60,15 60,0 90,22.5 60,45 60,30 0,35z" Fill="{StaticResource WhiteSolidBrush}" Stretch="Uniform" 
+	<Window.Resources>
+		<Storyboard x:Key="OnLoaded1" RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="path">
+				<EasingDoubleKeyFrame KeyTime="0:0:0.25" Value="10"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</Window.Resources>
+	<Window.Triggers>
+		<EventTrigger RoutedEvent="FrameworkElement.Unloaded">
+			<StopStoryboard BeginStoryboardName="OnLoaded1_BeginStoryboard"/>
+		</EventTrigger>
+		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+			<BeginStoryboard x:Name="OnLoaded1_BeginStoryboard" Storyboard="{StaticResource OnLoaded1}"/>
+		</EventTrigger>
+	</Window.Triggers>
+    <Grid x:Name="grid" Width="100" Height="50" RenderTransformOrigin="0.5,0.5" >
+    	<Grid.RenderTransform>
+    		<TransformGroup>
+    			<ScaleTransform/>
+    			<SkewTransform/>
+    			<RotateTransform Angle="{Binding Rotation, ElementName=ArrowWnd}"/>    			
+				<TranslateTransform/>
+    		</TransformGroup>
+    	</Grid.RenderTransform>
+    	<Path x:Name="path" Data="M0,10L60,15 60,0 90,22.5 60,45 60,30 0,35z" Fill="{StaticResource WhiteSolidBrush}" Stretch="Uniform" 
               Stroke="{DynamicResource BlackBrush}" StrokeThickness="3" RenderTransformOrigin="0.5,0.5" >
-            <Path.RenderTransform>
-                <RotateTransform Angle="{Binding Rotation, ElementName=ArrowWnd}"/>
-            </Path.RenderTransform>
-        </Path>
+    		<Path.RenderTransform>
+    			<TransformGroup>
+    				<ScaleTransform/>
+    				<SkewTransform/>
+    				<RotateTransform/>
+    				<TranslateTransform/>
+    			</TransformGroup>
+    		</Path.RenderTransform>
+    	</Path>
     </Grid>
 </Window>
