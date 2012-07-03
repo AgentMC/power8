@@ -53,8 +53,15 @@
                         <DataTemplate>
                             <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" IsMainMenu="False" x:Name="showJump">
                                 <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemplate}" 
-                                          ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0"
-                                          Header=">" />
+                                          ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0">
+                                    <MenuItem.Header>
+                                        <Grid Width="18" Height="16">
+                                            <!--<TextBlock Padding="0,1,0,0" Text=">" TextAlignment="Center"/>-->
+                                            <Path Data="M0,0 L2,2 0,4z" Fill="{StaticResource WhiteSolidBrush}" Stretch="Uniform" 
+                                            Stroke="{StaticResource BlackBrush}" Width="6" Margin="0,-0.5,0,0"/>
+                                        </Grid>
+                                    </MenuItem.Header>          
+                                </MenuItem>
                             </Menu>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding JumpList.Count}" Value="0">
