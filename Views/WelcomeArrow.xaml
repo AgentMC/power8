@@ -20,7 +20,7 @@
 			<BeginStoryboard x:Name="OnLoaded1_BeginStoryboard" Storyboard="{StaticResource OnLoaded1}"/>
 		</EventTrigger>
 	</Window.Triggers>
-    <Grid x:Name="grid" Width="100" Height="50" RenderTransformOrigin="0.5,0.5" >
+    <Grid x:Name="grid" Width="200" Height="100" RenderTransformOrigin="0.5,0.5" >
     	<Grid.RenderTransform>
     		<TransformGroup>
     			<ScaleTransform/>
