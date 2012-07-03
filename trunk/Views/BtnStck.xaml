@@ -26,9 +26,8 @@
                   Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
                   x:Name="dataGrid" MouseDoubleClick="DataGridMouseDoubleClick" GridLinesVisibility="None"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
-                  AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch"
-                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown"
-                  ItemsPanel="{StaticResource DataGridItemsPanelTemplate}">
+                  AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single"
+                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown">
             <DataGrid.Columns>
                 <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
                 <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
