@@ -292,6 +292,10 @@
     <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
         <DockPanel IsItemsHost="True"/>
     </ItemsPanelTemplate>
+
+    <ItemsPanelTemplate x:Key="DataGridItemsPanelTemplate">
+        <VirtualizingStackPanel IsItemsHost="True" HorizontalAlignment="Stretch" Orientation="Vertical"/>
+    </ItemsPanelTemplate>
     
     <HierarchicalDataTemplate ItemsSource="{Binding Items}" x:Key="MenuDataTemaplte">
         <Grid>
