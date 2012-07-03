@@ -294,6 +294,37 @@
 
     <!-- Menu -->
     
+    <HierarchicalDataTemplate ItemsSource="{Binding Items}" x:Key="MenuDataTemplate">
+        <Grid>
+            <Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
+                    Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" 
+                    HorizontalAlignment="Left" Margin="4,0" Name="BlurBorder" Visibility="Collapsed">
+                <Grid Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
+                      Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}"
+                      VerticalAlignment="Bottom">
+                    <Rectangle StrokeThickness="5" Stroke="#7FFFFFFF" RadiusX="5" RadiusY="5" Fill="#7FFFFFFF" 
+                               Margin="-4,3,-4,2">
+                        <Rectangle.Effect>
+                            <BlurEffect Radius="15"/>
+                        </Rectangle.Effect>
+                    </Rectangle>
+                </Grid>
+            </Border>
+            <StackPanel Orientation="Horizontal">  
+                <Image Source="{Binding Icon.SmallBitmap}" Margin="{Binding Converter={StaticResource themeApplier}}" 
+                       Width="16" Height="16" Stretch="Uniform" Name="IconImage"/>
+                <TextBlock x:Name="contentPresenter" Text="{Binding FriendlyName}" Padding="4,0" Margin="0,0,0,0" 
+                           VerticalAlignment="Center"/>
+            </StackPanel>     
+        </Grid>
+        <HierarchicalDataTemplate.Triggers>
+            <DataTrigger Binding="{Binding Parent}" Value="{x:Null}"> <!--i.e. MenuItem Role = "TopLevelHeader"-->
+                <Setter TargetName="BlurBorder" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed"/>
+            </DataTrigger>
+        </HierarchicalDataTemplate.Triggers>
+    </HierarchicalDataTemplate>
+    
     <Style x:Key="MenuStyle" TargetType="{x:Type Menu}">
         <Setter Property="Background" Value="{StaticResource MenuBackground}"/>
         <Setter Property="FontFamily" Value="{StaticResource {x:Static SystemFonts.MenuFontFamilyKey}}"/>
@@ -333,7 +364,7 @@
         </Setter>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="ItemsPanel" Value="{StaticResource ItemsPanelTemplate}"/>
-        <Setter Property="ItemTemplate" Value="{StaticResource MenuDataTemaplte}"/>
+        <Setter Property="ItemTemplate" Value="{StaticResource MenuDataTemplate}"/>
     </Style>
     
     <Style x:Key="RightMenuStyle" TargetType="{x:Type Menu}">
@@ -391,37 +422,6 @@
                                                   Converter={StaticResource localizer}}"/>
         <Setter Property="Padding" Value="6,3"/>
     </Style>
-
-    <HierarchicalDataTemplate ItemsSource="{Binding Items}" x:Key="MenuDataTemaplte">
-        <Grid>
-            <Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
-                    Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" 
-                    HorizontalAlignment="Left" Margin="4,0" Name="BlurBorder" Visibility="Collapsed">
-                <Grid Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
-                      Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}"
-                      VerticalAlignment="Bottom">
-                    <Rectangle StrokeThickness="5" Stroke="#7FFFFFFF" RadiusX="5" RadiusY="5" Fill="#7FFFFFFF" 
-                               Margin="-4,3,-4,2">
-                        <Rectangle.Effect>
-                            <BlurEffect Radius="15"/>
-                        </Rectangle.Effect>
-                    </Rectangle>
-                </Grid>
-            </Border>
-            <StackPanel Orientation="Horizontal">  
-                <Image Source="{Binding Icon.SmallBitmap}" Margin="{Binding Converter={StaticResource themeApplier}}" 
-                       Width="16" Height="16" Stretch="Uniform" Name="IconImage"/>
-                <TextBlock x:Name="contentPresenter" Text="{Binding FriendlyName}" Padding="4,0" Margin="0,0,0,0" 
-                           VerticalAlignment="Center"/>
-            </StackPanel>     
-        </Grid>
-        <HierarchicalDataTemplate.Triggers>
-            <DataTrigger Binding="{Binding Parent}" Value="{x:Null}"> <!--i.e. MenuItem Role = "TopLevelHeader"-->
-                <Setter TargetName="BlurBorder" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="IconImage" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
-        </HierarchicalDataTemplate.Triggers>
-    </HierarchicalDataTemplate>
     
     <!-- /Menu -->
 
