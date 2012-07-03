@@ -339,9 +339,6 @@ namespace Power8
 
         private static void FileChanged(object sender, FileSystemEventArgs e)
         {
-#if DEBUG
-            Debug.WriteLine("File {0}: {1}", e.ChangeType, e.FullPath);
-#endif
             try
             {
                 //We ignore hiden data
@@ -352,6 +349,17 @@ namespace Power8
             {
                 return;
             }
+
+            //Veryfying file changed not under any of appdata
+            var fpLow = e.FullPath.ToLowerInvariant();
+            var rAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant();
+            var lAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant();
+            var tmp = Environment.ExpandEnvironmentVariables("%temp%").ToLowerInvariant();
+            if(fpLow.StartsWith(rAppData) || fpLow.StartsWith(lAppData) || fpLow.StartsWith(tmp))
+                return;
+#if DEBUG
+            Debug.WriteLine("File {0}: {1}", e.ChangeType, e.FullPath);
+#endif
             //Ensuring buttonstack is created on Main thread
             Util.Send(() => BtnStck.Instance.InvalidateVisual());
             var isDir = Directory.Exists(e.FullPath);
