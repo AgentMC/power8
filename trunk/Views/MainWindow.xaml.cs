@@ -129,8 +129,7 @@ namespace Power8
             _watch = false;
             if (BtnStck.IsInstantited)
                 BtnStck.Instance.Close();
-            if(_arrow != null)
-                _arrow.Close();
+            KillArrow();
             Util.MainDisp.InvokeShutdown();
         }
 
@@ -142,6 +141,8 @@ namespace Power8
         {
             if(!BtnStck.IsInstantited)
                 return;
+
+            KillArrow();
 
             if (Keyboard.GetKeyStates(Key.LeftCtrl) == KeyStates.Down || Keyboard.GetKeyStates(Key.RightCtrl) == KeyStates.Down)
             {
@@ -466,6 +467,14 @@ namespace Power8
             var b = w as BtnStck;
             if (b != null)
                 b.Focus();
+        }
+
+        private void KillArrow()
+        {
+            if (_arrow == null) 
+                return;
+            _arrow.Close();
+            _arrow = null;
         }
 
         #endregion
