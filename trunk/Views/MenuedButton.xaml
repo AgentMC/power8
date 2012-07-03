@@ -74,7 +74,7 @@
         	</Grid>
         </Border>
         <Menu Grid.Column="1" Margin="0"  Padding="0"  ContextMenuOpening="ContextMenuContextMenuOpening" Style="{StaticResource RightMenuStyle}" IsMainMenu="False">
-            <MenuItem ItemsSource="{Binding Item.Items, ElementName=dblBtn}" ItemTemplate="{StaticResource MenuDataTemaplte}" ItemContainerStyle="{StaticResource MenuItemStyle}" Padding="0" Margin="0">
+            <MenuItem ItemsSource="{Binding Item.Items, ElementName=dblBtn}" ItemTemplate="{StaticResource MenuDataTemplate}" ItemContainerStyle="{StaticResource MenuItemStyle}" Padding="0" Margin="0">
                 <MenuItem.Header>
                     <Grid Margin="4">
                     	<Grid.ColumnDefinitions>
