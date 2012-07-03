@@ -152,14 +152,17 @@ namespace Power8
                 {
                     if (SpecialFolderId == API.Csidl.POWER8JLITEM)
                     {
-                        _friendlyName = Argument;
+                        if (Argument.StartsWith("/n,::"))
+                            _friendlyName = Util.GetLongPathOrDisplayName(Argument.Substring(3));
+                        if(string.IsNullOrEmpty(_friendlyName))
+                            _friendlyName = Argument;
                     }
                     else
                     {
                         _friendlyName = Util.ResolveSpecialFolderName(SpecialFolderId);
-                        if (_friendlyName != null)
-                            return _friendlyName;
                     }
+                    if (_friendlyName != null)
+                        return _friendlyName;
                 }
 
                 if (Parent == null) //main menu
