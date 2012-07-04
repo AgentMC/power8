@@ -156,6 +156,12 @@ namespace Power8
                             _friendlyName = Util.GetLongPathOrDisplayName(Argument.Substring(3));
                         if(string.IsNullOrEmpty(_friendlyName))
                             _friendlyName = Argument;
+                        if (!string.IsNullOrEmpty(_friendlyName) && _friendlyName.Length > 60)
+                        {
+                            _friendlyName = _friendlyName.Substring(0, 28) +
+                                            "…" +
+                                            _friendlyName.Substring(_friendlyName.Length - 28, 28);
+                        }
                     }
                     else
                     {
