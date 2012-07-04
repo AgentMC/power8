@@ -9,18 +9,14 @@ For already implemented features, see [Changelog] page.
 
 = _Beta_ =
 
-== B1 ==
-*estimated release date: 01.07.12* (moved `cause everyone on vacation :))
-  * launched items list;
-  * items can be pinned;
-  * each item has possible command lines obtainable by process event dispatcher;
-  * object jump lists also used as launch commands for items;
+== B2 ==
+*estimated release date: 15.07.12*
+  * MFU items can be pinned;
   * theme for non-Aero better implementation;
   * icon and logo;
-  * localization;
-  * possible: notification arrow for users when P8 launched 1st time.
+  * localization.
 
 
 = _Power8 v.1.0 Release_ =
-*estimated release date: 08.07.12*
+*estimated release date: 22.07.12*
   * various bugfixes and UI enhancements;
