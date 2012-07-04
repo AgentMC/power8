@@ -2,6 +2,23 @@
 #labels Featured
 
 
+==Beta 1 (v.0.5.0.0): 04.07.2012==
+  
+  # `[new]` Added support for Windows MFU list (main start menu list contents);
+  # `[new]` Added support for Windows Jump lists (main start menu list element). Along with Windows system API Power8 uses internal implementation, so Jump Lists works even on XP;
+  # `[new]` Welcome arrow appears on 1st launch to help user begin working with Power8;
+  # `[new]` Added option to block metro screen corner rectangles;
+  # `[new]` Cursor over main button now indicates that load is completed;
+  # `[changed]` Enhanced error handling. If error happens now, 90% that it will be shown to user, and then written to log;
+  # `[changed]` Hack-fixed initial layout of grid columns on .Net 4.0. Search something to get proper layout;
+  # `[changed]` Main button redrawn to display with Windows colors;
+  # `[fixed]` Doubling of links in All Programs in rare cases;
+  # `[fixed]` Visual state for pressed buttons;
+  # `[fixed]` Focus when `ButtonStack` is shown;
+  # `[fixed]` `ButtonStack` won't be instantiated twice now;
+  # `[fixed]` Invalid declaration and call for `ShGetSpecialFolderPath()`;
+
+
 ==Alpha 4 (v.0.4.0.0): 11.06.2012==
   
   # `[new]` Added search functionality. 3 new ways to search, see details in [FeatureDetails] page;
