@@ -11,6 +11,7 @@ For already implemented features, see [Changelog] page.
 
 == B2 ==
 *estimated release date: 15.07.12*
+  * Include JL in search?
   * MFU items can be pinned;
   * theme for non-Aero better implementation;
   * icon and logo;
