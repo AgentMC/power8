@@ -21,14 +21,13 @@ This list is maintained internally, if you want to report an issue that is not o
   #  7/8 Data grid icons and text are blurred though sizes of blocks are ok
   #  Menu from menu-button may show in inappropriate position
   #  Context menu from Main button may show in inappropriate position
+  #  Unneeded right margin in menu items
   #  Ctrl+Click may not invoke Run dialog, depending on focused control
   #  Cannot display properties of a Computer object
   #  XP: buttons are 3px lower than menu-buttons
   #  W7/classic theme: button is unreachable (almost)
   #  W8/basic theme: Menu TLH are drawn with system background instead of transparent
   #  (?) W8 immersive links aren't run properly - have to investigate, postpone to RTM
-  #  (warning) investigate why the process requires Exit() call to quit 
+
 
 = Done => goes to next release =
-
-  #  Buttons don't have Pushed visual style
