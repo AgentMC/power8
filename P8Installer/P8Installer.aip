@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="9.1.1" version="9.2" Modules="simple" RootPath="." Language="en" Id="{70FF9837-4253-4A9D-93FC-2C0D66A72373}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="9.1.1" version="9.3" Modules="simple" RootPath="." Language="en" Id="{70FF9837-4253-4A9D-93FC-2C0D66A72373}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_MINDOTNETVERSION" MultiBuildValue="DefaultBuild:4.0 Client Profile" ValueLocId="-"/>
     <ROW Property="ALLUSERS" Value="2"/>
@@ -12,10 +12,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:3"/>
     <ROW Property="Manufacturer" Value="Power8 team" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{67FED042-BD64-4DAF-8D8D-50A310CEB971} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{26BC1846-14EF-4DF4-B88B-EFD0BB0440CF} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Power8" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="0.4.0.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="0.5.0.0" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{76C7409C-E1F8-44D7-8849-6BD3C7F637F6}"/>
