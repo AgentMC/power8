@@ -14,6 +14,7 @@ This list is maintained internally, if you want to report an issue that is not o
   #  Internal search should return results `"TestApp.exe"` and `"Test App.exe"` for "ta" query
   #  Virtualization in item control in search group is off - investigate why =>auto-expand groups on search
   #  The style for search grid must be implemented
+  #  P8 prevents safe eject of removable drives
 
 == Other known ==
   
