@@ -69,7 +69,9 @@ This is the search over everything known to Power8 itself:
   *  Start menu;
   *  Items displayed in Computer or Documents menu-butons;
   *  Control panel elements;
-  *  Network neighborhood.
+  *  Network neighborhood;
+  *  MFU list (recently launched applications);
+  *  (also, Jump lists search will be probably implemented later).
 
 Minimum search length for this search is 2 characters, so "no" will already bring you Notepad up. Query string is being looked for in elements' path, description or target path if current element is a Link.
 This search is immediate. Found elements are grouped according to item under which they were found. Example of the internal search is on screenshot above.
@@ -104,3 +106,33 @@ The format of query is "key query" (with space inside), where key is 1 character
 ||я||Яndex.ru||
 
 This search is not even deferred - it's manual. When you press enter, the default system browser will be launched to show you the results of the search query using the site chosen.
+
+==Recent Applications (MFU List)==
+
+Each time main P8 window (aka "Button-Stack") is opened, Power8 reads system-managed lists of recently launched applications and displays it. P8 uses cache inside, so this does not impact the performance.
+
+Elements of MFU list pass through a number of filters, including ones defined by Microsoft, internal P8 filters, stripping away network files, and links approximization. Last one is process where from 2 different links pointing to same EXE and this EXE itself we construct one resulting element. However this is not precise process since some applications (like MS Office) use launchers/guids to launch instead of simple EXE targets. It will be enhanced in future.
+
+When displayed, all items are sorted by launch count (keep in mind, Windows resets this value from time to time) and then by launch date, keeping most popular/most recent at the top. For items that has launch count of 0 (e.g. when launched not by Windows, or after Windows had reset the counter), only latest 20 are shown to make list display faster.
+
+Names of elements are returned using complex algorythm:
+  * first, we try to find corresponding element in All Programs list;
+  * if this fails, we extract file information and display file Description of Product Name;
+  * finally, if none of above is available, file name or link title is shown. 
+
+==Jump Lists==
+
+Power8 displays 3 sources of JL in one menu:
+  * system Recent list;
+  * system Frequent list;
+  * P8 internal JL manager data (this is the only source of Jump List data for WinXP).
+
+There's no official way to get jump list for any desired application, so some of jump lists you can see in Windows may not be shown in Power8. And vice-versa. For example, seems Notepad is identified by it's window, not by exe file or link - so we can't show jump list for it.
+
+However we display JL for applications that follow MS's guidelines and add required data to their launch shortcuts. For example, Remote desktop connection, Visual Studio, etc.
+
+There are 2 kinds of Jump List elements:
+  * file;
+  * command.
+
+Jump list element is treated as file if it exists locally on your disc. Commands are all the others (command line parameters, web addresses, ...). Command will be always launched with application, jump list of which it is located in. File, however, will be treated as usual, and opened in default associated system application.
