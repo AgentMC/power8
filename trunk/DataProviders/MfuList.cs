@@ -265,6 +265,8 @@ namespace Power8
                     if(i > 0 && linx[i-1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
                     {
                         linx[i - 1].Item2.Mix((linx[i].Item2));
+                        if (Util.OsIs.SevenOrMore && linx[i].Item2.Arg.Contains("TaskBar"))
+                            linx[i - 1].Item2.Arg = linx[i].Item2.Arg;//priority for taskbar elements
                         list.Remove(linx[i].Item2);
                         linx.RemoveAt(i);
                     }
