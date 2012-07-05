@@ -236,7 +236,7 @@ namespace Power8
             LastList.Clear();
             list.ForEach(m => LastList.Add(m.Clone()));
 
-            lock (_startMfu)
+            lock (StartMfu)
             {
                 //Step 2.1: filter out setup, host apps and documentation files
                 list.ApplyMsFilter();
