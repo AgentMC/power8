@@ -8,7 +8,6 @@ using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using Power8.Properties;
 
 namespace Power8
@@ -41,8 +40,10 @@ namespace Power8
         private static readonly string DataBase = 
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\LaunchData.csv";
 
+        private const string
+            USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count",
+            PLD_SPLITTER = "<:;:>";
 
-        const string USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count";
         static class Guids
         {
             public const string W7_1 = "{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}";
@@ -84,7 +85,9 @@ namespace Power8
                             var l = f.ReadLine();
                             if (string.IsNullOrEmpty(l)) 
                                 continue;
-                            var ls = l.Split(new[]{';'}, 4);
+                            var ls = l.Split(new[]{PLD_SPLITTER}, 4, StringSplitOptions.None);
+                            if(ls.Length != 4)
+                                continue;
                             P8JlImpl.Add(new MfuElement
                                              {
                                                  Arg = ls[0],
@@ -114,11 +117,12 @@ namespace Power8
             {
                 foreach (var mfuElement in P8JlImpl)
                 {
-                    f.WriteLine("{0};{1};{2};{3}",
+                    f.WriteLine("{0}{4}{1}{4}{2}{4}{3}",
                                 mfuElement.Arg,
                                 mfuElement.Cmd,
                                 mfuElement.LaunchCount,
-                                mfuElement.LastLaunchTimeStamp.ToString("yyyyMMddHHmmss"));
+                                mfuElement.LastLaunchTimeStamp.ToString("yyyyMMddHHmmss"),
+                                PLD_SPLITTER);
                 }
             }
         }
@@ -303,7 +307,7 @@ namespace Power8
 
         public static void GetRecentListFor(PowerItem item)
         {
-            ThreadPool.QueueUserWorkItem(o => GetRecentListForSync((PowerItem) o), item);
+            Util.Fork(() => GetRecentListForSync(item), "MFU worker for " + item.Argument).Start();
         }
 
         private static void GetRecentListForSync(PowerItem item)
@@ -521,7 +525,7 @@ namespace Power8
                        && !Arg.Contains("\",")
                        && !Arg.StartsWith("::")
                        && !Arg.StartsWith("\\\\")
-                       && System.IO.File.Exists(Arg);
+                       && File.Exists(Arg);
             }
 
             public void Mix(MfuElement other)
