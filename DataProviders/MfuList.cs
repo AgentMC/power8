@@ -139,11 +139,11 @@ namespace Power8
             if(!string.IsNullOrEmpty(cmd) && !MsFilter.Any(cmd.ToUpper().Contains))
             {
                 var pair = Util.CommandToFilenameAndArgs(cmd);
-                pair = Tuple.Create(pair.Item1.ToLowerInvariant(), pair.Item2.ToLowerInvariant());
                 if(string.IsNullOrEmpty(pair.Item2))
                     return; //System will record usage, we don't need to monitor commandless launch
                 if (string.IsNullOrEmpty(pair.Item1) || pair.Item1.Length < 2 || pair.Item1[1] != ':' || !File.Exists(pair.Item1))
                     return; //As a rule, user-launched applications have full path. Something as "rundll %1 %2 %3" won't make sence for P8
+                pair = Tuple.Create(pair.Item1.ToLowerInvariant(), pair.Item2.ToLowerInvariant());
                 string checkPath = pair.Item2;
                 bool exists = File.Exists(checkPath);
                 if (!exists && checkPath.StartsWith("\"") && checkPath.EndsWith("\""))
