@@ -2,6 +2,14 @@
 #labels Featured
 
 
+==Beta 1 Hotfix 1 (v.0.5.1.0): 06.07.2012==
+  
+  # `[changed]` Speedup in displaying of icons;
+  # `[fixed]` Exception when a program was launched in a system with semicolon in command line;
+  # `[fixed]` Exception when a program was launched in a system with no command line and WMI reported it without quotes;
+  # `[fixed]` Potential exception that may be result of race condition;
+
+
 ==Beta 1 (v.0.5.0.0): 04.07.2012==
   
   # `[new]` Added support for Windows MFU list (main start menu list contents);
