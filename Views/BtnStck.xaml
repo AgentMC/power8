@@ -29,8 +29,7 @@
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single"
                   HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown">
             <DataGrid.Columns>
-                <!--<DataGridCheckBoxColumn Header="Pin" MinWidth="16"/>-->
-                <DataGridTemplateColumn Header="Icon" Width="18" IsReadOnly="True">
+                <DataGridTemplateColumn Header="Icon" Width="16" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate >
                             <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"
@@ -47,6 +46,13 @@
                                        ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Pin" Width="16">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ToggleButton Style="{DynamicResource PinToggleButtonStyle}" Width="16" Height="16" IsChecked="{Binding IsPinned, Mode=TwoWay}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>    
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Recent>" Width="18">
                     <DataGridTemplateColumn.CellTemplate>

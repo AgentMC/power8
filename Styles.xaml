@@ -3,7 +3,8 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:my="clr-namespace:Power8" mc:Ignorable="d">
+ xmlns:my="clr-namespace:Power8" 
+ mc:Ignorable="d">
     <!-- Resource dictionary entries should be defined here. -->
     <my:NameToResourceConverter x:Key="localizer"/>
     <my:MenuWidthToMarginConverter x:Key="themeApplier" />
@@ -17,10 +18,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10,8"/>
         <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="Content" Value="{Binding Path=Name, 
-                                                  RelativeSource={RelativeSource Self}, 
-                                                  Mode=OneWay, 
-                                                  Converter={StaticResource localizer}}"/>
+        <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
 
         <Setter Property="Template">
             <Setter.Value>
@@ -298,7 +296,7 @@
         <Grid>
             <Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
                     Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" 
-                    HorizontalAlignment="Left" Margin="4,0" Name="BlurBorder" Visibility="Collapsed">
+                    HorizontalAlignment="Left" Margin="4,0" x:Name="BlurBorder" Visibility="Collapsed">
                 <Grid Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
                       Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}"
                       VerticalAlignment="Bottom">
@@ -312,7 +310,7 @@
             </Border>
             <StackPanel Orientation="Horizontal">  
                 <Image Source="{Binding Icon.SmallBitmap}" Margin="{Binding Converter={StaticResource themeApplier}}" 
-                       Width="16" Height="16" Stretch="Uniform" Name="IconImage"/>
+                       Width="16" Height="16" Stretch="Uniform" x:Name="IconImage"/>
                 <TextBlock x:Name="contentPresenter" Text="{Binding FriendlyName}" Padding="4,0" Margin="0,0,0,0" 
                            VerticalAlignment="Center"/>
             </StackPanel>     
@@ -416,10 +414,7 @@
     </Style>
     
     <Style x:Key="ContextMenuItemStyle" TargetType="{x:Type MenuItem}">
-        <Setter Property="Header" Value="{Binding Path=Name, 
-                                                  RelativeSource={RelativeSource Self}, 
-                                                  Mode=OneWay, 
-                                                  Converter={StaticResource localizer}}"/>
+        <Setter Property="Header" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Padding" Value="6,3"/>
     </Style>
     
@@ -440,11 +435,10 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="300"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Foreground="White">padding</TextBlock>
-                                    <TextBlock Grid.Column="1" Foreground="#FFC0C0C0" Name="SearchBox" 
+                                    <TextBlock Grid.Column="0" Foreground="White"><Run Text="padding"/></TextBlock>
+                                    <TextBlock Grid.Column="1" Foreground="#FFC0C0C0" x:Name="SearchBox" 
                                         Height="22" Padding="0,2,0,0"
-                                        Text="{Binding Path=Name, RelativeSource={RelativeSource Self},
-                                            Mode=OneWay, Converter={StaticResource localizer}}"
+                                        Text="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
                                     />
                                 </Grid>
                             </VisualBrush.Visual>
@@ -454,5 +448,44 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+   
+	<Style x:Key="PinToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="1"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ToggleButton}">
+					<Grid x:Name="grid" Visibility="Visible">
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal"/>
+								<VisualState x:Name="MouseOver"/>
+								<VisualState x:Name="Pressed"/>
+								<VisualState x:Name="Disabled"/>
+							</VisualStateGroup>
+							<VisualStateGroup x:Name="CheckStates">
+								<VisualState x:Name="Checked">
+									<Storyboard>
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PinIcon">
+											<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+										</ObjectAnimationUsingKeyFrames>
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="UnpinIcon">
+											<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+										</ObjectAnimationUsingKeyFrames>
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Unchecked"/>
+								<VisualState x:Name="Indeterminate"/>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Image x:Name="PinIcon" Source="Images/Pin.png" Width="16" Height="16"/>
+						<Image x:Name="UnpinIcon" Source="Images/Unpin.png" Width="16" Height="16" Visibility="Collapsed"/>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
     
 </ResourceDictionary>
