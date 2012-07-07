@@ -314,7 +314,15 @@ namespace Power8
 
         private static void GetRecentListForSync(PowerItem item)
         {
-            var fsObject = PowerItemTree.GetResolvedArgument(item);
+            string fsObject;
+            try
+            {
+                fsObject = PowerItemTree.GetResolvedArgument(item);
+            }
+            catch (IOException)
+            {
+                return;
+            }
             IEnumerable<string> jl = null;
             var p8R = GetP8Recent(item.IsLink ? item.ResolvedLink : fsObject);
             if(Util.OsIs.SevenOrMore)

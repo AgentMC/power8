@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
@@ -167,13 +168,14 @@ namespace Power8
 
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
         {
+            PowerItemTree.SearchTreeCancel();
             var q = SearchBox.Text.Trim().ToLowerInvariant();
             if (!String.IsNullOrWhiteSpace(q) && q.Length > 1)
             {
                 if (q[1] != ' ')
                 {
                     dataGrid.ItemsSource = _searchView;
-                    Util.Fork(() => PowerItemTree.SearchTree(q, _searchData), "Search root for " + q).Start();
+                    Util.Fork(() => PowerItemTree.SearchTree(q, _searchData, ExpandGroup), "Search root for " + q).Start();
                 }
                 else
                 {
@@ -184,6 +186,36 @@ namespace Power8
             {
                 dataGrid.ItemsSource = MfuItems;
                 SearchMarker.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void ExpandGroup(PowerItem root, CancellationToken token)
+        {
+            if(token.IsCancellationRequested)
+                return;
+            if (_searchView.Groups == null || _searchView.Groups.Count == 0)
+                return;
+            var group = _searchView.Groups
+                .Cast<CollectionViewGroup>()
+                .FirstOrDefault(g => ((string) g.Name) == root.Root.FriendlyName);
+            if(group == null || group.ItemCount > 20)
+                return;
+            if(token.IsCancellationRequested)
+                return;
+            var expander = (Expander)dataGrid
+                .GetFirstVisualChildOfTypeByContent()
+                 .GetFirstVisualChildOfTypeByContent()
+                  .GetFirstVisualChildOfTypeByContent()
+                   .GetFirstVisualChildOfTypeByContent("ScrollContentPresenter")
+                    .GetFirstVisualChildOfTypeByContent("ItemsPresenter")
+                     .GetFirstVisualChildOfTypeByContent()
+                      .GetFirstVisualChildOfTypeByContent(content: group)
+                       .GetFirstVisualChildOfTypeByContent();
+            if (expander != null)
+            {
+                expander.IsExpanded = true;
+                if (dataGrid.SelectedIndex == -1)
+                    dataGrid.SelectedIndex = 0;
             }
         }
 

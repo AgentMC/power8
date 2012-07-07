@@ -124,6 +124,20 @@ namespace Power8
             w.GetHwndSource().AddHook(hook);
         }
 
+        public static DependencyObject GetFirstVisualChildOfTypeByContent
+            (this DependencyObject o, string shortTypeName = null, object content = null)
+        {
+            for (var i = 0; o != null && i < VisualTreeHelper.GetChildrenCount(o); i++)
+            {
+                var child = VisualTreeHelper.GetChild(o, i);
+                if (shortTypeName == null || child.GetType().Name == shortTypeName)
+                    if (content == null || (child is ContentControl && ((ContentControl)child).Content == content))
+                        return child;
+            }
+            return null;
+        }
+
+
 
 
         public static PowerItem ExtractRelatedPowerItem(object o)
