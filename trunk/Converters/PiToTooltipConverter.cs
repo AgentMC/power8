@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Windows.Data;
 using Power8.Properties;
 
@@ -24,7 +25,14 @@ namespace Power8
                     return pi.FriendlyName + Resources.Str_Library;
                 return cmd.Item1;
             }
-            return PowerItemTree.GetResolvedArgument(pi);
+            try
+            {
+                return PowerItemTree.GetResolvedArgument(pi);
+            }
+            catch (IOException)
+            {
+                return Resources.Err_CantGetTooltip;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

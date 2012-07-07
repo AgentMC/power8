@@ -743,10 +743,9 @@ namespace Power8
 
         //----------------
 
-        public static void SearchTree(string query, IList<PowerItem> destination)
+        public static void SearchTree(string query, IList<PowerItem> destination, Action<PowerItem, CancellationToken> callback)
         {
-            if(_lastSearchToken != null)
-                _lastSearchToken.Cancel();
+            SearchTreeCancel();
             lock (destination)
             {
                 Util.Send(destination.Clear);
@@ -758,7 +757,12 @@ namespace Power8
                                                  NetworkRoot, LibrariesRoot, MfuList.MfuSearchRoot })
                     {
                         var r = root;
-                        Util.Fork(() => SearchItems(query, r, destination, _lastSearchToken.Token),
+                        Util.Fork(() =>
+                                      {
+                                        SearchItems(query, r, destination, _lastSearchToken.Token);
+                                        if(!_lastSearchToken.IsCancellationRequested)
+                                            Util.Post(() => callback(r, _lastSearchToken.Token));
+                                      },
                                   "Tree search for " + r.FriendlyName).Start();
                     }
                 }
@@ -772,6 +776,12 @@ namespace Power8
                     Util.Fork(() => SearchWindows(query, ext, destination, _lastSearchToken.Token), 
                                 "WinSearch worker for " + ext + "/" + query).Start();
             }
+        }
+
+        public static void SearchTreeCancel()
+        {
+            if (_lastSearchToken != null)
+                _lastSearchToken.Cancel();
         }
 
         private static void SearchItems(string query, PowerItem source, IList<PowerItem> destination, CancellationToken stop)
