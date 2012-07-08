@@ -30,7 +30,7 @@ namespace Power8
             Util.Fork(() =>
                           {
                               var asyncContainer = GetImageContainerSync(item, iconNeeded);
-                              Util.Post(() => item.Icon = asyncContainer);
+                              Util.Send(() => item.Icon = asyncContainer);
                           }, "Icon getter for " + item.Argument).Start();
             return null;
         }
@@ -190,7 +190,7 @@ namespace Power8
                 Debug.WriteLine(dbgLine + "begin");
 #endif
                 var shinfo = new API.Shfileinfo();
-                var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
+                var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint) Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
 #if DEBUG
                 Debug.WriteLine(dbgLine + "ShGetFileInfo returned " + zeroFails);
 #endif

@@ -466,8 +466,11 @@ namespace Power8
                         {
                             if (str.StartsWith("IconFile=") || str.StartsWith("IconResource="))
                             {
-                                item.NonCachedIcon = true;
-                                item.Icon = null;
+                                Util.Post(() =>
+                                              {
+                                                item.NonCachedIcon = true;
+                                                item.Icon = null;
+                                              });
                             }
                             if (str.StartsWith("LocalizedResourceName="))
                             {
