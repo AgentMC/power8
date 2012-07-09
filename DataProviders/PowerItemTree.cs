@@ -679,8 +679,21 @@ namespace Power8
 
         #region Search
 
+        public class WinSearchEventArgs:EventArgs
+        {
+            public readonly PowerItem Root;
+            public readonly CancellationToken Token;
+            public readonly bool SearchCompleted;
+            public WinSearchEventArgs(PowerItem root, CancellationToken token, bool searchCompleted)
+            {
+                Root = root;
+                Token = token;
+                SearchCompleted = searchCompleted;
+            }
+        }
+
         private static CancellationTokenSource _lastSearchToken;
-        public static event EventHandler WinSearchThreadCompleted, WinSearchThreadStarted;
+        public static event EventHandler<WinSearchEventArgs> WinSearchThreadCompleted, WinSearchThreadStarted;
 
         /// <summary>
         /// From collection passed, searches for a parent item (i.e. container) of the one that would represent the object
@@ -828,6 +841,7 @@ namespace Power8
             Thread.Sleep(666); //let's give user the possibility to enter something more...
             OleDbDataReader rdr = null;
             OleDbConnection connection = null;
+            PowerItem groupItem = null;
 
             try
             {
@@ -838,14 +852,14 @@ namespace Power8
                     var command = new OleDbCommand(comText, connection);
 
                     var h = WinSearchThreadStarted;
-                    if (h != null) h(null, null);
+                    if (h != null) 
+                        h(null, new WinSearchEventArgs(null, stop, false));
                     if(!stop.IsCancellationRequested)
                         rdr = command.ExecuteReader();
                 }
-
                 if (rdr != null)
                 {
-                    var groupItem = new PowerItem {FriendlyName = Resources.Str_WindowsSearchResults};
+                    groupItem = new PowerItem {FriendlyName = Resources.Str_WindowsSearchResults};
                     var added = 0;
                     var bs = Path.DirectorySeparatorChar;
                     while (!stop.IsCancellationRequested && added < 50 && rdr.Read())
@@ -890,7 +904,8 @@ namespace Power8
             if (!stop.IsCancellationRequested)
             {
                 var h = WinSearchThreadCompleted;
-                if (h != null) h(null, null);
+                if (h != null) 
+                    h(null, new WinSearchEventArgs(groupItem, stop, true));
             }
         }
 
