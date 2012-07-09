@@ -56,10 +56,8 @@ namespace Power8
             foreach (var mb in folderButtons.Children.OfType<MenuedButton>().Union(dataGridHeightMeasure.Children.OfType<MenuedButton>()))
                 mb.Item = GetSpecialItems(mb.Name);
 
-            PowerItemTree.WinSearchThreadCompleted +=
-                (sender, args) => Util.Send(() => SearchMarker.Visibility = Visibility.Hidden);
-            PowerItemTree.WinSearchThreadStarted +=
-                (sender, args) => Util.Send(() => SearchMarker.Visibility = Visibility.Visible);
+            PowerItemTree.WinSearchThreadCompleted += HandleSearch;
+            PowerItemTree.WinSearchThreadStarted += HandleSearch;
         }
 
 // ReSharper disable RedundantAssignment
@@ -299,6 +297,22 @@ namespace Power8
                     SearchBox.Focus();
             }
 
+        }
+
+        private void HandleSearch(object sender, PowerItemTree.WinSearchEventArgs args)
+        {
+            Util.Send(() =>
+                          {
+                              if (args.SearchCompleted)
+                              {
+                                  SearchMarker.Visibility = Visibility.Hidden;
+                                  ExpandGroup(args.Root, args.Token);
+                              }
+                              else
+                              {
+                                  SearchMarker.Visibility = Visibility.Visible;
+                              }
+                          });
         }
 
         #endregion
