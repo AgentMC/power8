@@ -26,7 +26,8 @@ namespace Power8
         {
             return true;
         }
-
+#pragma warning disable 0067 //Unused event
         public event EventHandler CanExecuteChanged;
+#pragma warning restore 0067
     }
 }

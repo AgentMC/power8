@@ -423,7 +423,7 @@ namespace Power8
 
         private static IEnumerable<string> GetJumpList(string fsObject, API.ADLT listType)
         {
-            var riidPropertyStore = new Guid(API.IID_IPropertyStore);
+            var riidPropertyStore = new Guid(API.Sys.IdIPropertyStore);
             API.IPropertyStore store;
             var res = API.SHGetPropertyStoreFromParsingName(fsObject,
                                                             IntPtr.Zero,
@@ -442,13 +442,13 @@ namespace Power8
                 var ret = new Collection<string>();
                 var listProvider = (API.IApplicationDocumentLists)new API.ApplicationDocumentLists();
                 listProvider.SetAppID(pv2.GetValue());
-                var riidObjectArray = new Guid(API.IID_IObjectArray);
+                var riidObjectArray = new Guid(API.Sys.IdIObjectArray);
                 var list = (API.IObjectArray)listProvider.GetList(listType, 0, ref riidObjectArray);
 
                 if (list != null)
                 {
-                    var riidShellItem = new Guid(API.IID_IShellItem);
-                    var riidShellLink = new Guid(API.IID_IShellLinkW);
+                    var riidShellItem = new Guid(API.Sys.IdIShellItem);
+                    var riidShellLink = new Guid(API.Sys.IdIShellLinkW);
                     for (uint i = 0; i < list.GetCount(); i++)
                     {
                         object item;
