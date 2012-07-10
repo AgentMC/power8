@@ -368,7 +368,7 @@ namespace Power8
                     return;
                 }
             }
-            var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEIVerbs.SEV_RunAsAdmin);
+            var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEVerbs.RunAsAdmin);
             if (!string.IsNullOrEmpty(verb) && IsFile)
                 psi.Verb = verb;
             if (psi.Arguments.StartsWith("\\\\"))

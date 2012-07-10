@@ -81,20 +81,20 @@ namespace Power8
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-#warning context menu position should be handeled well
-            _taskBar = API.FindWindow(API.TRAY_WND_CLASS, null);
-            CheckWnd(_taskBar, API.TRAY_WND_CLASS);
+//TODO: context menu position should be handeled well
+            _taskBar = API.FindWindow(API.WndIds.TRAY_WND_CLASS, null);
+            CheckWnd(_taskBar, API.WndIds.TRAY_WND_CLASS);
             if (Util.OsIs.SevenOrMore)
             {
-                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.TRAY_NTF_WND_CLASS, null);
-                CheckWnd(_showDesktopBtn, API.TRAY_NTF_WND_CLASS);
-                _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, API.SH_DSKTP_WND_CLASS, null);
-                CheckWnd(_showDesktopBtn, API.SH_DSKTP_WND_CLASS);
+                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.TRAY_NTF_WND_CLASS, null);
+                CheckWnd(_showDesktopBtn, API.WndIds.TRAY_NTF_WND_CLASS);
+                _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, API.WndIds.SH_DSKTP_WND_CLASS, null);
+                CheckWnd(_showDesktopBtn, API.WndIds.SH_DSKTP_WND_CLASS);
             }
             else
             {
-                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.SH_DSKTP_START_CLASS, null);
-                CheckWnd(_showDesktopBtn, API.SH_DSKTP_START_CLASS);
+                _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.SH_DSKTP_START_CLASS, null);
+                CheckWnd(_showDesktopBtn, API.WndIds.SH_DSKTP_START_CLASS);
             }
 
             Left = 0;
@@ -305,7 +305,7 @@ namespace Power8
             IntPtr last = IntPtr.Zero, desk = API.GetDesktopWindow();
             do
             {
-                var current = API.FindWindowEx(desk, last, "EdgeUiInputWndClass", null);
+                var current = API.FindWindowEx(desk, last, API.WndIds.METRO_EDGE_WND, null);
                 if (current != IntPtr.Zero && !handles.ContainsKey(current))
                 {
                     API.RECT r;

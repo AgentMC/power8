@@ -178,7 +178,7 @@ namespace Power8
         
         public static Tuple<string, string> ResolveLink(API.IShellLink shellLink)
         {
-            lock (Buffer)
+            lock (Buffer.Clear())
             {
                 API.WIN32_FIND_DATAW sd;
                 shellLink.GetPath(Buffer, 512, out sd, API.SLGP_FLAGS.SLGP_UNCPRIORITY);
@@ -199,7 +199,7 @@ namespace Power8
 
         public static string ResolveSpecialFolder(API.Csidl id)
         {
-            lock (Buffer)
+            lock (Buffer.Clear())
             {
                 API.SHGetSpecialFolderPath(IntPtr.Zero, Buffer, id, false);
                 return Buffer.ToString();
@@ -240,7 +240,7 @@ namespace Power8
             if (path.Contains("~") || path.StartsWith("::"))
             {
                 IntPtr ppidl;
-                lock (Buffer)
+                lock (Buffer.Clear())
                 {
                     API.SFGAO nul;
                     API.SHParseDisplayName(path, IntPtr.Zero, out ppidl, API.SFGAO.NULL, out nul);
@@ -295,8 +295,8 @@ namespace Power8
                             Thread.Sleep(40);
                     }
                     provider = (API.IServiceProvider)shWndList.Item(0);
-                    var sidBrowser = new Guid(API.SID_STopLevelBrowser);
-                    var iidBrowser = new Guid(API.IID_IShellBrowser);
+                    var sidBrowser = new Guid(API.Sys.IdSTopLevelBrowser);
+                    var iidBrowser = new Guid(API.Sys.IdIShellBrowser);
                     provider.QueryService(ref sidBrowser, ref iidBrowser, out browser);
                     browser.BrowseObject(pidl, launchNew ? API.SBSP.NEWBROWSER : API.SBSP.SAMEBROWSER);
                 }
@@ -420,8 +420,10 @@ namespace Power8
                         _searchProviders = new Dictionary<char, string>();
                         var doc = new XmlDocument();
                         doc.LoadXml(Settings.Default.SearchProviders);
+// ReSharper disable PossibleNullReferenceException
                         foreach (XmlElement prov in doc["P8SearchProviders"].GetElementsByTagName("Provider"))
                             _searchProviders.Add(prov.GetAttribute("key")[0], prov.InnerText);
+// ReSharper restore PossibleNullReferenceException
                     }
 
                     string prefix = _searchProviders.ContainsKey(command[0]) ? _searchProviders[command[0]] : null;
@@ -503,7 +505,7 @@ namespace Power8
             var resData = ResolveResourceCommon(localizeableResourceId);
             if (resData.Item2 != IntPtr.Zero)
             {
-                lock (Buffer)
+                lock (Buffer.Clear())
                 {
                     var number = API.LoadString(resData.Item2, resData.Item3, Buffer, Buffer.Capacity);
 #if DEBUG
@@ -669,7 +671,7 @@ namespace Power8
 
                                 if (name == null)
                                 {
-                                    lock (Buffer)
+                                    lock (Buffer.Clear())
                                     {
                                         if (0 < API.LoadString(hModule, idName, Buffer, Buffer.Capacity))
                                             name = Buffer.ToString();

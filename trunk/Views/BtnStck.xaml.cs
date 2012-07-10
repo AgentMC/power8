@@ -68,7 +68,7 @@ namespace Power8
             {
                 handled = true;
                 var htLocation = API.DefWindowProc(hwnd, msg, wParam, lParam);
-                switch ((API.HT)Enum.Parse(typeof(API.HT), htLocation.ToString()))
+                switch ((API.HT)htLocation)
                 {
                     case API.HT.BOTTOM:
                     case API.HT.BOTTOMLEFT:

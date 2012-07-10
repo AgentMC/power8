@@ -104,7 +104,7 @@ namespace Power8
                 if (n == "AppRun" || n == "AppOpenFolder")
                     Util.ExtractRelatedPowerItem(sender).Invoke();
                 else
-                    Util.ExtractRelatedPowerItem(sender).InvokeVerb(API.SEIVerbs.SEV_RunAsAdmin);
+                    Util.ExtractRelatedPowerItem(sender).InvokeVerb(API.SEVerbs.RunAsAdmin);
             }
             catch (Exception ex)
             {
@@ -123,7 +123,7 @@ namespace Power8
                         API.SEIFlags.SEE_MASK_FLAG_NO_UI | API.SEIFlags.SEE_MASK_NOASYNC,
                     hwnd = BtnStck.Instance.GetHandle(),
                     nShow = API.SWCommands.HIDE,
-                    lpVerb = API.SEIVerbs.SEV_Properties,
+                    lpVerb = API.SEVerbs.Properties,
                     lpFile = Args4PropsAndCont(Util.ExtractRelatedPowerItem(sender), ((MenuItem)sender).Name)
                 };
                 var executer = new Util.ShellExecuteHelper(info);
