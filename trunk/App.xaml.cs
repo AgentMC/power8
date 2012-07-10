@@ -155,7 +155,7 @@ namespace Power8
                 arg = PowerItemTree.GetResolvedArgument(item);
             if (item.IsLink && (callerName == "AppOpenTargetContainer" 
                                 || callerName == "AppShowTargetProperties"))
-                arg = Util.ResolveLink(arg);
+                arg = item.ResolvedLink;
             return arg;
         }
 
