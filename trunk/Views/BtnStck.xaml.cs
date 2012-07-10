@@ -189,16 +189,17 @@ namespace Power8
 
         private void ExpandGroup(PowerItem root, CancellationToken token)
         {
-            if(token.IsCancellationRequested)
-                return;
-            if (_searchView.Groups == null || _searchView.Groups.Count == 0)
+            if(token.IsCancellationRequested 
+                || _searchView.Groups == null 
+                || _searchView.Groups.Count == 0
+                || root == null)
                 return;
             var group = _searchView.Groups
                 .Cast<CollectionViewGroup>()
                 .FirstOrDefault(g => ((string) g.Name) == root.Root.FriendlyName);
             if(group == null || group.ItemCount > 20)
                 return;
-            if(token.IsCancellationRequested)
+            if(token.IsCancellationRequested) // Just in case
                 return;
             var expander = (Expander)dataGrid
                 .GetFirstVisualChildOfTypeByContent()
