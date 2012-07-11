@@ -33,12 +33,15 @@ namespace Power8
 
         private static readonly List<MfuElement> LastList = new List<MfuElement>();
         private static readonly List<MfuElement> P8JlImpl = new List<MfuElement>();
+        private static readonly List<String > PinList = new List<string>();
         private static readonly string[] MsFilter;
         private static readonly ManagementEventWatcher WatchDog;
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;
 
-        private static readonly string DataBase = 
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\LaunchData.csv";
+        private static readonly string DataBaseRoot = 
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
+        private static readonly string LaunchDB = DataBaseRoot + "LaunchData.csv";
+        private static readonly string PinDB = DataBaseRoot + "PinData.csv";
 
         private const string
             USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count",
@@ -56,11 +59,12 @@ namespace Power8
         
         static MfuList()
         {
+            //Reading ms exclusion list
+            var col = new List<String>();
             using(var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                    @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FileAssociation", 
                    false))
             {
-                var col = new List<String>();
 // ReSharper disable AccessToDisposedClosure
                 if (k != null)
                 {
@@ -71,49 +75,67 @@ namespace Power8
                         col.AddRange(val.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries));
                     }
                 }
+            }
 // ReSharper restore AccessToDisposedClosure
-                col.Add("APPLICATION SHORTCUTS");
-                col.Add("HOST.EXE");
-                MsFilter = col.ToArray();
+            col.Add("APPLICATION SHORTCUTS");
+            col.Add("HOST.EXE");
+            MsFilter = col.ToArray();
 
-                if(File.Exists(DataBase))
+            //Reading launch data
+            if(File.Exists(LaunchDB))
+            {
+                using (var f = new StreamReader(LaunchDB, Encoding.UTF8))
                 {
-                    using (var f = new StreamReader(DataBase, Encoding.UTF8))
+                    while (!f.EndOfStream)
                     {
-                        while (!f.EndOfStream)
-                        {
-                            var l = f.ReadLine();
-                            if (string.IsNullOrEmpty(l)) 
-                                continue;
-                            var ls = l.Split(new[]{PLD_SPLITTER}, 4, StringSplitOptions.None);
-                            if(ls.Length != 4)
-                                continue;
-                            P8JlImpl.Add(new MfuElement
-                                             {
-                                                 Arg = ls[0],
-                                                 Cmd = ls[1],
-                                                 LaunchCount = int.Parse(ls[2]),
-                                                 LastLaunchTimeStamp =
-                                                     DateTime.ParseExact(ls[3], "yyyyMMddHHmmss", CultureInfo.CurrentCulture)
-                                             });
-                        }
+                        var l = f.ReadLine();
+                        if (string.IsNullOrEmpty(l)) 
+                            continue;
+                        var ls = l.Split(new[]{PLD_SPLITTER}, 4, StringSplitOptions.None);
+                        if(ls.Length != 4)
+                            continue;
+                        P8JlImpl.Add(new MfuElement
+                                            {
+                                                Arg = ls[0],
+                                                Cmd = ls[1],
+                                                LaunchCount = int.Parse(ls[2]),
+                                                LastLaunchTimeStamp =
+                                                    DateTime.ParseExact(ls[3], "yyyyMMddHHmmss", CultureInfo.CurrentCulture)
+                                            });
                     }
                 }
-
-                Util.MainDisp.ShutdownStarted += MainDispOnShutdownStarted;
-
-                WatchDog = new ManagementEventWatcher("SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
-                WatchDog.EventArrived += WatchDogOnEventArrived;
-                WatchDog.Start();
             }
+
+            //Reading pin data
+            if (File.Exists(PinDB))
+            {
+                using (var f = new StreamReader(PinDB, Encoding.UTF8))
+                {
+                    while (!f.EndOfStream)
+                    {
+                        var l = f.ReadLine();
+                        if (string.IsNullOrEmpty(l))
+                            continue;
+                        PinList.Add(l);
+                    }
+                }
+            }
+
+            //Save all on shutdown
+            Util.MainDisp.ShutdownStarted += MainDispOnShutdownStarted;
+
+            //React on new processes creation
+            WatchDog = new ManagementEventWatcher("SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
+            WatchDog.EventArrived += WatchDogOnEventArrived;
+            WatchDog.Start();
         }
 
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
-// ReSharper disable AssignNullToNotNullAttribute
-            Directory.CreateDirectory(Path.GetDirectoryName(DataBase));
-// ReSharper restore AssignNullToNotNullAttribute
-            using (var f = new StreamWriter(DataBase, false, Encoding.UTF8))
+            Directory.CreateDirectory(DataBaseRoot);
+
+            //Writing Launch list
+            using (var f = new StreamWriter(LaunchDB, false, Encoding.UTF8))
             {
                 foreach (var mfuElement in P8JlImpl)
                 {
@@ -123,6 +145,15 @@ namespace Power8
                                 mfuElement.LaunchCount,
                                 mfuElement.LastLaunchTimeStamp.ToString("yyyyMMddHHmmss"),
                                 PLD_SPLITTER);
+                }
+            }
+
+            //Writing pin list
+            using (var f = new StreamWriter(PinDB, false, Encoding.UTF8))
+            {
+                foreach (var pinned in PinList)
+                {
+                    f.WriteLine(pinned);
                 }
             }
         }
@@ -232,60 +263,15 @@ namespace Power8
 
             if (!list.Except(LastList).Any()) 
                 return;
-
+            
             LastList.Clear();
             list.ForEach(m => LastList.Add(m.Clone()));
 
             lock (StartMfu)
             {
-                //Step 2.1: filter out setup, host apps and documentation files
-                list.ApplyMsFilter();
-                
-                //Step 2.2: filter out malformed paths
-                var malformed = list.FindAll(m => m.Arg.Contains("\\\\") && !m.Arg.StartsWith("\\"));
-                malformed.ForEach(mf =>
-                                      {
-                                          var properArg = mf.Arg.Replace("\\\\", "\\");
-                                          mf.Arg = properArg;
-                                          var existent = list.Find(m => m.Arg == properArg);
-                                          list.Remove(existent);
-                                          mf.Mix(existent);
-                                      });
-                
-                //Step 2.3: filter out direct paths to the objects for which we have links
-                var linx = (from l in
-                                (from m in list
-                                 where m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase)
-                                 select Tuple.Create(Util.ResolveLink(m.Arg), m))
-                            orderby l.Item1
-                            select l).ToList();
-                //Step 2.3.1 : removing dupliocate links
-                for (int i = linx.Count - 1; i >= 0; i--)
-                {
-                    if(i > 0 && linx[i-1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        linx[i - 1].Item2.Mix((linx[i].Item2));
-                        if (Util.OsIs.SevenOrMore && linx[i].Item2.Arg.Contains("TaskBar"))
-                            linx[i - 1].Item2.Arg = linx[i].Item2.Arg;//priority for taskbar elements
-                        list.Remove(linx[i].Item2);
-                        linx.RemoveAt(i);
-                    }
-                }
-                //Step 2.3.2: really filter out
-                foreach (var tuple in linx)
-                {
-                    var directs =
-                        list.FindAll(q => q.Arg.Equals(tuple.Item1, StringComparison.InvariantCultureIgnoreCase));
-                    foreach (var direct in directs)
-                    {
-                        list.Remove(direct);
-                        tuple.Item2.Mix(direct);
-                    }
-                }
+                //Steps 2.1 - 2.4
+                list.ApplyFiltersAndSort();
 
-                //Step 2.4: sort.
-                list.Sort();
-                
                 //Step 2.5: limit single/zero-used to 20 items
                 for (int i = 0, j = 0; i < list.Count; i++)
                 {
@@ -295,15 +281,23 @@ namespace Power8
                         break;
                     }
                 }
-                
+
+
                 //Step 3: update collection
-                Util.Post(() =>
+                Util.Send(() =>
                               {
                                   _startMfu.Clear();
                                   foreach (var mfuElement in list)
-                                      _startMfu.Add(new PowerItem {Argument = mfuElement.Arg, Parent = MfuSearchRoot});
-                              }
-                            );
+                                  {
+                                      var elem = mfuElement;
+                                      _startMfu.Add(new PowerItem
+                                                        {
+                                                            Argument = elem.Arg,
+                                                            Parent = MfuSearchRoot,
+                                                            IsPinned = elem.LaunchCount >= 2000
+                                                        });
+                                  }
+                              });
             }
         }
 
@@ -364,6 +358,28 @@ namespace Power8
 
         }
 
+        public static void PinUnpin(PowerItem item)
+        {
+            bool? update = null;
+            if (item.IsPinned && !PinList.Contains(item.Argument))
+            {
+                PinList.Add(item.Argument);
+                update = true;
+            }
+            else if ((!item.IsPinned) && PinList.Contains(item.Argument))
+            {
+                PinList.Remove(item.Argument);
+                update = false;
+            }
+            if (update.HasValue)
+            {
+                var temp = new List<MfuElement>();
+                LastList.ForEach(m => temp.Add(m.Clone()));
+                temp.ApplyFiltersAndSort();
+                StartMfu.Move(StartMfu.IndexOf(item), temp.FindIndex(mfu => mfu.Arg == item.Argument));
+            }
+        }
+
 
 
 
@@ -409,6 +425,63 @@ namespace Power8
                 s = Util.ResolveSpecialFolder((API.Csidl) int.Parse(pair[0].Substring(5))) + pair[1];
             }
             return s;
+        }
+
+        private static void ApplyFiltersAndSort(this List<MfuElement> list )
+        {
+            //Step 2.1: filter out setup, host apps and documentation files
+            list.ApplyMsFilter();
+
+            //Step 2.2: filter out malformed paths
+            var malformed = list.FindAll(m => m.Arg.Contains("\\\\") && !m.Arg.StartsWith("\\"));
+            malformed.ForEach(mf =>
+            {
+                var properArg = mf.Arg.Replace("\\\\", "\\");
+                mf.Arg = properArg;
+                var existent = list.Find(m => m.Arg == properArg);
+                list.Remove(existent);
+                mf.Mix(existent);
+            });
+
+            //Step 2.3: filter out direct paths to the objects for which we have links
+            var linx = (from l in
+                            (from m in list
+                             where m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase)
+                             select Tuple.Create(Util.ResolveLink(m.Arg), m))
+                        orderby l.Item1
+                        select l).ToList();
+            //Step 2.3.1 : removing duplicate links
+            for (int i = linx.Count - 1; i >= 0; i--)
+            {
+                if (i > 0 && linx[i - 1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    linx[i - 1].Item2.Mix((linx[i].Item2));
+                    if (Util.OsIs.SevenOrMore && linx[i].Item2.Arg.Contains("TaskBar"))
+                        linx[i - 1].Item2.Arg = linx[i].Item2.Arg;//priority for taskbar elements
+                    list.Remove(linx[i].Item2);
+                    linx.RemoveAt(i);
+                }
+            }
+            //Step 2.3.2: really filter out
+            foreach (var tuple in linx)
+            {
+                var directs =
+                    list.FindAll(q => q.Arg.Equals(tuple.Item1, StringComparison.InvariantCultureIgnoreCase));
+                foreach (var direct in directs)
+                {
+                    list.Remove(direct);
+                    tuple.Item2.Mix(direct);
+                }
+            }
+
+            //Step 2.3.3: apply pinning
+            foreach (var mfuElement in list.Where(mfuElement => PinList.Contains(mfuElement.Arg)))
+            {
+                mfuElement.LaunchCount += 2000; //simply popping these up
+            }
+
+            //Step 2.4: sort.
+            list.Sort();
         }
 
         private static void ApplyMsFilter(this List<MfuElement> list )
