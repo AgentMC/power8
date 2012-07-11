@@ -316,6 +316,10 @@ namespace Power8
                           });
         }
 
+        private void PinClick(object sender, EventArgs e)
+        {
+            MfuList.PinUnpin(Util.ExtractRelatedPowerItem(e));
+        }
         #endregion
 
         #region Helpers

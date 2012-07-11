@@ -50,7 +50,9 @@
                 <DataGridTemplateColumn Header="Pin" Width="16">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ToggleButton Style="{DynamicResource PinToggleButtonStyle}" Width="16" Height="16" IsChecked="{Binding IsPinned, Mode=TwoWay}"/>
+                            <ToggleButton Style="{DynamicResource PinToggleButtonStyle}" Width="16" Height="16" 
+                                          IsChecked="{Binding IsPinned, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Click="PinClick"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>    
                 </DataGridTemplateColumn>
