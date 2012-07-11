@@ -140,11 +140,9 @@ namespace Power8
 
 
 
-        public static PowerItem ExtractRelatedPowerItem(object o)
+        public static PowerItem ExtractRelatedPowerItem(EventArgs o)
         {
 // ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
-            if (o is MenuItem)
-                return (PowerItem)((MenuItem)o).DataContext;
             if (o is ContextMenuEventArgs)
             {
                 var mi = o.GetType()
