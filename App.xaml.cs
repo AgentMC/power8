@@ -102,9 +102,9 @@ namespace Power8
             {
                 var n = ((MenuItem) sender).Name;
                 if (n == "AppRun" || n == "AppOpenFolder")
-                    Util.ExtractRelatedPowerItem(sender).Invoke();
+                    Util.ExtractRelatedPowerItem(e).Invoke();
                 else
-                    Util.ExtractRelatedPowerItem(sender).InvokeVerb(API.SEVerbs.RunAsAdmin);
+                    Util.ExtractRelatedPowerItem(e).InvokeVerb(API.SEVerbs.RunAsAdmin);
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@ namespace Power8
                     hwnd = BtnStck.Instance.GetHandle(),
                     nShow = API.SWCommands.HIDE,
                     lpVerb = API.SEVerbs.Properties,
-                    lpFile = Args4PropsAndCont(Util.ExtractRelatedPowerItem(sender), ((MenuItem)sender).Name)
+                    lpFile = Args4PropsAndCont(Util.ExtractRelatedPowerItem(e), ((MenuItem)sender).Name)
                 };
                 var executer = new Util.ShellExecuteHelper(info);
                 if (!executer.ShellExecuteOnSTAThread())
@@ -139,7 +139,7 @@ namespace Power8
 
         private void OpenContainerClick(object sender, RoutedEventArgs e)
         {
-            Util.StartExplorerSelect(Args4PropsAndCont(Util.ExtractRelatedPowerItem(sender), ((MenuItem) sender).Name));
+            Util.StartExplorerSelect(Args4PropsAndCont(Util.ExtractRelatedPowerItem(e), ((MenuItem) sender).Name));
         }
 
         private static string Args4PropsAndCont(PowerItem item, string callerName)
