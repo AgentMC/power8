@@ -849,7 +849,7 @@ namespace Power8
                 {
                     connection = new OleDbConnection(connText);
                     connection.Open();
-                    var command = new OleDbCommand(comText, connection);
+                    var command = new OleDbCommand(comText, connection) {CommandTimeout = 0};
 
                     var h = WinSearchThreadStarted;
                     if (h != null) 
