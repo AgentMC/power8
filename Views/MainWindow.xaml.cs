@@ -41,12 +41,7 @@ namespace Power8
             Application.EnableVisualStyles();
 
             App.Current.SessionEnding += (sender, args) => Close();
-            //deferred btnstack instance generation
-            BtnStck.Instanciated += (sender, args) =>
-                                        {
-                                            BtnStck.Instance.RunCalled += ShowRunDialog;
-                                            b1.Cursor = System.Windows.Input.Cursors.Hand;
-                                        };
+            BtnStck.Instanciated += BtnStckInstanciated;
 
             if (CheckForUpdatesEnabled)
                 UpdateCheckThreadInit();
@@ -61,6 +56,25 @@ namespace Power8
                 MWBlockMetro.Visibility = Visibility.Collapsed;
             }
                 
+        }
+
+        void BtnStckInstanciated(object sender, EventArgs e)
+        {
+            BtnStck.Instance.RunCalled += ShowRunDialog;
+            b1.Cursor = System.Windows.Input.Cursors.Hand;
+            if (!Settings.Default.FirstRunDone)
+            {
+                Settings.Default.FirstRunDone = true;
+                Settings.Default.Save();
+
+                _arrow = new WelcomeArrow();
+                _arrow.Show();
+                var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
+                GetSetWndPosition(_arrow, new API.POINT { X = (int)p1.X, Y = (int)p1.Y }, false);
+                var p2 = new Point(_arrow.Left + _arrow.Width / 2, _arrow.Top + _arrow.Height / 2);
+                var initialAngle = p1.X < p2.X ? 135 : 45;
+                _arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
+            }
         }
 
 // ReSharper disable RedundantAssignment
@@ -107,20 +121,6 @@ namespace Power8
 
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
             this.RegisterHook(WndProc);
-
-            if (!Settings.Default.FirstRunDone)
-            {
-                Settings.Default.FirstRunDone = true;
-                Settings.Default.Save();
-
-                _arrow = new WelcomeArrow();
-                _arrow.Show();
-                var p1 = PointToScreen(new Point(0, 0));//where the main button is actually located
-                GetSetWndPosition(_arrow, new API.POINT { X = (int)p1.X, Y = (int)p1.Y }, false);
-                var p2 = new Point(_arrow.Left + _arrow.Width / 2, _arrow.Top + _arrow.Height / 2);
-                var initialAngle = p1.X < p2.X ? 135 : 45;
-                _arrow.Rotation = p1.Y < p2.Y ? -initialAngle : initialAngle;
-            }
         }
 
         private void WindowClosed(object sender, EventArgs e)
