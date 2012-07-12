@@ -343,4 +343,10 @@ Cancel: I skip this update, never notify me about this version.</value>
     <data name="Str_Recent">
         <value xml:space="preserve">Recently started</value>
     </data>
+  <data name="Str_Unpin">
+    <value xml:space="preserve">Unpin item</value>
+  </data>
+  <data name="Str_Pin">
+    <value xml:space="preserve">Pin item</value>
+  </data>
 </root>
