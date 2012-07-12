@@ -265,7 +265,10 @@ namespace Power8
                         }
                         return;
                     case Key.Escape:
-                        SearchBox.Text = string.Empty;
+                        if(SearchBox.Text == string.Empty)
+                            Close();
+                        else
+                            SearchBox.Text = string.Empty;
                         return;
                 }
             e.Handled = false;
