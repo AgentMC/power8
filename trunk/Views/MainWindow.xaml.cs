@@ -159,7 +159,7 @@ namespace Power8
 
         private void ShowRunDialog(object sender, EventArgs e)
         {
-            API.SHRunDialog(_taskBar, IntPtr.Zero, null, null, null, API.RFF.NORMAL);
+            API.SHRunDialog(IntPtr.Zero, IntPtr.Zero, null, null, null, API.RFF.NORMAL);
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)
