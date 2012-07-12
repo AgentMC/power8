@@ -15,7 +15,7 @@ namespace Power8
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
         private ObservableCollection<PowerItem> _cmdLines;
         private string _friendlyName, _resIdString, _resolvedLink;
-        private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon;
+        private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon, _pin;
         private PowerItem _root;
 
         public string Argument { get; set; }
@@ -229,7 +229,17 @@ namespace Power8
 
 
         //0th block - Pin
-        public bool IsPinned { get; set; }
+        public bool IsPinned
+        {
+            get { return _pin; }
+            set
+            {
+                if (value == _pin)
+                    return;
+                _pin = value;
+                OnPropertyChanged("IsPinned");
+            }
+        }
 
 
 

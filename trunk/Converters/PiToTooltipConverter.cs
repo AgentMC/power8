@@ -13,6 +13,8 @@ namespace Power8
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (parameter != null && (string)parameter == "pin")
+                return (bool?) value == true ? Resources.Str_Unpin : Resources.Str_Pin;
             var pi = value as PowerItem;
             if (pi == null)
                 return Resources.Err_CantGetTooltip;
