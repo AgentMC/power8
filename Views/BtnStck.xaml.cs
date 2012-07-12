@@ -318,7 +318,9 @@ namespace Power8
 
         private void PinClick(object sender, EventArgs e)
         {
-            MfuList.PinUnpin(Util.ExtractRelatedPowerItem(e));
+            var pi = Util.ExtractRelatedPowerItem(e);
+            MfuList.PinUnpin(pi);
+            dataGrid.ScrollIntoView(pi);
         }
         #endregion
 
