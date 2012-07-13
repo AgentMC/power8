@@ -199,6 +199,9 @@
     <EmbeddedResource Include="Views\RestartExplorer.resx">
       <DependentUpon>RestartExplorer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Views\RestartExplorer.ru.resx">
+      <DependentUpon>RestartExplorer.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
