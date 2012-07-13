@@ -20,6 +20,7 @@ namespace Power8
         
         public App()
         {
+            Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
             if(Util.OsIs.VistaExact)
             {
                 MessageBox.Show(
