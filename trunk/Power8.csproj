@@ -100,6 +100,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.ru.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.sv.Designer.cs">
+      <DependentUpon>Resources.sv.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Views\ComputerList.xaml.cs">
       <DependentUpon>ComputerList.xaml</DependentUpon>
     </Compile>
@@ -196,10 +201,18 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.sv.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.sv.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Views\RestartExplorer.resx">
       <DependentUpon>RestartExplorer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RestartExplorer.ru.resx">
+      <DependentUpon>RestartExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RestartExplorer.sv.resx">
       <DependentUpon>RestartExplorer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
