@@ -7,17 +7,22 @@ For all other feature requests, currently not prioritized, please consult [Featu
 
 For already implemented features, see [Changelog] page.
 
-= _Beta_ =
 
-== B2 ==
-*estimated release date: 15.07.12*
-  * Include JL in search?
-  * MFU items can be pinned;
-  * theme for non-Aero better implementation;
-  * icon and logo;
-  * localization.
-
-
-= _Power8 v.1.0 Release_ =
+= _Power8 v.1.0 RTM_ =
 *estimated release date: 22.07.12*
   * various bugfixes and UI enhancements;
+  * icon and logo;
+  * Include JL in search? Still thinking...
+  * theme for non-Aero better implementation?
+
+
+= _Power8 v.1.1 - 1.4 Beta_ =
+*estimated dates -> starting end of August*
+  * various bugfixes and UI enhancements;
+  * fix for Removable HDDs;
+  * replace grid with something faster;
+
+
+= _Power8 v.1.5 RTM_ =
+*estimated release date: 30.09.12*
+  * Settings window -> contents TBD;
