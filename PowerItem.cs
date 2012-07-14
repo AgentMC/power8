@@ -14,14 +14,9 @@ namespace Power8
         private ImageManager.ImageContainer _icon;
         private readonly ObservableCollection<PowerItem> _items = new ObservableCollection<PowerItem>();
         private ObservableCollection<PowerItem> _cmdLines;
-        private string _friendlyName, _resIdString, _resolvedLink;
+        private string _friendlyName, _resIdString, _resolvedLink, _camels, _raws;
         private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon, _pin;
         private PowerItem _root;
-
-        public string Argument { get; set; }
-        public bool IsFolder { get; set; }
-        public bool AutoExpandIsPending { get; set; }
-        public API.Csidl SpecialFolderId { get; set; }
 
 
 
@@ -35,9 +30,21 @@ namespace Power8
             _items = items;
         }
 
-    
 
-        //1st block - icon
+
+        #region Distinctivity Properties
+
+        #region Core
+
+        public string Argument { get; set; }
+        public bool IsFolder { get; set; }
+        public bool AutoExpandIsPending { get; set; }
+        public API.Csidl SpecialFolderId { get; set; }
+
+        #endregion
+
+        #region Icon
+
         public ImageManager.ImageContainer Icon
         {
             get
@@ -75,54 +82,10 @@ namespace Power8
             set { _nonCachedIcon = value; }
         }
 
+        #endregion
 
+        #region Text
 
-        //3rd block - children and parents
-        public ObservableCollection<PowerItem> Items
-        {
-            get
-            {
-                if (_items.Count == 0 && !_expanding && AutoExpandIsPending)
-                {
-                    _expanding = true;
-                    PowerItemTree.ScanFolder(this, string.Empty, false);
-                }
-                return _items;
-            }
-        }
-
-        public bool AutoExpand
-        {
-            get { return _autoExpand; }
-            set
-            {
-                if (_autoExpand != value)
-                {
-                    _autoExpand = value;
-                    AutoExpandIsPending = value;
-                }
-            }
-        }
-
-        public PowerItem Parent { get; set; }
-
-        public PowerItem Root
-        {
-            get
-            {
-                if (_root == null)
-                {
-                    _root = this;
-                    while (_root.Parent != null)
-                        _root = _root.Parent;
-                }
-                return _root;
-            }
-        }
-
-
-
-        //2nd block - text
         public string ResourceIdString
         {
             get { return _resIdString; } 
@@ -226,9 +189,10 @@ namespace Power8
             get { return Parent == null ? 300 : 0; }
         }
 
+        #endregion
 
+        #region Related data
 
-        //0th block - Pin
         public bool IsPinned
         {
             get { return _pin; }
@@ -241,9 +205,6 @@ namespace Power8
             }
         }
 
-
-
-        //4th block - Arguments
         public ObservableCollection<PowerItem> JumpList
         {
             get
@@ -257,9 +218,58 @@ namespace Power8
             }
         }
 
+        #endregion
 
+        #region Children-Parents
 
-        //Not a visual block - binding and resolving helpers
+        public ObservableCollection<PowerItem> Items
+        {
+            get
+            {
+                if (_items.Count == 0 && !_expanding && AutoExpandIsPending)
+                {
+                    _expanding = true;
+                    PowerItemTree.ScanFolder(this, string.Empty, false);
+                }
+                return _items;
+            }
+        }
+
+        public bool AutoExpand
+        {
+            get { return _autoExpand; }
+            set
+            {
+                if (_autoExpand != value)
+                {
+                    _autoExpand = value;
+                    AutoExpandIsPending = value;
+                }
+            }
+        }
+
+        public PowerItem Parent { get; set; }
+
+        public PowerItem Root
+        {
+            get
+            {
+                if (_root == null)
+                {
+                    _root = this;
+                    while (_root.Parent != null)
+                        _root = _root.Parent;
+                }
+                return _root;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Helper properties
+
         public bool IsFile
         {
             get { return Argument != null && !IsFolder; }
@@ -331,7 +341,9 @@ namespace Power8
             }
         }
 
+        #endregion
 
+        #region Implementations and overrides
 
         public int CompareTo(PowerItem other)
         {
@@ -356,13 +368,22 @@ namespace Power8
             return p.GetHashCode() == GetHashCode();
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        public void OnPropertyChanged(string property)
+        {   
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(property));
+        }
 
+        #endregion
+
+        #region Methods
+        //run
         public void Invoke()
         {
             InvokeVerb(null);
         }
-
         public void InvokeVerb(string verb)
         {
             if (SpecialFolderId != API.Csidl.INVALID)
@@ -398,13 +419,13 @@ namespace Power8
                 throw;
             }
         }
-
+        //Invalidate
         public void Update()
         {
             Icon = null;
             FriendlyName = null;
         }
-
+        //Sort
         public void SortItems()
         {
             foreach (var powerItem in _items)
@@ -419,22 +440,46 @@ namespace Power8
             lf.ForEach(_items.Add);
             li.ForEach(_items.Add);
         }
-
+        //Search
         public bool Match(string query)
-        {//TODO: rewrite Match()!
-            return (FriendlyName != null && FriendlyName.ToLowerInvariant().Contains(query))
-                || (Argument != null && Argument.ToLowerInvariant().Contains(query))
-                || (IsLink && ResolvedLink.Contains(query));
+        {
+            return MatchCamelCheck(query) || MatchRawCheck(query);
+        }
+        private bool MatchCamelCheck(string query)
+        {
+            if (_camels == null)
+            {
+                _camels = string.Empty;
+                foreach (var s in new[]{FriendlyName, Argument, ResolvedLink} )
+                {
+                    if(!string.IsNullOrEmpty(s))
+                    {
+                        bool lastDelim = false;
+                        foreach (var cch in s)
+                        {
+                            if(lastDelim || char.IsUpper(cch) || char.IsNumber(cch))
+                            {
+                                _camels += cch;
+                                lastDelim = false;
+                            }
+                            else if(char.IsSeparator(cch) || char.IsPunctuation(cch))
+                            {
+                                lastDelim = true;
+                            }
+                        }
+                    }
+                }
+                _camels = _camels.ToLowerInvariant();
+            }
+            return _camels.Contains(query);
+        }
+        private bool MatchRawCheck(string query)
+        {
+            if (_raws == null)
+                _raws = (string.Empty + Argument + FriendlyName + ResolvedLink).ToLowerInvariant();
+            return _raws.Contains(query);
         }
 
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void OnPropertyChanged(string property)
-        {   
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(property));
-        }
+        #endregion
     }
 }
