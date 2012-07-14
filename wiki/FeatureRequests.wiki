@@ -7,4 +7,5 @@
     * In particular, Metro style.
   * Configurable user menus;
   * Configuration dialog for example, to set up search engine;
+    * Need to define contents.
   * Context menu (configurable) for computer list, specific items for each computer item;
