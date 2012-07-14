@@ -344,10 +344,10 @@ namespace Power8
             {
                 var t = Type.GetType(className);
                 if (t == null)
-                    throw new Exception(Resources.Err_GotNoTypeObject);
+                    throw new Exception(NoLoc.Err_GotNoTypeObject);
 
                 if(!t.GetInterfaces().Contains(typeof(IComponent)))
-                    throw new Exception(Resources.Err_TypeIsNotIComponent);
+                    throw new Exception(NoLoc.Err_TypeIsNotIComponent);
 
                 IComponent inst;
                 if (Instances.ContainsKey(t))
@@ -757,14 +757,14 @@ namespace Power8
 
         public static void DispatchCaughtException(Exception ex)
         {
-            MessageBox.Show(ex.Message, Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
 
         public static void DispatchUnhandledException(Exception ex)
         {
             var str = ex.ToString();
-            MessageBox.Show(str, Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
-            Die(Resources.Err_UnhandledGeneric + str);
+            MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
+            Die(NoLoc.Err_UnhandledGeneric + str);
         }
 
         public static void Restart(string reason)
@@ -776,7 +776,7 @@ namespace Power8
         public static void Die(string becauseString)
         {
             EventLog.WriteEntry("Application Error", 
-                                string.Format(Resources.Str_FailFastFormat, becauseString),
+                                string.Format(NoLoc.Str_FailFastFormat, becauseString),
                                 EventLogEntryType.Error);
             Environment.Exit(1);
         }

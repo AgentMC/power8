@@ -254,9 +254,6 @@
     <value>Не найдена папка для </value>
     <comment>Leave trailing space!</comment>
   </data>
-  <data name="Err_GotNoTypeObject" xml:space="preserve">
-    <value>Конструктор типа не вернул объект типа.</value>
-  </data>
   <data name="Err_NoPiExtracted" xml:space="preserve">
     <value>Недоступен элемент данных</value>
   </data>

@@ -243,7 +243,7 @@ namespace Power8
                     {//parsing
                         var info =
                             new System.IO.StringReader(
-                                client.DownloadString(Properties.Resources.Stg_Power8URI + Properties.Resources.Stg_AssemblyInfoURI));
+                                client.DownloadString(NoLoc.Stg_Power8URI + NoLoc.Stg_AssemblyInfoURI));
                         string line, verLine = null, uri7Z = null, uriMsi = null;
                         while ((line = info.ReadLine()) != null)
                         {
@@ -262,7 +262,7 @@ namespace Power8
                                 {
                                     switch (MessageBox.Show(Properties.Resources.CR_UNUpdateAvailableLong + string.Format(
                                                 Properties.Resources.Str_UpdateAvailableFormat, Application.ProductVersion, verLine),
-                                            Properties.Resources.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable,
+                                            NoLoc.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable,
                                             MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
                                     {
                                         case MessageBoxResult.Cancel:
@@ -270,7 +270,7 @@ namespace Power8
                                             Settings.Default.Save();
                                             break;
                                         case MessageBoxResult.Yes:
-                                            Process.Start(Properties.Resources.Stg_Power8URI);
+                                            Process.Start(NoLoc.Stg_Power8URI);
                                             break;
                                     }
                                 }
@@ -286,7 +286,7 @@ namespace Power8
                     catch (Exception ex)
                     {
                         MessageBox.Show(Properties.Resources.Err_CantCheckUpdates + ex.Message,
-                                        Properties.Resources.Stg_AppShortName, MessageBoxButton.OK,
+                                        NoLoc.Stg_AppShortName, MessageBoxButton.OK,
                                         MessageBoxImage.Exclamation);
                     }
                 }
@@ -345,9 +345,9 @@ namespace Power8
             get
             {
                 var k = Microsoft.Win32.Registry.CurrentUser;
-                k = k.OpenSubKey(Properties.Resources.Stg_RegKeyRun, false);
+                k = k.OpenSubKey(NoLoc.Stg_RegKeyRun, false);
                 return k != null &&
-                       string.Equals((string) k.GetValue(Properties.Resources.Stg_AppShortName),
+                       string.Equals((string) k.GetValue(NoLoc.Stg_AppShortName),
                                      Application.ExecutablePath,
                                      StringComparison.InvariantCultureIgnoreCase);
             }
@@ -356,13 +356,13 @@ namespace Power8
                 if (value == AutoStartEnabled)
                     return;
                 var k = Microsoft.Win32.Registry.CurrentUser;
-                k = k.OpenSubKey(Properties.Resources.Stg_RegKeyRun, true);
+                k = k.OpenSubKey(NoLoc.Stg_RegKeyRun, true);
                 if (k == null) 
                     return;
                 if (value)
-                    k.SetValue(Properties.Resources.Stg_AppShortName, Application.ExecutablePath);
+                    k.SetValue(NoLoc.Stg_AppShortName, Application.ExecutablePath);
                 else
-                    k.DeleteValue(Properties.Resources.Stg_AppShortName);
+                    k.DeleteValue(NoLoc.Stg_AppShortName);
             }
         }
 

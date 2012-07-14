@@ -95,6 +95,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataProviders\MfuList.cs" />
+    <Compile Include="Properties\NoLoc.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>NoLoc.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.ru.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -192,6 +197,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\NoLoc.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>NoLoc.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

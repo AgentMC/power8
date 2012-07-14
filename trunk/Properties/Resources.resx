@@ -117,14 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Stg_AppShortName" xml:space="preserve">
-    <value>Power8</value>
-    <comment>Default message box title. May not be localized.</comment>
-  </data>
-  <data name="Stg_RegKeyRun" xml:space="preserve">
-    <value>Software\Microsoft\Windows\CurrentVersion\Run</value>
-    <comment>May not be localized.</comment>
-  </data>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
 
@@ -138,24 +130,12 @@ No: remind me later, please.
 Cancel: I skip this update, never notify me about this version.</value>
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
-  <data name="Stg_AssemblyInfoURI" xml:space="preserve">
-    <value>svn/trunk/Properties/AssemblyInfo.cs</value>
-    <comment>May not be localized.</comment>
-  </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
     <value>: update available!</value>
-  </data>
-  <data name="Stg_Power8URI" xml:space="preserve">
-    <value>http://power8.googlecode.com/</value>
-    <comment>May not be localized.</comment>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
     <value>Error {0} caused while trying to show object Properties
 {1}</value>
-  </data>
-  <data name="Str_FailFastFormat" xml:space="preserve">
-    <value>Exiting because {0}</value>
-    <comment>String written to App event log. May not be localized.</comment>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
     <value>Unable to check for updates.
@@ -255,12 +235,6 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>File not found for </value>
     <comment>Leave trailing space!</comment>
   </data>
-  <data name="Err_GotNoTypeObject" xml:space="preserve">
-    <value>Type constructor did not return the type object.</value>
-  </data>
-  <data name="Err_TypeIsNotIComponent" xml:space="preserve">
-    <value>Type disposition event cannot be reacted on.</value>
-  </data>
   <data name="CR_ButtonStack" xml:space="preserve">
     <value>Power8 - Start Menu replacer for Windows XP, Se7en and 8</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
@@ -335,18 +309,13 @@ Cancel: I skip this update, never notify me about this version.</value>
   <data name="CR_MWBlockMetro" xml:space="preserve">
     <value>Block Metro features</value>
   </data>
-  <data name="Err_UnhandledGeneric" xml:space="preserve">
-    <value>an unhandled exceptoion occured in Power8. Details are below.
-</value>
-    <comment>String written to App event log. May not be localized. If you touch it, leave ending paragraph sign.</comment>
+  <data name="Str_Recent" xml:space="preserve">
+    <value>Recently started</value>
   </data>
-    <data name="Str_Recent">
-        <value xml:space="preserve">Recently started</value>
-    </data>
-  <data name="Str_Unpin">
-    <value xml:space="preserve">Unpin item</value>
+  <data name="Str_Unpin" xml:space="preserve">
+    <value>Unpin item</value>
   </data>
-  <data name="Str_Pin">
-    <value xml:space="preserve">Pin item</value>
+  <data name="Str_Pin" xml:space="preserve">
+    <value>Pin item</value>
   </data>
 </root>

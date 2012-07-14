@@ -27,7 +27,7 @@ namespace Power8
             _uri7Z = uri7Z;
             _uriMsi = uriMsi;
             InitializeComponent();
-            Title = Properties.Resources.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable;
+            Title = NoLoc.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable;
         }
 
         public string CurrentVersion
@@ -54,7 +54,7 @@ namespace Power8
 
         private void GoWebClick(object sender, RoutedEventArgs e)
         {
-            Process.Start(Properties.Resources.Stg_Power8URI);
+            Process.Start(NoLoc.Stg_Power8URI);
             Close();
         }
 
@@ -73,7 +73,7 @@ namespace Power8
             if (e.Cancelled)
             {
                 MessageBox.Show(Properties.Resources.Err_DownloadCancelled + (e.Error != null ? "\r\n" + e.Error.Message : ""),
-                                Properties.Resources.Stg_AppShortName, 
+                                NoLoc.Stg_AppShortName, 
                                 MessageBoxButton.OK, 
                                 MessageBoxImage.Error);
             }
@@ -92,8 +92,8 @@ namespace Power8
                               AddExtension = true,
                               DefaultExt = Path.GetExtension(obj),
                               FileName = "",
-                              Title = Properties.Resources.Stg_AppShortName + Properties.Resources.Str_SaveDialogDescription,
-                              Filter = Properties.Resources.Stg_AppShortName 
+                              Title = NoLoc.Stg_AppShortName + Properties.Resources.Str_SaveDialogDescription,
+                              Filter = NoLoc.Stg_AppShortName 
                                        + Properties.Resources.Str_SaveDialogFilter + Path.GetExtension(obj),
                           };
             if (ofd.ShowDialog().Value)

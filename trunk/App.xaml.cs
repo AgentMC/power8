@@ -24,7 +24,7 @@ namespace Power8
             {
                 MessageBox.Show(
                     Power8.Properties.Resources.Err_VistaDetected,
-                    Power8.Properties.Resources.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
+                    Power8.Properties.NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(2);
             }
 
