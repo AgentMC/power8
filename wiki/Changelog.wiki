@@ -8,7 +8,7 @@
   # `[new]` Now search results are automatically expanded for groups that contain less than 20 items (performance considerations);
   # `[new]` Added Russian and Swedish localization (Se loc -> thanks Åke Engelbrektson);
   # `[changed]` When pressing Esc in empty search bar - it will close button stack (if search bar is not empty - it will clear text);
-  # `[changed]` Issue "Internal search should return results "TestApp.exe" and "Test App.exe" for "ta" query";
+  # `[changed]` Issue "Internal search should return results "`TestApp.exe`" and "`Test App.exe`" for "ta" query";
   # `[changed]` Minor speed enhancements in core;
   # `[changed]` Partially imported patch to Api usages. Should increase stability in specific cases. Thanks goes to SSTREGG;
   # `[changed]` Show welcome arrow only after button stack is instantiated;
@@ -16,7 +16,7 @@
   # `[changed]` Enhanced default grid layout on XP and 7;
   # `[fixed]` Exception when file is not found for MFU element;
   # `[fixed]` Race condition that led to that folder items may display simple icons instead of customized ones;
-  # `[fixed]` Possible InvalidOperationException that might be side cause for the problem above;
+  # `[fixed]` Possible `InvalidOperationException` that might be side cause for the problem above;
 
 
 
