@@ -13,7 +13,7 @@ What you need is basically just couple of steps:
 ==1. Get RESX files to translate==
 Download these files:
 https://power8.googlecode.com/svn/trunk/Properties/Resources.resx - Main resource file<br/>
-https://power8.googlecode.com/svn/trunk/Views/RestartExplorer.resx - Resx for one specific WinForms window shown in quite a special case
+https://power8.googlecode.com/svn/trunk/Views/RestartExplorer.resx - Resx for one specific Win-Forms window shown in quite a special case
 
 ==2. Get Tool to translate==
 There are many tools to do this. The first simple one I found is [http://sourceforge.net/projects/resx/ Resx Editor]. [http://sourceforge.net/projects/resx/files/latest/download Download] it.
@@ -27,7 +27,7 @@ After you translated everything, contact any of the project team members, giving
 That's it! After you give us the files, we'll check them and join to the Power8 source code. They will automatically go to the next version release.
 
 ==Side notes==
-1) Resx files have comments on some lines - follow them;
-2) If you like, after you contributed the translation, we can grant you a Contributor status;
-3) Your translation will be automatically shown on the Windows system where current UI language is set to your culture;
-4) After your translation is joined the project, we will put your name to main project page, and we can put there some your id/link/etc.
+  # Resx files have comments on some lines - follow them;
+  # If you like, after you contributed the translation, we can grant you a Contributor status;
+  # Your translation will be automatically shown on the Windows system where current UI language is set to your culture;
+  # After your translation is joined the project, we will put your name to main project page, and we can put there some your id/link/etc.
