@@ -30,5 +30,3 @@ This list is maintained internally, if you want to report an issue that is not o
 
 
 = Done => goes to next release =
-  #  Virtualization in item control in search group is off - investigate why =>auto-expand groups on search
-  #  Internal search should return results `"TestApp.exe"` and `"Test App.exe"` for "ta" query
