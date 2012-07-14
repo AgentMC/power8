@@ -12,7 +12,7 @@ What you need is basically just couple of steps:
 
 ==1. Get RESX files to translate==
 Download these files:
-https://power8.googlecode.com/svn/trunk/Properties/Resources.resx - Main resource file</br>
+https://power8.googlecode.com/svn/trunk/Properties/Resources.resx - Main resource file<br/>
 https://power8.googlecode.com/svn/trunk/Views/RestartExplorer.resx - Resx for one specific WinForms window shown in quite a special case
 
 ==2. Get Tool to translate==
