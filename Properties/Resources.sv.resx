@@ -118,210 +118,210 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
-    <value>Открыть общую для всех папку</value>
+    <value>Öppna användarmappen</value>
   </data>
   <data name="CR_AppOpenContainer" xml:space="preserve">
-    <value>Открыть расположение</value>
+    <value>Öppna mapp</value>
   </data>
   <data name="CR_AppOpenFolder" xml:space="preserve">
-    <value>Открыть</value>
+    <value>Öppna</value>
   </data>
   <data name="CR_AppOpenTargetContainer" xml:space="preserve">
-    <value>Открыть расположение целевого файла</value>
+    <value>Öppna målmapp</value>
   </data>
   <data name="CR_AppRun" xml:space="preserve">
-    <value>Запустить</value>
+    <value>Kör</value>
   </data>
   <data name="CR_AppRunAs" xml:space="preserve">
-    <value>Запустить от имени Администратора</value>
+    <value>Kör som administratör</value>
   </data>
   <data name="CR_AppShowProperties" xml:space="preserve">
-    <value>Свойства</value>
+    <value>Egenskaper</value>
   </data>
   <data name="CR_AppShowTargetProperties" xml:space="preserve">
-    <value>Свойства целевого файла</value>
+    <value>Målets egenskaper</value>
   </data>
   <data name="CR_ButtonHibernate" xml:space="preserve">
-    <value>Спящий режим</value>
+    <value>Viloläge</value>
   </data>
   <data name="CR_ButtonLock" xml:space="preserve">
-    <value>Блокировка ПК</value>
+    <value>Lås</value>
   </data>
   <data name="CR_ButtonLogOff" xml:space="preserve">
-    <value>Выход из системы</value>
+    <value>Logga ut</value>
   </data>
   <data name="CR_ButtonRestart" xml:space="preserve">
-    <value>Перезагрузка</value>
+    <value>Starta om</value>
   </data>
   <data name="CR_ButtonRun" xml:space="preserve">
-    <value>Выполнить...</value>
+    <value>Kör…</value>
   </data>
   <data name="CR_ButtonScreensave" xml:space="preserve">
-    <value>Запуск заставки</value>
+    <value>Skärmsläckare</value>
   </data>
   <data name="CR_ButtonShutdown" xml:space="preserve">
-    <value>Выключение ПК</value>
+    <value>Stäng av</value>
   </data>
   <data name="CR_ButtonSleep" xml:space="preserve">
-    <value>Ждущий режим</value>
+    <value>Strömsparläge</value>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - заменитель меню Пуск для Windows XP, 7 и 8</value>
+    <value>Power8 - Ersätter startmenyn i Windows XP, 7 och 8</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="CR_CLCleanerBtn" xml:space="preserve">
-    <value>Очистить</value>
+    <value>Rensa</value>
   </data>
   <data name="CR_CLWindow" xml:space="preserve">
-    <value>Список компьютеров</value>
+    <value>Datorlista</value>
   </data>
   <data name="CR_GroupItemsText" xml:space="preserve">
-    <value> элемент(а,ов)</value>
+    <value> Objekt</value>
     <comment>Label in the group of search results in the grid (keep starting space!)</comment>
   </data>
   <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Запускаться при старте</value>
+    <value>Autostarta</value>
   </data>
   <data name="CR_MWBlockMetro" xml:space="preserve">
-    <value>Блокировать функции Metro</value>
+    <value>Blockera Metro-funktioner</value>
   </data>
   <data name="CR_MWCheckForUpdates" xml:space="preserve">
-    <value>Проверять обновления</value>
+    <value>Sök efter uppdateringar</value>
   </data>
   <data name="CR_MWExit" xml:space="preserve">
-    <value>Выход</value>
+    <value>Avsluta</value>
   </data>
   <data name="CR_SearchBox" xml:space="preserve">
-    <value>Искать...</value>
+    <value>Sök…</value>
   </data>
   <data name="CR_SearchMarker" xml:space="preserve">
-    <value>Поиск...</value>
+    <value>Söker…</value>
     <comment>Gray text indicating Windows search request was sent</comment>
   </data>
   <data name="CR_UNdown7z" xml:space="preserve">
-    <value>Скачать 7z</value>
+    <value>Ladda ner som 7z</value>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>Скачать MSI и установить обновление!</value>
+    <value>Ladda ner som MSI och uppdatera nu!</value>
   </data>
   <data name="CR_UNdownMsi" xml:space="preserve">
-    <value>Скачать MSI</value>
+    <value>Ladda ner som MSI</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Открыть веб-сайт проекта</value>
+    <value>Besök projektsidan</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
-    <value>Не напоминать больше об этом обновлении</value>
+    <value>Meddela inte igen, om denna uppdatering</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
-    <value>Новая версия:</value>
+    <value>Ny version:</value>
   </data>
   <data name="CR_UNNextTime" xml:space="preserve">
-    <value>Напомнить в следующий раз</value>
+    <value>Påminn mig senare</value>
   </data>
   <data name="CR_UNOther" xml:space="preserve">
-    <value>Другие возможности:</value>
+    <value>Andra alternativ:</value>
   </data>
   <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
-    <value>Доступно обновление для Power8!</value>
+    <value>Det finns en uppdatering för Power8!</value>
   </data>
   <data name="CR_UNwnd" xml:space="preserve">
-    <value>Извещение об обновлении</value>
+    <value>Uppdateringsmeddelande</value>
   </data>
   <data name="CR_UNYourVersion" xml:space="preserve">
-    <value>Ваша версия:</value>
+    <value>Din version:</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Не могу проверить обновления.
+    <value>Kan inte söka efter uppdateringar.
 </value>
     <comment>Leave trailing \r\n!</comment>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
-    <value>Невозможно получить подсказку для объекта</value>
+    <value>Kan inte hämta info om objektet</value>
   </data>
   <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
-    <value>Невозможно создать экземпляр класса {0}
+    <value>Kan inte bestämma klass {0}
 {1}</value>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
-    <value>Загрузка отменена.</value>
+    <value>Nedladdningen avbröts.</value>
   </data>
   <data name="Err_GotNoFile" xml:space="preserve">
-    <value>Не найден файл для </value>
+    <value>Kan inte hitta fil för </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
-    <value>Не найдена папка для </value>
+    <value>Kan inte hitta mapp för </value>
     <comment>Leave trailing space!</comment>
   </data>
-  <data name="Err_GotNoTypeObject" xml:space="preserve">
-    <value>Конструктор типа не вернул объект типа.</value>
-  </data>
   <data name="Err_NoPiExtracted" xml:space="preserve">
-    <value>Недоступен элемент данных</value>
+    <value>Ingen data tillgänglig</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>Во время отображения свойств произошла ошибка {0}.
+    <value>Fel {0} uppstod vid försök att visa objektegenskaper
 {1}</value>
     <comment>Don't drop the second line</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>Невозможно запустить указанный объект от имени Администратора. Процесс запущен с обычными правами.
+    <value>Kan inte köra objektet som administratör. Processen körs med normala användarrättigheter.
 </value>
     <comment>Leave trailling paragraph symbol</comment>
   </data>
   <data name="Err_VistaDetected" xml:space="preserve">
-    <value>Windows (R) Vista (R) не предназначена для использования с Power8. Пожалуйста используйте нормальную операционную систему.</value>
+    <value>Power8 är inte avsett för Windows (R) Vista (R). Använd Power8 på avsett operativsystem.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
-    <value>Все программы</value>
+    <value>Alla program</value>
     <comment>Default label instead of "Start menu" extracted automatically. Currently seems useless</comment>
   </data>
   <data name="Str_CplElement" xml:space="preserve">
-    <value>Элемент панели управления</value>
+    <value>Kontrollpanelobjekt</value>
   </data>
   <data name="Str_Library" xml:space="preserve">
-    <value> (библиотека)</value>
+    <value> (bibliotek)</value>
     <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
   </data>
   <data name="Str_Pin" xml:space="preserve">
-    <value>Прикрепить элемент</value>
+    <value>Fäst i den här listan</value>
     <comment>Tooltip over pin icon</comment>
   </data>
   <data name="Str_Recent" xml:space="preserve">
-    <value>Недавно запущенные</value>
+    <value>Senast använda</value>
     <comment>Name of search category</comment>
   </data>
   <data name="Str_SaveDialogDescription" xml:space="preserve">
-    <value>: выберите куда сохранить файл</value>
+    <value>: välj plats för nedladdningen</value>
   </data>
   <data name="Str_SaveDialogFilter" xml:space="preserve">
-    <value> - обновление|*</value>
+    <value> uppdatering|*</value>
     <comment>Leave starting space. Full line reads "Power8 update"</comment>
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
-    <value>Показать остальные...</value>
+    <value>Visa mer…</value>
     <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
   </data>
   <data name="Str_Unpin" xml:space="preserve">
-    <value>Открепить элемент</value>
+    <value>Fäst inte i den här listan</value>
     <comment>Tooltip over pin icon</comment>
   </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
-    <value>: доступно обновление!</value>
+    <value>: uppdatering tillgänglig!</value>
   </data>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
-Ваша версия: {0}
-Новая версия: {1}
-Перейти на веб-страницу для обновления?
-Да: перейти на веб-страницу и обновиться!
-Нет: напомнить позже.
-Отмена: я пропускаю это обновление, не напоминать больше про эту версию.</value>
+
+Din version: {0}
+Ny version: {1}
+
+Vill du gå till webbsidan och uppdatera?
+
+Ja: Gå till webbsidan och uppdatera nu!
+Nej: Påminn mig senare.
+Avbryt: Jag hoppar över den här uppdateringen, påminn mig inte igen.</value>
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Str_WindowsSearchResults" xml:space="preserve">
-    <value>Результаты Поиска Windows</value>
+    <value>Windows sökresultat</value>
     <comment>Name of search category</comment>
   </data>
 </root>
