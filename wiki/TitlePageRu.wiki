@@ -1,0 +1,107 @@
+=Power 8=
+
+==Заменитель меню "Пуск" для Win8, стилизированный и интегрированный в панель задач.==
+
+<table><tr><td valign="top">Разработано для Windows8, работает также под XP SP3 и Win7. Полный список возможностей ниже под скриншотами.<br/>
+Требует .Net Framework 4 [http://www.microsoft.com/en-us/download/details.aspx?id=17113 (здесь)]. Работает лучше с .Net 4.5 [http://www.microsoft.com/en-us/download/details.aspx?id=28978 (здесь)].
+
+==Преимущества:==
+  * Никакого патчинга системных файлов;
+  * Никаких хуков поверх системных объектов;
+  * Никаких app-init DLLs (и дополнительных служб также);
+  * Никакой установки - просто распакуйте и оно уже работает;
+  * Никакого мусора в реестре;
+  * Маленькая и быстрая программа;
+  * Open-source;
+  * Уже работает там, где подобное ПО в большинстве своём терпит неудачи;
+  * Будет работать и после того как MS заблокирует подобный софт (см. пункты 1-4 выше).
+
+==Текущая версия==
+
+Текущая версия — *Release Candidate 1: v.0.6.0.0*.
+См. [http://code.google.com/p/power8/wiki/Changelog список изменений] для получения полной картины об изменениях в данном релизе.
+
+См. [http://code.google.com/p/power8/wiki/KnownIssues список проблемм] чтобы быть в курсе того, какие проблемы уже были найдены.
+
+*текущие сборки имеют статус РелизКандидатов - значит функционал готов, но всё ещё может содержать ошибки. В целом должно работать без проблем. Пожалуйста, сообщите нам если Power8 не может стартовать или вываливается с ошибкой в процесе работы!*
+
+==Скачать==
+
+Зайдите на [http://code.google.com/p/power8/downloads/list страницу загрузок] для получения ссылок на основные и прочие закачки. Пожалуйста *НЕ* используйте Internet Explorer для скачивания, поскольку это может принести вам проблемы при установке.
+
+Также вы можете просмотреть исходники в онлайне или скачать их любым svn клиентом, например [http://tortoisesvn.net/ Tortoise Svn]. Если вы хотите собрать полный пакет, вам придётся также поставить [http://www.advancedinstaller.com/ Advanced Installer] чтобы получить MSI-установщик. Заметьте, файлы .aip и .aiproj находятся под системой контроля версий и в будущем могут (и будут) меняться.
+
+==Свяжитесь с нами!==
+
+Проект разрабатывается киевскими разработчиками: <br/>
+*Михаил "AgentMC" Макаров*: (ядро, интеграция с системой) agentmc-at-mail.ru, ICQ 348635420, skype: hack-designer;<br/>
+*Андрей Хабалевский*: (UI, дизайн, взаимодействие с пользователем): xabalevskii-at-gmail.com, skype: xabalevskii;
+
+Локализация проводится:
+||English||Power8 team||
+||Russian||Power8 team||
+||Swedish||Åke Engelbrektson||[http://svenskasprakfiler.se]||
+
+Хотите *Power8 на вашем языке?* Прочитайте страницу [Localization].
+
+*Идеи или предложения?* Свяжитесь с нами напрямую, воспользуйтесь форумами ниже, или оставьте комментарии на этих страницах: [Roadmap], [FeatureRequests].
+
+</td><td valign="top">
+http://i42.fastpic.ru/big/2012/0706/6d/bd16dcd812695e8b1e609324e6dea46d.png <br/>
+http://i41.fastpic.ru/big/2012/0704/7e/823470cbeb5726d9a7cc8f85fff37d7e.png 
+</td></tr></table>
+==Получить поддержку`*`==
+`*`Descriptions of forums taken from the respective forums directly, except minor additions; order of list at the moment of creation is the same as in my Opera bookmarks. If you're the site owner/admin and you want to put different description here, contact us. If you want to add your site to list, contact us as well.
+
+*Power8 support forums:*
+  * [http://club.myce.com/f182/ Myce.com] - dedicated P8 support forum @ Myce: community on consumer electronics, gadgets and technology;
+  * [http://vk.com/power8 vk.com/power8] - группа Power8 вКонтакте / Power8 vKontacte group | Support account is [http://vk.com/power8help];
+*Power8 dedicated disdcussion threads:*
+  * [http://www.forumswindows8.com/software/power8-start-menu-replacer-windows-8-a-6205.htm ForumsWindows8.com] - Windows 8 forums. Board also offers download links for W8 builds and software, including Power8;
+  * [http://windows8forums.com/windows-8-discussion/7158-power8-start-menu-replacer-windows8.html Windows8Forums.com] - "The internet's #1 Windows 8 community";
+  * [http://www.eightforums.com/software-apps/6213-power8-start-menu-replacer-windows-8-a.html EightForums.com] - Windows Eight Forums;
+  * [http://pchelpforum.ru/f44/t96385/#post843797 PcHelpForum.ru] - Форум компьютерной помощи;
+  * [http://www.cyberforum.ru/windows8/thread574329.html CyberForum.ru] - Форум программистов и сисадминов `CyberForum.ru`;
+  * [http://forum.kasperskyclub.ru/index.php?showtopic=35232 Forum.KasperskyClub.ru] - Форум фан-клуба Лаборатории Касперского;
+  * [http://www.thevista.ru/forums.php?m=posts&q=17389 TheVista.ru] - Уже сегодня о Windows 8. Авторитетно о Windows 7 и Windows Phone;
+  * [http://www.ichip.ru/forum/viewtopic?tid=10165&b_start:int=0&fid=61 iChip.ru] - Форум журнала Chip-Россия;
+*Power8 is also mentioned in following threads:*
+  * [http://forums.mydigitallife.info/threads/34245-DISCUSSION-ISSUES-BUGS-Windows-8-Release-Preview-Build-8400/page57 MyDigitallLife.info] - Windows 8 discussion thread @ MDL: My Digilal Life Forums;
+  * [http://forum.oszone.net/thread-215633-7.html OsZone.net] -  Как вернуть меню "Пуск", отключить Metro UI... - топик на компьютерном информационном портале OS-Zone;
+  * [http://pcportal.org.ru/forum/58-3236-70490-16-1341397783 PcPortal.org.ru] - Кнопка Пуск для Windows 8 - топик на компьютерном портале PC Portal.
+
+
+==What it can do already:==
+  # Launches :) and positions itself in the Taskbar opposite to Show Desktop button. For XP, it places itself over Start button;
+  # Styled similar to Show Desktop button (as in Developer Preview);
+  # Power and session features:
+    * Shutdown;
+    * Sleep;
+    * Hibernate;
+    * Restart;
+    * Log off;
+    * Lock screen (start screensaver);
+    * Lock Windows;
+  # Displays expanding "All Programs" menu as it was back in old good XP&98 time:
+    * With real icons;
+    * With real descriptions (from desktop.ini);
+    * Click to launch item;
+  # On main button right-click:
+    * Allows to toggle auto-start;
+    * Allows to enable automatic check for updates;
+    * Allows to block Metro corner mouse rectangles;
+    * Allows to exit application;<br/>http://i36.fastpic.ru/big/2012/0516/d1/1a9e1b6fe307390acc2343585a99d4d1.png
+  # Context menu over menu items (Open folder, Open common folder, Run, Run as Administrator, ...): http://i36.fastpic.ru/big/2012/0611/a8/292d014da2001cd4718eb3731210cea8.png <br/>(screenshot taken under WindowsXP SP3 RU, take a note on how Power8 uses system localized elements);
+  # Activated by hot key (Alt+Z) (see details [http://code.google.com/p/power8/wiki/FeatureDetails#Alt+Z_hotkey here]);
+  # Checks for updates (see details [http://code.google.com/p/power8/wiki/FeatureDetails#Check-for-update here]);
+  # Has dedicated special menued folder buttons: open folder or show the menu with contents(see details [http://code.google.com/p/power8/wiki/FeatureDetails#Menu_buttons here]);
+  # Can search your PC and Internet 3 different ways (see details [http://code.google.com/p/power8/wiki/FeatureDetails#Search here]):
+    * Immediate All Programs and Most Frequently Used (MFU) applications search; 
+    * Windows Search returned results;
+    * Support for internet search (like "w driver");
+  # Shows MFU history taken from system (see details [http://code.google.com/p/power8/wiki/FeatureDetails?ts=1341394437&updated=FeatureDetails#Recent_Applications_(MFU_List) here]);
+  # Shows Jump Lists for MFU elements (see details [http://code.google.com/p/power8/wiki/FeatureDetails?ts=1341394437&updated=FeatureDetails#Recent_Applications_(MFU_List) here]):
+    * System Jump Lists for Windows 7 and 8, when obtainable;
+    * Elements from internal JL engine for all supported OS.
+  # Allows you to pin/unpin MFU elements;
+  # Localized (see languages list above).
