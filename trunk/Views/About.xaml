@@ -21,10 +21,11 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="4"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Name="AbVersion"/>
-                <TextBlock Grid.Column="1" Text="{Binding VersionContent, ElementName=MWAbout}"/>
+                <TextBlock Grid.Column="2" Text="{Binding VersionContent, ElementName=MWAbout}"/>
             </Grid>
             <TextBlock Name="AbLocalization"/>
             <Label Margin="0" Padding="0">                
