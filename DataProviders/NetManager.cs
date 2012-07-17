@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Management;
 using System.Net;
 #if !DEBUG
@@ -42,12 +43,20 @@ namespace Power8
                         ComputerNames.Add("COMPUTER" + i);
                     }
 #else
-                    using (var workgroup = new DirectoryEntry("WinNT://" + DomainOrWorkgroup))
+                    try
                     {
-                        ComputerNames.AddRange(workgroup.Children
-                                                    .Cast<DirectoryEntry>()
-                                                    .Where(e => e.SchemaClassName == "Computer")
-                                                    .Select(e => e.Name.ToUpper()));
+                        using (var workgroup = new DirectoryEntry("WinNT://" + DomainOrWorkgroup))
+                        {
+                            ComputerNames.AddRange(workgroup.Children
+                                                        .Cast<DirectoryEntry>()
+                                                        .Where(e => e.SchemaClassName == "Computer")
+                                                        .Select(e => e.Name.ToUpper()));
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Util.DispatchCaughtException(ex);
+                        ComputerNames.Add(Hostname);
                     }
 #endif
                 }
