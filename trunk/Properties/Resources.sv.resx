@@ -324,4 +324,18 @@ Avbryt: Jag hoppar över den här uppdateringen, påminn mig inte igen.</value>
     <value>Windows sökresultat</value>
     <comment>Name of search category</comment>
   </data>
+  <data name="CR_AbLocalization" xml:space="preserve">
+    <value>This localization is done by Power8 Team</value>
+    <comment>Put localizer name here!</comment>
+  </data>
+  <data name="CR_AbVersion" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="CR_MWAbout" xml:space="preserve">
+    <value>About</value>
+    <comment>Label in main btn context menu and in About Window</comment>
+  </data>
+  <data name="Str_LocalizerUri" xml:space="preserve">
+    <value>http://svenskasprakfiler.se</value>
+  </data>
 </root>

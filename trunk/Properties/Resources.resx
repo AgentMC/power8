@@ -320,6 +320,7 @@ Cancel: I skip this update, never notify me about this version.</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
     <value>This localization is done by Power8 Team</value>
+    <comment>Put localizer name here!</comment>
   </data>
   <data name="CR_AbVersion" xml:space="preserve">
     <value>Version:</value>
