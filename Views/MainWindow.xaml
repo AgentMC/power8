@@ -14,6 +14,7 @@
                 <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="MWBlockMetro" IsCheckable="True" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
                 <Separator/>
+                <MenuItem Name="MWAbout" Style="{StaticResource ContextMenuItemStyle}" Click="AboutClick" />
                 <MenuItem Name="MWExit" Click="ExitClick" Style="{StaticResource ContextMenuItemStyle}"/> 
             </ContextMenu>
         </Button.ContextMenu>

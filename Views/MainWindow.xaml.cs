@@ -478,5 +478,10 @@ namespace Power8
         }
 
         #endregion
+
+        private void AboutClick(object sender, RoutedEventArgs e)
+        {
+            Util.InstanciateClass("Power8.Views.About");
+        }
     }
 }
