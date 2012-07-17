@@ -17,6 +17,8 @@ namespace Power8.Views
             InitializeComponent();
         }
 
+        #region DisposableWindow impl
+
         ~About()
         {
             Dispose();
@@ -47,9 +49,14 @@ namespace Power8.Views
 
         public ISite Site { get; set; }
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Dispose();
+        }
 
 
-
+        #endregion
 
 
 
@@ -74,9 +81,9 @@ namespace Power8.Views
         {
             get
             {
-                return new Uri(string.IsNullOrEmpty(Properties.Resources.Str_LocalizerUri)
-                                   ? Properties.NoLoc.Stg_Power8URI
-                                   : Properties.Resources.Str_LocalizerUri);
+                return string.IsNullOrEmpty(Properties.Resources.Str_LocalizerUri)
+                           ? null
+                           : new Uri(Properties.Resources.Str_LocalizerUri);
             }
         }
 
