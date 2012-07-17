@@ -6,7 +6,7 @@ Many people want their favorite software be presented in their language. But ind
 
 Here comes the power of community. If you want Power8 to be run in your mother tongue - no problem, go translate it!
 
-= Details =
+= Details: Initial translate =
 
 What you need is basically just couple of steps:
 
@@ -27,7 +27,24 @@ After you translated everything, contact any of the project team members, giving
 That's it! After you give us the files, we'll check them and join to the Power8 source code. They will automatically go to the next version release.
 
 ==Side notes==
-  # Resx files have comments on some lines - follow them;
-  # If you like, after you contributed the translation, we can grant you a Contributor status;
-  # Your translation will be automatically shown on the Windows system where current UI language is set to your culture;
+  # Resx files have comments on some lines - follow them.
+  # If you like, after you contributed the translation, we can grant you a Contributor status.
+  # Your translation will be automatically shown on the Windows system where current UI language is set to your culture.
   # After your translation is joined the project, we will put your name to main project page, and we can put there some your id/link/etc.
+  # One of the translatable resources is URL that you can use to point to your site, or use mailto: URI format; other one is string that includes your name - you and your contacts will be displayed in P8's About window.
+
+
+= Details: update localization =
+
+Each version and release adds new strings (images, videos as well :) ).
+When it is close enough to the release and we believe no data will be introduced anymore, we synchronize ResX-s, i.e. we add new untranslated strings to your language's ResX file.
+
+We do it only in case there's someone to translate the new strings. If the localizer goes out of the game, we "freeze" the ResX file - so some strings will be displayed in English for such languages.
+
+After the sync is completed, we notify translators, and this notification contains the list of new strings.
+
+Then, the preferred way is to proceed as described above except you download your culture's ResX. To do it, go [https://code.google.com/p/power8/source/browse/#svn%2Ftrunk%2FProperties here], click on ResX you need (for example, `Resources.ru.resx` file), and then on the right side, click the "View raw file" link. The file will be downloaded to your PC.
+
+It is recommended that you check *ALL* the strings in the file in case we forgot something and ensure that they are translated.
+
+Next, contact us and we'll update the file and include it to release.
