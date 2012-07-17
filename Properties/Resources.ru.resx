@@ -321,4 +321,18 @@
     <value>Результаты Поиска Windows</value>
     <comment>Name of search category</comment>
   </data>
+  <data name="CR_AbLocalization" xml:space="preserve">
+    <value>Этот перевод осуществлён Командой Power8</value>
+    <comment>Put localizer name here!</comment>
+  </data>
+  <data name="CR_AbVersion" xml:space="preserve">
+    <value>Версия:</value>
+  </data>
+  <data name="CR_MWAbout" xml:space="preserve">
+    <value>О программе</value>
+    <comment>Label in main btn context menu and in About Window</comment>
+  </data>
+  <data name="Str_LocalizerUri" xml:space="preserve">
+    <value />
+  </data>
 </root>
