@@ -3,9 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
-#if DEBUG
 using System.Diagnostics;
-#endif
 
 namespace Power8.Views
 {
