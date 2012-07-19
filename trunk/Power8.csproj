@@ -73,6 +73,9 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
     <CodeAnalysisFailOnMissingRules>false</CodeAnalysisFailOnMissingRules>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\Power8Logo_Red48x48.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -241,6 +244,9 @@
   <ItemGroup>
     <Resource Include="Images\Pin.png" />
     <Resource Include="Images\Unpin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Power8Logo_Red48x48.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
