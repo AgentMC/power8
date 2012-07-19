@@ -87,6 +87,17 @@ namespace Power8.Views
             }
         }
 
+        private readonly string[] _names = new[] {"", "Blue_", "Green_", "marine_", "Red_", "violet_", "yellow_"};
+        public string Logo
+        {
+            get
+            {
+                return "/Power8;component/Images/logo_alfa/Power8Logo7_" + 
+                       _names[new Random().Next(_names.Length)] +
+                       "alfa.png";
+            }
+        }
+
         private void Navigate(object sender, RoutedEventArgs e)
         {
             Process.Start(((Hyperlink) sender).NavigateUri.AbsoluteUri);

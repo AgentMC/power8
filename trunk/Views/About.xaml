@@ -4,7 +4,8 @@
         Title="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
         Height="242" Name="MWAbout" SizeToContent="Width" ResizeMode="NoResize" Icon="/Power8;component/Images/Power8Logo_Red48x48.ico">
     <Grid>
-        <Image Height="150" HorizontalAlignment="Left" Margin="12,12,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="200" />
+        <Image HorizontalAlignment="Left" Margin="12,12,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top"
+               Source="{Binding Logo, ElementName=MWAbout}" Height="150" Width="150"/>
         <Button Content="OK" Height="25" HorizontalAlignment="Right" Margin="0,0,12,12" VerticalAlignment="Bottom" Width="92" 
                 HorizontalContentAlignment="Center" IsDefault="True" Click="ButtonClick">
             <ButtonBase.Style><Style/></ButtonBase.Style>
@@ -15,7 +16,7 @@
             </Hyperlink>
         </Label>
         <!---->
-        <StackPanel Orientation="Vertical" Margin="218,12,12,41">
+        <StackPanel Orientation="Vertical" Margin="174,12,12,41" Width="364">
             <TextBlock Name="ButtonStack"/>
             <TextBlock Text="{Binding CopyrightContent, ElementName=MWAbout}"/>
             <Grid>

@@ -248,6 +248,15 @@
   <ItemGroup>
     <Resource Include="Images\Power8Logo_Red48x48.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\logo_alfa\Power8Logo7_alfa.png" />
+    <Resource Include="Images\logo_alfa\Power8Logo7_Blue_Alfa.png" />
+    <Resource Include="Images\logo_alfa\Power8Logo7_Green_alfa.png" />
+    <Resource Include="Images\logo_alfa\Power8Logo7_marine_Alfa.png" />
+    <Resource Include="Images\logo_alfa\Power8Logo7_Red_alfa.png" />
+    <Resource Include="Images\logo_alfa\Power8Logo7_violet_alfa.png" />
+    <Resource Include="Images\logo_alfa\Power8Logo7_yellow_alfa.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
