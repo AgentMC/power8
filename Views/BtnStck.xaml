@@ -8,7 +8,7 @@
         Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated"
         mc:Ignorable="d" d:DesignHeight="515" d:DesignWidth="494" Name="ButtonStack"
-        Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}">
+        Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}" Icon="/Power8;component/Images/Power8Logo_Red48x48.ico">
     <Grid Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
