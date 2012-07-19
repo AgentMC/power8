@@ -450,26 +450,29 @@ namespace Power8
             if (_camels == null)
             {
                 _camels = string.Empty;
-                foreach (var s in new[]{FriendlyName, Argument, ResolvedLink} )
+                if(IsLink || (Argument != null && Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    if(!string.IsNullOrEmpty(s))
+                    foreach (var s in new[] {FriendlyName, Argument, ResolvedLink})
                     {
-                        bool lastDelim = false;
-                        foreach (var cch in s)
+                        if (!string.IsNullOrEmpty(s))
                         {
-                            if(lastDelim || char.IsUpper(cch) || char.IsNumber(cch))
+                            bool lastDelim = false;
+                            foreach (var cch in s)
                             {
-                                _camels += cch;
-                                lastDelim = false;
-                            }
-                            else if(char.IsSeparator(cch) || char.IsPunctuation(cch))
-                            {
-                                lastDelim = true;
+                                if (lastDelim || char.IsUpper(cch) || char.IsNumber(cch))
+                                {
+                                    _camels += cch;
+                                    lastDelim = false;
+                                }
+                                else if (char.IsSeparator(cch) || char.IsPunctuation(cch))
+                                {
+                                    lastDelim = true;
+                                }
                             }
                         }
                     }
+                    _camels = _camels.ToLowerInvariant();
                 }
-                _camels = _camels.ToLowerInvariant();
             }
             return _camels.Contains(query);
         }
