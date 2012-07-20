@@ -2,6 +2,13 @@
 #labels Featured
 
 
+==Release 1.0 (v.1.0.0.0): 21.07.2012==
+  
+  # `[new]` About window;
+  # `[new]` Icon and logo;
+  # `[fixed]` Now Power8 is able to start up and work even if Workstation service is shut down;
+
+
 ==RC 1 (v.0.6.0.0): 14.07.2012==
   
   # `[new]` Added pinning in MFU list;
@@ -17,7 +24,6 @@
   # `[fixed]` Exception when file is not found for MFU element;
   # `[fixed]` Race condition that led to that folder items may display simple icons instead of customized ones;
   # `[fixed]` Possible `InvalidOperationException` that might be side cause for the problem above;
-
 
 
 ==Beta 1 Hotfix 1 (v.0.5.1.0): 06.07.2012==
