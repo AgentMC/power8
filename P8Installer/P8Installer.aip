@@ -4,18 +4,19 @@
     <ROW Property="AI_MINDOTNETVERSION" MultiBuildValue="DefaultBuild:4.0 Client Profile" ValueLocId="-"/>
     <ROW Property="ALLUSERS" Value="2"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
-    <ROW Property="ARPCONTACT" Value="skype: hack-designer | agentmc@mail.ru (Mike Makarov) |  skype: xabalevskii | xabalevskii@gmail.com"/>
+    <ROW Property="ARPCONTACT" Value="skype: hack-designer | agentmc@mail.ru (Mike Makarov) |  skype: xabalevskii | xabalevskii@gmail.com (Andrey Khabalevskiy)"/>
     <ROW Property="ARPHELPLINK" Value="http://code.google.com/p/power8/issues/list"/>
     <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
+    <ROW Property="ARPPRODUCTICON" Value="Power8Logo_Red16x16.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="http://code.google.com/p/power8/"/>
     <ROW Property="ARPURLUPDATEINFO" Value="http://code.google.com/p/power8/downloads/list"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:3"/>
     <ROW Property="Manufacturer" Value="Power8 team" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{33946F66-5E79-41E6-8086-DFB5DA02738D} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{594BC380-0BCB-4D66-AB49-82237397C428} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Power8" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="0.6.0.0" Type="32"/>
+    <ROW Property="ProductVersion" Value="1.0.0.0" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{76C7409C-E1F8-44D7-8849-6BD3C7F637F6}"/>
@@ -126,6 +127,7 @@
     <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="Power8Logo_Red16x16.exe" SourcePath="..\Images\Power8Logo_Red16x16.ico" Index="0"/>
     <ROW Name="SystemFoldermsiexec.exe" SourcePath="&lt;AI_RES&gt;uninstall.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIniFileComponent">

@@ -19,14 +19,16 @@
     		<RowDefinition Height="Auto"/>
     		<RowDefinition Height="Auto"/>
     		<RowDefinition Height="Auto"/>
-    		<RowDefinition Height="Auto"/>
+    		<RowDefinition />
     	</Grid.RowDefinitions>
     	<Grid.ColumnDefinitions>
     		<ColumnDefinition Width="Auto"/>
     		<ColumnDefinition Width="Auto"/>
     	</Grid.ColumnDefinitions>
-        <Image HorizontalAlignment="Left" x:Name="image1" Stretch="Fill" VerticalAlignment="Top"
-               Source="{Binding Logo, ElementName=MWAbout}" Grid.RowSpan="4" Width="150" Height="150"/>
+        <!---->
+        <Image HorizontalAlignment="Left" x:Name="image1" Stretch="Fill" VerticalAlignment="Top" Source="{Binding Logo, ElementName=MWAbout}" 
+               Grid.RowSpan="6" Width="200" Height="200"/>
+        <!---->
         <TextBlock x:Name="ButtonStack" VerticalAlignment="Top" Grid.Column="1" Margin="12,4,0,4"/>
         <TextBlock Text="{Binding CopyrightContent, ElementName=MWAbout}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Margin="12,4,0,4"/>
         <Grid VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Margin="12,0,0,0">
@@ -38,20 +40,21 @@
         	<TextBlock x:Name="AbVersion"/>
         	<TextBlock Grid.Column="2" Text="{Binding VersionContent, ElementName=MWAbout}"/>
         </Grid>
-    	<TextBlock x:Name="AbLocalization" Grid.Row="3" Grid.Column="1" Margin="12,4,0,4"/>
-    	<Label HorizontalAlignment="Left" x:Name="label4" VerticalAlignment="Top" Padding="0" Grid.Row="5" >
-    		<Hyperlink NavigateUri="http://power8.googlecode.com/" Click="Navigate"><InlineUIContainer>
-    				<TextBlock x:Name="UNGoWeb" Margin="0"/>
-    			</InlineUIContainer></Hyperlink>
-    	</Label>
-    	<Label Padding="0" VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="1">                
+    	<TextBlock x:Name="AbLocalization" Grid.Row="3" Grid.Column="1" Margin="12,12,0,0"/>
+    	<Label Padding="0" VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="1" Margin="12,0">                
     		<Hyperlink x:Name="hlTranslatorURI" NavigateUri="{Binding UriContent, ElementName=MWAbout}"  Click="Navigate"><InlineUIContainer>
-    				<TextBlock Text="{Binding NavigateUri, ElementName=hlTranslatorURI}" Margin="0" />
-    			</InlineUIContainer></Hyperlink>           
+    			<TextBlock Text="{Binding NavigateUri, ElementName=hlTranslatorURI}" Margin="0" />
+    		</InlineUIContainer></Hyperlink>           
+    	</Label>
+        <!---->
+    	<Label HorizontalAlignment="Left" x:Name="label4" VerticalAlignment="Bottom" Padding="0" Grid.Row="5"  Grid.Column="1" Margin="12,0">
+    		<Hyperlink NavigateUri="http://power8.googlecode.com/" Click="Navigate"><InlineUIContainer>
+    			<TextBlock x:Name="UNGoWeb" Margin="0"/>
+    		</InlineUIContainer></Hyperlink>
     	</Label>
         <Button Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
                 HorizontalContentAlignment="Center" IsDefault="True" Click="ButtonClick" Grid.Row="5" Grid.Column="1" MinWidth="75">
-            <Button.Style><Style/></Button.Style>
+                <Button.Style><Style/></Button.Style>
         </Button>
     </Grid>
 </Window>
