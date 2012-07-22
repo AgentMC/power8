@@ -5,6 +5,9 @@
 <table><tr><td valign="top">Разработано для Windows8, работает также под XP SP3 и Win7. Полный список возможностей ниже под скриншотами.<br/>
 Требует .Net Framework 4 [http://www.microsoft.com/en-us/download/details.aspx?id=17113 (здесь)]. Работает лучше с .Net 4.5 [http://www.microsoft.com/en-us/download/details.aspx?id=28978 (здесь)].
 
+Оценена *на Отлично* сайтом Primewares [http://www.primewares.com/links.php?id=53104] <br/> Пресса о нас: [http://www.addictivetips.com/windows-tips/power8-start-menu-for-windows-8-that-can-block-metro-features/ www.addictivetips.com] | [http://www.geekissimo.com/2012/07/16/power8-miglior-menu-start-windows-8/ www.geekissimo.com] | [http://www.intowindows.com/power8-powerful-start-menu-for-windows-8/ www.intowindows.com] | [http://www.drwindows.de/content/414-power8-bisher-kompletteste-startmenue-ersatz-fuer-windows.html www.drwindows.de] | [http://www.guiadowindows.net/power8/ www.guiadowindows.net]
+
+
 ==Преимущества:==
   * Никакого патчинга системных файлов;
   * Никаких хуков поверх системных объектов;
@@ -66,6 +69,7 @@ http://i41.fastpic.ru/big/2012/0704/7e/823470cbeb5726d9a7cc8f85fff37d7e.png
   * [http://forum.kasperskyclub.ru/index.php?showtopic=35232 Forum.KasperskyClub.ru] - Форум фан-клуба Лаборатории Касперского;
   * [http://www.thevista.ru/forums.php?m=posts&q=17389 TheVista.ru] - Уже сегодня о Windows 8. Авторитетно о Windows 7 и Windows Phone;
   * [http://www.ichip.ru/forum/viewtopic?tid=10165&b_start:int=0&fid=61 iChip.ru] - Форум журнала Chip-Россия;
+  * [http://www.gratilog.net/xoops/modules/newbb/viewtopic.php?topic_id=7955&forum=16 GratiLog.net] - Rien que des freewares;
 *Power8 упомянут также в следующих тредах:*
   * [http://forums.mydigitallife.info/threads/34245-DISCUSSION-ISSUES-BUGS-Windows-8-Release-Preview-Build-8400/page57 MyDigitallLife.info] - Windows 8 discussion thread @ MDL: My Digilal Life Forums;
   * [http://forum.oszone.net/thread-215633-7.html OsZone.net] -  Как вернуть меню "Пуск", отключить Metro UI... - топик на компьютерном информационном портале OS-Zone;
