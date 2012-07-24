@@ -333,6 +333,11 @@ namespace Power8
 
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
+            if (string.IsNullOrEmpty(e.Name)
+             || string.IsNullOrEmpty(e.FullPath) 
+             || string.IsNullOrEmpty(e.OldName) 
+             || string.IsNullOrEmpty(e.OldFullPath))
+                return;
             FileChanged(sender,
                 new FileSystemEventArgs(
                     WatcherChangeTypes.Deleted,
