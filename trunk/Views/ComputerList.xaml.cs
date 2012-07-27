@@ -1,73 +1,18 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-#if DEBUG
-using System.Diagnostics;
-#endif
 
-namespace Power8
+namespace Power8.Views
 {
-    /// <summary>
-    /// Interaction logic for ComputerList.xaml
-    /// </summary>
-    public partial class ComputerList : IComponent
+    public partial class ComputerList
     {
-        #region (De)Init
-
         public ComputerList()
         {
             InitializeComponent();
             DataContext = this;
-        }
-
-        ~ComputerList()
-        {
-            Dispose();
-        }
-
-        private bool _disposing;
-        public void Dispose()
-        {
-#if DEBUG
-            Debug.WriteLine("Dispose called for ComputerList");
-#endif
-            lock (this)
-            {
-                if (_disposing)
-                    return;
-                _disposing = true;
-            }
-            Util.Send(() =>
-                          {
-                              if(IsVisible)
-                                  Close();
-                              var handler = Disposed;
-                              if (handler != null)
-                                  handler(this, null);
-                          });
-        }
-        public event EventHandler Disposed;
-
-        public ISite Site { get; set; }
-
-        private void WindowLoaded(object sender, RoutedEventArgs e)
-        {
             foreach (var comp in NetManager.ComputersNearby)
-            {
                 listBox1.Items.Add(comp);
-            }
         }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            Dispose();
-        }
-
-        #endregion
-
 
         public ImageSource IconEx
         {
@@ -76,7 +21,7 @@ namespace Power8
 
         private void CleanerBtnClick(object sender, RoutedEventArgs e)
         {
-            CLTextbox.Text = "";
+            CLTextbox.Text = string.Empty;
         }
 
         private void Textbox1TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
@@ -84,16 +29,13 @@ namespace Power8
             var txt = CLTextbox.Text.ToUpper();
             listBox1.Items.Clear();
             foreach (var comp in NetManager.ComputersNearby.Where(comp => comp.Contains(txt)))
-            {
                 listBox1.Items.Add(comp);
-            }
         }
 
         private void ListBox1MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Util.StartExplorer("\\\\" + listBox1.SelectedItem);
         }
-
 
     }
 }

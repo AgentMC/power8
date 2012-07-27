@@ -144,7 +144,7 @@ namespace Power8
 
             KillArrow();
 
-            if (Keyboard.GetKeyStates(Key.LeftCtrl) == KeyStates.Down || Keyboard.GetKeyStates(Key.RightCtrl) == KeyStates.Down)
+            if ((Control.ModifierKeys & Keys.Control) > 0)
             {
                 ShowRunDialog(this, null);
                 return;
