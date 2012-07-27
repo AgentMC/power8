@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml;
 using Power8.Properties;
+using Power8.Views;
 
 namespace Power8
 {

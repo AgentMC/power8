@@ -12,11 +12,11 @@ namespace Power8.Views
     /// <summary>
     /// Interaction logic for UpdateNotifier.xaml
     /// </summary>
-    public partial class UpdateNotifier : IComponent 
+    public partial class UpdateNotifier
     {
         private readonly string _curVer, _newVer, _uri7Z, _uriMsi;
 
-        private UpdateNotifier()
+        public UpdateNotifier()
         {
             InitializeComponent();
         }
@@ -30,50 +30,6 @@ namespace Power8.Views
             InitializeComponent();
             Title = NoLoc.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable;
         }
-
-                #region DisposableWindow impl
-
-        ~UpdateNotifier()
-        {
-            Dispose();
-        }
-
-        private bool _disposing;
-        public void Dispose()
-        {
-#if DEBUG
-            Debug.WriteLine("Dispose called for UpdateNotifier Window");
-#endif
-            lock (this)
-            {
-                if (_disposing)
-                    return;
-                _disposing = true;
-            }
-            Util.Send(() =>
-                          {
-                              if(IsVisible)
-                                  Close();
-                              var handler = Disposed;
-                              if (handler != null)
-                                  handler(this, null);
-                          });
-        }
-        public event EventHandler Disposed;
-
-        public ISite Site { get; set; }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            Dispose();
-        }
-
-
-        #endregion
-
-
-
 
         public string CurrentVersion
         {
@@ -112,7 +68,7 @@ namespace Power8.Views
             IsEnabled = false;
         }
 
-        void WcDownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        void WcDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             Util.Send(() => IsEnabled = true);
             if (e.Cancelled)

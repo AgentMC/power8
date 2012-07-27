@@ -366,6 +366,7 @@ namespace Power8
                 var wnd = inst as Window;
                 if(wnd != null)
                 {
+                    if(wnd.IsVisible) wnd.Hide(); //XP hack
                     wnd.Show();
                     if(wnd.WindowState == WindowState.Minimized)
                         wnd.WindowState = WindowState.Normal;
@@ -375,6 +376,7 @@ namespace Power8
                 var frm = inst as Form;
                 if (frm != null)
                 {
+                    if(frm.Visible) frm.Hide(); //XP hack
                     frm.Show();
                     if(frm.WindowState == FormWindowState.Minimized)
                         frm.WindowState = FormWindowState.Normal;

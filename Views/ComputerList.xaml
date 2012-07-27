@@ -1,8 +1,8 @@
-﻿<Window x:Class="Power8.ComputerList"
+﻿<Views:DisposableWindow x:Class="Power8.Views.ComputerList" x:Name="CLWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Height="300" Width="300" Loaded="WindowLoaded" Icon="{Binding Path=IconEx}" 
-        Name="CLWindow"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:Views="clr-namespace:Power8.Views" 
+        Height="300" Width="300" Icon="{Binding Path=IconEx}" 
         Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}" >
     <Grid>
         <Grid.RowDefinitions>
@@ -21,4 +21,4 @@
                 Margin="0" HorizontalContentAlignment="Center" Click="CleanerBtnClick"/>
         
     </Grid>
-</Window>
+</Views:DisposableWindow>

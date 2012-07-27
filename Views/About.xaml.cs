@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
@@ -10,56 +9,12 @@ namespace Power8.Views
     /// <summary>
     /// Interaction logic for About.xaml
     /// </summary>
-    public partial class About : IComponent
+    public partial class About
     {
         public About()
         {
             InitializeComponent();
         }
-
-        #region DisposableWindow impl
-
-        ~About()
-        {
-            Dispose();
-        }
-
-        private bool _disposing;
-        public void Dispose()
-        {
-#if DEBUG
-            Debug.WriteLine("Dispose called for About Window");
-#endif
-            lock (this)
-            {
-                if (_disposing)
-                    return;
-                _disposing = true;
-            }
-            Util.Send(() =>
-                          {
-                              if(IsVisible)
-                                  Close();
-                              var handler = Disposed;
-                              if (handler != null)
-                                  handler(this, null);
-                          });
-        }
-        public event EventHandler Disposed;
-
-        public ISite Site { get; set; }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-            Dispose();
-        }
-
-
-        #endregion
-
-
-
 
         public string CopyrightContent
         {

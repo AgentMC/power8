@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="Converters\PiToTooltipConverter.cs" />
     <Compile Include="DataProviders\DriveManager.cs" />
+    <Compile Include="Views\DisposableWindow.cs" />
     <Compile Include="Views\MenuedButton.xaml.cs">
       <DependentUpon>MenuedButton.xaml</DependentUpon>
     </Compile>
