@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Management;
 using System.Net;
 #if !DEBUG
 using System.DirectoryServices;
 using System.Linq;
+using System;
 #endif
 
 namespace Power8

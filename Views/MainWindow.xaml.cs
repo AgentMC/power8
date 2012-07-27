@@ -8,13 +8,11 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Power8.Properties;
-using Power8.Views;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using ThreadState = System.Threading.ThreadState;
 
-
-namespace Power8
+namespace Power8.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Power8
+namespace Power8.Views
 {
     public partial class RestartExplorer : Form
     {

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace Power8.Views
 {
