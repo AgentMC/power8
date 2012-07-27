@@ -16,7 +16,6 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
-using MenuItem = System.Windows.Controls.MenuItem;
 using MessageBox = System.Windows.MessageBox;
 using System.Xml;
 
@@ -338,11 +337,15 @@ namespace Power8
             }
         }
 
-        public static void InstanciateClass(string className)
+
+
+        public static void InstanciateClass(string className = null, Type t = null, Func<IComponent> ctor = null)
         {
             try
             {
-                var t = Type.GetType(className);
+                if(t == null && !string.IsNullOrEmpty(className))
+                    t = Type.GetType(className);
+                
                 if (t == null)
                     throw new Exception(NoLoc.Err_GotNoTypeObject);
 
@@ -356,7 +359,7 @@ namespace Power8
                 }
                 else
                 {
-                    inst = (IComponent) Activator.CreateInstance(t);
+                    inst = ctor != null ? ctor() : (IComponent) Activator.CreateInstance(t);
                     inst.Disposed += (sender, args) => Instances.Remove(sender.GetType());
                     Instances.Add(t, inst);
                 }

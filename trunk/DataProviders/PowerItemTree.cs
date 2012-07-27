@@ -319,7 +319,7 @@ namespace Power8
                                                                             SpecialFolderId =
                                                                                 API.Csidl.POWER8CLASS,
                                                                             IsFolder = true,
-                                                                            Argument = "Power8.ComputerList",
+                                                                            Argument = typeof(ComputerList).FullName,
                                                                             Icon = _networkRoot.Items[0].Icon
                                                                         });
                                             });
