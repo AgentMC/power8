@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Power8.Views;
 
 namespace Power8
 {

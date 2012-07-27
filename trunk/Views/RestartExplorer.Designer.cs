@@ -1,4 +1,4 @@
-﻿namespace Power8
+﻿namespace Power8.Views
 {
     partial class RestartExplorer
     {

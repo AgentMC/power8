@@ -9,7 +9,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace Power8
+namespace Power8.Views
 {
     /// <summary>
     /// Interaction logic for BtnStck.xaml
