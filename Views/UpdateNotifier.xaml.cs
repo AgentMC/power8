@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -6,12 +7,12 @@ using System.Windows;
 using Microsoft.Win32;
 using Power8.Properties;
 
-namespace Power8
+namespace Power8.Views
 {
     /// <summary>
     /// Interaction logic for UpdateNotifier.xaml
     /// </summary>
-    public partial class UpdateNotifier
+    public partial class UpdateNotifier : IComponent 
     {
         private readonly string _curVer, _newVer, _uri7Z, _uriMsi;
 
@@ -29,6 +30,50 @@ namespace Power8
             InitializeComponent();
             Title = NoLoc.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable;
         }
+
+                #region DisposableWindow impl
+
+        ~UpdateNotifier()
+        {
+            Dispose();
+        }
+
+        private bool _disposing;
+        public void Dispose()
+        {
+#if DEBUG
+            Debug.WriteLine("Dispose called for UpdateNotifier Window");
+#endif
+            lock (this)
+            {
+                if (_disposing)
+                    return;
+                _disposing = true;
+            }
+            Util.Send(() =>
+                          {
+                              if(IsVisible)
+                                  Close();
+                              var handler = Disposed;
+                              if (handler != null)
+                                  handler(this, null);
+                          });
+        }
+        public event EventHandler Disposed;
+
+        public ISite Site { get; set; }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            Dispose();
+        }
+
+
+        #endregion
+
+
+
 
         public string CurrentVersion
         {

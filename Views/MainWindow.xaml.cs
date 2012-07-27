@@ -170,6 +170,11 @@ namespace Power8
 //            Environment.Exit(0);  looks like fixed already
         }
 
+        private void AboutClick(object sender, RoutedEventArgs e)
+        {
+            Util.InstanciateClass(t: typeof (About));
+        }
+
         #endregion
 
         #region Background threads
@@ -276,8 +281,13 @@ namespace Power8
                                 }
                                 else
                                 {
-                                    Util.Send(()=> new UpdateNotifier(Application.ProductVersion, verLine, uri7Z,
-                                                                      uriMsi).Show());
+                                    Util.Send(() =>
+                                              Util.InstanciateClass(
+                                                  t: typeof (UpdateNotifier),
+                                                  ctor: () => new UpdateNotifier(
+                                                                  Application.ProductVersion, verLine,
+                                                                  uri7Z,
+                                                                  uriMsi)));
                                 }
                             }
 
@@ -478,10 +488,5 @@ namespace Power8
         }
 
         #endregion
-
-        private void AboutClick(object sender, RoutedEventArgs e)
-        {
-            Util.InstanciateClass("Power8.Views.About");
-        }
     }
 }
