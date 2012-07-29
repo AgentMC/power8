@@ -49,14 +49,21 @@
             </InlineUIContainer></Hyperlink>           
         </Label>
         <!---->
-        <Label HorizontalAlignment="Left" x:Name="label4" VerticalAlignment="Bottom" Padding="0" Grid.Row="5"  Grid.Column="1" Margin="12,0">
-            <Hyperlink NavigateUri="http://power8.googlecode.com/" Click="Navigate"><InlineUIContainer>
-                <TextBlock x:Name="UNGoWeb" Margin="0"/>
-            </InlineUIContainer></Hyperlink>
-        </Label>
-        <Button Content="OK" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-                HorizontalContentAlignment="Center" IsDefault="True" Click="ButtonClick" Grid.Row="5" Grid.Column="1" MinWidth="75">
-                <Button.Style><Style/></Button.Style>
-        </Button>
+        <Grid Grid.Row="5" Grid.Column="1" Margin="0" VerticalAlignment="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Label HorizontalAlignment="Left" x:Name="label4" Padding="0" Margin="12,0">
+                <Hyperlink NavigateUri="http://power8.googlecode.com/" Click="Navigate">
+                    <InlineUIContainer><TextBlock x:Name="UNGoWeb" Margin="0"/></InlineUIContainer>
+                </Hyperlink>
+            </Label>
+            <Button Content="OK" HorizontalContentAlignment="Center" IsDefault="True" 
+                    Click="ButtonClick" Grid.Column="1" MinWidth="75">
+                    <Button.Style><Style/></Button.Style>
+            </Button>
+        </Grid>
     </Grid>
 </Views:DisposableWindow>
