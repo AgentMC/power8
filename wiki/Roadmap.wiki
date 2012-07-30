@@ -8,19 +8,13 @@ For all other feature requests, currently not prioritized, please consult [Featu
 For already implemented features, see [Changelog] page.
 
 
-= _Power8 v.1.0 RTM_ =
-*estimated release date: 22.07.12*
-  * various bugfixes and UI enhancements;
-  * icon and logo;
-  * Include JL in search? Still thinking...
-  * theme for non-Aero better implementation?
-
 
 = _Power8 v.1.1 - 1.4 Beta_ =
 *estimated dates -> starting end of August*
   * various bugfixes and UI enhancements;
   * fix for Removable HDDs;
   * replace grid with something faster;
+  * theme for non-Aero better implementation?
 
 
 = _Power8 v.1.5 RTM_ =
