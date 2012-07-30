@@ -4,7 +4,7 @@
 
 <table><tr><td valign="top">Разработано для Windows8, работает также под XP SP3 и Win7. Полный список возможностей ниже под скриншотами.<br/>
 Требует .Net Framework 4 [http://www.microsoft.com/en-us/download/details.aspx?id=17113 (здесь)]. Работает лучше с .Net 4.5 [http://www.microsoft.com/en-us/download/details.aspx?id=28978 (здесь)].
-<table><tr><td width="130" align="center">Оценена на <div style="white-space: nowrap"><a href="http://www.primewares.com/links.php?id=53104"><img src="http://www.primewares.com/images/star.png" />*Отлично*</a></div>сайтом Primewares</td>
+<table><tr><td width="100" align="center">Оценена на <div style="white-space: nowrap"><a href="http://www.primewares.com/links.php?id=53104"><img src="http://www.primewares.com/images/star.png" />*Отлично*</a></div>сайтом Primewares</td>
 <td width="172"><a href="http://www.softpedia.com/progClean/Power8-Clean-219120.html" title="100% FREE Certified by Softpedia"><img src="http://s1.softpedia-static.com/base_img/softpedia_free_award_f.gif" width="170" height="116" border="0"/></a></td></tr></table>
 Пресса о нас: [http://www.addictivetips.com/windows-tips/power8-start-menu-for-windows-8-that-can-block-metro-features/ www.addictivetips.com] | [http://www.geekissimo.com/2012/07/16/power8-miglior-menu-start-windows-8/ www.geekissimo.com] | [http://www.intowindows.com/power8-powerful-start-menu-for-windows-8/ www.intowindows.com] | [http://www.drwindows.de/content/414-power8-bisher-kompletteste-startmenue-ersatz-fuer-windows.html www.drwindows.de] | [http://www.guiadowindows.net/power8/ www.guiadowindows.net]
 
@@ -27,7 +27,7 @@
 
 См. [http://code.google.com/p/power8/wiki/KnownIssues список проблем] чтобы быть в курсе того, какие проблемы уже были найдены.
 
-*текущие сборки имеют статус РелизКандидатов - значит функционал готов, но всё ещё может содержать ошибки. В целом должно работать без проблем. Пожалуйста, сообщите нам если Power8 не может стартовать или вываливается с ошибкой в процесе работы!*
+*Power8 должна работать без проблем. Пожалуйста, сообщите нам если Power8 не может стартовать или вываливается с ошибкой в процесе работы!*
 
 ==Скачать==
 
