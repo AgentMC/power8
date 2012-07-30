@@ -93,6 +93,8 @@ namespace Power8
 
         public static IntPtr MakeGlassWpfWindow(this Window w)
         {
+            if (!w.IsLoaded)
+                return IntPtr.Zero;
             var source = w.GetHwndSource();
             if (OsIs.SevenOrMore &&  API.DwmIsCompositionEnabled())
             {
@@ -103,6 +105,7 @@ namespace Power8
                 }
                 MakeGlass(source.Handle);
             }
+            //TODO: else - paint in system colors
             return source.Handle;
         }
         
