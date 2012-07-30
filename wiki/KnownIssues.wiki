@@ -14,7 +14,6 @@ This list is maintained internally, if you want to report an issue that is not o
 == Other known ==
   
   #  P8 prevents safe eject of removable drives
-  #  Ctrl+Click may not invoke Run dialog, depending on focused control
   #  XP/8?: Menu from menu-button may show in inappropriate position 
   #  Context menu from Main button may show in inappropriate position
   #  W8/basic theme: Menu TLH are drawn with system background instead of transparent
@@ -24,7 +23,9 @@ This list is maintained internally, if you want to report an issue that is not o
   #  XP: buttons are 3px lower than menu-buttons
   #  Unneeded right margin in menu items
   #  W7/classic theme: button is unreachable (almost)
-  #  (?) Some W8 immersive links aren't run properly - have to investigate, postpone to RTM
+  #  (?) Some W8 immersive links aren't run properly - have to investigate, postpone to W8 RTM
 
 
 = Done => goes to next release =
+
+  #  Ctrl+Click may not invoke Run dialog, depending on focused control
