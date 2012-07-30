@@ -4,7 +4,15 @@
 = List of ideas and requests we not commited yet =
   * Skins/styles;
     * In particular, Metro style.
-  * Configurable user menus;
-  * Configuration dialog for example, to set up search engine;
-    * Need to define contents.
+  * Configuration dialog:
+    * Start button size and picture;
+    * Configurable text for start menu;
+    * To watch removable devicesor not to;
+    * Speedhacks for MFU: ignore FileVersionInfo, ignore Start menu list;
+    * Disable some menued buttons;
+    * User panels - TBD;
+    * Web Search Engines settings;
+    * Checkboxes from context menu - autostart, updater, metro blocker;
+    * more.....?
   * Context menu (configurable) for computer list, specific items for each computer item;
+  * "Switch User" command
