@@ -3,11 +3,10 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:my="clr-namespace:Power8" 
- mc:Ignorable="d">
+ xmlns:my="clr-namespace:Power8" xmlns:Converters="clr-namespace:Power8.Converters" mc:Ignorable="d">
     <!-- Resource dictionary entries should be defined here. -->
-    <my:NameToResourceConverter x:Key="localizer"/>
-    <my:MenuWidthToMarginConverter x:Key="themeApplier" />
+    <Converters:NameToResourceConverter x:Key="localizer"/>
+    <Converters:MenuWidthToMarginConverter x:Key="themeApplier" />
     
     <!-- Buttons -->
     <Style TargetType="{x:Type Button}">

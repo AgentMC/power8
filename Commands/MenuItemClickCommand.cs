@@ -3,7 +3,7 @@ using System.Windows.Input;
 using Power8.Properties;
 using Power8.Views;
 
-namespace Power8
+namespace Power8.Commands
 {
     public class MenuItemClickCommand : ICommand
     {

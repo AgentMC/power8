@@ -5,7 +5,7 @@ using System.IO;
 using System.Windows.Data;
 using Power8.Properties;
 
-namespace Power8
+namespace Power8.Converters
 {
     [ValueConversion(typeof(PowerItem), typeof(string))]
     [TypeConverter(typeof(PowerItem))]
