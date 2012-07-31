@@ -8,11 +8,13 @@
     * Start button size and picture;
     * Configurable text for start menu;
     * To watch removable devicesor not to;
-    * Speedhacks for MFU: ignore FileVersionInfo, ignore Start menu list;
+    * Speedhacks for MFU: ignore `FileVersionInfo`, ignore Start menu list;
     * Disable some menued buttons;
     * User panels - TBD;
     * Web Search Engines settings;
     * Checkboxes from context menu - autostart, updater, metro blocker;
+    * (?) Skip metro shell;
+    * (?,W7) Aero: hide standard start/Classic: fill it.
     * more.....?
   * Context menu (configurable) for computer list, specific items for each computer item;
   * "Switch User" command
