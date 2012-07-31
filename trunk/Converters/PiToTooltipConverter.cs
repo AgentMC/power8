@@ -7,6 +7,13 @@ using Power8.Properties;
 
 namespace Power8.Converters
 {
+    /// <summary>
+    /// This converter tries to get tooltip fo PowerItem passed in various ways. In general,
+    /// it is the resolved argument of PowerItem, but other options available as well.
+    /// One-way converter. Data: PowerItem. Returns: the descriptive tooltip.
+    /// 2nd option: when "pin" is passed as parameter, returns pinned/unpinned string
+    /// for boolean passed as data item.
+    /// </summary>
     [ValueConversion(typeof(PowerItem), typeof(string))]
     [TypeConverter(typeof(PowerItem))]
     class PiToTooltipConverter : IValueConverter
