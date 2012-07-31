@@ -243,9 +243,10 @@ namespace Power8
             {
                 foreach (var k in new[]{k1, k2})
                 {
+                    var ak = k;
                     list.AddRange(
-                        (from valueName in k.GetValueNames()
-                        let data = (byte[])k.GetValue(valueName)
+                        (from valueName in ak.GetValueNames()
+                        let data = (byte[])ak.GetValue(valueName)
                         let fileTime = data.Length == dataWidthExpected ? BitConverter.ToInt64(data, fileTimeOffset) : 0
                         where fileTime != 0 && valueName.Contains("\\")
                         select new MfuElement

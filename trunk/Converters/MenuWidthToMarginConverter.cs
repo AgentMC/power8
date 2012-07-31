@@ -3,11 +3,12 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+
 #if DEBUG
 using System.Diagnostics;
 #endif
 
-namespace Power8
+namespace Power8.Converters
 {
     [ValueConversion(typeof(double), typeof(Thickness))]
     [TypeConverter(typeof(double))]

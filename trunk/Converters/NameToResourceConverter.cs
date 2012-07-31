@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace Power8
+namespace Power8.Converters
 {
     [ValueConversion(typeof(string), typeof(string))]
     [TypeConverter(typeof(string))]

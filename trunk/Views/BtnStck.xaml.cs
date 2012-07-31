@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
+using Power8.Commands;
 
 namespace Power8.Views
 {
