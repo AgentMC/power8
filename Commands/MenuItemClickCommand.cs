@@ -5,6 +5,10 @@ using Power8.Views;
 
 namespace Power8.Commands
 {
+    /// <summary>
+    /// Standard PowerItem invoker, used thoughout all the menus 
+    /// (not the context menus though). Parameter should be bound to data item.
+    /// </summary>
     public class MenuItemClickCommand : ICommand
     {
         public void Execute(object parameter)
