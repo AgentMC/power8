@@ -250,7 +250,7 @@ namespace Power8
         //Utility User32 functions and data, needed in different places============================
         public enum WM : uint
         {
-//excerpt
+            //excerpt
             SYSCOMMAND = 0x0112,
             HOTKEY = 0x312,
 
@@ -275,6 +275,23 @@ namespace Power8
             NCXBUTTONDOWN = 0x00AB,
             NCXBUTTONUP = 0x00AC,
             NCXBUTTONDBLCLK = 0x00AD,
+
+            MOUSEFIRST = 0x0200,
+            MOUSEMOVE = 0x0200,
+            LBUTTONDOWN = 0x0201,
+            LBUTTONUP = 0x0202,
+            LBUTTONDBLCLK = 0x0203,
+            RBUTTONDOWN = 0x0204,
+            RBUTTONUP = 0x0205,
+            RBUTTONDBLCLK = 0x0206,
+            MBUTTONDOWN = 0x0207,
+            MBUTTONUP = 0x0208,
+            MBUTTONDBLCLK = 0x0209,
+            MOUSEWHEEL = 0x020A,
+            XBUTTONDOWN = 0x020B,
+            XBUTTONUP = 0x020C,
+            XBUTTONDBLCLK = 0x020D,
+            MOUSEHWHEEL = 0x020E,
 
             DWMCOMPOSITIONCHANGED = 0x031E,
             DWMNCRENDERINGCHANGED = 0x031F,
