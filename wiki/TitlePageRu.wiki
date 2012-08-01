@@ -4,14 +4,7 @@
 
 <table><tr><td valign="top">Разработано для Windows8, работает также под XP SP3 и Win7. Полный список возможностей ниже под скриншотами.<br/>
 Требует .Net Framework 4 [http://www.microsoft.com/en-us/download/details.aspx?id=17113 (здесь)]. Работает лучше с .Net 4.5 [http://www.microsoft.com/en-us/download/details.aspx?id=28978 (здесь)].
-<table><tr><td width="100" align="center">Оценена на <div style="white-space: nowrap"><a href="http://www.primewares.com/links.php?id=53104"><img src="http://www.primewares.com/images/star.png" />*Отлично*</a></div>сайтом Primewares<hr/>
-<a href="http://www.downloadtyphoon.com/power8/infosqixaztn"><img src="http://www.downloadtyphoon.com/templates/downty/images/award_88x31_5.gif" title="Download Typhoon 5 stars" border="0" width="88" height="31"/></a></td>
-<td width="172"><a href="http://www.softpedia.com/progClean/Power8-Clean-219120.html" title="100% FREE Certified by Softpedia"><img src="http://s1.softpedia-static.com/base_img/softpedia_free_award_f.gif" width="170" height="116" border="0"/></a></td>
-<td width="250"><a href="http://www.windows7download.com/win7-power8/pcuetujj.html"><img src="http://www.windows7download.com/img/awards/award_88x31_5.png" title="Windows 7 Download 5 stars" border="0" width="88" height="31"/></a>
-<a href="http://www.windows7download.com/win7-power8/pcuetujj.html"><img src="http://www.windows7download.com/img/awards/windows7compatible_88x31.png" title="Windows 7 Download: compatible with Windows 7" border="0" width="88" height="31"/></a>
-<a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/award_88x31_5.gif" title="X 64-bit Download 5 stars" border="0" width="88" height="31"/></a>
-<a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/compatible_88x31.gif" title="X 64-bit Download: x64 Compatible" border="0" width="88" height="31"/></a>
-</td></tr></table>
+
 Пресса о нас: [http://www.addictivetips.com/windows-tips/power8-start-menu-for-windows-8-that-can-block-metro-features/ www.addictivetips.com] | [http://www.geekissimo.com/2012/07/16/power8-miglior-menu-start-windows-8/ www.geekissimo.com] | [http://www.intowindows.com/power8-powerful-start-menu-for-windows-8/ www.intowindows.com] | [http://www.drwindows.de/content/414-power8-bisher-kompletteste-startmenue-ersatz-fuer-windows.html www.drwindows.de] | [http://www.guiadowindows.net/power8/ www.guiadowindows.net]
 
 
@@ -58,6 +51,15 @@
 *Идеи или предложения?* Свяжитесь с нами напрямую, воспользуйтесь форумами ниже, или оставьте комментарии на этих страницах: [Roadmap], [FeatureRequests].
 
 </td><td valign="top">
+<table><tr><td width="90" align="center">Оценена на <div style="white-space: nowrap"><a href="http://www.primewares.com/links.php?id=53104"><img src="http://www.primewares.com/images/star.png" />*Отлично*</a></div>сайтом Primewares<hr/>
+<a href="http://www.downloadtyphoon.com/power8/infosqixaztn"><img src="http://www.downloadtyphoon.com/templates/downty/images/award_88x31_5.gif" title="Download Typhoon 5 stars" border="0" width="88" height="31"/></a></td>
+<td><a href="http://www.softpedia.com/progClean/Power8-Clean-219120.html" title="100% FREE Certified by Softpedia"><img src="http://s1.softpedia-static.com/base_img/softpedia_free_award_f.gif" width="170" height="116" border="0"/></a></td>
+<td width="180"><a href="http://www.windows7download.com/win7-power8/pcuetujj.html"><img src="http://www.windows7download.com/img/awards/award_88x31_5.png" title="Windows 7 Download 5 stars" border="0" width="88" height="31"/></a>
+<a href="http://www.windows7download.com/win7-power8/pcuetujj.html"><img src="http://www.windows7download.com/img/awards/windows7compatible_88x31.png" title="Windows 7 Download: compatible with Windows 7" border="0" width="88" height="31"/></a>
+<a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/award_88x31_5.gif" title="X 64-bit Download 5 stars" border="0" width="88" height="31"/></a>
+<a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/compatible_88x31.gif" title="X 64-bit Download: x64 Compatible" border="0" width="88" height="31"/></a>
+</td>
+<td><a href="http://www.winload.de/download/power8-118961#utm_source=PS&utm_medium=BL&utm_campaign=Badge" target="_blank"><img src="http://www.winload.de/img/siegel/badge_1.png" alt="Download Power8" title="Download Power8" border="0" /></a></td></tr></table>
 http://i42.fastpic.ru/big/2012/0706/6d/bd16dcd812695e8b1e609324e6dea46d.png <br/>
 http://i41.fastpic.ru/big/2012/0704/7e/823470cbeb5726d9a7cc8f85fff37d7e.png 
 </td></tr></table>
