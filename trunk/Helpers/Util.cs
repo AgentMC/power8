@@ -15,6 +15,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Power8.Properties;
+using Power8.Views;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using System.Xml;
@@ -96,7 +97,7 @@ namespace Power8
             if (!w.IsLoaded)
                 return IntPtr.Zero;
             var source = w.GetHwndSource();
-            if (OsIs.SevenOrMore &&  API.DwmIsCompositionEnabled())
+            if (OsIs.SevenOrMore && API.DwmIsCompositionEnabled())
             {
                 if (source.CompositionTarget != null)
                 {
@@ -105,7 +106,10 @@ namespace Power8
                 }
                 MakeGlass(source.Handle);
             }
-            //TODO: else - paint in system colors
+            else
+            {
+                w.Background = w is MainWindow ? SystemColors.ActiveCaptionBrush : SystemColors.ControlBrush;
+            }
             return source.Handle;
         }
         
