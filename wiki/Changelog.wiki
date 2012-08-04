@@ -2,6 +2,17 @@
 #labels Featured
 
 
+==Version 1.0 Hotfix 1 (v.1.0.1.0): 04.08.2012==
+  
+  # `[new]` German localization;
+  # `[fixed]` If you leave Power8 running for weekend and we will issue a new version this time, only one Update Notification window will appear (previously: 4-5);
+  # `[fixed]` Exception in file system events handling when Power8 may unexpectedly crash when you work with network files or run an installer;
+  # `[fixed]` XP: certain windows were not re-shown when expected;
+  # `[fixed]` CTRL+Click on Main button will now always show Run dialog;
+  # `[fixed]` 1 line in RU localization;
+  # `[fixed]` W7: Power8 might crash when you just started it and switch from classic theme to Aero and vice-versa;
+  # `[fixed]` W7: no black background when switch from classic theme to Aero and vice-versa;
+
 ==Release 1.0 (v.1.0.0.0): 21.07.2012==
   
   # `[new]` About window;
