@@ -13,12 +13,11 @@ This list is maintained internally, if you want to report an issue that is not o
 
 == Other known ==
   
-  #  W8RTM: no transparency;
-  #  W8RTM: icons for CPL may double (PostBackgroundDllUnload() doesn't work as expected);
   #  P8 prevents safe eject of removable drives
+  #  W8RTM: no transparency;
+  #  W8RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected);
   #  XP/8?: Menu from menu-button may show in inappropriate position 
   #  Context menu from Main button may show in inappropriate position
-  #  W8/basic theme: Menu TLH are drawn with system background instead of transparent
   #  7/8: Data grid icons and text are blurred though sizes of blocks are ok
   #  7/8: Menu item loses selection when context menu is shown
   #  7/8?: Cannot display properties of a Computer object
