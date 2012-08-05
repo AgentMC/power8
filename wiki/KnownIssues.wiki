@@ -23,12 +23,12 @@ This list is maintained internally, if you want to report an issue that is not o
   #  Context menu from Main button may show in inappropriate position
   #  7/8: Data grid icons and text are blurred though sizes of blocks are ok
 ===Low===
-  #  8/7^Classic/XP^Classic: Menu-button's MTLH is repainted improperly on hover 
+  #  8/7^Classic^/XP^Classic^: Menu-button's MTLH is repainted improperly on hover 
   #  7/8: Menu item loses selection when context menu is shown
   #  7/8?: Cannot display properties of a Computer object
   #  XP: buttons are 3px lower than menu-buttons
   #  Unneeded right margin in menu items
-  #  W7/classic theme: button is unreachable (almost)
+  #  7^classic^: button is unreachable (almost)
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
