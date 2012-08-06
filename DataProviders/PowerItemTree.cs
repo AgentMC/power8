@@ -424,12 +424,9 @@ namespace Power8
 #if DEBUG
             var s = Stopwatch.StartNew();
 #endif
-            lock (StartMenuRootItem)
-            {
-                ScanFolderSync(StartMenuRootItem, PathRoot, true);
-                ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
-                StartMenuRootItem.SortItems();
-            }
+            ScanFolderSync(StartMenuRootItem, PathRoot, true);
+            ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
+            StartMenuRootItem.SortItems();
 #if DEBUG
             Debug.WriteLine("InitTree - scanned in {0}", s.ElapsedMilliseconds);
 #endif
@@ -516,11 +513,11 @@ namespace Power8
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
         {
             var argStr = fsObject.Substring(basePath.Length);
-            var child = !autoExpand
-                ? item.Items.FirstOrDefault(i => 
-                    string.Equals(i.Argument, argStr, StringComparison.CurrentCultureIgnoreCase) 
-                    && i.IsFolder == isFolder)
-                : null;
+            var child = autoExpand || item.AutoExpandIsPending
+                    ? null
+                    : item.Items.FirstOrDefault(i =>
+                                string.Equals(i.Argument, argStr, StringComparison.CurrentCultureIgnoreCase)
+                                && i.IsFolder == isFolder);
             if(child == null)
             {
                 child = new PowerItem
