@@ -9,14 +9,24 @@ using System;
 
 namespace Power8
 {
+    /// <summary>
+    /// Provides data related to the network activity PC might have
+    /// </summary>
     static class NetManager
     {
         private static string _host, _wg;
+
+        /// <summary>
+        /// Gets the computer name
+        /// </summary>
         public static string Hostname
         {
             get { return _host ?? (_host = Dns.GetHostName()); }
         }
 
+        /// <summary>
+        /// Gets the name of domain or workgroup
+        /// </summary>
         public static string DomainOrWorkgroup
         {
             get
@@ -31,6 +41,10 @@ namespace Power8
         }
 
         private static readonly List<string> ComputerNames = new List<string>();
+        /// <summary>
+        /// Returns the list of UPPERCASED computer names which are visible in domain or workgroup.
+        /// In debug, returns "Computer1"..."Computer3000"
+        /// </summary>
         public static List<string> ComputersNearby
         {
             get
@@ -48,9 +62,9 @@ namespace Power8
                         using (var workgroup = new DirectoryEntry("WinNT://" + DomainOrWorkgroup))
                         {
                             ComputerNames.AddRange(workgroup.Children
-                                                        .Cast<DirectoryEntry>()
-                                                        .Where(e => e.SchemaClassName == "Computer")
-                                                        .Select(e => e.Name.ToUpper()));
+                                                       .Cast<DirectoryEntry>()
+                                                       .Where(e => e.SchemaClassName == "Computer")
+                                                       .Select(e => e.Name.ToUpper()));
                         }
                     }
                     catch (Exception ex)
