@@ -164,8 +164,6 @@ namespace Power8.Views
         {
             Close();
             _bgrThreadLock.WaitOne();
-//#warning hackfix. Env.Exit() shouldn't be required.
-//            Environment.Exit(0);  looks like fixed already
         }
 
         private void AboutClick(object sender, RoutedEventArgs e)
