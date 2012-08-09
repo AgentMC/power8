@@ -12,9 +12,15 @@ using Power8.Properties;
 
 namespace Power8
 {
+    /// <summary>
+    /// Provides list of Moset Frequently Used applications in the system
+    /// </summary>
     public static class MfuList
     {
         private static ObservableCollection<PowerItem> _startMfu;
+        /// <summary>
+        /// Gets the bindable ObservableCollection of MFU items for Start Menu
+        /// </summary>
         public static ObservableCollection<PowerItem> StartMfu
         {
             get
@@ -28,21 +34,26 @@ namespace Power8
                 return _startMfu;
             }
         }
+        /// <summary>
+        /// The search root for MFU. Used for different Search() methods from PITree.
+        /// </summary>
         public static PowerItem MfuSearchRoot;
 
 
-        private static readonly List<MfuElement> LastList = new List<MfuElement>();
-        private static readonly List<MfuElement> P8JlImpl = new List<MfuElement>();
-        private static readonly List<String > PinList = new List<string>();
-        private static readonly string[] MsFilter;
-        private static readonly ManagementEventWatcher WatchDog;
-        private static readonly int SessionId = Process.GetCurrentProcess().SessionId;
+        private static readonly List<MfuElement> LastList = new List<MfuElement>(); //The last checked state of MFU data
+        private static readonly List<MfuElement> P8JlImpl = new List<MfuElement>(); //Power8's own JumpList items implementation
+        private static readonly List<String > PinList = new List<string>();         //The list of pinned elements
+        private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
+        private static readonly ManagementEventWatcher WatchDog;                    //Notifies when a process is created in system
+        private static readonly int SessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
 
+        //Files with data
         private static readonly string DataBaseRoot = 
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
         private static readonly string LaunchDB = DataBaseRoot + "LaunchData.csv";
         private static readonly string PinDB = DataBaseRoot + "PinData.csv";
 
+        //Registry pathes
         private const string
             USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count",
             PLD_SPLITTER = "<:;:>";
@@ -56,7 +67,10 @@ namespace Power8
         }
 
 
-        
+        /// <summary>
+        /// Type constructor. Initializes MS exception list, P8 JL implementation list and Pinned list.
+        /// Also creates WMI event watcher.
+        /// </summary>
         static MfuList()
         {
             //Reading ms exclusion list
@@ -130,6 +144,8 @@ namespace Power8
             WatchDog.Start();
         }
 
+        
+        // Save data on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
             Directory.CreateDirectory(DataBaseRoot);
@@ -158,34 +174,52 @@ namespace Power8
             }
         }
 
+        //New process is created in system
         private static void WatchDogOnEventArrived(object sender, EventArrivedEventArgs e)
         {
             var proc = e.NewEvent["TargetInstance"] as ManagementBaseObject;
-            if (proc == null) 
+            if (proc == null) //The instance is available?
                 return;
             var sId = (int)(uint) proc["SessionId"];
-            if (sId != SessionId) 
+            if (sId != SessionId) //It is in our session?
                 return;
+            var parentPid = (int) (uint) proc["ParentProcessId"];
+            if(parentPid != 0) //Parent available
+            {
+                try
+                {
+                    var parentProcess = Process.GetProcessById(parentPid);
+                    if(parentProcess.SessionId != SessionId) //And parent is in our session?
+                        return;
+                }
+                catch (InvalidOperationException)
+                {
+                    return; //msdn: "process was not started by this object", probably means SID is different
+                }
+                catch(ArgumentException){} //parent exited... well, assuming it was from our session
+            }
             var cmd = (string) proc["CommandLine"];
             if(!string.IsNullOrEmpty(cmd) && !MsFilter.Any(cmd.ToUpper().Contains))
-            {
+            {//And command line doesn't include filtered elements?
                 var pair = Util.CommandToFilenameAndArgs(cmd);
                 if(string.IsNullOrEmpty(pair.Item2))
                     return; //System will record usage, we don't need to monitor commandless launch
                 if (string.IsNullOrEmpty(pair.Item1) || pair.Item1.Length < 2 || pair.Item1[1] != ':' || !File.Exists(pair.Item1))
                     return; //As a rule, user-launched applications have full path. Something as "rundll %1 %2 %3" won't make sence for P8
                 pair = Tuple.Create(pair.Item1.ToLowerInvariant(), pair.Item2.ToLowerInvariant());
-                string checkPath = pair.Item2;
+                //Quotes make troubles in case it's a filename. Strip them in this case. 
+                string checkPath = pair.Item2; 
                 bool exists = File.Exists(checkPath);
                 if (!exists && checkPath.StartsWith("\"") && checkPath.EndsWith("\""))
                 {
                     checkPath = checkPath.Substring(1, checkPath.Length - 2);
                     exists = File.Exists(checkPath);
                     if(!exists)
-                        checkPath = pair.Item2;
+                        checkPath = pair.Item2; //But since it's not a file, we'll leave quotes
                 }
-                var prefix = exists ? string.Empty : "::";
+                var prefix = exists ? string.Empty : "::"; //If file doesn't exist, add a prefix to show that this JL item is a command
                 pair = Tuple.Create(pair.Item1.ToLowerInvariant(), prefix + checkPath.ToLowerInvariant());
+                //Add to jump list or update the launch data
                 var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
                 if(t == null)
                 {
@@ -209,18 +243,23 @@ namespace Power8
         }
 
 
-
+        /// <summary>
+        /// Starts asynchronous update of MFU list
+        /// </summary>
         public static void UpdateStartMfu()
         {
             Util.Fork(UpdateStartMfuSync, "Update MFU").Start();
         }
 
+        /// <summary>
+        /// Synchronously updates the MFU list
+        /// </summary>
         public static void UpdateStartMfuSync()
         {
         //Step 1: parse registry
             var list = new List<MfuElement>();
-            string ks1, ks2;
-            int dataWidthExpected, fileTimeOffset, launchCountCorrection;
+            string ks1, ks2; //reg key strings
+            int dataWidthExpected, fileTimeOffset, launchCountCorrection; //key parameters
             if (Util.OsIs.XPOrLess)
             {
                 ks1 = string.Format(USERASSISTKEY, Guids.XP_1);
@@ -262,13 +301,14 @@ namespace Power8
                 k2.Close();
             }
 
-            if (!list.Except(LastList).Any()) 
+            if (!list.Except(LastList).Any()) //Exit if list  not changed comparing to the last one
                 return;
             
+            //Copy to the last list
             LastList.Clear();
             list.ForEach(m => LastList.Add(m.Clone()));
 
-            lock (StartMfu)
+            lock (StartMfu) //Update the Start MFU
             {
                 //Steps 2.1 - 2.4
                 list.ApplyFiltersAndSort();
@@ -295,18 +335,22 @@ namespace Power8
                                                         {
                                                             Argument = elem.Arg,
                                                             Parent = MfuSearchRoot,
-                                                            IsPinned = elem.LaunchCount >= 2000
+                                                            IsPinned = elem.LaunchCount >= 2000 //hack yeah!
                                                         });
                                   }
                               });
             }
         }
 
+        /// <summary>
+        /// Updates JumpList of PowerItem passed asynchronously
+        /// </summary>
+        /// <param name="item">the PowerItem whose JumpList may be updated</param>
         public static void GetRecentListFor(PowerItem item)
         {
             Util.Fork(() => GetRecentListForSync(item), "MFU worker for " + item.Argument).Start();
         }
-
+        //Same as above but inSync
         private static void GetRecentListForSync(PowerItem item)
         {
             string fsObject;
@@ -314,13 +358,13 @@ namespace Power8
             {
                 fsObject = PowerItemTree.GetResolvedArgument(item);
             }
-            catch (IOException)
+            catch (IOException) //No money no honey (no object to get JL for)
             {
                 return;
             }
             IEnumerable<string> jl = null;
-            var p8R = GetP8Recent(item.IsLink ? item.ResolvedLink : fsObject);
-            if(Util.OsIs.SevenOrMore)
+            var p8R = GetP8Recent(item.IsLink ? item.ResolvedLink : fsObject); //P8 internal JL
+            if(Util.OsIs.SevenOrMore) //System JL
             {
                 var recent = GetJumpList(fsObject, API.ADLT.RECENT);
                 var frequent = GetJumpList(fsObject, API.ADLT.FREQUENT);
@@ -328,7 +372,7 @@ namespace Power8
                     jl = recent.Union(frequent);
                 else
                     jl = recent ?? frequent;
-                if (jl != null)
+                if (jl != null)                     
                     jl = jl.Where(x => x.StartsWith("::") || File.Exists(x));
             }
             if (jl != null && p8R != null)
@@ -359,9 +403,13 @@ namespace Power8
 
         }
 
+        /// <summary>
+        /// Updates internal pin data based on already updated PowerItem
+        /// </summary>
+        /// <param name="item">PowerItem, whose IsPinned property is already set to desired value</param>
         public static void PinUnpin(PowerItem item)
         {
-            bool? update = null;
+            bool? update = null; //TODO: do we need this?
             if (item.IsPinned && !PinList.Contains(item.Argument))
             {
                 PinList.Add(item.Argument);
@@ -372,7 +420,7 @@ namespace Power8
                 PinList.Remove(item.Argument);
                 update = false;
             }
-            if (update.HasValue)
+            if (update.HasValue) //Calculate the new index
             {
                 var temp = new List<MfuElement>();
                 LastList.ForEach(m => temp.Add(m.Clone()));
@@ -384,7 +432,11 @@ namespace Power8
 
 
 
-
+        /// <summary>
+        /// Implementation of Rot13 "encryption" algorythm used in Windows to "protect" user data
+        /// </summary>
+        /// <param name="s">String that shall be decoded or encoded</param>
+        /// <returns>String that is decoded or encoded</returns>
         private static string Rot13(string s)
         {
             var r13 = new StringBuilder(s.Length);
@@ -394,7 +446,7 @@ namespace Power8
             {
                 var c = s[i];
                 if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-                {
+                {//a pieace of dark magic...
                     var lcaseMarker = (byte)(bytes[i] & 32);
                     bytes[i] = (byte) (((bytes[i] & (~32 & 0xFF)) - a + 13)%26 + a);
                     bytes[i] |= lcaseMarker;
@@ -407,27 +459,39 @@ namespace Power8
             }
             return r13.ToString();
         }
-
+        /// <summary>
+        /// This fumction translates Windows UserAssist data entries into readable data
+        /// </summary>
+        /// <param name="s">Rot13-encoded UserAssist string data</param>
+        /// <returns>Decoded string with expanded known folder guids, special folder IDs and stripped off UEME_-prefixes</returns>
         private static string DeRot13AndKnwnFldr(string s)
         {
             s = Rot13(s);
-            if(s.StartsWith("{"))
+            if(s.StartsWith("{")) //KnownFolder. Expanding...
             {
                 var pair = s.Split(new[] {'}'}, 2);
                 return Util.ResolveKnownFolder(pair[0].Substring(1)) + pair[1];
             }
-            if (s.StartsWith("UEME_"))
+            if (s.StartsWith("UEME_"))//Prefix. Removing...
             {
                 s = s.Split(new[] {':'}, 2)[1];
             }
-            if (s.StartsWith("%csidl"))
+            if (s.StartsWith("%csidl"))//SpecialFolder ID. Expanding...
             {
                 var pair = s.Split(new[] {'%'}, 2, StringSplitOptions.RemoveEmptyEntries);
                 s = Util.ResolveSpecialFolder((API.Csidl) int.Parse(pair[0].Substring(5))) + pair[1];
             }
             return s;
         }
-
+        /// <summary>
+        /// Filters out MFU elements that:
+        /// - are in MS Filter list;
+        /// - contain double slashes;
+        /// Then joins objects and links to theese objects prewfering the links,
+        /// increases usage to visualize pinning,
+        /// and finally sorts the collection.
+        /// </summary>
+        /// <param name="list">Collection of MFU elements</param>
         private static void ApplyFiltersAndSort(this List<MfuElement> list )
         {
             //Step 2.1: filter out setup, host apps and documentation files
@@ -484,7 +548,7 @@ namespace Power8
             //Step 2.4: sort.
             list.Sort();
         }
-
+        //Excludes the elements that are like ones to be filtered out using M$ User Assist filter
         private static void ApplyMsFilter(this List<MfuElement> list )
         {
             for (int i = list.Count - 1; i >= 0; i--)
@@ -494,9 +558,18 @@ namespace Power8
                     list.RemoveAt(i);
             }
         }
-
+        /// <summary>
+        /// Gets system jump list of a desired type for a file system object given
+        /// using the property store approach as the only one possible when getting the JL 
+        /// for object other than your own application
+        /// </summary>
+        /// <param name="fsObject">file system object which we need jump list for</param>
+        /// <param name="listType">the type of a jump list - rercent or frequent</param>
+        /// <returns>the IEnumerable of strings representing the JumpList: 
+        /// FS pathes for files, "::" + command lines for target links</returns>
         private static IEnumerable<string> GetJumpList(string fsObject, API.ADLT listType)
         {
+            //Getting the property store
             var riidPropertyStore = new Guid(API.Sys.IdIPropertyStore);
             API.IPropertyStore store;
             var res = API.SHGetPropertyStoreFromParsingName(fsObject,
@@ -506,6 +579,7 @@ namespace Power8
                                                             out store);
             if (res > 0)
                 return null;
+            //Getting the AppUserModelId
             using (var pv2 = new API.PROPVARIANT())
             {
                 store.GetValue(API.PKEY.AppUserModel_ID, pv2);
@@ -513,6 +587,7 @@ namespace Power8
                 if (pv2.longVal == 0)
                     return null;
 
+                //Getting the required list
                 var ret = new Collection<string>();
                 var listProvider = (API.IApplicationDocumentLists)new API.ApplicationDocumentLists();
                 listProvider.SetAppID(pv2.GetValue());
@@ -521,12 +596,13 @@ namespace Power8
 
                 if (list != null)
                 {
+                    //Getting the contents of the list
                     var riidShellItem = new Guid(API.Sys.IdIShellItem);
                     var riidShellLink = new Guid(API.Sys.IdIShellLinkW);
                     for (uint i = 0; i < list.GetCount(); i++)
                     {
                         object item;
-                        try
+                        try //we don't know what is inside - so let's use exceptions from IDispatch
                         {
                             item = list.GetAt(i, ref riidShellItem);
                         }
@@ -544,7 +620,7 @@ namespace Power8
                         if (item == null)
                             continue;
                         string tmp = null;
-                        if (item is API.IShellItem)
+                        if (item is API.IShellItem) //get the FILEPATH from IShellItem
                         {
                             IntPtr ppIdl;
                             API.SHGetIDListFromObject(item, out ppIdl);
@@ -560,7 +636,7 @@ namespace Power8
                                 Marshal.FreeCoTaskMem(ppIdl);
                             }
                         }
-                        else
+                        else //get command from IShellLink
                         {
                             tmp = "::" + Util.ResolveLink(((API.IShellLink)item)).Item2;
                         }
@@ -574,7 +650,12 @@ namespace Power8
                 return ret;
             }
         }
-
+        /// <summary>
+        /// Gets P8's internal JumpList for given object
+        /// </summary>
+        /// <param name="fsObject">file system object which we need recently used items for</param>
+        /// <returns>the IEnumerable of strings representing the JumpList: 
+        /// FS pathes for files, "::" + command lines for commands of a different kind</returns>
         private static IEnumerable<string> GetP8Recent(string fsObject)
         {
             var o = fsObject.ToLowerInvariant();
@@ -587,7 +668,9 @@ namespace Power8
 
 
 
-
+        /// <summary>
+        /// Represents one entry in different MFU lists - P8 JL implementation and system UserAssist data
+        /// </summary>
         private class MfuElement : IComparable<MfuElement>
         {
             public string Arg;
@@ -599,9 +682,11 @@ namespace Power8
             {
                 return LaunchCount == other.LaunchCount 
                     ? -LastLaunchTimeStamp.CompareTo(other.LastLaunchTimeStamp) 
-                    : -LaunchCount.CompareTo(other.LaunchCount);
+                    : -LaunchCount.CompareTo(other.LaunchCount); //"-" because sort descending
             }
-
+            /// <summary>
+            /// Checks if the constructed MFU elements contains valid data
+            /// </summary>
             public bool IsOk()
             {
                 return LaunchCount > -1
@@ -611,7 +696,11 @@ namespace Power8
                        && !Arg.StartsWith("\\\\")
                        && File.Exists(Arg);
             }
-
+            /// <summary>
+            /// Mixes two MfuElements into one. The instance of this method is the resulting target.
+            /// Mixing means summing the launch count and updating the last launch time stamp.
+            /// </summary>
+            /// <param name="other">2nd MfuElement to mix</param>
             public void Mix(MfuElement other)
             {
                 LaunchCount += other.LaunchCount;
