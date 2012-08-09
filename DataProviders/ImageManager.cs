@@ -10,10 +10,18 @@ using System.Diagnostics;
 
 namespace Power8
 {
+    /// <summary>
+    /// Maintains cached lists of icons, resolves icons from resources and so on...
+    /// </summary>
     public static class ImageManager
     {
+        //Image cache
         private static readonly Hashtable Cache = new Hashtable(); 
-
+        /// <summary>
+        /// Gets a string that represents a kind of tag for icon for PowerItem passed
+        /// </summary>
+        /// <param name="item">PowerItem which we need icon for</param>
+        /// <param name="resolved">Resolved argument for item.</param>
         private static string GetObjectDescriptor(PowerItem item, string resolved)
         {
             if (item.IsFolder || item.IsSpecialObject)
@@ -25,6 +33,12 @@ namespace Power8
                 ? resolved : Path.GetExtension(resolved);
         }
 
+        /// <summary>
+        /// Starts asynchronous extraction of ImageContainer for PowerItem
+        /// </summary>
+        /// <param name="item">PowerItem we need icon extracted for</param>
+        /// <param name="iconNeeded">type of icon needed - small or large</param>
+        /// <returns>Always null</returns>
         public static ImageContainer GetImageContainer(PowerItem item, API.Shgfi iconNeeded)
         {
             Util.Fork(() =>
@@ -35,12 +49,19 @@ namespace Power8
             return null;
         }
 
+        /// <summary>
+        /// Synchronous getter of an icon for PowerItem
+        /// </summary>
+        /// <param name="item">PowerItem we need icon extracted for</param>
+        /// <param name="iconNeeded">type of icon needed - small or large</param>
+        /// <returns>ImageContainer with ImageSources extracted. Can be null.</returns>
         public static ImageContainer GetImageContainerSync(PowerItem item, API.Shgfi iconNeeded)
         {
 #if DEBUG
             var dbgLine = "GICS for " + item.FriendlyName + ": ";
             Debug.WriteLine(dbgLine + "begin");
 #endif
+            //Checking if there's cached ImageContainer
             string resolvedArg, descr;
             try
             {
@@ -58,7 +79,7 @@ namespace Power8
                 Debug.WriteLine("{3}arg<={0}, descr<={1}, container<={2}", resolvedArg, descr,
                                 (container != null ? "not " : "") + "null", dbgLine);
 #endif
-                if (container == null)
+                if (container == null) //No cached instance
                 {
                     container = new ImageContainer(resolvedArg, descr, item.SpecialFolderId);
                     Cache.Add(descr, container);
@@ -74,6 +95,13 @@ namespace Power8
             }
         }
 
+        /// <summary>
+        /// Returns ImageContainer for hIcon provided
+        /// </summary>
+        /// <param name="description">Object description, tag, under which the container will be stored in cache</param>
+        /// <param name="unmanagedIcon">HICON you obtained after some unmanaged interactions. DestroyIcon() is NOT being
+        /// called automatically</param>
+        /// <returns>ImageContainer with ImageSource`s for the given hIcon</returns>
         public static ImageContainer GetImageContainerForIconSync(string description, IntPtr unmanagedIcon)
         {
             lock (Cache)
@@ -87,17 +115,23 @@ namespace Power8
         }
 
 
-
+        /// <summary>
+        /// Holds the cached instance of bitmap sources for big and large icons to be displayed.
+        /// Can automatically extract icons from the file or special object given.
+        /// </summary>
         public class ImageContainer
         {
 // ReSharper disable NotAccessedField.Local
             private readonly string _objectDescriptor; //needed for debug purposes
 // ReSharper restore NotAccessedField.Local
-            private readonly string _initialObject;
-            private readonly API.Csidl _id;
-            private ImageSource _smallBitmap, _largeBitmap;
+            private readonly string _initialObject; //Path to file or special object
+            private readonly API.Csidl _id; //SpecialFolderId from source PowerItem, if any
+            private ImageSource _smallBitmap, _largeBitmap; 
             private bool _smallExtracted, _largeExtracted;
 
+            /// <summary>
+            /// Gets 16x16 BitmapSource-representation of target icon
+            /// </summary>
             public ImageSource SmallBitmap
             {
                 get
@@ -108,6 +142,9 @@ namespace Power8
                 } 
                 private set { _smallBitmap = value; }
             }
+            /// <summary>
+            /// Gets 32x32 BitmapSource-representation of target icon
+            /// </summary>
             public ImageSource LargeBitmap 
             { 
                 get
@@ -119,13 +156,22 @@ namespace Power8
                 private set { _largeBitmap = value; }
             }
 
+            /// <summary>
+            /// Constructs the instance of ImageContainer from data from PowerItem
+            /// </summary>
+            /// <param name="objectToGetIcons">Path to file or special object</param>
+            /// <param name="typeDescriptor">Tag that will be set in cache for this ImageContainer. Used for debugging.</param>
+            /// <param name="specialId">SpecialFolderId from source PowerItem</param>
             public ImageContainer(string objectToGetIcons, string typeDescriptor, API.Csidl specialId)
             {
                 _initialObject = objectToGetIcons;
                 _objectDescriptor = typeDescriptor;
                 _id = specialId;
             }
-
+            /// <summary>
+            /// Constructs the instance of ImageContainer from the HICON extracted already
+            /// </summary>
+            /// <param name="unmanagedIcon">HICON you have already extracted</param>
             public ImageContainer(IntPtr unmanagedIcon)
             {
                 SmallBitmap = ExtractInternal(unmanagedIcon);
@@ -133,6 +179,9 @@ namespace Power8
                 LargeBitmap = SmallBitmap;
             }
 
+            /// <summary>
+            /// Extracts 16*16 icon when ImageContainer is constructed with PowerItem data
+            /// </summary>
             public void ExtractSmall()
             {
                 if (_smallBitmap != null) 
@@ -152,7 +201,9 @@ namespace Power8
 #endif
                 _smallExtracted = true;
             }
-
+            /// <summary>
+            /// Extracts 32*32 icon when ImageContainer is constructed with PowerItem data
+            /// </summary>
             public void ExtractLarge()
             {
                 if(_largeBitmap != null)
@@ -173,22 +224,30 @@ namespace Power8
                 _largeExtracted = true;
             }
 
+            /// <summary>
+            /// Converts HICON to BitmapSource, without calling of DestroyIcon()
+            /// </summary>
+            /// <param name="handle">HICON that is already extracted</param>
             private static BitmapSource ExtractInternal(IntPtr handle)
             {
-
+                //TODO:Buggy staff. replace with own reimplementation
                 var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(handle,
                                                       System.Windows.Int32Rect.Empty,
                                                       BitmapSizeOptions.FromEmptyOptions());
                 bs.Freeze();
                 return bs;
             }
-
+            /// <summary>
+            /// Returns HICON of provided size (or of default size if requested one isn't available)
+            /// </summary>
+            /// <param name="iconType"></param>
             private IntPtr GetUnmanagedIcon(API.Shgfi iconType)
             {
 #if DEBUG
                 var dbgLine = "GUIc for " + _initialObject + ": ";
                 Debug.WriteLine(dbgLine + "begin");
 #endif
+                //Way 1, straightforward: "Hey shell, give me an icon for that file!"
                 var shinfo = new API.Shfileinfo();
                 var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint) Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
 #if DEBUG
@@ -196,6 +255,8 @@ namespace Power8
 #endif
                 if (zeroFails == IntPtr.Zero) //lot of stuff will work via this
                 {
+                    //Shell failed
+                    //Way 2: way around: "Hey registry, and how should display the stuff of a kind?"
                     var temp = Util.GetDefaultIconResourceIdForClass(_initialObject);
 #if DEBUG
                     Debug.WriteLine(dbgLine + "GetDefaultIconResourceIdForClass returned " + (temp ?? "NULL!!"));
@@ -212,9 +273,10 @@ namespace Power8
                         shinfo.hIcon = zeroFails;
                     }
                     else if (_id != API.Csidl.INVALID)//For PowerItems initialized without argument but with folderId
-                    {
+                    {//No icon, or Registry doesn't know
+                        //Way 3, cumbersome: "Hey shell, I know that stuff means something for ya. Give me the icon for the thing this staff means!"
                         var ppIdl = IntPtr.Zero;
-                        var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, _id, ref ppIdl);
+                        var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, _id, ref ppIdl); //I know, obsolete, but works ;)
 #if DEBUG
                         Debug.WriteLine("{2}SHGetSp.F.Loc. for id<={0} returned result code {1}", _id, hRes, dbgLine);
 #endif
