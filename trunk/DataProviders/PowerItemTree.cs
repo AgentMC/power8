@@ -13,13 +13,18 @@ using Power8.Views;
 
 namespace Power8
 {
+    /// <summary>
+    /// Class manages the different trees of PowerItem`s, and roots for start menu, menued buttons and so on.
+    /// Class also provides way to search these lists and do other types of searches.
+    /// </summary>
     static class PowerItemTree
     {
+        //....Items.Add(New PowerItem{Argument=SEPARATOR_NAME}) ==> adds the separator item, visualized in menus only.
         public const string SEPARATOR_NAME = "----";
 
         private static readonly string 
-            PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu),
-            PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu);
+            PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu rioot
+            PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu); //All users start menu root
 
         //Ignore changed in
         private static readonly string
@@ -27,22 +32,34 @@ namespace Power8
             IclAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
             IcTemp = Util.GetLongPathOrDisplayName(Environment.ExpandEnvironmentVariables("%temp%")).ToLowerInvariant();
 
+        #region Roots
 
+        //Single virtual root item for both Common and User Start Menus
         private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true, Argument = @"\"};
+        //Roots backing fields
+        private static PowerItem _adminToolsItem, _librariesOrMyDocsItem, _controlPanelRoot,
+                                 _myComputerItem, _networkRoot;
+        /// <summary>
+        /// Bindable collection of items presented in Start Menu for current user, joined with the common Start menu entries
+        /// </summary>
         public static readonly ObservableCollection<PowerItem> StartMenuRoot
             = new ObservableCollection<PowerItem> {StartMenuRootItem};
-
-        private static PowerItem _adminToolsItem;
+        
+        /// <summary>
+        /// Represents folder "Administrative tools" with children
+        /// </summary>
         public static PowerItem AdminToolsRoot
         {
             get
             {
                 if (_adminToolsItem == null)
-                {
+                {   //No race condition with InitTree() since this is triggered from BtnStck binding initializer,
+                    //and it will be triggered when window is shown, and window may be shown only after instance initialized,
+                    //and the 1st initialization is automatically triggered right after InitTree() :)
                     var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
                     _adminToolsItem = SearchContainerByArgument(PathToBaseAndArg(path), StartMenuRootItem, false);
                     _adminToolsItem = SearchItemByArgument(path, true, _adminToolsItem);
-                    _adminToolsItem.Argument = API.ShNs.AdministrationTools;
+                    _adminToolsItem.Argument = API.ShNs.AdministrationTools; //Converting explicit FS item to shell-like
                     _adminToolsItem.ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AdministrationTools);
                     _adminToolsItem.SpecialFolderId = API.Csidl.COMMON_ADMINTOOLS;
                     _adminToolsItem.NonCachedIcon = true;
@@ -54,7 +71,10 @@ namespace Power8
             }
         }
 
-        private static PowerItem _librariesOrMyDocsItem;
+        /// <summary>
+        /// Represents Windows Libraries window, acting however via simple Libraries parser.
+        /// On WinXP represents MyDocuments folder
+        /// </summary>
         public static PowerItem LibrariesRoot
         {
             get
@@ -67,7 +87,7 @@ namespace Power8
                         path = Util.ResolveKnownFolder(API.KnFldrIds.Libraries);
                         ns = API.ShNs.Libraries;
                     }
-                    else                                          //XP or below -> return MyDocs
+                    else                       //XP or below -> return MyDocs
                     {
                         path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                         ns = API.ShNs.MyDocuments;
@@ -80,15 +100,17 @@ namespace Power8
                         NonCachedIcon = true,
                         HasLargeIcon = true,
                         IsFolder = true
-                    };
+                    };                         //Deferred children initialization
                     ScanFolderSync(_librariesOrMyDocsItem, string.Empty, false);
-                    _librariesOrMyDocsItem.Argument = ns;
+                    _librariesOrMyDocsItem.Argument = ns; //For icon and similar
                 }
                 return _librariesOrMyDocsItem;
             }
         }
 
-        private static PowerItem _controlPanelRoot;
+        /// <summary>
+        /// Element which represents OS-dependent control panel link with children
+        /// </summary>
         public static PowerItem ControlPanelRoot
         {
             get
@@ -107,7 +129,7 @@ namespace Power8
                     };
 
                     var cplCache = new List<string>();
-                    //Flow items and CPLs from cache
+                    //Flow items (Vista-like) and CPLs from cache
                     using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
                        @"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace", false))
                     {
@@ -115,7 +137,7 @@ namespace Power8
                         {
                             foreach (var cplguid in k.GetSubKeyNames())
                             {
-                                if(cplguid.StartsWith("{"))
+                                if(cplguid.StartsWith("{")) //registered guid
                                 {
                                     _controlPanelRoot.Items.Add(new PowerItem
                                     {
@@ -125,8 +147,8 @@ namespace Power8
                                         ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
                                     });
                                 }
-                                else
-                                {
+                                else //named items, for example "Internet options" on XP. In general, this block
+                                {    //is not documented on MSDN
                                     using (var sk = k.OpenSubKey(cplguid, false))
                                     {
                                         if (sk != null)
@@ -166,7 +188,7 @@ namespace Power8
                     {
                         if (cplCache.Contains(cpl, StringComparer.InvariantCultureIgnoreCase)) 
                             continue;
-                        var resolved = Util.GetCplInfo(cpl);
+                        var resolved = Util.GetCplInfo(cpl); //Something new...
                         if (resolved.Item2 != null && _controlPanelRoot.Items.All(p => p.FriendlyName != resolved.Item1))
                             _controlPanelRoot.Items.Add(new PowerItem
                             {
@@ -205,7 +227,9 @@ namespace Power8
             }
         }
 
-        private static PowerItem _myComputerItem;
+        /// <summary>
+        /// Represents Computer with drives inside
+        /// </summary>
         public static PowerItem MyComputerRoot
         {
             get
@@ -223,19 +247,27 @@ namespace Power8
                     };
                     _myComputerItem.Icon = ImageManager.GetImageContainerSync(_myComputerItem, API.Shgfi.LARGEICON);
                     _myComputerItem.Icon.ExtractSmall();
-                    DriveManager.Init(FileChanged, FileRenamed, _myComputerItem);
+                    DriveManager.Init(FileChanged, FileRenamed, _myComputerItem);//Will add drives under MyComputer + watches the files
                 }
                 return _myComputerItem;
             }
         }
 
-        private static PowerItem _networkRoot;
+        /// <summary>
+        /// The item, all network stuff is located under:
+        /// - repsesents "Network neighbourhood"
+        /// - under: workgroup/domain
+        /// - under: connections
+        /// - under: computers nearby
+        /// </summary>
         public static PowerItem NetworkRoot
         {
             get
             {
                 if (_networkRoot == null)
                 {
+                    //Same guids mean different stuff between xp and 7+.
+                    //Fortunately there're only 2 of them :)
                     var xpNet7Wrkgrp = new PowerItem
                     {
                         SpecialFolderId = API.Csidl.NETWORK,
@@ -253,12 +285,16 @@ namespace Power8
                         HasLargeIcon = true
                     };
 
+                    //Choose Root and the Child based on OS
                     _networkRoot = Util.OsIs.SevenOrMore ? xpWrkgrp7Net : xpNet7Wrkgrp;
 
+// ReSharper disable PossibleUnintendedReferenceComparison
                     var child = _networkRoot == xpWrkgrp7Net ? xpNet7Wrkgrp : xpWrkgrp7Net;
+// ReSharper restore PossibleUnintendedReferenceComparison
                     _networkRoot.Items.Add(child);
                     child.Parent = _networkRoot;
 
+                    //Try to get chached Connections PowerItem
                     var conString = Util.ResolveSpecialFolderName(API.Csidl.CONNECTIONS);
                     var connections =
                         ControlPanelRoot.Items.FirstOrDefault(i => i.FriendlyName == conString) ??
@@ -274,14 +310,16 @@ namespace Power8
                                         
                     _networkRoot.Items.Add(new PowerItem {FriendlyName = SEPARATOR_NAME, Parent = _networkRoot});
 
+
+                    //Search for computers
                     Util.Fork(() =>
                                   {
-                                      if (Util.OsIs.SevenOrMore)
+                                      if (Util.OsIs.SevenOrMore) //Name won't be resolved automatically on 7+
                                           xpNet7Wrkgrp.FriendlyName = NetManager.DomainOrWorkgroup;
 
                                       List<string> names;
-                                      bool addMoreItem = false;
-                                      if (NetManager.ComputersNearby.Count > 10)
+                                      bool addMoreItem = false; //if number of computers > 10
+                                      if (NetManager.ComputersNearby.Count > 10)//indirectly refresh computers cache
                                       {
                                           addMoreItem = true;
                                           names = new List<string>();
@@ -298,6 +336,7 @@ namespace Power8
                                           Util.Post(() => _networkRoot.Items.RemoveAt(_networkRoot.Items.Count - 1));
                                           return;
                                       }
+                                      //otherwise convert all computers into the PIs and add to the net root
                                       names.Select(e => new PowerItem
                                                             {
                                                                 Argument = "\\\\" + e,
@@ -308,10 +347,10 @@ namespace Power8
                                           .ToList()
                                           .ForEach(i => Util.Post(() => _networkRoot.Items.Add(i)));
 
-                                      if (addMoreItem)
+                                      if (addMoreItem) //Add special class-link PowerItem
                                           Util.Post(() =>
                                             {
-                                                _networkRoot.Items[0].Icon = 
+                                                _networkRoot.Items[0].Icon = //workgroup/domain's icon
                                                     ImageManager.GetImageContainerSync(_networkRoot.Items[0], API.Shgfi.SMALLICON);
                                                 _networkRoot.Items.Add(new PowerItem
                                                                         {
@@ -329,6 +368,8 @@ namespace Power8
                 return _networkRoot;
             }
         }
+
+        #endregion
 
         #region FS Events handlers
 
