@@ -13,11 +13,16 @@ using Power8.Commands;
 namespace Power8.Views
 {
     /// <summary>
-    /// Interaction logic for BtnStck.xaml
+    /// Singleton that represents ButtonStack - window with all those buttons, menus, lists...
+    /// Inherits Window
     /// </summary>
     public partial class BtnStck
     {
         private static BtnStck _instance;
+        /// <summary>
+        /// Gets the instance of ButtonStack. 
+        /// Not thread-safe, but the instance should be ONLY created on main dispatcher thread.
+        /// </summary>
         public static BtnStck Instance
         {
             get
@@ -33,11 +38,18 @@ namespace Power8.Views
             }
             private set { _instance = value; }
         }
+        /// <summary>
+        /// Returns boolean indicating if ButtonStack instance is available, without requesting of one to be created in deferred way.
+        /// Window however may not finish Load or Instantiate itself when this returns true, use corresponding Instance's properties
+        /// to check the window status.
+        /// </summary>
         public static bool IsInstantited { get { return _instance != null; } }
+        //Bindings sometimes are executed in parallel. So this dictionary conteins data items for menued buttons
         private static readonly Dictionary<string, PowerItem> SpecialItems = new Dictionary<string, PowerItem>();
 
-        private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
+        //The collection of search results
         private readonly ObservableCollection<PowerItem> _searchData = new ObservableCollection<PowerItem>();
+        //The view of search results
         private readonly ListCollectionView _searchView;
 
         public event EventHandler RunCalled;
@@ -413,8 +425,9 @@ namespace Power8.Views
         public ObservableCollection<PowerItem> SearchData
         {
             get { return _searchData; }
-        } 
+        }
 
+        private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
         public MenuItemClickCommand ClickCommand
         {
             get { return _cmd; }
