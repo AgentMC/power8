@@ -373,13 +373,14 @@ namespace Power8
 
         #region FS Events handlers
 
+        //Handles event when a file is renamed under any of drives watched
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Name)
              || string.IsNullOrEmpty(e.FullPath) 
              || string.IsNullOrEmpty(e.OldName) 
              || string.IsNullOrEmpty(e.OldFullPath))
-                return;
+                return; //Sometimes this happens
             FileChanged(sender,
                 new FileSystemEventArgs(
                     WatcherChangeTypes.Deleted,
@@ -392,6 +393,7 @@ namespace Power8
                     e.Name));
         }
 
+        //Handles event when a file is created, deleted or changed in any other way under any of drives watched
         private static void FileChanged(object sender, FileSystemEventArgs e)
         {
             try
@@ -413,21 +415,26 @@ namespace Power8
             Debug.WriteLine("File {0}: {1}", e.ChangeType, e.FullPath);
 #endif
             //Ensuring buttonstack is created on Main thread
-            Util.Send(() => BtnStck.Instance.InvalidateVisual());
+            if(!BtnStck.IsInstantited)
+                Util.Send(() => BtnStck.Instance.InvalidateVisual());
+
             var isDir = Directory.Exists(e.FullPath);
             var baseAndArg = PathToBaseAndArg(e.FullPath);
             if (baseAndArg.Item2 == null) 
-                return;
+                return; //Even %startmenu% is changed, here will be "/", so null means error
 
-            var roots = new List<PowerItem> {MyComputerRoot, StartMenuRootItem};
-            foreach (var lib in LibrariesRoot.Items.Where(lib => !lib.AutoExpandIsPending))
+            var roots = new List<PowerItem> {MyComputerRoot, StartMenuRootItem}; //look only under these + libraries
+            foreach (var lib in LibrariesRoot.Items.Where(lib => !lib.AutoExpandIsPending)) //if expanded already
                 roots.AddRange(lib.Items);
 
             foreach (var root in roots)
             {
+// ReSharper disable PossibleUnintendedReferenceComparison
                 var item = SearchContainerByArgument(baseAndArg, root,
-                                                        e.ChangeType == WatcherChangeTypes.Created &&
-                                                        root == StartMenuRootItem);
+                                                     e.ChangeType == WatcherChangeTypes.Created &&
+                                                     root == StartMenuRootItem);
+                //Create intermediate folders only for Start Menu and only in casethe file was created
+// ReSharper restore PossibleUnintendedReferenceComparison
                 if (item != null)
                 {
                     Util.Send(() =>
@@ -443,9 +450,9 @@ namespace Power8
                                         (j.IsFolder == isDir || e.ChangeType == WatcherChangeTypes.Deleted) &&
                                         j.Argument == baseAndArg.Item2);
                                 if (e.ChangeType == WatcherChangeTypes.Deleted && item != null)
-                                    item.Parent.Items.Remove(item);
+                                    item.Parent.Items.Remove(item); //Lol, eh?
                                 else if (item != null)
-                                    item.Update();
+                                    item.Update(); //when icon for folder is set, the folder changed event arrives
                                 break;
                             case WatcherChangeTypes.Created:
                                 AddSubItem(item, baseAndArg.Item1, e.FullPath, isDir);
@@ -459,7 +466,10 @@ namespace Power8
         #endregion
 
         #region Tree builder methods
-
+        
+        /// <summary>
+        /// Initially builds start menu tree and then starts the Button stack initialization
+        /// </summary>
         public static void InitTree()
         {
 #if DEBUG
@@ -478,34 +488,51 @@ namespace Power8
 #endif
         }
 
+        /// <summary>
+        /// Initializes an asynchronous scan of some FS folder
+        /// </summary>
+        /// <param name="item">A PowerItem that represents an FS folder or a Windows Library</param>
+        /// <param name="basePath">If item passed represents folder under Start Menu, place here corresponding 
+        /// (Common or User) special folder path. Empty string otherwise. See AddSubItem for details.</param>
+        /// <param name="recoursive">True to scan subdirectories. True by default.</param>
         public static void ScanFolder(PowerItem item, string basePath, bool recoursive = true)
         {
             ThreadPool.QueueUserWorkItem(o => ScanFolderSync(item, basePath, recoursive));
         }
 
+        /// <summary>
+        /// Synchronously scanns some FS folder, filling Items list of item passed
+        /// </summary>
+        /// <param name="item">A PowerItem that represents an FS folder, special folder or a Windows Library</param>
+        /// <param name="basePath">If item passed represents folder under Start Menu, place here corresponding 
+        /// (Common or User) special folder path. Empty string otherwise. See AddSubItem for details.</param>
+        /// <param name="recoursive">True to scan subdirectories.</param>
         private static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
         {
             try
-            {
+            {   //Obtain full fs path to current location
                 var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
+                //Parse child directories and recoursively call the ScanFolderSync
                 foreach (var directory in item.IsLibrary ? GetLibraryDirectories(curDir) : Directory.GetDirectories(curDir))
-                {
+                {   //Skip hidden directories
                     if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
                         continue;
-
+                    //Otherwise add the directory item to this PowerItem
                     var subitem = AddSubItem(item, basePath, directory, true, autoExpand: !recoursive);
                     if (recoursive)
                         ScanFolderSync(subitem, basePath, true);
                 }
-                if (item.IsLibrary)
+                if (item.IsLibrary) //Since Libraries are actually files, but were already parsed as folders, we shan't continue...
                     return;
+                //Proceed with files
                 var resources = new Dictionary<string, string>();
                 var dsktp = curDir + "\\desktop.ini";
-                if (File.Exists(dsktp))
+                if (File.Exists(dsktp)) //Let's parse Desktop.ini if it exists
                 {
                     using (var reader = new StreamReader(dsktp, System.Text.Encoding.Default, true))
                     {
-                        string str;
+                        string str; //TODO: rewrite!!! Currently elements located after LFN section aren't parsed!
+                                    //TODO: comment
                         while ((str = reader.ReadLine()) != null && !str.Contains("[LocalizedFileNames]"))
                         {
                             if (str.StartsWith("IconFile=") || str.StartsWith("IconResource="))
@@ -528,10 +555,11 @@ namespace Power8
                         }
                     }
                 }
+                //Let's scan files now 
                 foreach (var file in Directory.GetFiles(curDir))
                 {
                     if ((File.GetAttributes(file).HasFlag(FileAttributes.Hidden)))
-                        continue;
+                        continue; //Skip hidden files
 
                     var fn = Path.GetFileName(file);
                     var fileIsLib = (Path.GetExtension(file) ?? "")
@@ -551,15 +579,34 @@ namespace Power8
             }
         }
 
+        /// <summary>
+        /// For the given parent PowerItem, searches child for given parameters, or creates a new one
+        /// if search is unsuccessful or cannot be executed, and returns the child obtained.
+        /// Thread-safe, UI-thread-safe.
+        /// </summary>
+        /// <param name="item">parent PowerItem, typically a filesystem folder, a Library or a special folder</param>
+        /// <param name="basePath">if 'item' represents a folder under Start menu (and so has relative Argument),
+        /// pass here a full-qualified path to a User or Common Start Menu (the one under which a folder is 
+        /// actually located). Use PathRoot and PathCommonRoot fields to simpolify the task. Empty string otherwise.</param>
+        /// <param name="fsObject">Non-virtual non-junction file system object (file or folder), not null, not empty
+        /// (this is the most meaningful parameter). If you need to add a virtual item (e.g. Computer element), use
+        /// direct access to proprties (parent.Items.Add(child); child.Parent=parent;) with respect to 
+        /// IsAutoExpandPending property. Child search parameter.</param>
+        /// <param name="isFolder">Sets child's IsFolder property to a value passed. Child search parameter.</param>
+        /// <param name="resourceId">Localized resource identifier in a standard "[@]Library,-resId[__varData*]" form.
+        /// Null by default. Since 0.4 can be set to a required string directly, but in this case it is recommended to 
+        /// set FriendlyName explicitly</param>
+        /// <param name="autoExpand">True to mark the item as deferred-expandable. This means it's children won't be enumerated
+        /// synchronously and will be loaded automatically later, when requested by the user. False by default.</param>
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
         {
-            var argStr = fsObject.Substring(basePath.Length);
-            var child = autoExpand || item.AutoExpandIsPending
+            var argStr = fsObject.Substring(basePath.Length); //Expected relative argument in case of Start Menu item
+            var child = autoExpand || item.AutoExpandIsPending //Searching...
                     ? null
                     : item.Items.FirstOrDefault(i =>
                                 string.Equals(i.Argument, argStr, StringComparison.CurrentCultureIgnoreCase)
                                 && i.IsFolder == isFolder);
-            if(child == null)
+            if(child == null) //Generating...
             {
                 child = new PowerItem
                             {
@@ -569,7 +616,7 @@ namespace Power8
                                 ResourceIdString = resourceId,
                                 AutoExpand = autoExpand
                             };
-                Util.Send(() => item.Items.Add(child));
+                Util.Send(() => item.Items.Add(child)); //Synchronously add item in UI thread
             }
             return child;
         }
@@ -578,11 +625,22 @@ namespace Power8
 
         #region Tree Utilities
 
+        /// <summary>Converts PowerItem passed into runnable ProcessStartInfo structure.</summary>
+        /// <param name="item">The PowerItem that needs to be started.</param>
+        /// <param name="prioritizeCommons">For StartMenu items, use this to indicate that 
+        /// the common item is desired to be runned in case both are available.</param>
+        /// <returns>ProcessStartInfo structure which can be used to "launch" passed PowerItem.
+        /// This includes but is not limited to:
+        /// - execute program 'item' points to;
+        /// - execute program associated with format of the file 'item' points to;
+        /// - open folder 'item' points to;
+        /// - execute ControlPanel item, the 'item' points to
+        /// ...and so on.</returns>
         public static ProcessStartInfo ResolveItem(PowerItem item, bool prioritizeCommons = false)
         {
             var psi = new ProcessStartInfo();
             var arg1 = item.Argument;
-            if (item.IsSpecialObject || arg1 == null)
+            if (item.IsSpecialObject || arg1 == null) //CPL item or some ::Special//::Folder
             {
                 bool cplSucceeded = false;
                 if (item.IsControlPanelChildItem)
@@ -596,7 +654,7 @@ namespace Power8
                         cplSucceeded = true;
                     }
                     else
-                    {
+                    {//Sysname-registered CPL items
                         var sysname = Util.GetCplAppletSysNameForClass(arg1);
                         if (!string.IsNullOrEmpty(sysname))
                         {
@@ -606,26 +664,26 @@ namespace Power8
                         }
                     }
                 }
-                if (!cplSucceeded)
+                if (!cplSucceeded) //Special folder?
                 {
                     psi.FileName = "explorer.exe";
                     psi.Arguments = "/N," + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
                 }
             }
             else if (item.SpecialFolderId == API.Csidl.POWER8JLITEM)
-            {
+            {//P8 internal-implementation jump list's command
                 psi = ResolveItem(item.Parent, prioritizeCommons);
-                psi.Arguments = item.Argument;
+                psi.Arguments = item.Argument; //simply invoke parent with command equal to 'item''s Argument
             }
-            else
+            else //File or folder probably
             {
                 if (!(arg1.StartsWith("\\\\") || (arg1.Length > 1 && arg1[1] == ':')))
-                    arg1 = PathRoot + item.Argument;
-                var arg2 = PathCommonRoot + item.Argument;
-                if (prioritizeCommons)
+                    arg1 = PathRoot + item.Argument; //form full path, depending on what Argument is
+                var arg2 = PathCommonRoot + item.Argument; //arg2 ALWAYS starts with common path
+                if (prioritizeCommons) //so, if you set prioritizeCommons, you GUARANTEE it's StartMenu item under Common one
                     arg2 = Interlocked.Exchange(ref arg1, arg2);
                 if (item.IsFolder)
-                {
+                {//if folder exists, or it's network path, or the secondary path exists - open in explorer, otherwise fail
                     psi.FileName = "explorer.exe";
                     if (arg1.StartsWith("\\\\") || Directory.Exists(arg1))
                         psi.Arguments = arg1;
@@ -637,7 +695,7 @@ namespace Power8
                             throw new IOException(Resources.Err_GotNoFolder + item.Argument);
                     }
                 }
-                else
+                else // if file exists, or secondary evaluated file exists - run, otherwise fail
                 {
                     if (File.Exists(arg1))
                         psi.FileName = arg1;
@@ -654,6 +712,13 @@ namespace Power8
             return psi;
         }
 
+        /// <summary>Safely converts PowerItem to a string representation of it's target</summary>
+        /// <param name="item">The PowerItem to convert</param>
+        /// <returns>Something that actually will be opened: 
+        /// - Argument for SpecialObjects 
+        /// - Runnable parent for P8 JL implementation
+        /// - Folder path for folder-pointing items
+        /// - Full-path argumet for file-pointing items</returns>
         public static string GetResolvedArgument(PowerItem item)
         {
             if(item.IsSpecialObject)
@@ -668,18 +733,22 @@ namespace Power8
         /// Breaks full path into predicate base (one of User Start Menu and Common Start Menu) and the trailling stuff
         /// </summary>
         /// <param name="itemFullPath">file system object in its string representation</param>
-        /// <returns>Tuple of base path and the other staff</returns>
+        /// <returns>Tuple of base path and the other stuff. Base can be empty string in case item isn't located 
+        /// under Start menu for current user or the Common one</returns>
         private static Tuple<string, string> PathToBaseAndArg(string itemFullPath)
         {
             if (itemFullPath.StartsWith(PathRoot))
-            {
                 return new Tuple<string, string>(PathRoot, itemFullPath.Substring(PathRoot.Length));
-            }
             return itemFullPath.StartsWith(PathCommonRoot)
-                       ? new Tuple<string, string>(PathCommonRoot, itemFullPath.Substring(PathCommonRoot.Length))
-                       : new Tuple<string, string>(string.Empty, itemFullPath);
+                ? new Tuple<string, string>(PathCommonRoot, itemFullPath.Substring(PathCommonRoot.Length))
+                : new Tuple<string, string>(string.Empty, itemFullPath);
         }
 
+        /// <summary>
+        /// Parses *.library-ms file to return the incorporated pathes
+        /// </summary>
+        /// <param name="libraryMs">Fully-qualified path to the library file</param>
+        /// <returns>Array of strings, each one is a File System directory.</returns>
         private static string[] GetLibraryDirectories(string libraryMs)
         {
             var xdoc = new XmlDocument();
@@ -702,17 +771,17 @@ namespace Power8
                 return new string[0];
             var temp = (from XmlNode node
                         in nodeList2
-                        let xmlElement = node["simpleLocation"]
-                        where xmlElement != null
-                        let element = xmlElement["url"]
-                        where element != null
-                        select element.InnerText
+                            let xmlElement = node["simpleLocation"]
+                            where xmlElement != null
+                                let element = xmlElement["url"]
+                                where element != null
+                                select element.InnerText
                         ).ToList();
             var arr = new string[temp.Count];
             for (var i = 0; i < temp.Count; i++)
             {
                 if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
-                    arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12));
+                    arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12)); //Expand known folders
                 else if (!temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
                     arr[i] = temp[i];
             }
@@ -723,6 +792,9 @@ namespace Power8
 
         #region Search
 
+        /// <summary>
+        /// Event arguments to be used with WinSearchThread* events
+        /// </summary>
         public class WinSearchEventArgs:EventArgs
         {
             public readonly PowerItem Root;
@@ -737,29 +809,30 @@ namespace Power8
         }
 
         private static CancellationTokenSource _lastSearchToken;
+
+        //Indicate the state chenage of Windows Search thread.
         public static event EventHandler<WinSearchEventArgs> WinSearchThreadCompleted, WinSearchThreadStarted;
 
         /// <summary>
-        /// From collection passed, searches for a parent item (i.e. container) of the one that would represent the object
-        /// described by passed tuple. Optionally tries to generate items in the middle.
+        /// From collection tree passed, searches for a parent item (i.e. container) of the one that would
+        /// represent the object described by passed tuple. Optionally tries to generate items in the middle.
         /// </summary>
         /// <param name="baseAndArg">Tuple returned by <code>PathToBaseAndArg</code></param>
         /// <param name="collectionRoot">The root of collection, like <code>StartMenuRootItem</code></param>
         /// <param name="autoGenerateSubItems">Should method generate proxy Folder items in between of last available 
         /// and required items?</param>
-        /// <returns></returns>
         private static PowerItem SearchContainerByArgument(Tuple<string, string> baseAndArg, PowerItem collectionRoot, bool autoGenerateSubItems)
         {
             if (!string.IsNullOrEmpty(collectionRoot.Argument)
                 && baseAndArg.Item2.StartsWith(collectionRoot.Argument, StringComparison.InvariantCultureIgnoreCase)
                 && baseAndArg.Item2 != collectionRoot.Argument)
-            {
+            {//Make argument relative to Root
                 baseAndArg = new Tuple<string, string>(baseAndArg.Item1,
                                                         baseAndArg.Item2.Substring(collectionRoot.Argument.Length + 1));
             }
             var sourceSplitted = baseAndArg.Item2.Split(new[] {'\\'}, StringSplitOptions.RemoveEmptyEntries);
             if (sourceSplitted.Length > 0 && sourceSplitted[0].EndsWith(":"))
-                sourceSplitted[0] += "\\";
+                sourceSplitted[0] += "\\"; //For MyComputer children
             var item = collectionRoot;
             for (int i = 0; i < sourceSplitted.Length - 1; i++)
             {
@@ -772,6 +845,7 @@ namespace Power8
                                                                     StringComparison.InvariantCultureIgnoreCase));
                 if (item == null && autoGenerateSubItems && !string.IsNullOrEmpty(baseAndArg.Item1))
                     // ReSharper disable AccessToModifiedClosure
+                    //TODO: really Eval()? UI in ASI kicked from Send, probably don't need this...
                     item = Util.Eval(() =>
                                         AddSubItem(prevItem,
                                                 baseAndArg.Item1,
@@ -783,7 +857,14 @@ namespace Power8
             }
             return item;
         }
-
+        
+        /// <summary>
+        /// From a container's children selects the one that seems to be discribed by passed parameters
+        /// </summary>
+        /// <param name="argument">Search parameter: child's expected Argument. Case-insensitive.</param>
+        /// <param name="isFolder">Search parameter: child's IsFolder value.</param>
+        /// <param name="container">The PowerItem to search children from.</param>
+        /// <returns></returns>
         private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container)
         {
             if(container.AutoExpandIsPending)
@@ -794,6 +875,13 @@ namespace Power8
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
+        /// <summary>
+        /// From the StartMenu, searches for the only item that will Match() the given 'argument'.
+        /// This is used to quickly find Start Menu element corresponding to some MFU item.
+        /// Not thread-safe, not UI-thread-safe, call ONLY from UI thread!
+        /// </summary>
+        /// <param name="argument">Some string to compare to</param>
+        /// <returns>The only Start Menu PowerItem the 'argument' matches, or null.</returns>
         public static PowerItem SearchStartMenuItemSyncFast(string argument)
         {
             var list = new Collection<PowerItem>();
@@ -803,15 +891,24 @@ namespace Power8
 
         //----------------
 
+        /// <summary>
+        /// From the all data sources available, searches PowerItems that Match() to 'query' and stores results in 'destination'.
+        /// Search goes on in separate thread for each root. Each thread as well as this initialier thread is cancellable.
+        /// Search takes into account all rootitems available in P8 UI + Windows Search data. Thread-safe/UI-thread-safe.
+        /// </summary>
+        /// <param name="query">Something, found elements should Match() to.</param>
+        /// <param name="destination">The IList ofPowerItems, where to store the search results.</param>
+        /// <param name="callback">The callback to be executed after the some root search thread is completed.
+        /// NOTE: this is not valid for WinSearch, use WinThread* events for it.</param>
         public static void SearchTree(string query, IList<PowerItem> destination, Action<PowerItem, CancellationToken> callback)
         {
-            SearchTreeCancel();
-            lock (destination)
-            {
+            SearchTreeCancel(); //Stop previous searches
+            lock (destination)  //Just hang here until previous searches are all done
+            {                   //...and BTW, pre-pause all child threads
                 Util.Send(destination.Clear);
                 _lastSearchToken = new CancellationTokenSource();
-                string ext = null;
-                if(!query.Contains("|"))
+                string ext = null; //requested extension for filtered WinSearch ("exe|paint net")
+                if(!query.Contains("|")) //not filtered, regular search
                 {
                     foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, 
                                                  NetworkRoot, LibrariesRoot, MfuList.MfuSearchRoot })
@@ -826,35 +923,48 @@ namespace Power8
                                   "Tree search for " + r.FriendlyName).Start();
                     }
                 }
-                else
+                else //type-filtered WinSearch, splitter part
                 {
                     var pair = query.Split(new[] {'|'}, 2);
                     ext = pair[0];
                     query = pair[1];
                 }
-                if (query.Length >= 3)
+                if (query.Length >= 3) //init WinSearch
                     Util.Fork(() => SearchWindows(query, ext, destination, _lastSearchToken.Token), 
                                 "WinSearch worker for " + ext + "/" + query).Start();
             }
         }
 
+        /// <summary>
+        /// Cancels previously started Tree search, including WinSearch query
+        /// </summary>
         public static void SearchTreeCancel()
         {
             if (_lastSearchToken != null)
                 _lastSearchToken.Cancel();
         }
 
+        /// <summary>
+        /// From the 'source' given, recoursively searches the PowerItem that would Match() the 'query', including
+        /// the 'source' itself, storing results in 'destination'. Finds folders unless they're under Start Menu.
+        /// Cancellable. Intended to be run async. Thread/UI-thread-safe.
+        /// </summary>
+        /// <param name="query">Something searched results should Match() to.</param>
+        /// <param name="source">Tree to search from, including the collection root item passed 
+        /// (but not the source.Root itself if the passed item isn't the root of the collection)</param>
+        /// <param name="destination">Collection to store data in</param>
+        /// <param name="stop">Cancellation token from initializer thread</param>
         private static void SearchItems(string query, PowerItem source, IList<PowerItem> destination, CancellationToken stop)
         {
             if(stop.IsCancellationRequested)
                 return;
             if ((!source.IsFolder || source.Root != StartMenuRootItem) && source.Match(query))
-            {
+            {//return ((folders for not StartMenu children) or files) that Match() the query
                 lock (destination)
                 {
-                    if (!stop.IsCancellationRequested &&
+                    if (!stop.IsCancellationRequested && //this item wasn't added before
                         !destination.Any(d => d.FriendlyName == source.FriendlyName && d.IsFolder == source.IsFolder))
-                        Util.Send(() => destination.Add(source));
+                            Util.Send(() => destination.Add(source));
                 }
             }
             if (!source.AutoExpandIsPending)
@@ -862,6 +972,8 @@ namespace Power8
                     SearchItems(query, powerItem, destination, stop);
         }
 
+        //Proxy for SearchStartMenuSyncFast. Code literally copypasted from SearchItems and simplified.
+        //Not thread-safe.
         private static void SearchRootFastSync(string query, PowerItem source, ICollection<PowerItem> destination)
         {
             if (!source.IsFolder && source.Match(query) && destination.All(d => d.FriendlyName != source.FriendlyName))
@@ -871,26 +983,37 @@ namespace Power8
                     SearchRootFastSync(query, powerItem, destination);
         }
 
+        /// <summary>
+        /// Queries Windows Search service indexer for the items that will mathc the query. Sorts results by search rank.
+        /// Cancellable. Intended to be run from background thread. UI-thread-safe.
+        /// </summary>
+        /// <param name="query">Something the results should match to.</param>
+        /// <param name="ext">When you want to filter only specific types of files, set this to file extension 
+        /// (like "wmv"). Set to null otherwise.</param>
+        /// <param name="destination">The collection to store results in.</param>
+        /// <param name="stop">Cancellation token to break the execution.</param>
         private static void SearchWindows(string query, string ext, IList<PowerItem> destination, CancellationToken stop)
         {
             if(stop.IsCancellationRequested)
                 return;
 
-            const string connText = "Provider=Search.CollatorDSO;Extended Properties='Application=Windows'";
+            const string connText = "Provider=Search.CollatorDSO;Extended Properties='Application=Windows'"; //See MSDN 4 details
             var comText = @"SELECT TOP 100 System.ItemUrl FROM SYSTEMINDEX WHERE System.Search.Store='FILE' and " +
                 (ext == null ? string.Empty : "System.FileName like '%." + ext + "' and ") +
                 "(FREETEXT ('" + query + "') OR System.FileName like '%" + query + "%') " +
                 "ORDER BY RANK DESC"; 
+            //I.e., get 100 files represented by their File:/// -style URI, probably of a given type, 
+            //and looking similar to query or matched to it by full-text indexer, ordered by system rank
 
             Thread.Sleep(666); //let's give user the possibility to enter something more...
             OleDbDataReader rdr = null;
             OleDbConnection connection = null;
-            PowerItem groupItem = null;
+            PowerItem groupItem = null; //needed for visual representation
 
             try
             {
                 if(!stop.IsCancellationRequested)
-                {
+                {//Begin search andnotify subscribers
                     connection = new OleDbConnection(connText);
                     connection.Open();
                     var command = new OleDbCommand(comText, connection) {CommandTimeout = 0};
@@ -902,7 +1025,7 @@ namespace Power8
                         rdr = command.ExecuteReader();
                 }
                 if (rdr != null)
-                {
+                { //Build children list
                     groupItem = new PowerItem {FriendlyName = Resources.Str_WindowsSearchResults};
                     var added = 0;
                     var bs = Path.DirectorySeparatorChar;
@@ -923,7 +1046,7 @@ namespace Power8
                                                  IsFolder = Directory.Exists(data)
                                              };
                             if (!destination.Contains(source))
-                            {
+                            { //switch to UI context
                                 Util.Send(() => destination.Add(source));
                                 added++;
                             }
@@ -945,6 +1068,7 @@ namespace Power8
                     connection.Close();
             }
 
+            //Notify subscribers the search is conmpleted
             if (!stop.IsCancellationRequested)
             {
                 var h = WinSearchThreadCompleted;
