@@ -52,7 +52,7 @@
 </td><td valign="top">
 <table><tr><td width="90" align="center">Оценена на <div style="white-space: nowrap"><a href="http://www.primewares.com/links.php?id=53104"><img src="http://www.primewares.com/images/star.png" />*Отлично*</a></div>сайтом Primewares<hr/>
 <a href="http://www.downloadtyphoon.com/power8/infosqixaztn"><img src="http://www.downloadtyphoon.com/templates/downty/images/award_88x31_5.gif" title="Download Typhoon 5 stars" border="0" width="88" height="31"/></a></td>
-<td><a href="http://www.softpedia.com/progClean/Power8-Clean-219120.html" title="100% FREE Certified by Softpedia"><img src="http://s1.softpedia-static.com/base_img/softpedia_free_award_f.gif" width="170" height="116" border="0"/></a></td>
+<td width="170"><a href="http://www.softpedia.com/progClean/Power8-Clean-219120.html" title="100% FREE Certified by Softpedia"><img src="http://s1.softpedia-static.com/base_img/softpedia_free_award_f.gif" width="170" height="116" border="0"/></a></td>
 <td width="180"><a href="http://www.windows7download.com/win7-power8/pcuetujj.html"><img src="http://www.windows7download.com/img/awards/award_88x31_5.png" title="Windows 7 Download 5 stars" border="0" width="88" height="31"/></a>
 <a href="http://www.windows7download.com/win7-power8/pcuetujj.html"><img src="http://www.windows7download.com/img/awards/windows7compatible_88x31.png" title="Windows 7 Download: compatible with Windows 7" border="0" width="88" height="31"/></a>
 <a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/award_88x31_5.gif" title="X 64-bit Download 5 stars" border="0" width="88" height="31"/></a>
