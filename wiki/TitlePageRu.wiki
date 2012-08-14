@@ -1,8 +1,8 @@
-=Power 8=
+= http://www.chip.de/ii/1/6/0/7/0/2/3/7/cf953d1cbf1fcd3d.jpg Power 8=
 
 ==Заменитель меню "Пуск" для Win8, стилизированный и интегрированный в панель задач.==
 
-<table><tr><td valign="top">Разработано для Windows8 (*в. 1.0.1 протестирована под RTM 9020*), работает также под XP SP3 и Win7.<br/> Полный список возможностей ниже под скриншотами.<br/>
+<table><tr><td valign="top">Разработано для Windows8 (*v. 1.0.1 протестирована под RTM 9200*), работает также под XP SP3 и Win7.<br/> Полный список возможностей ниже под скриншотами.<br/>
 Требует .Net Framework 4 [http://www.microsoft.com/en-us/download/details.aspx?id=17113 (здесь)]. Работает лучше с .Net 4.5 [http://www.microsoft.com/en-us/download/details.aspx?id=28978 (здесь)].
 
 Пресса о нас: [http://www.addictivetips.com/windows-tips/power8-start-menu-for-windows-8-that-can-block-metro-features/ www.addictivetips.com] | [http://www.geekissimo.com/2012/07/16/power8-miglior-menu-start-windows-8/ www.geekissimo.com] | [http://www.intowindows.com/power8-powerful-start-menu-for-windows-8/ www.intowindows.com] | [http://www.drwindows.de/content/414-power8-bisher-kompletteste-startmenue-ersatz-fuer-windows.html www.drwindows.de] | [http://www.guiadowindows.net/power8/ www.guiadowindows.net]
@@ -58,7 +58,10 @@
 <a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/award_88x31_5.gif" title="X 64-bit Download 5 stars" border="0" width="88" height="31"/></a>
 <a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/compatible_88x31.gif" title="X 64-bit Download: x64 Compatible" border="0" width="88" height="31"/></a>
 </td>
-<td><a href="http://www.winload.de/download/power8-118961#utm_source=PS&utm_medium=BL&utm_campaign=Badge" target="_blank"><img src="http://www.winload.de/img/siegel/badge_1.png" alt="Download Power8" title="Download Power8" border="0" /></a></td></tr></table>
+<td><a href="http://www.winload.de/download/power8-118961#utm_source=PS&utm_medium=BL&utm_campaign=Badge" target="_blank"><img src="http://www.winload.de/img/siegel/badge_1.png" alt="Download Power8" title="Download Power8" border="0" /></a></td></tr>
+<tr><td align="center"><a href="http://www.downloadatlas.com/open-source-33dc7fdb.html" target="_blank"><img src="http://www.downloadatlas.com/images/editors_choice.png" style="border:none;" width="80" height="80" alt="Power8 Editor's Choice" title="DownloadAtlas: Editor's choise!" /></a></td>
+<td align="center"><a href="http://www.downloadatlas.com/open-source-33dc7fdb.html"><img src="http://www.downloadatlas.com/clean-awards/power8-by-power8.png" style="border:none;" width="160" height="114" alt="Power8 is clean!" title="DownloadAtlas: 100% clean software!" /></a></td>
+<td align="center"><a href="http://www.chip.de/downloads/Power8_56797104.html"><img src="http://i41.fastpic.ru/big/2012/0815/15/32364238931bfc6b3d152fb70ef94315.png" style="border:none;" width="180" height="79" alt="Chip pick" title="Chip-online: the ChipPick!" /></a></td></tr></table>
 http://i42.fastpic.ru/big/2012/0706/6d/bd16dcd812695e8b1e609324e6dea46d.png <br/>
 http://i41.fastpic.ru/big/2012/0704/7e/823470cbeb5726d9a7cc8f85fff37d7e.png 
 </td></tr></table>
