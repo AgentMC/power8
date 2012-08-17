@@ -409,23 +409,29 @@ namespace Power8
         /// <param name="item">PowerItem, whose IsPinned property is already set to desired value</param>
         public static void PinUnpin(PowerItem item)
         {
-            bool? update = null; //TODO: do we need this?
+            bool update = false;
             if (item.IsPinned && !PinList.Contains(item.Argument))
-            {
+            {//Item was pinned
                 PinList.Add(item.Argument);
                 update = true;
             }
             else if ((!item.IsPinned) && PinList.Contains(item.Argument))
-            {
+            {//Item was unpinned
                 PinList.Remove(item.Argument);
-                update = false;
+                update = true;
             }
-            if (update.HasValue) //Calculate the new index
+            //else means state of item may changed but already reflected in pin list
+            if (update) //Calculate the new index
             {
                 var temp = new List<MfuElement>();
                 LastList.ForEach(m => temp.Add(m.Clone()));
                 temp.ApplyFiltersAndSort();
-                StartMfu.Move(StartMfu.IndexOf(item), temp.FindIndex(mfu => mfu.Arg == item.Argument));
+                //Destination index. When moving data from LastList to StartMFU, it is truncated to contain
+                //only 20 items with launchCount==0. So it is possible that when you unpin an element,
+                //it's calculated position in scope of LastList will be more that StartMFU contains.
+                //This is the fix for the problem.
+                var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
+                StartMfu.Move(StartMfu.IndexOf(item), tIdx);
             }
         }
 
