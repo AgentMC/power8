@@ -19,12 +19,24 @@ https://power8.googlecode.com/svn/trunk/Views/RestartExplorer.resx - Resx for on
 There are many tools to do this. The first simple one I found is [http://sourceforge.net/projects/resx/ Resx Editor]. [http://sourceforge.net/projects/resx/files/latest/download Download] it.
 
 ==3. Translate!==
-Open the files you got with Resx Editor you got, and translate all the rows you can find in both files.
+Open the files you got with Resx Editor you got, and translate all the rows you can find in the first file. Then, there are only 4 strings to translate in the second one: `$this.Text`, `button1.Text`, `button2.Text`, `label1.Text`.
+
+If your translating tool is smart enough to give you an ability to remove rows, don't hesitate to go on and remove all other strings in that file - otherwise we'll do it anyway :)
 
 ==4. Join your translation to Power8==
 After you translated everything, contact any of the project team members, giving us these files and the Culture you're translating them into. 
 
-That's it! After you give us the files, we'll check them and join to the Power8 source code. They will automatically go to the next version release.
+That's it! 
+
+After you give us the files, we'll check them and join to the Power8 source code. They will automatically go to the next version release.
+
+==5. Test the UI==
+After that, we usually send the new translator the special build, that allows to quickly check the layout of windows usually hidden:
+  * Welcome arrow (shown on 1st startup; currently no resources are from there, but who knows...);
+  * Update Notifier (right-click the main button and choose "Check for updates". The test version is made to be something like "0.0.0.0", so it will show message);
+  * Show more computers (Main window - Network - Show more...);
+  * Restart Explorer (CTRL+SHIFT+Click the main button, note that the window's buttons do nothing via this command).
+
 
 ==Side notes==
   # Resx files have comments on some lines - follow them.
