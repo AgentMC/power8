@@ -44,6 +44,7 @@
 ||Russian||Power8 team||
 ||Swedish||Åke Engelbrektson||[http://svenskasprakfiler.se]||
 ||German ||Mario Saternus||mario.saternus@satiru.de||
+||Dutch  ||Gerard Stenveld||
 
 Хотите *Power8 на вашем языке?* Прочитайте страницу [Localization].
 
