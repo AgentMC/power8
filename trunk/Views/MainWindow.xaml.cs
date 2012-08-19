@@ -144,6 +144,13 @@ namespace Power8.Views
 
             if ((Control.ModifierKeys & Keys.Control) > 0)
             {
+#if DEBUG
+                if ((Control.ModifierKeys & Keys.Shift) > 0)
+                {
+                    new RestartExplorer().ShowDialog();
+                    return;
+                }
+#endif
                 ShowRunDialog(this, null);
                 return;
             }
@@ -169,6 +176,11 @@ namespace Power8.Views
         private void AboutClick(object sender, RoutedEventArgs e)
         {
             Util.InstanciateClass(t: typeof (About));
+        }
+
+        private void MainBtnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            KillArrow();
         }
 
         #endregion
@@ -484,5 +496,6 @@ namespace Power8.Views
         }
 
         #endregion
+
     }
 }
