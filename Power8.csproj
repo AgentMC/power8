@@ -215,6 +215,7 @@
     <EmbeddedResource Include="Properties\Resources.de.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.nl.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -231,6 +232,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RestartExplorer.de.resx">
+      <DependentUpon>RestartExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\RestartExplorer.nl.resx">
       <DependentUpon>RestartExplorer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\RestartExplorer.resx">
