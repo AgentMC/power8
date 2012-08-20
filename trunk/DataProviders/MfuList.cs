@@ -421,18 +421,18 @@ namespace Power8
                 update = true;
             }
             //else means state of item may changed but already reflected in pin list
-            if (update) //Calculate the new index
-            {
-                var temp = new List<MfuElement>();
-                LastList.ForEach(m => temp.Add(m.Clone()));
-                temp.ApplyFiltersAndSort();
-                //Destination index. When moving data from LastList to StartMFU, it is truncated to contain
-                //only 20 items with launchCount==0. So it is possible that when you unpin an element,
-                //it's calculated position in scope of LastList will be more that StartMFU contains.
-                //This is the fix for the problem.
-                var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
-                StartMfu.Move(StartMfu.IndexOf(item), tIdx);
-            }
+            if (!update) 
+                return;
+            //Calculate the new index
+            var temp = new List<MfuElement>();
+            LastList.ForEach(m => temp.Add(m.Clone()));
+            temp.ApplyFiltersAndSort();
+            //Destination index. When moving data from LastList to StartMFU, it is truncated to contain
+            //only 20 items with launchCount==0. So it is possible that when you unpin an element,
+            //it's calculated position in scope of LastList will be more that StartMFU contains.
+            //This is the fix for the problem.
+            var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
+            StartMfu.Move(StartMfu.IndexOf(item), tIdx);
         }
 
 
@@ -522,9 +522,9 @@ namespace Power8
                         orderby l.Item1
                         select l).ToList();
             //Step 2.3.1 : removing duplicate links
-            for (int i = linx.Count - 1; i >= 0; i--)
+            for (int i = linx.Count - 1; i > 0; i--)
             {
-                if (i > 0 && linx[i - 1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
+                if (linx[i - 1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
                 {
                     linx[i - 1].Item2.Mix((linx[i].Item2));
                     if (Util.OsIs.SevenOrMore && linx[i].Item2.Arg.Contains("TaskBar"))
