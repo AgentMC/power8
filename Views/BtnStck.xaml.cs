@@ -335,8 +335,15 @@ namespace Power8.Views
         private void PinClick(object sender, EventArgs e)
         {
             var pi = Util.ExtractRelatedPowerItem(e);
-            MfuList.PinUnpin(pi);
-            dataGrid.ScrollIntoView(pi);
+            try
+            {
+                MfuList.PinUnpin(pi);
+                dataGrid.ScrollIntoView(pi);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Util.DispatchCaughtException(new Exception(Properties.Resources.Err_NoPiExtracted));
+            }
         }
         #endregion
 
