@@ -40,11 +40,12 @@
 *Андрей Хабалевский*: (UI, дизайн, взаимодействие с пользователем): xabalevskii-at-gmail.com, skype: xabalevskii;
 
 Локализация проводится:
-||English||Power8 team||
-||Russian||Power8 team||
+||English||Команда Power8||
+||Russian||Команда Power8||
 ||Swedish||Åke Engelbrektson||[http://svenskasprakfiler.se]||
 ||German ||Mario Saternus||mario.saternus@satiru.de||
-||Dutch  ||Gerard Stenveld||
+||Dutch  ||Gerard Stenveld||gstenveld@npz-nrz.nl||
+||Italian||Michele Bastianelli||0makoblaster0@gmail.com||
 
 Хотите *Power8 на вашем языке?* Прочитайте страницу [Localization].
 
