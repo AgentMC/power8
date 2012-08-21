@@ -147,9 +147,8 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
     <comment>Default label instead of "Start menu". Currently seems useless</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>Niet in staat om het gespecificeerde object als Administrator te starten. Proces gestart met gewone gebruikersrechten.
+    <value>Kan het gespecificeerde object niet als Administrator starten. Proces gestart met gewone gebruikersrechten.
 </value>
-    <comment>Leave trailling paragraph symbol.</comment>
   </data>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
     <value>Open Alle Gebruikers Map</value>
@@ -209,8 +208,8 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
     <value>Sluit</value>
   </data>
   <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
-    <value>Niet in staat om class {0}
-{1} te starten</value>
+    <value>Kan class {0}
+{1} niet starten</value>
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
     <value>Meer...</value>
@@ -287,13 +286,13 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
     <value>Geen data element beschikbaar</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
-    <value>Niet in staat om tooltip voor dit object te krijgen</value>
+    <value>Kan tooltip voor dit object niet verkrijgen</value>
   </data>
   <data name="Str_CplElement" xml:space="preserve">
-    <value>Control panel element</value>
+    <value>Configuratiescherm element</value>
   </data>
   <data name="Str_WindowsSearchResults" xml:space="preserve">
-    <value>Windows Search Results</value>
+    <value>Windows Zoek Resultaten</value>
   </data>
   <data name="CR_SearchMarker" xml:space="preserve">
     <value>Zoeken...</value>
@@ -314,10 +313,10 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
     <value>Onlangs geopend</value>
   </data>
   <data name="Str_Unpin" xml:space="preserve">
-    <value>Unpin item</value>
+    <value>Maak item los</value>
   </data>
   <data name="Str_Pin" xml:space="preserve">
-    <value>Pin item</value>
+    <value>Zet item vast</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
     <value>Deze vertaling is gedaan door G.J. Stenveld</value>
