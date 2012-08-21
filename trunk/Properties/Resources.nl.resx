@@ -149,6 +149,7 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
     <value>Kan het gespecificeerde object niet als Administrator starten. Proces gestart met gewone gebruikersrechten.
 </value>
+    <comment>Keep trailling /r/n.</comment>
   </data>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
     <value>Open Alle Gebruikers Map</value>
@@ -330,6 +331,6 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
     <comment>Label in main btn context menu and in About Window</comment>
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
-    <value />
+    <value>mailto:gstenveld@npz-nrz.nl</value>
   </data>
 </root>
