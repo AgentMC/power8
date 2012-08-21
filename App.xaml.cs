@@ -30,8 +30,10 @@ namespace Power8
             }
 
             Util.MainDisp = Dispatcher;
-            //Error handling and detection
 #if DEBUG
+            //Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("it-IT");
+
+            //Error handling and detection
             var l = new TextWriterTraceListener(Environment.ExpandEnvironmentVariables(@"%temp%\p8log.txt"));
             l.Write("\r\n\r\nPower8 Log opened at " + DateTime.Now + "\r\n\r\n");
             Debug.AutoFlush = true;
