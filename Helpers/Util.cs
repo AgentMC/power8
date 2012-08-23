@@ -22,49 +22,93 @@ using System.Xml;
 
 namespace Power8
 {
+    /// <summary>
+    /// Contains helping methods
+    /// </summary>
     static class Util
     {
+        /// <summary>
+        /// The Main UI thread dispatcher. Public since many stuff is related to program shutdown.
+        /// </summary>
         public static Dispatcher MainDisp;
 
-        private static readonly StringBuilder Buffer = new StringBuilder(1024);
-        private static readonly Dictionary<Type, IComponent> Instances = new Dictionary<Type, IComponent>();
+        //2-kilobyte string buffer for string operations
+        private static readonly StringBuilder Buffer = new StringBuilder(1024); 
+        //Singleton window manager
+        private static readonly Dictionary<Type, IComponent> Instances = new Dictionary<Type, IComponent>(); 
+        //Collection of letter-websearch engine pairs
         private static Dictionary<char, string> _searchProviders;
 
+        #region Cross-thread operations
 
+        /// <summary>
+        /// Invokes the delegate on the main UI thread. Execution is immediate, but control is not
+        /// returned to the caller until the callee is done. The execution priority is set to Render.
+        /// </summary>
+        /// <param name="method">Any parameterless action, lambda or delegate</param>
         public static void Send(Action method)
         {
             MainDisp.Invoke(DispatcherPriority.Render, method);
         }
-
+        /// <summary>
+        /// Invokes the delegate on the main UI thread. Execution may be delayed, but control is
+        /// immediately returned to the caller. The execution priority is set to Background.
+        /// </summary>
+        /// <param name="method">Any parameterless action, lambda or delegate</param>
         public static void Post(Action method)
         {
             MainDisp.BeginInvoke(DispatcherPriority.Background, method);
         }
-
-        public static void PostBackgroundReleaseResourceCall(Action method)
+        /// <summary>
+        /// Executes an Action with almost lowest priority (AppIdle). Use this to free 
+        /// unmanaged resources.
+        /// </summary>
+        /// <param name="method">Any parameterless action, lambda or delegate</param>
+        private static void PostBackgroundReleaseResourceCall(Action method)
         {
 #if DEBUG
-            var mName = method.Method;
+            var mName = method.Method; //In debug, we log the resource release usage
             method = (Action) Delegate.Combine(method, new Action(() => Debug.WriteLine("PBRRC invoked for " + mName)));
 #endif
             MainDisp.BeginInvoke(DispatcherPriority.ApplicationIdle, method);
         }
-
+        /// <summary>
+        /// Initiates the procedure of unloading the unmanaged dll, and immediately returns.
+        /// The resource will be freed likely later, when the Application becomes idle.
+        /// </summary>
+        /// <param name="hModule">A handle to the DLL obtained by LoadLibrary() call.</param>
         public static void PostBackgroundDllUnload(IntPtr hModule)
         {
             PostBackgroundReleaseResourceCall(() => API.FreeLibrary(hModule));
         }
-
+        /// <summary>
+        /// Initiates the procedure of unloading the unmanaged icon, and immediately returns.
+        /// The resource will be freed likely later, when the Application becomes idle.
+        /// </summary>
+        /// <param name="hIcon">A handle to the icon obtained by LoadIcon() or similar call.</param>
         public static void PostBackgroundIconDestroy(IntPtr hIcon)
         {
             PostBackgroundReleaseResourceCall(() => API.DestroyIcon(hIcon));
         }
-
+        /// <summary>
+        /// Executes the function on the main thread with the almost highest priority.
+        /// The caling thread is blocked until the callee returns the result.
+        /// </summary>
+        /// <typeparam name="T">The type of return result.</typeparam>
+        /// <param name="method">Any parameterless Func, including lambda and the returning delegate</param>
+        /// <returns>The value returned by the method invoked</returns>
         public static T Eval<T>(Func<T> method)
         {
             return (T) MainDisp.Invoke(DispatcherPriority.DataBind, method);
         }
-
+        /// <summary>
+        /// Creates a Thread from a delegate, with the given thread name, wrapping it in the 
+        /// try-catch block, without starting it. 
+        /// The catch calls <code>DispatchUnhandledException()</code>
+        /// </summary>
+        /// <param name="method">The delegate which can be used as non-parametrized thread start</param>
+        /// <param name="name">Optional. Managed name of a Thread being created, default is "P8 forked"</param>
+        /// <returns>The Thread class instance created, ready to be started</returns>
         public static Thread Fork(ThreadStart method, string name = "P8 forked")
         {
             return new Thread(() => 
@@ -80,18 +124,35 @@ namespace Power8
             }) { Name = name };
         }
 
+        #endregion
 
+        #region WPF-User32 interactions
 
+        /// <summary>
+        /// Extension. Returns unmanaged handle for the User32 window that hosts
+        /// current WPF Window.
+        /// </summary>
+        /// <param name="w">The Window to get handle for</param>
+        /// <returns>IntPtr which represents the HWND of the caller</returns>
         public static IntPtr GetHandle(this Window w)
         {
             return new WindowInteropHelper(w).Handle;
         }
-
+        /// <summary>
+        /// Extension. Returns HwndSource object for current WPF Window.
+        /// </summary>
+        /// <param name="w">Window to get HwndSource for.</param>
         public static HwndSource GetHwndSource(this Window w)
         {
             return HwndSource.FromHwnd(w.GetHandle());
         }
-
+        /// <summary>
+        /// Extension. Makes the Window glassed in the environment which support such action.
+        /// In case this is not supported, ensures that the Window will have proper background.
+        /// </summary>
+        /// <param name="w">The Window that must be glassified</param>
+        /// <returns>Unmanaged HWND of the glassified window, in the form of IntPtr.
+        /// Returns NULL (IntPtr.Zero) in case Window has not yet initialized completely.</returns>
         public static IntPtr MakeGlassWpfWindow(this Window w)
         {
             if (!w.IsLoaded)
@@ -112,7 +173,10 @@ namespace Power8
             }
             return source.Handle;
         }
-        
+        /// <summary>
+        /// Calls the DWM API to make the target window, represented by a handle, the glass one.
+        /// </summary>
+        /// <param name="hWnd">HWND of a window, in the form of IntPtr</param>
         public static void MakeGlass(IntPtr hWnd)
         {
             var bbhOff = new API.DwmBlurbehind
@@ -121,15 +185,35 @@ namespace Power8
                                 fEnable = false,
                                 hRegionBlur = IntPtr.Zero
                             };
-            API.DwmEnableBlurBehindWindow(hWnd, bbhOff);
+            API.DwmEnableBlurBehindWindow(hWnd, bbhOff);            //vvvHere goes special "MARGIN{-1}" structure;
             API.DwmExtendFrameIntoClientArea(hWnd, new API.Margins { cxLeftWidth = -1, cxRightWidth = 0, cyTopHeight = 0, cyBottomHeight = 0 });
         }
-
+        /// <summary>
+        /// Extension. For the given Window attaches Message Filter hook to the 
+        /// native WndProc sink of a host native window. 
+        /// </summary>
+        /// <param name="w">Window whose messages you need to filter</param>
+        /// <param name="hook"><code>HwndSourceHook</code> instance.</param>
         public static void RegisterHook(this Window w, HwndSourceHook hook)
         {
             w.GetHwndSource().AddHook(hook);
         }
-
+        /// <summary>
+        /// Scans the VisualTree of a Window or Control, etc. to find the Visual that complies
+        /// to the passed parameters. When <code>content</code> parameter is used, the child must 
+        /// be derived from ContentControl to be tested for the value of content. 
+        /// Something like GetWindow()/FindWindowEx() but bit smarter.
+        /// </summary>
+        /// <param name="o">The parent of the hierarchy searched.</param>
+        /// <param name="shortTypeName">Optional. The <code>child.GetType().Name</code> of the 
+        /// required child.</param>
+        /// <param name="content">The object that shall be reference-equal to the desired 
+        /// Content of the control being searched.</param>
+        /// <returns>Returns first child available if no parameters specified.
+        /// When single paramemeter is specified returns first Visual child that
+        /// satisfies the parameter passed.
+        /// If no children are available, or noone satisfies the conditions passed,
+        /// returns null.</returns>
         public static DependencyObject GetFirstVisualChildOfTypeByContent
             (this DependencyObject o, string shortTypeName = null, object content = null)
         {
@@ -143,43 +227,31 @@ namespace Power8
             return null;
         }
 
+        #endregion
 
+        #region Shell items resolution
 
-
-        public static PowerItem ExtractRelatedPowerItem(EventArgs o)
-        {
-// ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
-            if (o is ContextMenuEventArgs)
-            {
-                var mi = o.GetType()
-                          .GetProperty("TargetElement",
-                                       BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
-                          .GetValue(o, null)
-                          as FrameworkElement;
-                if (mi != null && mi.DataContext is PowerItem)
-                    return (PowerItem)mi.DataContext;
-            }
-            if (o is RoutedEventArgs)
-            {
-                var obj = ((FrameworkElement)((RoutedEventArgs)o).OriginalSource).DataContext;
-                if (obj is PowerItem)
-                    return (PowerItem)obj;
-            }
-// ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
-            return null;
-        }
-
-
-        
+        /// <summary>
+        /// Returns the target of a shell shortcut, using COM component to get data.
+        /// </summary>
+        /// <param name="link">Full path to *.LNK file</param>
         public static string ResolveLink(string link)
         {
             var shLink = new API.ShellLink();
             ((API.IPersistFile)shLink).Load(link, 0);
             var res = ResolveLink(((API.IShellLink) shLink));
             Marshal.FinalReleaseComObject(shLink);
-            return res.Item1;
+            return res.Item1;//The target of Link
         }
-        
+        /// <summary>
+        /// Extracts data from IShellLink instance, in Unicode format. Does NOT automatically 
+        /// release the COM instance.
+        /// </summary>
+        /// <param name="shellLink">Initialized instance of IShellLink, with the data already loaded.</param>
+        /// <returns>The tuple of 2 strings:
+        /// - the target of the shortcut (512 characters max);
+        /// - the command line to the target, except 0th argument (the target itself), also
+        /// limited to 512 chars max</returns>
         public static Tuple<string, string> ResolveLink(API.IShellLink shellLink)
         {
             lock (Buffer.Clear())
@@ -191,7 +263,9 @@ namespace Power8
                 return new Tuple<string, string>(i1, Buffer.ToString());
             }
         }
-
+        /// <summary> Gets the path of a known folder (Win7 or higher) </summary>
+        /// <param name="apiKnFldr">One of GUIDs in <code>API.KnFldrIds</code></param>
+        /// <returns>FQ-Path of the FS folder for existing initialized Known Folders, or null</returns>
         public static string ResolveKnownFolder(string apiKnFldr)
         {
             IntPtr pwstr;
@@ -200,7 +274,9 @@ namespace Power8
             Marshal.FreeCoTaskMem(pwstr);
             return res;
         }
-
+        /// <summary> Gets the path of a special folder </summary>
+        /// <param name="id">Corresponding folder ID</param>
+        /// <returns>FQ-Path of the FS folder for existing available Special Folder, or null</returns>
         public static string ResolveSpecialFolder(API.Csidl id)
         {
             lock (Buffer.Clear())
@@ -209,25 +285,33 @@ namespace Power8
                 return Buffer.ToString();
             }
         }
-
+        /// <summary>
+        /// Gets the display name of the Special folder, using the desktop.ini configuration
+        /// and in system locale. For Win7 and upper OS, tries fast shell function first, and 
+        /// if it fails or it is XP, uses general <code>SHGetFileInfo()</code>.
+        /// </summary>
+        /// <param name="id">The ID for the folder whose display name is needed.</param>
+        /// <returns>String, equal to how the folder will be displayed in Explorer, 
+        /// or null if such information is not available.</returns>
         public static string ResolveSpecialFolderName(API.Csidl id)
         {
-            var ppIdl = IntPtr.Zero;
-            var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, id, ref ppIdl);
+            var ppIdl = IntPtr.Zero; //Sinse some of special folders are virtual, we'll use PIDLs
+            var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, id, ref ppIdl); //Obtain PIDL to folder
 #if DEBUG
             Debug.WriteLine("RSFN: SHGetSp.F.Loc. for id<={0} returned result code {1}", id, hRes);
 #endif
             var pwstr = IntPtr.Zero;
             var info = new API.Shfileinfo();
-            var zeroFails = new IntPtr(1);
+            var zeroFails = new IntPtr(1); 
+            //Fast shell call for Win7+
             if (hRes == 0 && OsIs.SevenOrMore && API.SHGetNameFromIDList(ppIdl, API.SIGDN.NORMALDISPLAY, ref pwstr) == 0)
             {
                 info.szDisplayName = Marshal.PtrToStringUni(pwstr);
                 Marshal.FreeCoTaskMem(pwstr);
             }
-            else
+            else //If failed or XP
             {
-                zeroFails = (hRes != 0
+                zeroFails = (hRes != 0 //if(!SUCCEEDED(SHGetSp.F.Loc.)) return NULL;
                             ? IntPtr.Zero
                             : API.SHGetFileInfo(ppIdl, 0, ref info, (uint) Marshal.SizeOf(info),
                                                 API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES));
@@ -238,6 +322,199 @@ namespace Power8
 #endif
             return zeroFails == IntPtr.Zero ? null : info.szDisplayName;
         }
+
+        #endregion
+
+        #region Shell items visualizing
+
+        /// <summary>
+        /// Initializes the background thread to display the required special folder, 
+        /// and returns immediately
+        /// </summary>
+        public static void DisplaySpecialFolder(API.Csidl id)
+        {
+            new Thread(DisplaySpecialFolderSync).Start(id);
+        }
+        /// <summary>
+        /// Displays the special folder specified in Explorer window, blocking calling thread until 
+        /// the coresponding window has not <b>begun</b> the displaying the special folder.
+        /// Uses different strategies for XP and other OSs. For XP, it needs some Explorer window to exist
+        /// and to be available for shell automation to work seamlessly. In case no such window is available,
+        /// the new Explorer window is created, with something default inside, and then it is pointed to the 
+        /// desired location. This can cause short blinking of the created window.
+        /// For Win7 and later, the ExplorerBrowser instance is used, so no blinking and other side effects
+        /// will be visible.
+        /// </summary>
+        /// <param name="id"><code>API.Csidl</code> representing the desired special folder</param>
+        public static void DisplaySpecialFolderSync(object id)
+        {
+            var pidl = IntPtr.Zero;
+            var res = API.SHGetSpecialFolderLocation(IntPtr.Zero, (API.Csidl)id, ref pidl);
+            if (res != 0)
+            {
+#if DEBUG
+                Debug.WriteLine("Can't SHget folder PIDL, error " + res);
+#endif
+                return;
+            }
+
+            if (OsIs.XPOrLess) //Use old awfull shell COM hell from the Raymond Chen...
+            {
+                API.IShellWindows shWndList = null;     //Opened Explorer windows, excl. Desktop, ProgMan...
+                API.IServiceProvider provider = null;   //Browser accessor for Explorer window
+                API.IShellBrowser browser = null;       //The browser that makes possible to kick Explorer
+                                                        //whereever you need
+                try
+                {
+                    shWndList  = (API.IShellWindows)new API.ShellWindows();
+                    var wndCount = shWndList.Count;     //How many are opened at the moment?
+                    var launchNew = true;               //To open our target in new window or in existing one?
+                    if (wndCount == 0)                  //Will create a window and use it
+                    {
+                        launchNew = false;              //Use newly created window
+                        StartExplorer("/N");            //Create a window
+                        while (shWndList.Count == 0)    //Wait until dispatch stops snorring...
+                            Thread.Sleep(40);
+                    }
+                    provider = (API.IServiceProvider)shWndList.Item(0); //Get browser from any available wnd
+                    var sidBrowser = new Guid(API.Sys.IdSTopLevelBrowser);
+                    var iidBrowser = new Guid(API.Sys.IdIShellBrowser);
+                    provider.QueryService(ref sidBrowser, ref iidBrowser, out browser);
+                                                        //Use browser to navigate where needed
+                    browser.BrowseObject(pidl, launchNew ? API.SBSP.NEWBROWSER : API.SBSP.SAMEBROWSER);
+                }
+                catch (Exception e)
+                {
+#if DEBUG
+                    Debug.WriteLine(e.ToString());
+#endif
+                }
+                finally                                 //Cleanup
+                {
+                    if(shWndList != null)
+                        Marshal.ReleaseComObject(shWndList);
+                    if(provider != null)
+                        Marshal.ReleaseComObject(provider);
+                    if(browser != null)
+                        Marshal.ReleaseComObject(browser);
+                    Marshal.FreeCoTaskMem(pidl);
+                }
+            }
+            else    //Modern approach
+            {
+                API.IExplorerBrowser browser = null;
+                try
+                {   //Create a browser directly and go...
+                    browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
+                    browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
+                }
+                catch (Exception e)
+                {
+#if DEBUG
+                    Debug.WriteLine(e.ToString());
+#endif
+                }
+                finally //Cleanup
+                {
+                    if (browser != null) 
+                        Marshal.ReleaseComObject(browser);
+                    Marshal.FreeCoTaskMem(pidl);
+                }
+            }
+        }
+        /// <summary>
+        /// Opens Explorer window for the folder that can be represented by a path,
+        /// or a default folder if no command specified,
+        /// or simply starts Explorer if it's dead and no command specified
+        /// </summary>
+        /// <param name="command">Optional. FQ-path of a FS folder to display.</param>
+        public static void StartExplorer(string command = null)
+        {
+            const string explorerString = "explorer.exe";
+            if (command != null)
+                Process.Start(explorerString, command);
+            else
+                Process.Start(explorerString);
+        }
+        /// <summary>
+        /// Displays in Explorer the folder that is a container for the FS element
+        /// specified as parameter, and makes explorer select the mentioned FS element.
+        /// </summary>
+        /// <param name="objectToSelect">FQ-path to the file or a folder on FS</param>
+        public static void StartExplorerSelect(string objectToSelect)
+        {
+            StartExplorer("/select,\"" + objectToSelect + "\"");
+        }
+        /// <summary>
+        /// Creates an instance of the Power8 class according t the parameters passed. If the class
+        /// is a WPF Window or a WinForms form, displays it by calling <code>Show()</code>. The class 
+        /// must implement the <code>IComponent</code> interface to be created via this method. Only 
+        /// one instance of the class may exist at the same time. Use this method with classes inherited 
+        /// from <code>DisposableWindow</code> to create singleton WPF windows, which will be activated
+        /// when user clicks again on their related button or menu item.
+        /// </summary>
+        /// <param name="className">Half-optional. Either this parameter or <code>t</code> must be 
+        /// specified. The FQ-class name, such that can be passed as parameter to 
+        /// <code>Type.GetType()</code>, for example, "Power8.Views.UltraWnd". Null by default.</param>
+        /// <param name="t">Half-optional. Either this parameter or a valid <code>className</code>
+        /// must be specified. The type of the class being created. Null by default.</param>
+        /// <param name="ctor">Optional. The function that will return the instance of the class. If 
+        /// not specified, the <code>Activator.CreateInstance(t)</code> will be executed. Passing only 
+        /// this parameter is not enough even if the delegate is able to produce a valid instance.</param>
+        public static void InstanciateClass(string className = null, Type t = null, Func<IComponent> ctor = null)
+        {
+            try
+            {   //Testing parameters
+                if (t == null && !string.IsNullOrEmpty(className))
+                    t = Type.GetType(className);
+
+                if (t == null)
+                    throw new Exception(NoLoc.Err_GotNoTypeObject);
+
+                if (!t.GetInterfaces().Contains(typeof(IComponent)))
+                    throw new Exception(NoLoc.Err_TypeIsNotIComponent);
+
+                IComponent inst;
+                if (Instances.ContainsKey(t)) //If object of this type already exists, just use it
+                {
+                    inst = Instances[t];
+                }
+                else                          //Create it
+                {
+                    inst = ctor != null ? ctor() : (IComponent)Activator.CreateInstance(t);
+                    //We'll automaticaly remove the object when it's not needed anymore
+                    inst.Disposed += (sender, args) => Instances.Remove(sender.GetType());
+                    Instances.Add(t, inst);
+                }
+                var wnd = inst as Window;
+                if (wnd != null) //Show the Window
+                {
+                    if (wnd.IsVisible) wnd.Hide(); //XP hack
+                    wnd.Show();
+                    if (wnd.WindowState == WindowState.Minimized)
+                        wnd.WindowState = WindowState.Normal;
+                    wnd.Activate();
+                    return;
+                }
+                var frm = inst as Form;
+                if (frm != null) //Show the Form
+                {
+                    if (frm.Visible) frm.Hide(); //XP hack
+                    frm.Show();
+                    if (frm.WindowState == FormWindowState.Minimized)
+                        frm.WindowState = FormWindowState.Normal;
+                    frm.Activate();
+                }
+            }
+            catch (Exception ex) //User won't ever see this I believe... so we can use not the Dispatch... methods
+            {
+                MessageBox.Show(string.Format(Resources.Err_CantInstanciateClassFormatString, className, ex.Message));
+            }
+        }
+        
+        #endregion
+
+        #region Path utils
 
         public static string GetLongPathOrDisplayName(string path)
         {
@@ -260,161 +537,6 @@ namespace Power8
                 }
             }
             return path;
-        }
-
-
-
-        public static void DisplaySpecialFolder(API.Csidl id)
-        {
-            new Thread(DisplaySpecialFolderSync).Start(id);
-        }
-
-        public static void DisplaySpecialFolderSync(object id)
-        {
-            var pidl = IntPtr.Zero;
-            var res = API.SHGetSpecialFolderLocation(IntPtr.Zero, (API.Csidl)id, ref pidl);
-            if (res != 0)
-            {
-#if DEBUG
-                Debug.WriteLine("Can't SHget folder PIDL, error " + res);
-#endif
-                return;
-            }
-
-            if (OsIs.XPOrLess)
-            {
-                API.IShellWindows shWndList = null;
-                API.IServiceProvider provider = null;
-                API.IShellBrowser browser = null;
-                try
-                {
-                    shWndList  = (API.IShellWindows)new API.ShellWindows();
-                    var wndCount = shWndList.Count;
-                    var launchNew = true;
-                    if (wndCount == 0)
-                    {
-                        launchNew = false;
-                        StartExplorer("/N");
-                        while (shWndList.Count == 0)
-                            Thread.Sleep(40);
-                    }
-                    provider = (API.IServiceProvider)shWndList.Item(0);
-                    var sidBrowser = new Guid(API.Sys.IdSTopLevelBrowser);
-                    var iidBrowser = new Guid(API.Sys.IdIShellBrowser);
-                    provider.QueryService(ref sidBrowser, ref iidBrowser, out browser);
-                    browser.BrowseObject(pidl, launchNew ? API.SBSP.NEWBROWSER : API.SBSP.SAMEBROWSER);
-                }
-                catch (Exception e)
-                {
-#if DEBUG
-                    Debug.WriteLine(e.ToString());
-#endif
-                }
-                finally
-                {
-                    if(shWndList != null)
-                        Marshal.ReleaseComObject(shWndList);
-                    if(provider != null)
-                        Marshal.ReleaseComObject(provider);
-                    if(browser != null)
-                        Marshal.ReleaseComObject(browser);
-                    Marshal.FreeCoTaskMem(pidl);
-                }
-            }
-            else
-            {
-                API.IExplorerBrowser browser = null;
-                try
-                {
-                    browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
-                    browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
-                }
-                catch (Exception e)
-                {
-#if DEBUG
-                    Debug.WriteLine(e.ToString());
-#endif
-                }
-                finally
-                {
-                    if (browser != null) 
-                        Marshal.ReleaseComObject(browser);
-                    Marshal.FreeCoTaskMem(pidl);
-                }
-            }
-        }
-
-
-
-        public static void InstanciateClass(string className = null, Type t = null, Func<IComponent> ctor = null)
-        {
-            try
-            {
-                if(t == null && !string.IsNullOrEmpty(className))
-                    t = Type.GetType(className);
-                
-                if (t == null)
-                    throw new Exception(NoLoc.Err_GotNoTypeObject);
-
-                if(!t.GetInterfaces().Contains(typeof(IComponent)))
-                    throw new Exception(NoLoc.Err_TypeIsNotIComponent);
-
-                IComponent inst;
-                if (Instances.ContainsKey(t))
-                {
-                    inst = Instances[t];
-                }
-                else
-                {
-                    inst = ctor != null ? ctor() : (IComponent) Activator.CreateInstance(t);
-                    inst.Disposed += (sender, args) => Instances.Remove(sender.GetType());
-                    Instances.Add(t, inst);
-                }
-                var wnd = inst as Window;
-                if(wnd != null)
-                {
-                    if(wnd.IsVisible) wnd.Hide(); //XP hack
-                    wnd.Show();
-                    if(wnd.WindowState == WindowState.Minimized)
-                        wnd.WindowState = WindowState.Normal;
-                    wnd.Activate();
-                    return;
-                }
-                var frm = inst as Form;
-                if (frm != null)
-                {
-                    if(frm.Visible) frm.Hide(); //XP hack
-                    frm.Show();
-                    if(frm.WindowState == FormWindowState.Minimized)
-                        frm.WindowState = FormWindowState.Normal;
-                    frm.Activate();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(string.Format(Resources.Err_CantInstanciateClassFormatString, className, ex.Message));
-            }
-        }
-
-
-
-        public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs, bool fallbackToInfoTip = false)
-        {
-            var ls = GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString");
-            if(ls == null && fallbackToInfoTip)
-                return GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip");
-            return ls;
-        }
-
-        public static string GetDefaultIconResourceIdForClass(string clsidOrApiShNs)
-        {
-            return GetResourceIdForClassCommon(clsidOrApiShNs, "\\DefaultIcon", "");
-        }
-
-        public static Tuple<string, string> GetOpenCommandForClass(string clsidOrApiShNs)
-        {
-            var command = GetResourceIdForClassCommon(clsidOrApiShNs, "\\Shell\\Open\\Command", "");
-            return CommandToFilenameAndArgs(command);
         }
 
         public static Tuple<string, string> CommandToFilenameAndArgs(string command)
@@ -450,6 +572,29 @@ namespace Power8
                 return new Tuple<string, string>(command, null);
             }
             return null;
+        }
+
+        #endregion
+
+        #region Registry data resolution
+
+        public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs, bool fallbackToInfoTip = false)
+        {
+            var ls = GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString");
+            if(ls == null && fallbackToInfoTip)
+                return GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip");
+            return ls;
+        }
+
+        public static string GetDefaultIconResourceIdForClass(string clsidOrApiShNs)
+        {
+            return GetResourceIdForClassCommon(clsidOrApiShNs, "\\DefaultIcon", "");
+        }
+
+        public static Tuple<string, string> GetOpenCommandForClass(string clsidOrApiShNs)
+        {
+            var command = GetResourceIdForClassCommon(clsidOrApiShNs, "\\Shell\\Open\\Command", "");
+            return CommandToFilenameAndArgs(command);
         }
         
         public static string GetCplAppletSysNameForClass(string clsidOrApiShNs)
@@ -497,17 +642,10 @@ namespace Power8
             }
         }
 
+        #endregion
 
-        private static string NameSpaceToGuidWithBraces(string ns)
-        {
-            ns = ns.Substring(ns.LastIndexOf('\\') + 1).TrimStart(':');
-            if (!ns.StartsWith("{"))
-                ns = "{" + ns + "}";
-            return ns;
-        }
+        #region Resources extraction
 
-
-        
         public static string ResolveStringResource(string localizeableResourceId)
         {
             if(!(localizeableResourceId.StartsWith("@")))
@@ -585,7 +723,45 @@ namespace Power8
             return new Tuple<string, IntPtr, uint>(resDll, dllHandle, resId);
         }
 
+        #endregion
 
+        #region Unsorted utilities
+
+        /// <summary>
+        /// Extracts the PowerItem underlying the control that raised some event,
+        /// at least tries to. Supported are <code>ContextMenuEventArgs</code>
+        /// (through Reflection) and diferent <code>RoutedEventArgs</code>.
+        /// </summary>
+        public static PowerItem ExtractRelatedPowerItem(EventArgs o)
+        {
+// ReSharper disable CanBeReplacedWithTryCastAndCheckForNull
+            if (o is ContextMenuEventArgs)
+            {
+                var mi = o.GetType()
+                          .GetProperty("TargetElement",
+                                       BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
+                          .GetValue(o, null)
+                          as FrameworkElement;
+                if (mi != null && mi.DataContext is PowerItem)
+                    return (PowerItem)mi.DataContext;
+            }
+            if (o is RoutedEventArgs)
+            {
+                var obj = ((FrameworkElement)((RoutedEventArgs)o).OriginalSource).DataContext;
+                if (obj is PowerItem)
+                    return (PowerItem)obj;
+            }
+// ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
+            return null;
+        }
+
+        private static string NameSpaceToGuidWithBraces(string ns)
+        {
+            ns = ns.Substring(ns.LastIndexOf('\\') + 1).TrimStart(':');
+            if (!ns.StartsWith("{"))
+                ns = "{" + ns + "}";
+            return ns;
+        }
 
         public static Tuple<string, ImageManager.ImageContainer> GetCplInfo(string cplFileName)
         {
@@ -720,13 +896,57 @@ namespace Power8
             return new Tuple<string, ImageManager.ImageContainer>(name, container);
         }
 
-
         private static void ZeroMemory (IntPtr hMem, int cb)
         {
             for (var i = 0; i < cb; i++)
                 Marshal.WriteByte(hMem, i, 0);
         }
 
+        #endregion
+
+        #region Errors handling and app lifecycle management
+
+        public static void DispatchCaughtException(Exception ex)
+        {
+            MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        public static void DispatchUnhandledException(Exception ex)
+        {
+            var str = ex.ToString();
+            MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
+            Die(NoLoc.Err_UnhandledGeneric + str);
+        }
+
+        public static void Restart(string reason)
+        {
+            Process.Start(Application.ExecutablePath);
+            Die(reason);
+        }
+
+        public static void Die(string becauseString)
+        {
+            EventLog.WriteEntry("Application Error", 
+                                string.Format(NoLoc.Str_FailFastFormat, becauseString),
+                                EventLogEntryType.Error);
+            Environment.Exit(1);
+        }
+
+        #endregion
+
+
+
+        public static class OsIs
+        {
+            static readonly Version Ver = Environment.OSVersion.Version;
+
+            public static bool XPOrLess { get { return Ver.Major < 6; } }
+            public static bool VistaExact { get { return Ver.Major == 6 && Ver.Minor == 0; } }
+            public static bool SevenOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 1); } }
+            public static bool SevenOrBelow { get { return Ver.Major < 6 || (Ver.Major == 6 && Ver.Minor <= 1); } }
+            public static bool EightOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 2); } }
+            public static bool EightRpOrMore { get { return Ver >= new Version(6, 2, 8400); } }
+        }
 
         public class ShellExecuteHelper
         {
@@ -763,63 +983,6 @@ namespace Power8
                     ShellExecuteFunction();
                 return _succeeded;
             }
-        }
-
-
-
-        public static void DispatchCaughtException(Exception ex)
-        {
-            MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
-        }
-
-        public static void DispatchUnhandledException(Exception ex)
-        {
-            var str = ex.ToString();
-            MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
-            Die(NoLoc.Err_UnhandledGeneric + str);
-        }
-
-        public static void Restart(string reason)
-        {
-            Process.Start(Application.ExecutablePath);
-            Die(reason);
-        }
-
-        public static void Die(string becauseString)
-        {
-            EventLog.WriteEntry("Application Error", 
-                                string.Format(NoLoc.Str_FailFastFormat, becauseString),
-                                EventLogEntryType.Error);
-            Environment.Exit(1);
-        }
-
-        public static void StartExplorer(string command = null)
-        {
-            const string explorerString = "explorer.exe";
-            if (command != null)
-                Process.Start(explorerString, command);
-            else
-                Process.Start(explorerString);
-        }
-
-        public static void StartExplorerSelect(string objectToSelect)
-        {
-            StartExplorer("/select,\"" + objectToSelect + "\"");
-        }
-
-
-
-
-        public static class OsIs
-        {
-            static readonly Version Ver = Environment.OSVersion.Version;
-
-            public static bool XPOrLess { get { return Ver.Major < 6; } }
-            public static bool VistaExact { get { return Ver.Major == 6 && Ver.Minor == 0; } }
-            public static bool SevenOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 1); } }
-            public static bool SevenOrBelow { get { return Ver.Major < 6 || (Ver.Major == 6 && Ver.Minor <= 1); } }
-            public static bool EightOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 2); } }
-            public static bool EightRpOrMore { get { return Ver >= new Version(6, 2, 8400); } }
         }
 
     }
