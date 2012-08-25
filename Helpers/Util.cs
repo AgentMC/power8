@@ -322,6 +322,40 @@ namespace Power8
 #endif
             return zeroFails == IntPtr.Zero ? null : info.szDisplayName;
         }
+        /// <summary>
+        /// Converts a path with 8.3 styled file- or foldernames to a long one.
+        /// Or, gets the diplay name for shell namespace guids.
+        /// </summary>
+        /// <param name="path">Path to file or folder, either normal one (the function won't 
+        /// do anything), or containing 8.3 styled names, like "C:\Users\MYUSER~1\", 
+        /// or a shell namespage guid(s), one from <code>API.ShNs</code>.</param>
+        /// <returns>If succeeds, returns expanded FQ-FS-path of a file or folder that was 
+        /// passed  containing 8.3-styled names, or returns the display name for shell guid.
+        /// If fails, returns either original passed data (if no changes were done, and the
+        /// parameter is simply non-applicable), or null, or empty string in case something 
+        /// gone wrong.</returns>
+        public static string ResolveLongPathOrDisplayName(string path)
+        {
+            if (path.Contains("~") || path.StartsWith("::"))
+            {
+                IntPtr ppidl;
+                lock (Buffer.Clear()) 
+                {
+                    API.SFGAO nul;
+                    API.SHParseDisplayName(path, IntPtr.Zero, out ppidl, API.SFGAO.NULL, out nul);
+                    API.SHGetPathFromIDList(ppidl, Buffer);//for 8.3-styled
+                    path = Buffer.ToString();
+                }
+                if (string.IsNullOrEmpty(path))//if the 8.3-conversion failed
+                {
+                    var info = new API.Shfileinfo();
+                    API.SHGetFileInfo(ppidl, 0, ref info, (uint) Marshal.SizeOf(info),
+                                      API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES);
+                    path = info.szDisplayName;
+                }
+            }
+            return path;
+        }
 
         #endregion
 
@@ -514,70 +548,21 @@ namespace Power8
         
         #endregion
 
-        #region Path utils
-
-        public static string GetLongPathOrDisplayName(string path)
-        {
-            if (path.Contains("~") || path.StartsWith("::"))
-            {
-                IntPtr ppidl;
-                lock (Buffer.Clear())
-                {
-                    API.SFGAO nul;
-                    API.SHParseDisplayName(path, IntPtr.Zero, out ppidl, API.SFGAO.NULL, out nul);
-                    API.SHGetPathFromIDList(ppidl, Buffer);
-                    path = Buffer.ToString();
-                }
-                if (string.IsNullOrEmpty(path))
-                {
-                    var info = new API.Shfileinfo();
-                    API.SHGetFileInfo(ppidl, 0, ref info, (uint) Marshal.SizeOf(info),
-                                      API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES);
-                    path = info.szDisplayName;
-                }
-            }
-            return path;
-        }
-
-        public static Tuple<string, string> CommandToFilenameAndArgs(string command)
-        {
-            if (!string.IsNullOrEmpty(command))
-            {
-                if (File.Exists(command))
-                    return new Tuple<string, string>(command, "");
-                if (command[1] == ' ')//web search?
-                {
-                    if (_searchProviders == null)
-                    {
-                        _searchProviders = new Dictionary<char, string>();
-                        var doc = new XmlDocument();
-                        doc.LoadXml(Settings.Default.SearchProviders);
-// ReSharper disable PossibleNullReferenceException
-                        foreach (XmlElement prov in doc["P8SearchProviders"].GetElementsByTagName("Provider"))
-                            _searchProviders.Add(prov.GetAttribute("key")[0], prov.InnerText);
-// ReSharper restore PossibleNullReferenceException
-                    }
-
-                    string prefix = _searchProviders.ContainsKey(command[0]) ? _searchProviders[command[0]] : null;
-                    if (prefix != null)
-                        return new Tuple<string, string>(
-                            string.Format(prefix, Uri.EscapeUriString(command.Substring(2))), 
-                            null);
-                }
-                //normal file and args
-                var argPtr = command[0] == '"' ? command.IndexOf('"', 1) + 1 : command.IndexOf(' ');
-                if (argPtr > 0)
-                    return new Tuple<string, string>(command.Substring(0, argPtr).Trim('"'),
-                                                     command.Substring(argPtr).TrimStart(' '));
-                return new Tuple<string, string>(command, null);
-            }
-            return null;
-        }
-
-        #endregion
-
         #region Registry data resolution
 
+        /// <summary>
+        /// Gets a resource id string representing a kind of description for object
+        /// represented by a guid, either directly in form of a CLSID or in a form
+        /// of a shell namespace description.
+        /// </summary>
+        /// <param name="clsidOrApiShNs">Guid, guid with braces, shell namespace from
+        /// <code>API.ShNs</code>. The path or file extension won't work, because the 
+        /// description for them is stored a bit differently; the function may be 
+        /// enhanced in future to support files/extensions as well.</param>
+        /// <param name="fallbackToInfoTip">If set to true, the function tries to get 
+        /// also "InfoTip" value, if "LocalizedString" is not available.</param>
+        /// <returns>Resource Id that, when resolved, will contain the description
+        /// for the class or shell namespace represented by passed parameter</returns>
         public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs, bool fallbackToInfoTip = false)
         {
             var ls = GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString");
@@ -585,25 +570,63 @@ namespace Power8
                 return GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip");
             return ls;
         }
-
+        /// <summary>
+        /// Gets a resource id string pointing to a icon for object
+        /// represented by a guid, either directly in form of a CLSID or in a form
+        /// of a shell namespace description, or by a file name with extension.
+        /// </summary>
+        /// <param name="clsidOrApiShNs">Guid, guid with braces, shell namespace from
+        /// <code>API.ShNs</code>, filename with extension, either with path or without.</param>
+        /// <returns>Resource Id that, when resolved, will return the icon
+        /// for the class or shell namespace represented by passed parameter</returns>
         public static string GetDefaultIconResourceIdForClass(string clsidOrApiShNs)
         {
             return GetResourceIdForClassCommon(clsidOrApiShNs, "\\DefaultIcon", "");
         }
-
+        /// <summary>
+        /// Gets a pair of strings that work as open command for object
+        /// represented by a guid, either directly in form of a CLSID or in a form
+        /// of a shell namespace description, or by a file name with extension.
+        /// In case of file, the command may contain enumerated parameters, like "%1".
+        /// </summary>
+        /// <param name="clsidOrApiShNs">Guid, guid with braces, shell namespace from
+        /// <code>API.ShNs</code>, filename with extension, either with path or without.</param>
+        /// <returns>Tuple, where Item1 is an executable application, and Item2 is a 
+        /// comand for this application passed to launch the given object.</returns>
         public static Tuple<string, string> GetOpenCommandForClass(string clsidOrApiShNs)
         {
             var command = GetResourceIdForClassCommon(clsidOrApiShNs, "\\Shell\\Open\\Command", "");
             return CommandToFilenameAndArgs(command);
         }
-        
+        /// <summary>
+        /// Properly registered CPLs contain "system name", a string that, when passed to
+        /// "control.exe /name {sysname}" launches this CPL item. This function returns 
+        /// such name for a CPL represented by a guid or a shell namespace poiner.
+        /// </summary>
+        /// <param name="clsidOrApiShNs">Guid, guid with braces, shell namespace from
+        /// <code>API.ShNs</code> with a guid appended. Parameter must represent the
+        /// Control Panel Item.</param>
+        /// <returns>String that is a system regisered name for a cpl.</returns>
         public static string GetCplAppletSysNameForClass(string clsidOrApiShNs)
         {
             return GetResourceIdForClassCommon(clsidOrApiShNs, "", "System.ApplicationName");
         }
-
+        /// <summary>
+        /// Helper function that finds a proper registry key for an object passed 
+        /// and gets the string placed under that key, described by other parameters.
+        /// </summary>
+        /// <param name="clsidOrApiShNs">Guid, guid with braces, shell namespace from
+        /// <code>API.ShNs</code>, filename with extension, either with path or without.</param>
+        /// <param name="subkey">Subkey name where to find information, relative to the 
+        /// location in the registry where the class description for specified object 
+        /// resides. May be null or empty. If not, shall start with a backslash,
+        /// e.g. "\DefaultIcon".</param>
+        /// <param name="valueName">Name of the registry value that contains the desired
+        /// data. May be empty, which means default value ("@"), but must not be null.</param>
+        /// <returns>String contained in the registry value located as escribed by 
+        /// parameters passed, without any conversion done on it. If fails, returns null.</returns>
         private static string GetResourceIdForClassCommon(string clsidOrApiShNs, string subkey, string valueName)
-        {
+        {//That's a simple routine: get container-open key-open value-return
 // ReSharper disable EmptyGeneralCatchClause
             if (!string.IsNullOrEmpty(clsidOrApiShNs))
             {
@@ -625,34 +648,61 @@ namespace Power8
 // ReSharper restore EmptyGeneralCatchClause
             return null;
         }
-
+        /// <summary>
+        /// Returns the registry key located under HKCR, but withour explicit "HKCR"
+        /// mentioning, which contains descriptive data for a class represented by 
+        /// a guid, shell namespace pointer, or a file with extension.
+        /// </summary>
+        /// <param name="pathClsidGuidOrApishnamespace">Guid, or guid with braces, shell 
+        /// namespace from <code>API.ShNs</code>, shell namespace with additional \guid 
+        /// appended, with 2 colons ("::") or without, a filename with extension, either 
+        /// with path or without.</param>
+        /// <returns>See Summary on what is rerturned on success. Null is returned on 
+        /// failure.</returns>
         private static string GetRegistryContainer(string pathClsidGuidOrApishnamespace)
-        {
+        {   //file?
             var i = pathClsidGuidOrApishnamespace.LastIndexOf(".", StringComparison.Ordinal);
-            if (i < 0)
-            {
+            if (i < 0) //not file
+            {                      //vvvThis will parse guid
                 return "CLSID\\" + NameSpaceToGuidWithBraces(pathClsidGuidOrApishnamespace);
             }
+            //file
             using (var k = Microsoft.Win32.Registry.ClassesRoot
                 .OpenSubKey(pathClsidGuidOrApishnamespace.Substring(i), false))
-            {
+            {//"hkcr\.doc\@" => "Word.document"
                 return (k != null)
                            ? ((string) k.GetValue(String.Empty, null))
                            : null;
             }
+        }
+        /// <summary> Converts a guid, or shell namespace, to a registry-styled {GUID} </summary>
+        /// <param name="ns">A textual representation for guid,or a shell namespace 
+        /// description, possibly with many levels, possibly with double colons inside.</param>
+        /// <returns>Something like "{AAAAAAA-BBBB-CCCC-DDDD-EEEEFFFF}". Shell 
+        /// namespace descriptors are trimmed to the latest guid in chain.</returns>
+        private static string NameSpaceToGuidWithBraces(string ns)
+        {
+            ns = ns.Substring(ns.LastIndexOf('\\') + 1).TrimStart(':');
+            if (!ns.StartsWith("{"))
+                ns = "{" + ns + "}";
+            return ns;
         }
 
         #endregion
 
         #region Resources extraction
 
+        /// <summary> Loads string resource identified by resource ID and returns it  </summary>
+        /// <param name="localizeableResourceId">The resource ID for a string resource, e.g.
+        /// the "LocalizableString" from desktop.ini</param>
+        /// <returns>String resource contents on success, null on failure</returns>
         public static string ResolveStringResource(string localizeableResourceId)
         {
             if(!(localizeableResourceId.StartsWith("@")))
-                return localizeableResourceId; //when non-@ string is used for id
+                return localizeableResourceId; //when non-@ string is used for id, it is already itself
             var resData = ResolveResourceCommon(localizeableResourceId);
-            if (resData.Item2 != IntPtr.Zero)
-            {
+            if (resData.Item2 != IntPtr.Zero) //the dl was loaded ok
+            {//i2 = hModule of DLL, i3 = id of resource
                 lock (Buffer.Clear())
                 {
                     var number = API.LoadString(resData.Item2, resData.Item3, Buffer, Buffer.Capacity);
@@ -666,35 +716,52 @@ namespace Power8
             }
             return null;
         }
-
+        /// <summary>Loads ICON resource identified by resource ID and returns the handle to it</summary>
+        /// <param name="localizeableResourceId">The resource ID for a string resource, e.g.
+        /// the "DefaultIcon" from desktop.ini</param>
+        /// <returns>Handle to unmanaged HICON on success, or IntPtr.Zero on fail.</returns>
         public static IntPtr ResolveIconicResource(string localizeableResourceId)
         {
             var resData = ResolveResourceCommon(localizeableResourceId);
-            if (resData.Item2 != IntPtr.Zero)
+            if (resData.Item2 != IntPtr.Zero) //the dll or exe was loaded ok
             {
-                IntPtr icon = resData.Item3 == 0xFFFFFFFF 
-                                  ? API.ExtractIcon(resData.Item2, resData.Item1, 0) 
-                                  : API.LoadIcon(resData.Item2, resData.Item3);
+                IntPtr icon = resData.Item3 == 0xFFFFFFFF //e.g. the ID was not present
+                                  ? API.ExtractIcon(resData.Item2, resData.Item1, 0) //Get first icon available
+                                  : API.LoadIcon(resData.Item2, resData.Item3); //otherwise load proper resource
 #if DEBUG
                 Debug.WriteLine("RIR: icon => " + icon);
 #endif
                 PostBackgroundDllUnload(resData.Item2);
-                if(icon != IntPtr.Zero)
+                if(icon != IntPtr.Zero) //if all above succeeded
                     return icon;
 
-                var shinfo = new API.Shfileinfo();
+                var shinfo = new API.Shfileinfo(); //otherwise let's make system extract icon for us
                 API.SHGetFileInfo(resData.Item1, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), API.Shgfi.ICON | API.Shgfi.LARGEICON);
-                return shinfo.hIcon;
+                return shinfo.hIcon; //and return whatever comes as result
             }
-            return IntPtr.Zero;
+            return IntPtr.Zero; //fail
         }
-
+        /// <summary>
+        /// Parses Resource ID and returns structure of data prepared for further usage
+        /// </summary>
+        /// <param name="resourceString">String like the following:
+        /// ResId = @%ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
+        /// or like @C:\data\a.dll,-2000#embedding8
+        /// or      @B:\wakawaka\foo.dlx
+        /// or      @%windir%\msm.dll,8 => 8 is index, not id TODO: handle indices well.
+        /// Note that when Resource string doesn't start with @ it is verbatim string and this 
+        /// method shan't be called. However no error will occur, you'll only get the 
+        /// Tuple &lt;ResourceId,IntPtr.Zero,0xFFFFFFFF&gt;.
+        /// </param>
+        /// <returns>Tuple of three items: 
+        /// - full path + name of resource contained (i.e. path to dll file);
+        /// - handle to this DLL loaded by LoadLibraryExW();
+        /// - id of resource if it was specified, or 0xFFFFFFFF otherwise.
+        /// Note that the last tuple item at the moment doesn't explicitely include 
+        /// Resource Indices, so the value returned may be an index. This is not
+        /// implemented because usually it's not. Method may be enhanced in future.</returns>
         private static Tuple<string, IntPtr, uint> ResolveResourceCommon(string resourceString)
         {
-            //ResId = @%ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
-            //or like @C:\data\a.dll,-2000#embedding8
-            //or      @B:\wakawaka\foo.dlx
-            //or      @%windir%\msm.dll,8 => 8 == -8
 #if DEBUG
             Debug.WriteLine("RRC: in => " + resourceString);
 #endif
@@ -708,9 +775,9 @@ namespace Power8
                     resourceString.Substring(0, lastCommaIdx > 0 ? lastCommaIdx : resourceString.Length));
 
             var resId = 
-                lastCommaIdx == 0
+                lastCommaIdx == 0 //id/index not present => default to idx 0 which is described by special value
                 ? 0xFFFFFFFF
-                : uint.Parse((lastSharpIdx > lastCommaIdx
+                : uint.Parse((lastSharpIdx > lastCommaIdx //lastSharpIdx may be bigger or -1 (not found)
                         ? resourceString.Substring(lastCommaIdx + 1, lastSharpIdx - (lastCommaIdx + 1))
                         : resourceString.Substring(lastCommaIdx + 1)).TrimStart('-'));
 
@@ -754,55 +821,102 @@ namespace Power8
 // ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
             return null;
         }
-
-        private static string NameSpaceToGuidWithBraces(string ns)
+        /// <summary>
+        /// Splits command to a flename to be runned and argumets to be passed to the file.
+        /// Also handles web search requests (like "w server" => go to wikipedia, find server).
+        /// Query is considered a web search if 2nd char is space.
+        /// </summary>
+        /// <param name="command">Some command line, in general case contains the EXE to 
+        /// run and some argument, like "C:\my.exe myArg"</param>
+        /// <returns>Tuple of 2 items: the command to run, and the command parameters to pass.
+        /// Returns null in case nothing useful was passed. 
+        /// Returns [command, ""] in case the filename of the file available at the moment 
+        /// was passed.
+        /// Returns [invokable search URI, null] for the web search.
+        /// Returns [command, null] for all other cases (and this likely indicates that the
+        /// command is broken, or it is not the valid command for the system).</returns>
+        public static Tuple<string, string> CommandToFilenameAndArgs(string command)
         {
-            ns = ns.Substring(ns.LastIndexOf('\\') + 1).TrimStart(':');
-            if (!ns.StartsWith("{"))
-                ns = "{" + ns + "}";
-            return ns;
-        }
+            if (!string.IsNullOrEmpty(command))
+            {
+                if (File.Exists(command))
+                    return new Tuple<string, string>(command, string.Empty);
 
+                if (command[1] == ' ')//web search?
+                {
+                    if (_searchProviders == null) //lazy search providers initialization.
+                    {//providers are saved as XML stored in settings.
+                        _searchProviders = new Dictionary<char, string>();
+                        var doc = new XmlDocument();
+                        doc.LoadXml(Settings.Default.SearchProviders);
+// ReSharper disable PossibleNullReferenceException
+                        foreach (XmlElement prov in doc["P8SearchProviders"].GetElementsByTagName("Provider"))
+                            _searchProviders.Add(prov.GetAttribute("key")[0], prov.InnerText);
+// ReSharper restore PossibleNullReferenceException
+                    }
+
+                    string prefix = _searchProviders.ContainsKey(command[0]) ? _searchProviders[command[0]] : null;
+                    if (prefix != null) //the given key was present in dictionary
+                        return new Tuple<string, string>(
+                            string.Format(prefix, Uri.EscapeUriString(command.Substring(2))), 
+                            null);
+                    //otherwise won't fail, just go on
+                }
+                //normal file and args
+                var argPtr = command[0] == '"' ? command.IndexOf('"', 1) + 1 : command.IndexOf(' ');
+                if (argPtr > 0) //if arguments were found at all
+                    return new Tuple<string, string>(command.Substring(0, argPtr).Trim('"'),
+                                                     command.Substring(argPtr).TrimStart(' '));
+                return new Tuple<string, string>(command, null);
+            }
+            return null;
+        }
+        /// <summary> Extracts description and icon from *.CPL file </summary>
+        /// <param name="cplFileName">FQ-FS-path to a *.CPL file</param>
+        /// <returns>Tuple [CPL description, ImageContainer(CPL icon)].
+        /// If certain parts of the CPL interop workflow failed, any item 
+        /// or both of them can be null(s).</returns>
         public static Tuple<string, ImageManager.ImageContainer> GetCplInfo(string cplFileName)
         {
             string name = null;
             ImageManager.ImageContainer container = null;
-            var info = new API.CplInfo {lData = new IntPtr(0xDEADC0D)};
-            
+            var info = new API.CplInfo {lData = new IntPtr(0xDEADC0D)}; //just for dbg
+            //Load CPL as DLL and perform PE init
             var hModule = API.LoadLibrary(cplFileName, IntPtr.Zero, API.LLF.AS_REGULAR_LOAD_LIBRARY);
 #if DEBUG
             Debug.WriteLine("GCplI: begin 4 {1}, hModule<={0}", hModule, cplFileName);
 #endif
 
-            if(hModule != IntPtr.Zero)
-            {
+            if(hModule != IntPtr.Zero) //SUCCEEDED()?
+            {   //Get pointer to CPL wndProc as a delegate
                 var cplProcAddress = API.GetProcAddress(hModule, "CPlApplet");
                 if (cplProcAddress != IntPtr.Zero)
                 {
                     var cplProc = (API.CplAppletProc) Marshal.GetDelegateForFunctionPointer(
                                                                 cplProcAddress, 
                                                                 typeof (API.CplAppletProc));
-                    if (cplProc != null)
+                    if (cplProc != null) //SUCCEEDED()?
                     {
                         var hWnd = API.GetDesktopWindow();
 #if DEBUG
                         Debug.WriteLine("GCplI: doing INIT...");
-#endif
+#endif                  //CPL initializes required data
                         var res = cplProc(hWnd, API.CplMsg.INIT, IntPtr.Zero, IntPtr.Zero);
                         if (res != 0)
                         {
 #if DEBUG
                             Debug.WriteLine("GCplI: doing GETCOUNT...");
-#endif
+#endif                      //How many CPLs are available, basically Cpl.Windows.Any()
                             res = cplProc(hWnd, API.CplMsg.GETCOUNT, IntPtr.Zero, IntPtr.Zero);
                             if (res > 0)
                             {
 #if DEBUG
                                 Debug.WriteLine("GCplI: GETCOUNT returned {0}, doing INQUIRE...", res);
-#endif
+#endif                          //Will work with 1st available
                                 var structSize = Marshal.SizeOf(typeof (API.CplInfo));
                                 var hMem = Marshal.AllocHGlobal(structSize);
                                 ZeroMemory(hMem, structSize);
+                                //Reserved place and cleared space for data. Now do Inquire.
                                 cplProc(hWnd, API.CplMsg.INQUIRE, IntPtr.Zero, hMem);
                                 Marshal.PtrToStructure(hMem, info);
 #if DEBUG
@@ -813,27 +927,34 @@ namespace Power8
                                 var idName = info.idName == 0 ? info.idInfo : info.idName;
                                 var unmanagedIcon = IntPtr.Zero;
 
-                                if (idIcon == 0 || idName == 0)
-                                {
-                                    structSize = Marshal.SizeOf(typeof (API.NewCplInfoW)); //v- just in case...
+                                if (idIcon == 0 || idName == 0) //this means not fail, but just we need to 
+                                {//perform very bad operation, not recommended by MS and so on, but still
+                                    //actively used by many-many-many...
+
+                                    //Ok, let's go. First the memory. Let's alloc twice we might need, to
+                                    //expect someone mixes byte- and char-functions for Unicode... 
+                                    structSize = Marshal.SizeOf(typeof (API.NewCplInfoW)); 
                                     hMem = Marshal.ReAllocHGlobal(hMem, new IntPtr(structSize*2));
                                     ZeroMemory(hMem, structSize*2);
 #if DEBUG
                                     Debug.WriteLine("GCplI: doing NEWINQUIRE...");
 #endif
                                     cplProc(hWnd, API.CplMsg.NEWINQUIRE, IntPtr.Zero, hMem);
-                                    var infoNew =
-                                        (API.NewCplInfoW) Marshal.PtrToStructure(hMem, typeof (API.NewCplInfoW));
+                                    //After we did the NewInquire without specifiing the dwSize, data will be 
+                                    //returned in the format CPL wants. Let's check for it.
+                                    var gotSize = Marshal.ReadInt32(hMem);
 
-                                    if (infoNew.dwSize == structSize)
+                                    if (gotSize == structSize) //NewCplInfoW
                                     {
+                                        var infoNew =
+                                            (API.NewCplInfoW) Marshal.PtrToStructure(hMem, typeof (API.NewCplInfoW));
 #if DEBUG
                                         Debug.WriteLine("GCplI: got NewCplInfoW: {0},{1},{2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);
 #endif
                                         unmanagedIcon = infoNew.hIcon;
                                         name = infoNew.szName ?? infoNew.szInfo;
                                     }
-                                    else if (infoNew.dwSize == Marshal.SizeOf(typeof(API.NewCplInfoA)))
+                                    else if (gotSize == Marshal.SizeOf(typeof(API.NewCplInfoA)))
                                     {
                                         var infoNewA =
                                             (API.NewCplInfoA)Marshal.PtrToStructure(hMem, typeof(API.NewCplInfoA));
@@ -846,7 +967,7 @@ namespace Power8
 #if DEBUG
                                     else
                                     {
-                                        Debug.WriteLine("GCplI: NEWINQUIRE: structure size not supported: 0x{0:x} with IntPtr size 0x{1:x}", infoNew.dwSize, IntPtr.Size);
+                                        Debug.WriteLine("GCplI: NEWINQUIRE: structure size not supported: 0x{0:x} with IntPtr size 0x{1:x}", gotSize, IntPtr.Size);
                                     }
 #endif
                                 }
@@ -855,9 +976,9 @@ namespace Power8
                                 Debug.WriteLine("GCplI: freed, conditional load string...");
 #endif
 
-                                if (name == null)
+                                if (name == null) //No NewInquire or failed or has no dynamic name
                                 {
-                                    lock (Buffer.Clear())
+                                    lock (Buffer.Clear()) //load resource from Inquire
                                     {
                                         if (0 < API.LoadString(hModule, idName, Buffer, Buffer.Capacity))
                                             name = Buffer.ToString();
@@ -867,37 +988,41 @@ namespace Power8
                                 Debug.WriteLine("GCplI: name={0}, conditional load icon...", new object[]{name});
 #endif
 
-                                if(unmanagedIcon == IntPtr.Zero)
+                                if(unmanagedIcon == IntPtr.Zero) //No NewInquire or failed or has no dynamic icon
                                     unmanagedIcon = API.LoadIcon(hModule, idIcon);
 #if DEBUG
                                 Debug.WriteLine("GCplI: icon={0}", unmanagedIcon);
 #endif
-                                if(unmanagedIcon != IntPtr.Zero)
-                                {
+                                if(unmanagedIcon != IntPtr.Zero) //If we have icon anyway
+                                {//convert to ImageContainer and free unmanaged one
                                     container = ImageManager.GetImageContainerForIconSync(cplFileName, unmanagedIcon);
                                     PostBackgroundIconDestroy(unmanagedIcon);
                                 }
 
 #if DEBUG
                                 Debug.WriteLine("GCplI: doing STOP...");
-#endif
+#endif                          //This will affect only curent instance of CPL. At least it should...
                                 cplProc(hWnd, API.CplMsg.STOP, IntPtr.Zero, info.lData);
                             }
 #if DEBUG
                             Debug.WriteLine("GCplI: doing EXIT...");
-#endif
+#endif                      //Same as above
                             cplProc(hWnd, API.CplMsg.EXIT, IntPtr.Zero, IntPtr.Zero);
                         }
                     }
                 }
                 PostBackgroundDllUnload(hModule);
             }
-
+            //Whatever we got anything,
             return new Tuple<string, ImageManager.ImageContainer>(name, container);
         }
-
+        /// <summary> Fills dedicated memory area with zeros </summary>
+        /// <param name="hMem">Pointer to a memory region to be cleaned. In particular, 1st byte
+        /// which shall be cleared. This byte, of course, is not always the 1st byte of 
+        /// allocated region.</param>
+        /// <param name="cb">Size in bytes to be cleared.</param>
         private static void ZeroMemory (IntPtr hMem, int cb)
-        {
+        {//Todo: why not just proxy unmanaged method?
             for (var i = 0; i < cb; i++)
                 Marshal.WriteByte(hMem, i, 0);
         }
@@ -906,24 +1031,33 @@ namespace Power8
 
         #region Errors handling and app lifecycle management
 
+        /// <summary> Shows warning message with exception text </summary>
+        /// <param name="ex">Caught exception</param>
         public static void DispatchCaughtException(Exception ex)
         {
             MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
-
+        /// <summary>
+        /// Shows error message with popped up unhandled exception details.
+        /// Then writes same data in event log as Application Error.
+        /// Then, quits application with code 1. 
+        /// </summary>
+        /// <param name="ex">The exception caused the error.</param>
         public static void DispatchUnhandledException(Exception ex)
         {
             var str = ex.ToString();
             MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
             Die(NoLoc.Err_UnhandledGeneric + str);
         }
-
+        /// <summary> Restarts Power8 writing the reason of restarting into EventLog </summary>
+        /// <param name="reason">Reason to restart</param>
         public static void Restart(string reason)
         {
             Process.Start(Application.ExecutablePath);
             Die(reason);
         }
-
+        /// <summary> Shuts down the Power8  writing the reason of exiting into EventLog </summary>
+        /// <param name="becauseString">Reason to exit</param>
         public static void Die(string becauseString)
         {
             EventLog.WriteEntry("Application Error", 
@@ -935,27 +1069,34 @@ namespace Power8
         #endregion
 
 
-
+        /// <summary>
+        /// Helper class to determine the version of runtime OS 
+        /// in scope of how it is needed by Power8.
+        /// </summary>
         public static class OsIs
         {
-            static readonly Version Ver = Environment.OSVersion.Version;
-
+            static readonly Version Ver = Environment.OSVersion.Version; //it won't change
+            //I guess nothing to document here
             public static bool XPOrLess { get { return Ver.Major < 6; } }
             public static bool VistaExact { get { return Ver.Major == 6 && Ver.Minor == 0; } }
             public static bool SevenOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 1); } }
             public static bool SevenOrBelow { get { return Ver.Major < 6 || (Ver.Major == 6 && Ver.Minor <= 1); } }
             public static bool EightOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 2); } }
-            public static bool EightRpOrMore { get { return Ver >= new Version(6, 2, 8400); } }
+            public static bool EightRpOrMore { get { return Ver >= new Version(6, 2, 8400); } } //Win8ReleasePreview+
         }
-
+        /// <summary> Helper class to call unmanaged ShellExecute on STA thread 
+        /// (used for Verbs invokation) </summary>
         public class ShellExecuteHelper
         {
             private readonly API.ShellExecuteInfo _executeInfo;
             private bool _succeeded;
 
+            /// <summary> Gets the code of error occured during execution </summary>
             public int ErrorCode { get; private set; }
+            /// <summary> Gets the description of error occured during execution </summary>
             public string ErrorText { get; private set; }
 
+            /// <summary> Class constructor. Pass it an instance of ShellExecuteInfo </summary>
             public ShellExecuteHelper(API.ShellExecuteInfo executeInfo)
             {
                 _executeInfo = executeInfo;
@@ -966,10 +1107,18 @@ namespace Power8
                 _succeeded = API.ShellExecuteEx(_executeInfo);
                 if (_succeeded)
                     return;
+                //...and if not - let's try to get what was wrong
                 ErrorCode = Marshal.GetLastWin32Error();
-                ErrorText = new Win32Exception(ErrorCode).Message;
+                ErrorText = new Win32Exception(ErrorCode).Message; //FormatError()
             }
 
+            /// <summary>
+            /// Executes ShellExecute with given Info. The method insures that execution takes
+            /// place on STA thread, either this, or other one. The method won't return until 
+            /// the execution is finished.
+            /// </summary>
+            /// <returns>Bool indicating were there errors during execution (false) 
+            /// or it suceeded (true).</returns>
             public bool ShellExecuteOnSTAThread()
             {
                 if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)

@@ -116,7 +116,7 @@ namespace Power8
                     if (SpecialFolderId == API.Csidl.POWER8JLITEM)
                     {
                         if (Argument.StartsWith("/n,::"))
-                            _friendlyName = Util.GetLongPathOrDisplayName(Argument.Substring(3));
+                            _friendlyName = Util.ResolveLongPathOrDisplayName(Argument.Substring(3));
                         if(string.IsNullOrEmpty(_friendlyName))
                             _friendlyName = Argument;
                         if (!string.IsNullOrEmpty(_friendlyName) && _friendlyName.Length > 60)
