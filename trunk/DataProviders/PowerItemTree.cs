@@ -30,7 +30,7 @@ namespace Power8
         private static readonly string
             IcrAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
             IclAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData).ToLowerInvariant(),
-            IcTemp = Util.GetLongPathOrDisplayName(Environment.ExpandEnvironmentVariables("%temp%")).ToLowerInvariant();
+            IcTemp = Util.ResolveLongPathOrDisplayName(Environment.ExpandEnvironmentVariables("%temp%")).ToLowerInvariant();
 
         #region Roots
 
