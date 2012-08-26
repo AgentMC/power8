@@ -52,11 +52,29 @@ namespace Power8.Views
         //The view of search results
         private readonly ListCollectionView _searchView;
 
+        /// <summary>
+        /// Occurs when The Run button is pressed by user in Instance window.
+        /// Used as centralized handling by MainWindow.
+        /// </summary>
         public event EventHandler RunCalled;
+        /// <summary>
+        /// Occurs when the ButtonStack instance is created and all .ctor stuff is executed.
+        /// This, among other stuff, includes lazy initialization of all data roots in 
+        /// PowerItemTree and MfuList.
+        /// Occurs only once as BtnStck is written as singleton (need 2 start menu instances?) 
+        /// </summary>
         public static event EventHandler Instanciated;
 
         #region Load, Unload, Show, Hide
 
+        /// <summary>
+        /// Buttonstack instance constructor. Except buidling of UI, it:
+        /// - initializes search view;
+        /// - subscribes to DwmCompositionChanged from system and to search events from Tree;
+        /// - initializes the menu-buttons roots.
+        /// After completion of instance construction, the next point of interesting is 
+        /// OnSourceInitialized.
+        /// </summary>
         public BtnStck()
         {
             InitializeComponent();
@@ -66,14 +84,21 @@ namespace Power8.Views
                 _searchView.GroupDescriptions.Add(new PropertyGroupDescription("Root.FriendlyName"));
 
             App.Current.DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
-            foreach (var mb in folderButtons.Children.OfType<MenuedButton>().Union(dataGridHeightMeasure.Children.OfType<MenuedButton>()))
-                mb.Item = GetSpecialItems(mb.Name);
-
             PowerItemTree.WinSearchThreadCompleted += HandleSearch;
             PowerItemTree.WinSearchThreadStarted += HandleSearch;
+
+            foreach (var mb in GetAllMenuButtons())
+                mb.Item = GetSpecialItems(mb.Name);
         }
 
 // ReSharper disable RedundantAssignment
+        /// <summary>
+        /// WM filter hook. Curently used only to prevent arrow sizing cursors
+        /// from appear at edges of the window. Uses both Un/Handled and 
+        /// DefaultProc models from Windows Shell Team guidelines.
+        /// Read MSDN about WndProc function on the method parameters.
+        /// </summary>
+        /// <returns>NULL ptr if not handled, HT* constant otherwise.</returns>
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             handled = false;
@@ -99,14 +124,19 @@ namespace Power8.Views
             return IntPtr.Zero;
         }
 // ReSharper restore RedundantAssignment
-
+        /// <summary>
+        /// Rises SourceInitialized event, when unmanaged source window becomes availabe,
+        /// then tries to create glass sheet around and adds a message filter <see cref="WndProc"/>
+        /// </summary>
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
             this.MakeGlassWpfWindow();
             this.RegisterHook(WndProc);
         }
-
+        /// <summary>
+        /// Overrides closing by hiding window unless P8 shuts doen now.
+        /// </summary>
         private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = !MainWindow.ClosedW;
@@ -115,7 +145,9 @@ namespace Power8.Views
             else
                 Instance = null;
         }
-
+        /// <summary>
+        /// Hides window when it loses input focus
+        /// </summary>
         private void WindowDeactivated(object sender, EventArgs e)
         {
             Hide();
@@ -414,6 +446,16 @@ namespace Power8.Views
                 Util.DispatchCaughtException(ex);
             }
             Hide();
+        }
+
+        /// <summary>
+        /// Returns enumerable collection of all Menued butons for current window
+        /// </summary>
+        private IEnumerable<MenuedButton> GetAllMenuButtons()
+        {
+            return
+                folderButtons.Children.OfType<MenuedButton>().Union(
+                    dataGridHeightMeasure.Children.OfType<MenuedButton>());
         }
 
         #endregion
