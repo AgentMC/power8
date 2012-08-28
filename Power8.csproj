@@ -232,25 +232,6 @@
       <LastGenOutput>Resources.sv.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\RestartExplorer.de.resx">
-      <DependentUpon>RestartExplorer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\RestartExplorer.it.resx">
-      <DependentUpon>RestartExplorer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\RestartExplorer.nl.resx">
-      <DependentUpon>RestartExplorer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\RestartExplorer.resx">
-      <DependentUpon>RestartExplorer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\RestartExplorer.ru.resx">
-      <DependentUpon>RestartExplorer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\RestartExplorer.sv.resx">
-      <DependentUpon>RestartExplorer.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -338,4 +338,21 @@ Avbryt: Jag hoppar över den här uppdateringen, påminn mig inte igen.</value>
   <data name="Str_LocalizerUri" xml:space="preserve">
     <value>http://svenskasprakfiler.se</value>
   </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>Nej, tack!
+Jag vet vad som hänt och vill hantera problemet själv.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Utforskaren har slutat fungera</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Det verkar som om Utforskaren har slutat fungera.
+Power8 kan hjälpa dig hantera detta.
+
+Vill du återställa Utforskaren och starta om Power8?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Ja!
+Återställ Utforskaren och starta om Power8 åt mig.</value>
+  </data>
 </root>
