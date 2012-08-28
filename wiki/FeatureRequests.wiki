@@ -2,26 +2,27 @@
 #labels Featured
 
 = List of ideas and requests we not committed yet =
-  * Skins/styles;
-    * In particular, Metro style.
   * Configuration dialog:
     * Start button size and picture;
-    * Configurable text for start menu;
     * To watch removable devices or not to;
+    * Configurable text for start menu;
     * Speedhacks for MFU: ignore `FileVersionInfo`, ignore Start menu list;
+    * Web Search Engines settings;
+    * Checkboxes from context menu - autostart, updater, metro blocker;
     * Disable some menued buttons;
     * What to show in MFU list:
       * User Assist data (as it is now);
       * Power8 MFU data;
       * User-Configurable list.
-    * Auto-sort items in Start menu on add;
-    * Web Search Engines settings;
-    * Checkboxes from context menu - autostart, updater, metro blocker;
-    * (?) Skip metro shell;
-    * (?,W7) Aero: hide standard start/Classic: fill it.
+    * Auto-sort items in Start menu on add or not (as it is now);
+    * (W7+) Switch CPL Root and All CPL items;
     * more.....?
-  * Context menu (configurable) for computer list, specific items for each computer item;
   * "Switch User" command
   * Drag&Drop in Start menu and User-configurable MFU list (see above);
   * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
-  * Cut/Copy/Paste/Delete for context menu,
+  * Cut/Copy/Paste/Delete for context menu;
+  * Skins/styles;
+    * In particular, Metro style.
+  * (?,W7) Aero: hide standard start/Classic: fill it.
+  * (?) Context menu (configurable) for computer list, specific items for each computer item;
+  * (?, unlikely) Skip metro shell;
