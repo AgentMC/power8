@@ -24,3 +24,4 @@
   * "Switch User" command
   * Drag&Drop in Start menu and User-configurable MFU list (see above);
   * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
+  * Cut/Copy/Paste/Delete for context menu,
