@@ -333,4 +333,21 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value />
     <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
   </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>No, thanks.
+I know what's happening and will handle the problem myself.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Windows Explorer is dead</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>It seems that Windows Explorer process is unavailable.
+Power8 can help you handling this.
+ 
+Do you want to restore Windows Explorer and restart Power8?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Yes!
+Please launch Explorer for me and restart Power8 process.</value>
+  </data>
 </root>

@@ -333,4 +333,21 @@ Abbrechen: Ich überspringe das Update. Benachrichtige mich nicht mehr über die
   <data name="Str_LocalizerUri" xml:space="preserve">
     <value>mailto:mario.saternus@satiru.de</value>
   </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>Nein danke.
+Ich weiß, was hier passiert und werde mich selbst um das Problem kümmern.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — der Windows-Explorer ist abgestürzt</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Es scheint, dass der Windows-Explorer nicht verfügbar ist.
+Power8 kann Ihnen helfen, dass Problem zu lösen.
+ 
+Möchten Sie den Windows-Explorer wiederherstellen und Power8 neu starten?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Ja! 
+Bitte starte den Windows-Explorer für mich und starte den Power8-Prozess neu.</value>
+  </data>
 </root>

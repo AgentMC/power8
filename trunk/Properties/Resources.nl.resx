@@ -333,4 +333,21 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
   <data name="Str_LocalizerUri" xml:space="preserve">
     <value>mailto:gstenveld@npz-nrz.nl</value>
   </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>Nee, bedankt.
+Ik weet wat er gebeurt en zal het probleem zelf aanpakken.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Windows Explorer is dood</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Het lijkt er op dat Windows Explorer niet beschikbaar is.
+Power8 kan u hierbij helpen.
+ 
+Wilt u Windows Explorer herstellen en Power8 herstarten?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Ja!
+Start Explorer a.u.b. voor me en herstart Power8 proces.</value>
+  </data>
 </root>

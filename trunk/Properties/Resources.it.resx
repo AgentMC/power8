@@ -334,4 +334,21 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>mailto:0makoblaster0@gmail.com</value>
     <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
   </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>No, grazie.
+So cosa sta succedendo e risolverò il problema per conto mio.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Esplora file è occupato</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Sembra che il processo Esplora file sia occupato.
+Power8 può aiutarti a risolvere.
+ 
+Vuoi ripristinare Esplora file e riavviare Power8?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Sì!
+Riavvia Explorer per me e riavvia Power8.</value>
+  </data>
 </root>

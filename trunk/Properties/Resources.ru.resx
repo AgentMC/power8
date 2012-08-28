@@ -338,4 +338,21 @@
   <data name="Str_LocalizerUri" xml:space="preserve">
     <value />
   </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>Нет, спасибо.
+Я в курсе, что происходит, и сам как-нибудь справлюсь.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Windows Explorer ушёл и не вернулся</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Похоже, процесс Windows Explorer'а недоступен.
+Power8 может помочь вам с этим справиться.
+ 
+Восстановить Windows Explorer и перезапустить Power8?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Да!
+Пожалуйста восстановите Explorer и перезапустите Power8.</value>
+  </data>
 </root>
