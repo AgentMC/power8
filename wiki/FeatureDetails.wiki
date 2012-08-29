@@ -120,6 +120,8 @@ Names of elements are returned using complex algorythm:
   * if this fails, we extract file information and display file Description of Product Name;
   * finally, if none of above is available, file name or link title is shown. 
 
+The elements in MFU list can be pinned, which means they'll always appear at the top of the MFU list. Elements can be pinned even if they're shown in Internal Search results. However this relates and will suceed only to MFU elements, and not other ones like Start menu entry, Windows search item and so on.
+
 ==Jump Lists==
 
 Power8 displays 3 sources of JL in one menu:
