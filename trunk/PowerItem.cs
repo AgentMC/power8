@@ -140,7 +140,7 @@ namespace Power8
                     return _friendlyName;
                 }
                 
-                if (Parent == MfuList.MfuSearchRoot //so it must have ARGUMENT...
+                if (IsMfuChild //so it must have ARGUMENT...
                     && (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
                 {
                     var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument);
@@ -339,6 +339,11 @@ namespace Power8
                        PowerItemTree.StartMenuRoot.Count > 0 &&
                        Root == PowerItemTree.StartMenuRoot[0];
             }
+        }
+
+        public bool IsMfuChild
+        {
+            get { return Parent == MfuList.MfuSearchRoot; }
         }
 
         #endregion
