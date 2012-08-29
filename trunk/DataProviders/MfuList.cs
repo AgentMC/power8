@@ -372,8 +372,6 @@ namespace Power8
                     jl = recent.Union(frequent);
                 else
                     jl = recent ?? frequent;
-                if (jl != null)                     
-                    jl = jl.Where(x => x.StartsWith("::") || File.Exists(x));
             }
             if (jl != null && p8R != null)
                 jl = jl.Union(p8R);
@@ -381,6 +379,7 @@ namespace Power8
                 jl = jl ?? p8R;
             if (jl != null)
             {
+                jl = jl.Where(x => x.StartsWith("::") || File.Exists(x));
                 foreach (var arg in jl)
                 {
                     var local = arg;

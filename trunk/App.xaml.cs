@@ -142,7 +142,14 @@ namespace Power8
 
         private void OpenContainerClick(object sender, RoutedEventArgs e)
         {
-            Util.StartExplorerSelect(Args4PropsAndCont(Util.ExtractRelatedPowerItem(e), ((MenuItem) sender).Name));
+            try
+            {
+                Util.StartExplorerSelect(Args4PropsAndCont(Util.ExtractRelatedPowerItem(e), ((MenuItem) sender).Name));
+            }
+            catch (Exception ex)
+            {
+                Util.DispatchCaughtException(ex);
+            }
         }
 
         private static string Args4PropsAndCont(PowerItem item, string callerName)
