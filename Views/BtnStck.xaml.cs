@@ -158,41 +158,58 @@ namespace Power8.Views
 
         #region Handlers
 
+        /// <summary>
+        /// Handler of Hibernate button. Calls SetSuspendState() to put PC to hibernation
+        /// </summary>
         private void ButtonHibernateClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Hibernate, true, false);
         }
-
+        /// <summary>
+        /// Handler of Sleep button. Calls SetSuspendState() to put PC to sleep
+        /// </summary>
         private void ButtonSleepClick(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
         }
-
+        /// <summary>
+        /// Handler of Shutdown button. Calls shutdown.exe to turn PC off
+        /// </summary>
         private void ButtonShutdownClick(object sender, RoutedEventArgs e)
         {
             LaunchShForced("-s");
         }
-
+        /// <summary>
+        /// Handler of Restart button. Calls shutdown.exe to reboot PC
+        /// </summary>
         private void ButtonRestartClick(object sender, RoutedEventArgs e)
         {
             LaunchShForced("-r");
         }
-
+        /// <summary>
+        /// Handler of Log Off button. Calls shutdown.exe to log current user off
+        /// </summary>
         private void ButtonLogOffClick(object sender, RoutedEventArgs e)
         {
             LaunchShForced("-l");
         }
-
+        /// <summary>
+        /// Handler of Lock button. Calls LockWorkStation to lock the user session
+        /// </summary>
         private void ButtonLockClick(object sender, RoutedEventArgs e)
         {
             StartConsoleHidden(@"C:\WINDOWS\system32\rundll32.exe", "user32.dll,LockWorkStation");
         }
-
+        /// <summary>
+        /// Handler of ScreenSave button. Sends SC_SREENSAVE to Desktop to start the screensaver
+        /// </summary>
         private void ButtonScreensaveClick(object sender, RoutedEventArgs e)
         {
             API.SendMessage(API.GetDesktopWindow(), API.WM.SYSCOMMAND, (int)API.SC.SCREENSAVE, 0);
         }
-        
+        /// <summary>
+        /// Handler of Run button. Raises event RunCalled in case any handler is attached
+        /// </summary>
         private void ButtonRunClick(object sender, RoutedEventArgs e)
         {
             var handler = RunCalled;
@@ -202,6 +219,12 @@ namespace Power8.Views
 
         //------------------------------------------
 
+        /// <summary>
+        /// Handler that is called when a context menu is opened over Start menu or 
+        /// MFU list, or JL item of MFU.
+        /// </summary>
+        /// <param name="sender">Context menu that is opening</param>
+        /// <param name="e">Event Args that have the related power item deep inside</param>
         private void AllItemsMenuRootContextMenuOpening(object sender, ContextMenuEventArgs e)
         {
             App.Current.MenuDataContext = Util.ExtractRelatedPowerItem(e);
@@ -209,45 +232,67 @@ namespace Power8.Views
 
         //------------------------------------------
 
+        /// <summary>
+        /// Starts or cancels asynchronous search and sets the data source for MFU list 
+        /// depending on text in search field
+        /// </summary>
         private void SearchBoxTextChanged(object sender, TextChangedEventArgs e)
         {
-            PowerItemTree.SearchTreeCancel();
-            var q = SearchBox.Text.Trim().ToLowerInvariant();
-            if (!String.IsNullOrWhiteSpace(q) && q.Length > 1)
+            PowerItemTree.SearchTreeCancel(); //first always cancel the current search
+            var q = SearchBox.Text.Trim().ToLowerInvariant(); //ignore spaces an case
+            if (!String.IsNullOrWhiteSpace(q) && q.Length > 1) //we can probably start search
             {
-                if (q[1] != ' ')
+                if (q[1] != ' ') //not web search
                 {
-                    dataGrid.ItemsSource = _searchView;
+                    dataGrid.ItemsSource = _searchView; //switch MFU list to search results and kisk search invoker
                     Util.Fork(() => PowerItemTree.SearchTree(q, _searchData, ExpandGroup), "Search root for " + q).Start();
                 }
-                else
+                else //web search - no actions from our side
                 {
-                    dataGrid.SelectedIndex = -1;
-                }
+                    dataGrid.SelectedIndex = -1; //except clearing the selection from MFU list, so that Enter
+                }                                //will be handled proper way
             }
-            else
+            else //no search
             {
-                dataGrid.ItemsSource = MfuItems;
-                SearchMarker.Visibility = Visibility.Hidden;
+                dataGrid.ItemsSource = MfuItems; //show MFU list
+                SearchMarker.Visibility = Visibility.Hidden; //Hide search marker if any
             }
         }
-
+        /// <summary>
+        /// Searches for the visual group in search results that is represented by 
+        /// a PowerItem passed and ensures it's items are displayed.
+        /// </summary>
+        /// <param name="root">The PowerItem that serves as group root for the
+        /// collection generated by one of the search threads. This can be obtained
+        /// by calling Root property of any item that was actually put to the 
+        /// collection. Obviously, different search threads search items using  
+        /// different search roots which (roots) will then be used as group root
+        /// for search results as well.</param>
+        /// <param name="token">CancellationToken that can cancel the thread.</param>
+        /// <remarks>From the visual tree of MFU list 
+        /// searches for the first Expander control 
+        /// under the ContentPresenter control 
+        /// with Content that ReferenceEquals to the Group in SearchView
+        /// whose (Group's) Name value-equals to the passed root's FriendlyName.
+        /// Cancellation token is checked twice during the execution.
+        /// Expander is searched and expanded only if the number of iems 
+        /// in related group is 20 or less (performance concideration).</remarks>
         private void ExpandGroup(PowerItem root, CancellationToken token)
         {
-            if(token.IsCancellationRequested 
+            if(token.IsCancellationRequested       //thread cancelled
                 || _searchView.Groups == null 
-                || _searchView.Groups.Count == 0
-                || root == null)
+                || _searchView.Groups.Count == 0   //no groups available
+                || root == null)                   //argument exception should be here...
                 return;
-            var group = _searchView.Groups
-                .Cast<CollectionViewGroup>()
+            var group = _searchView.Groups         //get group whose name equals to root's 
+                .Cast<CollectionViewGroup>()       //Friendly name
                 .FirstOrDefault(g => ((string) g.Name) == root.Root.FriendlyName);
             if(group == null || group.ItemCount > 20)
+                return;                            //If no such group or it's to large to expand
+            if(token.IsCancellationRequested)      // Just in case
                 return;
-            if(token.IsCancellationRequested) // Just in case
-                return;
-            var expander = (Expander)dataGrid
-                .GetFirstVisualChildOfTypeByContent()
+            var expander = (Expander)dataGrid      //get the expander. Method is extension, so no exceptions here,
+                .GetFirstVisualChildOfTypeByContent() //only null may be returned
                  .GetFirstVisualChildOfTypeByContent()
                   .GetFirstVisualChildOfTypeByContent()
                    .GetFirstVisualChildOfTypeByContent("ScrollContentPresenter")
@@ -255,11 +300,11 @@ namespace Power8.Views
                      .GetFirstVisualChildOfTypeByContent()
                       .GetFirstVisualChildOfTypeByContent(content: group)
                        .GetFirstVisualChildOfTypeByContent();
-            if (expander != null)
+            if (expander != null)                   //Expander was found?
             {
-                expander.IsExpanded = true;
+                expander.IsExpanded = true;         //expand it and set the selection
                 if (dataGrid.SelectedIndex == -1)
-                    dataGrid.SelectedIndex = 0;
+                    dataGrid.SelectedIndex = 0;     //TODO: probably not 0, but idx(first available)?
             }
         }
 
