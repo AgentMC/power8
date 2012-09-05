@@ -2,6 +2,23 @@
 #labels Featured
 
 
+==Version 1.0 Hotfix 2 (v.1.0.2.0): 05.08.2012==
+  
+  # `[new]` Dutch localization;
+  # `[new]` Italian localization;
+  # `[changed]` Now we won't add entries to P8's own Jump List if the parent process of the launched one is started not by our user;
+  # `[changed]` From now on, Welcome arrow will be hidden as only user moves the mouse over the main button;
+  # `[changed]` Now all localizations are inside single file;
+  # `[fixed]` Fixed bug when trying to open folder for deleted item when it was previously put to Jump Lists:
+    * now we filter out these files also from P8's Jumo Lists;
+    * the exception is handled in the menu item click handler as well;
+  # `[fixed]` Couple of bugs in Pin/Unpin button:
+    * `ArgumentOutOfRange` exception when unpinning old items that would normally be filtered out as obsolete;
+    * Now we handle exception if the (un)pinned item is not available at the moment of (un)pinning;
+    * Now the pin icon will be shown for MFU children only, preventing user from trying to pin the unpinnable stuff;
+  # `[fixed]` Under extremely rare conditions, when an FS event for the folder comes at the same time with whatever way called Items evaluation for the same folder, two threads may reside at `AddSubItem()` at the same time. And if 1st thread's Send() will be executed in parallel with 2nd thread's `FirstOrDefault` -> here is `InvalidOperationException` thrown. Fixed now.
+
+
 ==Version 1.0 Hotfix 1 (v.1.0.1.0): 04.08.2012==
   
   # `[new]` German localization;
