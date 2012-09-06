@@ -307,7 +307,14 @@ namespace Power8.Views
                     dataGrid.SelectedIndex = 0;     //TODO: probably not 0, but idx(first available)?
             }
         }
-
+        /// <summary>
+        /// Handles specific key presses when caret is in search box:
+        /// - Up and down move the selection in the grid;
+        /// - Enter launches selected item in grid if there's such an item,
+        /// or tries to launch command typed in search box;
+        /// - Esc clears the text in search box or hides the ButtonStack 
+        /// if the text has been cleared already.
+        /// </summary>
         private void SearchBoxPreviewKeyDown(object sender, KeyEventArgs e)
         {
                 e.Handled = true;
@@ -363,14 +370,21 @@ namespace Power8.Views
                 }
             e.Handled = false;
         }
-
+        /// <summary>
+        /// Launches doubleclicked PowerItem. does nothing if clicked not on the PowerItem.
+        /// </summary>
         private void DataGridMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var i = Util.ExtractRelatedPowerItem(e);
             if (i != null)
                 InvokeFromDataGrid(i);
         }
-
+        /// <summary>
+        /// Handles specific key presses when focus is in Data grid:
+        /// - Enter starts the selected PowerItem, if any;
+        /// - Tab/Shift-Tab moves focus to correct controls so that grid doesn't 
+        /// hold focus inside. There are arrow buttons for that.
+        /// </summary>
         private void DataGridPreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -392,7 +406,10 @@ namespace Power8.Views
             }
 
         }
-
+        /// <summary>
+        /// Handles search event raised by Windows Serach threads.
+        /// Works with UI thus invokes Main Dispatcher for real work.
+        /// </summary>
         private void HandleSearch(object sender, PowerItemTree.WinSearchEventArgs args)
         {
             Util.Send(() =>
@@ -408,7 +425,9 @@ namespace Power8.Views
                               }
                           });
         }
-
+        /// <summary>
+        /// Handles click on Pin icon. Pins or unpins element in the collection
+        /// </summary>
         private void PinClick(object sender, EventArgs e)
         {
             var pi = Util.ExtractRelatedPowerItem(e);
@@ -426,17 +445,30 @@ namespace Power8.Views
 
         #region Helpers
         
+        /// <summary>
+        /// Launches Shutdown.exe with -f key and command passed as argument.
+        /// If command is not "-l", adds "-t 0" as well.
+        /// Console window isn't shown.
+        /// </summary>
+        /// <param name="arg">Shutdown command, like "-s", "-r", "-l".</param>
         private static void LaunchShForced(string arg)
         {
             StartConsoleHidden("shutdown.exe", arg + " -f" + (arg == "-l" ? "" : " -t 0"));
         }
-
+        /// <summary>
+        /// Executes command without showing the console window or other windows
+        /// </summary>
+        /// <param name="exe">Application to launch</param>
+        /// <param name="args">Command to execute</param>
         private static void StartConsoleHidden(string exe, string args)
         {
             var si = new ProcessStartInfo(exe, args) {CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden};
             Process.Start(si);
         }
-
+        /// <summary>
+        /// Overrides Focus() to forward it to the search bar, 
+        /// so when window is activated focus always goes there
+        /// </summary>
         new public void Focus()
         {
             base.Focus();
