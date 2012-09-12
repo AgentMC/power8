@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -13,23 +12,27 @@ using System.Diagnostics;
 namespace Power8
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Bootstrapper for the application
     /// </summary>
     public partial class App
-    {
-        private readonly Thread _initTreeThread = Util.Fork(PowerItemTree.InitTree, "InitTree");
-        
+    {   
+        /// <summary>
+        /// Application initializer. Performs compatibility check, 
+        /// starts diagnostics if required, works settings around,
+        /// and initializes the process of generating of internal data structures.
+        /// </summary>
         public App()
         {
-            if(Util.OsIs.VistaExact)
+            if(Util.OsIs.VistaExact) //If run on shit
             {
                 MessageBox.Show(
                     Power8.Properties.Resources.Err_VistaDetected,
                     Power8.Properties.NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
-                Environment.Exit(2);
+                Environment.Exit(2); //means: OS not found
             }
 
-            Util.MainDisp = Dispatcher;
+            Util.MainDisp = Dispatcher; //store main thread dispatcher. Widely used in Application.
+
 #if DEBUG
             //Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("it-IT");
 
@@ -40,6 +43,7 @@ namespace Power8
             Debug.Listeners.Add(l);
 #endif
             DispatcherUnhandledException += (sender, e) => Util.DispatchUnhandledException(e.Exception);
+
             //Move settings from previous ver
             var std = Power8.Properties.Settings.Default;
             if (!std.FirstRunDone)
@@ -47,9 +51,10 @@ namespace Power8
                 std.Upgrade();
                 std.Save();//FirstRunDone is updated later in Main Window code
             }
+
             //Initialize standard folder icon
             foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))
-            {
+            {//we just seek for appropriate special folder to get folder icon...
                 bool isOk = false;
                 switch (sf)
                 {
@@ -57,79 +62,115 @@ namespace Power8
                     case Environment.SpecialFolder.DesktopDirectory:
                     case Environment.SpecialFolder.CommonDesktopDirectory:
                     case Environment.SpecialFolder.MyComputer:
-                        break;
+                        break; //from switch
                     default:
                         var path = Environment.GetFolderPath(sf);
-                        if (!File.Exists(path + @"\desktop.ini"))
+                        if (!File.Exists(path + @"\desktop.ini")) //we need generic folder, not the customized one
                         {
                             ImageManager.GetImageContainerSync(new PowerItem {Argument = path, IsFolder = true},
                                                            API.Shgfi.SMALLICON);
                             isOk = true;
                         }
-                        break;
+                        break; //from switch
                 }
                 if(isOk)
-                    break;
+                    break; //from foreach
             }
+
             //Build tree
-            _initTreeThread.Start();
+            Util.Fork(PowerItemTree.InitTree, "InitTree").Start();
+
             //react on DwmCompositionChanged event
             ComponentDispatcher.ThreadFilterMessage += WndProc;
         }
+        /// <summary>
+        /// Gets the running instance of App
+        /// </summary>
+        public static new App Current
+        {
+            get { return (App) Application.Current; }
+        }
 
-// ReSharper disable RedundantAssignment
+        #region DWM CompositionChanged event
+
+        // ReSharper disable RedundantAssignment
+        /// <summary>
+        /// App WndProc. Filter. Used only to hande DWMCOMPOSITIONCHANGED event.
+        /// </summary>
+        /// <param name="msg">Structure with message, lparame, wparam, etc.</param>
+        /// <param name="handled">IntPtr wrapped to bool as 1/0. Retval of WndProc.</param>
         private void WndProc(ref MSG msg, ref bool handled)
         {
             if (msg.message == (int)API.WM.DWMCOMPOSITIONCHANGED)
             {
-                OnDwmCompositionChanged();
+                var h = DwmCompositionChanged;
+                if (h != null) 
+                    h(this, null);
                 handled = true;
                 return;
             }
             handled = false;
         }
 // ReSharper restore RedundantAssignment
+        /// <summary>
+        /// WM_DWMCOMPOSITIONCHANGED converted to event model. e is always null.
+        /// Sender is this App.
+        /// </summary>
+        public event EventHandler DwmCompositionChanged;
 
-        public event EventHandler DwmCompositionChanged ;
+        #endregion
 
-        protected void OnDwmCompositionChanged()
-        {
-            var handler = DwmCompositionChanged;
-            if (handler != null) handler(this, null);
-        }
+        //App stores global context menu as resource.
+        #region Global Context menu
 
-
+        /// <summary>
+        /// Handles Run/Run As/Open/Open all users folder commands
+        /// </summary>
         private void RunRunasOpenOpencommonClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 var n = ((MenuItem) sender).Name;
-                if (n == "AppRun" || n == "AppOpenFolder")
+                if (n == "AppRun" || n == "AppOpenFolder") //TODO: maybe compare byref to menuitems?
                     Util.ExtractRelatedPowerItem(e).Invoke();
-                else
+                else //Open common folder is also handled via "RunAsAdmin" command. See below.
                     Util.ExtractRelatedPowerItem(e).InvokeVerb(API.SEVerbs.RunAsAdmin);
+                    //This was done to simplify the implementation. Passing this command switches
+                    //the flag in ResolveItem() that exchanges discovered Common item (if exists)
+                    //with User one. This relates to Start menu explicitly and only.
+                    //Along with that, this flag is passed to process start info, regardless of PowerItem 
+                    //type (file/folder/link...). That type, however, influences the enabled state of 
+                    //menu items, so you shouldn't be able to do something wrong; but, there's a possibility
+                    //that if the PowerItem points to file or link, and it is located under Start menu,
+                    //and there are samely named items under User and Common sections corresponding each other,
+                    //and user clicks "Run as admin", than the Common item will be run as Admin,
+                    //and there's no way to run the user one elevated, as well as running Common one
+                    //with regular rights.
             }
             catch (Exception ex)
             {
                 Util.DispatchCaughtException(ex);
             }
         }
-
+        /// <summary>
+        /// Displays properties of a clicked object. Depending on which item
+        /// was clicked, the automatic link resolution may take place.
+        /// </summary>
         private void ShowPropertiesClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 var info = new API.ShellExecuteInfo
                 {
-                    fMask =
+                    fMask = //need all them for Properties verb
                         API.SEIFlags.SEE_MASK_INVOKEIDLIST | API.SEIFlags.SEE_MASK_NOCLOSEPROCESS |
                         API.SEIFlags.SEE_MASK_FLAG_NO_UI | API.SEIFlags.SEE_MASK_NOASYNC,
-                    hwnd = BtnStck.Instance.GetHandle(),
-                    nShow = API.SWCommands.HIDE,
-                    lpVerb = API.SEVerbs.Properties,
+                    hwnd = BtnStck.Instance.GetHandle(), //otherwise will be in background
+                    nShow = API.SWCommands.HIDE, //hides some other window, kind of worker one
+                    lpVerb = API.SEVerbs.Properties, 
                     lpFile = Args4PropsAndCont(Util.ExtractRelatedPowerItem(e), ((MenuItem)sender).Name)
                 };
-                var executer = new Util.ShellExecuteHelper(info);
+                var executer = new Util.ShellExecuteHelper(info); //Needed to be executed on STA htread
                 if (!executer.ShellExecuteOnSTAThread())
                     throw new ExternalException(string.Format(
                         Power8.Properties.Resources.Err_ShellExecExErrorFormatString, executer.ErrorCode, executer.ErrorText));
@@ -139,7 +180,9 @@ namespace Power8
                 Util.DispatchCaughtException(ex);
             }
         }
-
+        /// <summary>
+        /// Shows source PowerItem in a folder
+        /// </summary>
         private void OpenContainerClick(object sender, RoutedEventArgs e)
         {
             try
@@ -151,7 +194,19 @@ namespace Power8
                 Util.DispatchCaughtException(ex);
             }
         }
-
+        /// <summary>
+        /// Returns string, of a Path kind, that can be passed to a system, and will
+        /// represent the passed PowerItem. Depending on Caller Name, may invoke
+        /// automatic Link resolution for Link PowerItems. "Denamespaces" the 
+        /// passed ControlPanel item returning open command for it.
+        /// </summary>
+        /// <param name="item">The PowerItem which has to be located/properties for 
+        /// which have to be shown.</param>
+        /// <param name="callerName">String, the name of clicked menu item, hendler
+        /// of which is calling this method. Recognizes "AppOpenTargetContainer" and
+        /// "AppShowTargetProperties".</param>
+        /// <returns>Path to binary FS object that represents the passed PowerItem or 
+        /// the target of its link.</returns>
         private static string Args4PropsAndCont(PowerItem item, string callerName)
         {
             string arg = null;
@@ -168,17 +223,17 @@ namespace Power8
                 arg = item.ResolvedLink;
             return arg;
         }
-
-
+        /// <summary>
+        /// Gets or sets Data Context for the whole menu. MUST be called in ALL 
+        /// ContextMenuOpening event handlers with something like:
+        /// App.Current.MDC = Util.ExtractRelatedPowerItem(e);
+        /// </summary>
         public object MenuDataContext
         {
             get { return ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext; }
             set { ((ContextMenu) Resources["fsMenuItemsContextMenu"]).DataContext = value; }
         }
 
-        public static new App Current
-        {
-            get { return (App) Application.Current; }
-        }
+        #endregion
     }
 }
