@@ -474,7 +474,11 @@ namespace Power8.Views
             base.Focus();
             SearchBox.Focus();
         }
-
+        /// <summary>
+        /// Returns Root PowerItem based on the passed name of Menued button.
+        /// Stores generated reference in cache so that no multiple comparisions 
+        /// happens each time the binding occurs
+        /// </summary>
         private static PowerItem GetSpecialItems(string containerName)
         {
 #if DEBUG
@@ -511,7 +515,12 @@ namespace Power8.Views
 #endif
             return SpecialItems[containerName];
         }
-
+        /// <summary>
+        /// Safely invokes passed item and hides the butonstack - as it is done for the grid
+        /// Used in other code as well, like in the search bar handlers, because they behave 
+        /// like invoking something from the grid.  
+        /// </summary>
+        /// <param name="item">Grid's selected item (usually)</param>
         private void InvokeFromDataGrid(PowerItem item)
         {
             try
@@ -524,7 +533,6 @@ namespace Power8.Views
             }
             Hide();
         }
-
         /// <summary>
         /// Returns enumerable collection of all Menued butons for current window
         /// </summary>
@@ -538,22 +546,33 @@ namespace Power8.Views
         #endregion
 
         #region Bindable props
+
+        /// <summary>
+        /// Source for Start Menu
+        /// </summary>
         public ObservableCollection<PowerItem> Items
         {
             get { return PowerItemTree.StartMenuRoot; }
         }
-
+        /// <summary>
+        /// Source for Recent list
+        /// </summary>
         public ObservableCollection<PowerItem> MfuItems
         {
             get { return MfuList.StartMfu; }
         }
-
+        /// <summary>
+        /// Source for search results
+        /// </summary>
         public ObservableCollection<PowerItem> SearchData
         {
             get { return _searchData; }
         }
 
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
+        /// <summary>
+        /// Bindable command which performs Invoke() on item that might be extracted from source
+        /// </summary>
         public MenuItemClickCommand ClickCommand
         {
             get { return _cmd; }
