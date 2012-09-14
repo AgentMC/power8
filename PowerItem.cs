@@ -366,18 +366,27 @@ namespace Power8
 
         #region Helper properties
 
+        /// <summary>
+        /// Returns true when instance is not folder and has some Argument.
+        /// So, this property doesn't actually guarantee this instance points 
+        /// to some real file, or even has proper syntax in Argument.
+        /// </summary>
         public bool IsFile
         {
             get { return Argument != null && !IsFolder; }
         }
-
+        /// <summary>
+        /// Returns true if this instance points to some file which ends with ".lnk", case insensitive.
+        /// True does not guarantee that this file actually exists on disk.
+        /// </summary>
         public bool IsLink
         {
-            get { return IsFile && 
-                  !string.IsNullOrEmpty(Argument) && 
-                  Argument.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase); }
+            get { return IsFile && Argument.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase); }
         }
-
+        /// <summary>
+        /// Returns l-cased cached target of the link for this instance if it is Link;
+        /// returns null otherwise. 
+        /// </summary>
         public string ResolvedLink
         {
             get
@@ -387,21 +396,32 @@ namespace Power8
                 return _resolvedLink;
             }
         }
-
+        /// <summary>
+        /// Returns true if this instance is Library or shell namespace("::{guid}...") ptr,
+        /// or if SpecialFolderId was explicitly set to Power8Class.
+        /// </summary>
         public bool IsSpecialObject
         {
             get { return IsLibrary 
                         || (!string.IsNullOrEmpty(Argument) && Argument.StartsWith("::{")) 
                         || SpecialFolderId == API.Csidl.POWER8CLASS; }
         }
-
+        /// <summary>
+        /// Returns true if this instance points to the file with ".library-ms" extension,
+        /// AND this instance was explicitly switched to Folder mode.
+        /// </summary>
         public bool IsLibrary
         {
             get { return IsFolder && 
                   !string.IsNullOrEmpty(Argument) && 
                   Argument.EndsWith(".library-ms", StringComparison.InvariantCultureIgnoreCase); }
         }
-
+        /// <summary>
+        /// Returns false when this instance references the Vista-style guid-based Control panel flow item,
+        /// launchable via Rundll or "Control /name" only.
+        /// Also returns false for Power8Class-items, since they have same virtualization degree as
+        /// mentioned flow items, in particular, they're totally virtual from the FS perspective.
+        /// </summary>
         public bool IsNotPureControlPanelFlowItem
         {
             get
@@ -421,12 +441,18 @@ namespace Power8
                 return false;
             }
         }
-
+        /// <summary>
+        /// Returns true when this instance points to the element of Control panel. 
+        /// To achieve this, CONTROLS special folder id is used, also the item must not be the folder
+        /// and have parent.
+        /// </summary>
         public bool IsControlPanelChildItem
         {
             get { return !IsFolder && Parent != null && Parent.SpecialFolderId == API.Csidl.CONTROLS; }
         }
-
+        /// <summary>
+        /// Returns true if this instance references the folder under User or Common Start menu.
+        /// </summary>
         public bool IsFolderUnderStartMenu
         {
             get
@@ -436,7 +462,9 @@ namespace Power8
                        Root == PowerItemTree.StartMenuRoot[0];
             }
         }
-
+        /// <summary>
+        /// Returns true if this instance has Mfu as Root
+        /// </summary>
         public bool IsMfuChild
         {
             get { return Parent == MfuList.MfuSearchRoot; }
