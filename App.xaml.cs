@@ -137,15 +137,10 @@ namespace Power8
                     Util.ExtractRelatedPowerItem(e).InvokeVerb(API.SEVerbs.RunAsAdmin);
                     //This was done to simplify the implementation. Passing this command switches
                     //the flag in ResolveItem() that exchanges discovered Common item (if exists)
-                    //with User one. This relates to Start menu explicitly and only.
+                    //with User one. This relates to Start menu _folders_ explicitly and only.
                     //Along with that, this flag is passed to process start info, regardless of PowerItem 
                     //type (file/folder/link...). That type, however, influences the enabled state of 
-                    //menu items, so you shouldn't be able to do something wrong; but, there's a possibility
-                    //that if the PowerItem points to file or link, and it is located under Start menu,
-                    //and there are samely named items under User and Common sections corresponding each other,
-                    //and user clicks "Run as admin", than the Common item will be run as Admin,
-                    //and there's no way to run the user one elevated, as well as running Common one
-                    //with regular rights.
+                    //menu items, so you shouldn't be able to do something wrong.
             }
             catch (Exception ex)
             {

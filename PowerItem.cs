@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using Power8.Properties;
 using System.Linq;
 
@@ -21,6 +22,7 @@ namespace Power8
         private string _friendlyName, _resIdString, _resolvedLink, _camels, _raws;
         private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon, _pin;
         private PowerItem _root; //root is always the same, this is just cache
+
 
 
         /// <summary>
@@ -473,32 +475,46 @@ namespace Power8
         #endregion
 
         #region Implementations and overrides
-
+        
+        /// <summary>
+        /// Compares this PowerItem to other one. Since this function is widely used
+        /// in different sortings, comparision is done based on eveluated FriendlyName
+        /// Use Equals() to determine if items are REALLY similar
+        /// </summary>
+        /// <param name="other">The PowerItem which this one is compared to.</param>
+        /// <returns>0 if items are equal, 1 if this one is bigger, and -1 otherwise</returns>
         public int CompareTo(PowerItem other)
         {
             return String.CompareOrdinal(FriendlyName, other.FriendlyName);
         }
-
+        /// <summary>
+        /// Used in some places where incorrect bindings are used :)
+        /// returns Friendly name
+        /// </summary>
         public override string ToString()
         {
             return FriendlyName;
         }
-
+        /// <summary>
+        /// Gets item hash code based on Friendly name, Argument and IsFolder
+        /// </summary>
         public override int GetHashCode()
         {
             return (FriendlyName + IsFolder + Argument).GetHashCode();
         }
-
+        /// <summary> Compares two PowerItems based on hash codes. </summary>
+        /// <param name="obj">Object to compare to</param>
+        /// <returns>True if obj is PowerItem and HashCodes equal</returns>
         public override bool Equals(object obj)
         {
-            var p = obj as PowerItem;
-            if(p == null)
-                return false;
-            return p.GetHashCode() == GetHashCode();
+            return obj is PowerItem && obj.GetHashCode() == GetHashCode();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
+        /// <summary>
+        /// Fires PropertyChanged event passing property name as argument
+        /// </summary>
+        /// <param name="property">Name of the Property that had changed</param>
         public void OnPropertyChanged(string property)
         {   
             var handler = PropertyChanged;
@@ -508,13 +524,34 @@ namespace Power8
         #endregion
 
         #region Methods
-        //run
+        //Run
+        /// <summary>
+        /// Runs the object this PowerItem is bound to. Depending on what are the Argument
+        /// and other properties of this instance, an application may be run, folder (or
+        /// special system window) may be opened, Control panel element may be launched,
+        /// Power8 window may be displayed, and so on... Calls InvokeVerb(null).
+        /// </summary>
         public void Invoke()
         {
             InvokeVerb(null);
         }
+        /// <summary>
+        /// When not null value is passed as argument, tries to perform the command
+        /// related to the argument passed via the system Verb engine. Works for
+        /// non-folders.<br/>
+        /// If RunAsAdmin verb is passed and this PowerItem instance is Folder, flag 
+        /// is converted to boolean true instructing ResolveItem() that, if available, 
+        /// Common start menu folder should be used instead of user one. This is not 
+        /// used for non-folder items and won't work for folders not under Start menu,
+        /// even there's corresponding CSIDLs.<br/>
+        /// If null value is passed, then it simply runs the PowerItem. Consult Invoke()
+        /// xml-doc on how this can be performed.
+        /// </summary>
+        /// <param name="verb">One from <code>API.SEVerbs</code> constants, or null/empty 
+        /// string, which means "no command"</param>
         public void InvokeVerb(string verb)
         {
+            //Shell namespaces and Power8 classes
             if (SpecialFolderId != API.Csidl.INVALID)
             {
                 if (string.IsNullOrEmpty(Argument))
@@ -528,17 +565,18 @@ namespace Power8
                     return;
                 }
             }
+            //All the other stuff: FS-resolvable
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEVerbs.RunAsAdmin);
-            if (!string.IsNullOrEmpty(verb) && IsFile)
+            if (!string.IsNullOrEmpty(verb) && IsFile)  //pass verb
                 psi.Verb = verb;
-            if (psi.Arguments.StartsWith("\\\\"))
+            if (psi.Arguments.StartsWith("\\\\"))       //network items may be only directly launched
                 psi.UseShellExecute = false;
             try
             {
                 Process.Start(psi);
             }
-            catch (Win32Exception w32E)
-            {
+            catch (Win32Exception w32E) //Any exception will be handled really out of here, but we
+            {                           //shall report proper error
                 if (w32E.NativeErrorCode == 0x483) //1155, e.g. when doing "runas" on "*.hlp"
                 {
                     psi.Verb = null;
@@ -549,12 +587,22 @@ namespace Power8
             }
         }
         //Invalidate
+        /// <summary>
+        /// Clears the Icon andFriendly name. As this class implements INotifyPropChnaged,
+        /// this results in total 5 events: Icon null, Icon null (async extractor started),
+        ///  FriendlyName null, FriendlyName available, Icon available
+        /// </summary>
         public void Update()
         {
             Icon = null;
             FriendlyName = null;
         }
         //Sort
+        /// <summary>
+        /// Recousively calls SortDescription on all children, then
+        /// sorts owh children list putting Folders first, then 
+        /// non-folders. Consult CompareTo() for details.
+        /// </summary>
         public void SortItems()
         {
             foreach (var powerItem in _items)
@@ -570,46 +618,80 @@ namespace Power8
             li.ForEach(_items.Add);
         }
         //Search
+        /// <summary>
+        /// Checks if this instance matches with the provided search query.
+        /// Tries to match item by Camel content and by raw strings.
+        /// Both Camel and Raw strings are cached lowercase, so query must also
+        /// be lowercase to find something.
+        /// See xml-doc for MatchCamelCheck() and MatchRawCheck() for details.
+        /// </summary>
+        /// <param name="query">Search query</param>
+        /// <returns>Boolean indicating if this item matches the query or not.</returns>
         public bool Match(string query)
         {
             return MatchCamelCheck(query) || MatchRawCheck(query);
         }
+        /// <summary>
+        /// Tries to match search query to this item's special Camel string.
+        /// Camel string is built from sources available by FillCamels(),
+        /// see xml-doc of it for the algorythm. Works for Links or EXE references
+        /// (Friendly name, Argument, Resolved link are used), and for 
+        /// Control panel items (only FriendlyName). See Match() xml-doc for 
+        /// details on parameter and return value.
+        /// </summary>
         private bool MatchCamelCheck(string query)
         {
             if (_camels == null)
             {
-                _camels = string.Empty;
+                var b = new StringBuilder();
                 if(IsLink || (Argument != null && Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    foreach (var s in new[] {FriendlyName, Argument, ResolvedLink})
-                    {
-                        if (!string.IsNullOrEmpty(s))
-                        {
-                            bool lastDelim = false;
-                            foreach (var cch in s)
-                            {
-                                if (lastDelim || char.IsUpper(cch) || char.IsNumber(cch))
-                                {
-                                    _camels += cch;
-                                    lastDelim = false;
-                                }
-                                else if (char.IsSeparator(cch) || char.IsPunctuation(cch))
-                                {
-                                    lastDelim = true;
-                                }
-                            }
-                        }
-                    }
-                    _camels = _camels.ToLowerInvariant();
+                    foreach (var s in new[] {FriendlyName, Argument, ResolvedLink}.Where(s => !string.IsNullOrEmpty(s)))
+                        FillCamels(s, b);
                 }
+                else if (IsControlPanelChildItem && !string.IsNullOrEmpty(FriendlyName))
+                {
+                    FillCamels(FriendlyName, b);
+                }
+                _camels = b.ToString().ToLowerInvariant();
             }
             return _camels.Contains(query);
         }
+        /// <summary>
+        /// Tries to match search query to this item's special string containing of 
+        /// concatenated Friendly name, Argument and Resolved link. See Match() xml-doc for 
+        /// details on parameter and return value.
+        /// </summary>
         private bool MatchRawCheck(string query)
         {
             if (_raws == null)
                 _raws = (string.Empty + Argument + FriendlyName + ResolvedLink).ToLowerInvariant();
             return _raws.Contains(query);
+        }
+        /// <summary>
+        /// Appends the _camels builder with new data from string passed according to the algorythm:
+        /// for each char, it is added if a separator or punctuation char was before, and it 
+        /// is not such char itself, or else if it is number or UPPERCASE.
+        /// </summary>
+        /// <param name="s">String for analysis to be added to the camels string</param>
+        /// <param name="sBuilder">The stringBuilder used to build Cames string </param>
+        private static void FillCamels(string s, StringBuilder sBuilder)
+        {
+            bool lastDelim = false;
+            foreach (var cch in s)
+            {
+                if ((lastDelim && !(char.IsSeparator(cch) || char.IsPunctuation(cch)))
+                     || char.IsUpper(cch) 
+                     || char.IsNumber(cch))
+                {
+                    sBuilder.Append(cch);
+                    lastDelim = false;
+                }
+                else if (char.IsSeparator(cch) || char.IsPunctuation(cch))
+                {
+                    lastDelim = true;
+                }
+            }
         }
 
         #endregion
