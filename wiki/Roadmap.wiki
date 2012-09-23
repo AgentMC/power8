@@ -8,15 +8,45 @@ For all other feature requests, currently not prioritized, please consult [Featu
 For already implemented features, see [Changelog] page.
 
 
+= _Power8 v.1.1 Beta_ =
+*estimated date: 07.10.12*
+  * Bugfixes for bugs currently on hold (all high priority at least);
+  * Configuration dialog:
+    * Start button size and picture;
+    * To watch removable devices or not to (bug fix);
+    * Speedhacks for MFU: ignore `FileVersionInfo`, ignore Start menu list;
+    * Checkboxes from context menu - autostart, updater, metro blocker;
+  * User notification to use auto-update;
 
-= _Power8 v.1.1 - 1.4 Beta_ =
-*estimated dates -> starting end of August*
-  * various bugfixes and UI enhancements;
-  * fix for Removable HDDs;
-  * replace grid with something faster;
-  * theme for non-Aero better implementation?
+
+= _Power8 v.1.2 Beta_ =
+*estimated date: 28.10.12*
+  * Replace grid with something faster;
+  * Configuration dialog:
+    * Web Search Engines settings;
+    * Configurable text for start menu;
+    * Disable some menued buttons;
+    * Auto-sort items in Start menu on add or not (as it is now);
+
+
+= _Power8 v.1.3 Beta_ =
+*estimated date: 25.10.12*
+  * Configuration dialog:
+    * What to show in MFU list:
+      * User Assist data (as it is now);
+      * Power8 MFU data;
+      * User-Configurable list.
+    * (W7+) Switch CPL Root and All CPL items;
+  * "Switch User" command
+
+= _Power8 v.1.4 Beta_ =
+*estimated date: 18.11.12*
+  * Drag&Drop in Start menu and User-configurable MFU list (see above);
+  * Cut/Copy/Paste/Delete for context menu;
 
 
 = _Power8 v.1.5 RTM_ =
 *estimated release date: 30.09.12*
-  * Settings window -> contents TBD;
+  * Skins/styles;
+    * In particular, Metro style.
+  * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
