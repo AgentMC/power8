@@ -34,6 +34,7 @@ namespace Power8.Views
         private IntPtr _taskBar, _showDesktopBtn;
         private Thread _updateThread, _blockMetroThread;
         private WelcomeArrow _arrow;
+        private PlacementMode _placement = PlacementMode.MousePoint;
 
         #region Window (de)init 
 
@@ -191,7 +192,14 @@ namespace Power8.Views
 
         private void MainBtnLayoutUpdated(object sender, EventArgs e)
         {
-            ContextPlacement = PlacementMode.Custom;
+            if (!IsLoaded || Util.OsIs.XPOrLess)
+                return;
+            var p = b1.PointToScreen(PlacementPoint);
+            GetSetWndPosition(PlacementWnd, new API.POINT { X = (int)p.X, Y = (int)p.Y }, false);
+            if ((int)PlacementWnd.Left != (int)p.X)//Taskbar vertical
+                ContextPlacement = PlacementWnd.Left > p.X ? PlacementMode.Right : PlacementMode.Left;
+            else                         //Taskbar horizontal
+                ContextPlacement = PlacementWnd.Top > p.Y ? PlacementMode.Bottom : PlacementMode.Top;
         }
 
         #endregion
@@ -435,19 +443,12 @@ namespace Power8.Views
 
         public PlacementMode ContextPlacement
         {
-            get
-            {
-                if (!IsLoaded || Util.OsIs.XPOrLess)
-                    return PlacementMode.Mouse;
-                var p = b1.PointToScreen(PlacementPoint);
-                GetSetWndPosition(PlacementWnd, new API.POINT { X = (int)p.X, Y = (int)p.Y }, false);
-                if (PlacementWnd.Left != p.X)//Taskbar vertical
-                    return PlacementWnd.Left > p.X ? PlacementMode.Right : PlacementMode.Left;
-                //Taskbar horizontal
-                return PlacementWnd.Top > p.Y ? PlacementMode.Bottom : PlacementMode.Top;
-            }
+            get { return _placement; }
             private set
             {
+                if(_placement == value)
+                    return;
+                _placement = value;
                 var h = PropertyChanged;
                 if(h!=null)
                     PropertyChanged(this, new PropertyChangedEventArgs("ContextPlacement"));
