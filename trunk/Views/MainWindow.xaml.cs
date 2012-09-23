@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Power8.Properties;
@@ -17,16 +19,21 @@ namespace Power8.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow
+    public partial class MainWindow:INotifyPropertyChanged
     {
         public static bool ClosedW;
+
+        private static readonly Window PlacementWnd = new Window { Width = 10, Height = 10 };
+        private static readonly Point PlacementPoint = new Point(0, 0);
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private readonly EventWaitHandle _bgrThreadLock = new EventWaitHandle(false, EventResetMode.ManualReset);
 
         private bool _watch, _update, _blockMetro;
         private IntPtr _taskBar, _showDesktopBtn;
         private Thread _updateThread, _blockMetroThread;
         private WelcomeArrow _arrow;
-
-        private readonly EventWaitHandle _bgrThreadLock = new EventWaitHandle(false, EventResetMode.ManualReset);
 
         #region Window (de)init 
 
@@ -93,7 +100,6 @@ namespace Power8.Views
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-//TODO: context menu position should be handeled well
             _taskBar = API.FindWindow(API.WndIds.TRAY_WND_CLASS, null);
             CheckWnd(_taskBar, API.WndIds.TRAY_WND_CLASS);
             if (Util.OsIs.SevenOrMore)
@@ -181,6 +187,11 @@ namespace Power8.Views
         private void MainBtnMouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             KillArrow();
+        }
+
+        private void MainBtnLayoutUpdated(object sender, EventArgs e)
+        {
+            ContextPlacement = PlacementMode.Custom;
         }
 
         #endregion
@@ -422,6 +433,27 @@ namespace Power8.Views
             }
         }
 
+        public PlacementMode ContextPlacement
+        {
+            get
+            {
+                if (!IsLoaded || Util.OsIs.XPOrLess)
+                    return PlacementMode.Mouse;
+                var p = b1.PointToScreen(PlacementPoint);
+                GetSetWndPosition(PlacementWnd, new API.POINT { X = (int)p.X, Y = (int)p.Y }, false);
+                if (PlacementWnd.Left != p.X)//Taskbar vertical
+                    return PlacementWnd.Left > p.X ? PlacementMode.Right : PlacementMode.Left;
+                //Taskbar horizontal
+                return PlacementWnd.Top > p.Y ? PlacementMode.Bottom : PlacementMode.Top;
+            }
+            private set
+            {
+                var h = PropertyChanged;
+                if(h!=null)
+                    PropertyChanged(this, new PropertyChangedEventArgs("ContextPlacement"));
+            }
+        }
+
         #endregion
 
         #region Helpers
@@ -481,7 +513,8 @@ namespace Power8.Views
 
             w.Left = resPoint.X;
             w.Top = resPoint.Y;
-            w.Activate();
+            if(w.Height != 10)
+                w.Activate();
             var b = w as BtnStck;
             if (b != null)
                 b.Focus();
@@ -496,6 +529,5 @@ namespace Power8.Views
         }
 
         #endregion
-
     }
 }
