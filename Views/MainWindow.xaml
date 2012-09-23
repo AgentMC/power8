@@ -6,10 +6,11 @@
         Name="Root" Closed="WindowClosed" Loaded="WindowLoaded"
         WindowStyle="None" ResizeMode="NoResize" Topmost="True"
         AllowsTransparency="False" Background="{x:Static SystemColors.ActiveCaptionBrush}" SizeToContent="WidthAndHeight">
-    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
-            Cursor="Wait"  ForceCursor="True" MouseEnter="MainBtnMouseEnter">
+    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" 
+            VerticalContentAlignment="Stretch" Cursor="Wait"  ForceCursor="True" MouseEnter="MainBtnMouseEnter" 
+            ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" LayoutUpdated="MainBtnLayoutUpdated">
         <Button.ContextMenu>
-            <ContextMenu Name="menu" >
+            <ContextMenu Name="menu">
                 <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="MWBlockMetro" IsCheckable="True" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
