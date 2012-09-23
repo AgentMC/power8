@@ -19,7 +19,6 @@ This list is maintained internally, if you want to report an issue that is not o
   #  W8RTM: no transparency;
   #  W8RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected);
 ===Medium===
-  #  XP/8?: Menu from menu-button may show in inappropriate position 
   #  Context menu from Main button may show in inappropriate position
   #  7/8: Data grid icons and text are blurred though sizes of blocks are ok
 ===Low===
@@ -32,3 +31,4 @@ This list is maintained internally, if you want to report an issue that is not o
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
+  #  XP/8?: Menu from menu-button may show in inappropriate position 
