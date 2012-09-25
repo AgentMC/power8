@@ -34,7 +34,7 @@ namespace Power8
             Util.MainDisp = Dispatcher; //store main thread dispatcher. Widely used in Application.
 
 #if DEBUG
-            //Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("it-IT");
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo("es-ES");
 
             //Error handling and detection
             var l = new TextWriterTraceListener(Environment.ExpandEnvironmentVariables(@"%temp%\p8log.txt"));
