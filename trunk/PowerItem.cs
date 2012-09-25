@@ -130,6 +130,7 @@ namespace Power8
 
         #region Text
 
+        public bool AllowAsyncFriendlyName { get; set; }
         /// <summary>
         /// Gets or sets the resource ID string for current PowerItem.
         /// Consult Util.ResolveResourceCommon() and dependent methods
@@ -161,66 +162,19 @@ namespace Power8
                 if(_friendlyName != null) //Return from cache
                     return _friendlyName;
 
-                if (ResourceIdString != null) //Return based on resId
-                {
-                    _friendlyName = Util.ResolveStringResource(ResourceIdString);
-                    if (_friendlyName != null)
-                        return _friendlyName;
-                    ResourceIdString = null; //Operation failed somewhere, resourceId is invalid
-                }
-
-                if (SpecialFolderId != API.Csidl.INVALID) //Resolve for a special folder, if any
-                {
-                    if (SpecialFolderId == API.Csidl.POWER8JLITEM) //For jump list item <IShellLink>
-                    {
-                        if (Argument.StartsWith("/n,::")) //in part., for explorer shell NSs
-                            _friendlyName = Util.ResolveLongPathOrDisplayName(Argument.Substring(3));
-                        if(string.IsNullOrEmpty(_friendlyName)) //Otherwise, set display name to link target
-                            _friendlyName = Argument;
-                        if (!string.IsNullOrEmpty(_friendlyName) && _friendlyName.Length > 60)
-                        { //finally, if it is too long, cut it from the middle
-                            _friendlyName = _friendlyName.Substring(0, 28) +
-                                            "…" +
-                                            _friendlyName.Substring(_friendlyName.Length - 28, 28);
-                        }
-                    }
-                    else //for all the other special folders
-                    {
-                        _friendlyName = Util.ResolveSpecialFolderName(SpecialFolderId);
-                    }
-                    if (_friendlyName != null)
-                        return _friendlyName;
-                }
-
-                //If no SpecialFolderId or resolving failed
-                if (Parent == null) //main menu
-                {//this basically should never happen since the moment when desktop.ini parsing is implemented
-                    _friendlyName = Resources.Str_AllPrograms;
+                if (!AllowAsyncFriendlyName)
+                    _friendlyName = TryExtractFriendlyNameAsync();
+                if (!string.IsNullOrEmpty(_friendlyName))
                     return _friendlyName;
-                }
-                
-                //For Recent list...
-                if (IsMfuChild //so it must have ARGUMENT...
-                    && (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
-                {//...that is either link or exe (UserAssist doesn't return others but who knows)
-                    var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument); //yeah, "fast"... :(
-                    if (container != null)
-                        _friendlyName = container.FriendlyName;
 
-                    if (string.IsNullOrEmpty(_friendlyName)/*(still)*/ && !IsLink)
-                    {//get file version info table and extract data from there. Costly but provides valuable results.
-                        var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
-                        if (!string.IsNullOrWhiteSpace(ver.FileDescription)) //try description, if not fallback to...
-                            _friendlyName = ver.FileDescription;
-                        else if (!string.IsNullOrWhiteSpace(ver.ProductName)) //...Product. This is specifically for...
-                            _friendlyName = ver.ProductName;                  //...NFS.Run and the kind of.
-                    }
+                if (string.IsNullOrEmpty(Argument)) //will be extracted in background
+                {
+                    _friendlyName = string.Empty;
                 }
-
-                if (string.IsNullOrEmpty(_friendlyName)/*(yeah, still; or not special folder, not MFU item)*/)
-                {//use fallback... Name+Extension for file, just name for link or library
+                else
+                { //we can provide at least temporary text
                     var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
-                    if(string.IsNullOrEmpty(path)) //and if this fails...
+                    if (string.IsNullOrEmpty(path)) //and if this fails...
                     {
                         if ((Argument.Length > 1 && Argument[Argument.Length - 1] == ':')
                             ||
@@ -234,7 +188,15 @@ namespace Power8
                         _friendlyName = path;
                     }
                 }
-                
+
+                if(AllowAsyncFriendlyName)
+                    Util.Post(() => 
+                    {
+                        var f = TryExtractFriendlyNameAsync();
+                        if (!string.IsNullOrEmpty(f))
+                            FriendlyName = f;
+                    });
+
                 return _friendlyName;
             }
             set
@@ -694,6 +656,65 @@ namespace Power8
             }
         }
 
+        private string TryExtractFriendlyNameAsync()
+        {
+            string fName = null;
+            if (ResourceIdString != null) //Return based on resId
+            {
+                fName = Util.ResolveStringResource(ResourceIdString);
+                if (!string.IsNullOrEmpty(fName))
+                    return fName;
+                ResourceIdString = null; //Operation failed somewhere, resourceId is invalid
+            }
+
+            if (SpecialFolderId != API.Csidl.INVALID) //Resolve for a special folder, if any
+            {
+                if (SpecialFolderId == API.Csidl.POWER8JLITEM) //For jump list item <IShellLink>
+                {
+                    if (Argument.StartsWith("/n,::")) //in part., for explorer shell NSs
+                        fName = Util.ResolveLongPathOrDisplayName(Argument.Substring(3));
+                    if (string.IsNullOrEmpty(fName)) //Otherwise, set display name to link target
+                        fName = Argument;
+                    if (!string.IsNullOrEmpty(fName) && fName.Length > 60)
+                    { //finally, if it is too long, cut it from the middle
+                        fName = fName.Substring(0, 28) +
+                                        "…" +
+                                        fName.Substring(fName.Length - 28, 28);
+                    }
+                }
+                else //for all the other special folders
+                {
+                    fName = Util.ResolveSpecialFolderName(SpecialFolderId);
+                }
+                if (!string.IsNullOrEmpty(fName))
+                    return fName;
+            }
+
+            //If no SpecialFolderId or resolving failed
+            if (Parent == null) //main menu
+            {//this basically should never happen since the moment when desktop.ini parsing is implemented
+                return  Resources.Str_AllPrograms;
+            }
+
+            //For Recent list...
+            if (IsMfuChild //so it must have ARGUMENT...
+                && (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
+            {//...that is either link or exe (UserAssist doesn't return others but who knows)
+                var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument); //yeah, "fast"... :(
+                if (container != null)
+                    fName = container.FriendlyName;
+
+                if (string.IsNullOrEmpty(fName)/*(still)*/ && !IsLink)
+                {//get file version info table and extract data from there. Costly but provides valuable results.
+                    var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
+                    if (!string.IsNullOrWhiteSpace(ver.FileDescription)) //try description, if not fallback to...
+                        fName = ver.FileDescription;
+                    else if (!string.IsNullOrWhiteSpace(ver.ProductName)) //...Product. This is specifically for...
+                        fName = ver.ProductName;                  //...NFS.Run and the kind of.
+                }
+            }
+            return fName;
+        }
         #endregion
     }
 }

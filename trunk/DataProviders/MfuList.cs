@@ -335,6 +335,7 @@ namespace Power8
                                                         {
                                                             Argument = elem.Arg,
                                                             Parent = MfuSearchRoot,
+                                                            AllowAsyncFriendlyName = true,
                                                             IsPinned = elem.LaunchCount >= 2000 //hack yeah!
                                                         });
                                   }
