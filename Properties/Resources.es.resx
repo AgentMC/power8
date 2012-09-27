@@ -199,7 +199,7 @@ Cancelar: ignorar esta actualización, no volver a notificarme acerca de esta ve
     <value>Suspender</value>
   </data>
   <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Inicio automa´tico</value>
+    <value>Inicio automático</value>
   </data>
   <data name="CR_MWCheckForUpdates" xml:space="preserve">
     <value>Buscar actualizaciones</value>
@@ -236,7 +236,7 @@ Cancelar: ignorar esta actualización, no volver a notificarme acerca de esta ve
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - Menú inicio sustituto para Windows XP, 7 and 8</value>
+    <value>Power8 - Menú inicio sustituto para Windows XP, 7 y 8</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
@@ -271,7 +271,7 @@ Cancelar: ignorar esta actualización, no volver a notificarme acerca de esta ve
     <value>Descargar MSI</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Open project web site</value>
+    <value>Abrir página web del proyecto</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
     <value>No volver a notificarme sobre esta actualización.</value>
@@ -286,7 +286,7 @@ Cancelar: ignorar esta actualización, no volver a notificarme acerca de esta ve
     <value>Elemento de datos no disponible</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
-    <value>Unable to get tooltip for object</value>
+    <value>No ha sido posible obtener la ayuda contextual para este elemento</value>
   </data>
   <data name="Str_CplElement" xml:space="preserve">
     <value>Elemento de panel de control</value>
