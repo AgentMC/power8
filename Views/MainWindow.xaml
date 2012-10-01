@@ -8,7 +8,9 @@
         AllowsTransparency="False" Background="{x:Static SystemColors.ActiveCaptionBrush}" SizeToContent="WidthAndHeight">
     <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" 
             VerticalContentAlignment="Stretch" Cursor="Wait"  ForceCursor="True" MouseEnter="MainBtnMouseEnter" 
-            ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" LayoutUpdated="MainBtnLayoutUpdated">
+            ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" LayoutUpdated="MainBtnLayoutUpdated"
+            ToolTipService.ToolTip="TODO: Click this for real POWER!!!"
+            ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" >
         <Button.ContextMenu>
             <ContextMenu Name="menu">
                 <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
