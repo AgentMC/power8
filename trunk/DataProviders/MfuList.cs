@@ -93,6 +93,7 @@ namespace Power8
 // ReSharper restore AccessToDisposedClosure
             col.Add("APPLICATION SHORTCUTS");
             col.Add("HOST.EXE");
+            col.Add("VSLAUNCHER.EXE");
             MsFilter = col.ToArray();
 
             //Reading launch data
@@ -313,7 +314,7 @@ namespace Power8
                 //Steps 2.1 - 2.4
                 list.ApplyFiltersAndSort();
 
-                //Step 2.5: limit single/zero-used to 20 items
+                //Step 2.6: limit single/zero-used to 20 items
                 for (int i = 0, j = 0; i < list.Count; i++)
                 {
                     if (list[i].LaunchCount<2 && ++j > 20)
@@ -335,7 +336,7 @@ namespace Power8
                                                         {
                                                             Argument = elem.Arg,
                                                             Parent = MfuSearchRoot,
-                                                            AllowAsyncFriendlyName = true,
+                                                            AllowAsyncFriendlyName = true, //Friendly Name isn't distinctive for MFU
                                                             IsPinned = elem.LaunchCount >= 2000 //hack yeah!
                                                         });
                                   }
@@ -553,6 +554,19 @@ namespace Power8
 
             //Step 2.4: sort.
             list.Sort();
+
+            //Step 2.5: remove duplicates based on args (yes, this is possible even after we filtered out so many items)
+            for (int i = 0; i < list.Count - 1; i++)//The top index, used to select main item
+            {
+                for (int j = list.Count - 1; j > i; j--) //bottom index, selects duplicate
+                {
+                    if (list[i].Arg.Equals(list[j].Arg, StringComparison.OrdinalIgnoreCase))
+                    {//duplicate found
+                        list[i].Mix((list[j])); //mix less-popular into more popular
+                        list.RemoveAt(j);       //remove less popular
+                    }
+                }
+            }
         }
         //Excludes the elements that are like ones to be filtered out using M$ User Assist filter
         private static void ApplyMsFilter(this List<MfuElement> list )
@@ -710,6 +724,8 @@ namespace Power8
             public void Mix(MfuElement other)
             {
                 LaunchCount += other.LaunchCount;
+                if (LaunchCount >= 4000)
+                    LaunchCount -= 1999; //if both items were identified as pinned, simply add one, in any other case mix values
                 if (LastLaunchTimeStamp < other.LastLaunchTimeStamp)
                     LastLaunchTimeStamp = other.LastLaunchTimeStamp;
             }

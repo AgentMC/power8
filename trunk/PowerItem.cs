@@ -130,6 +130,11 @@ namespace Power8
 
         #region Text
 
+        /// <summary>
+        /// Gets or Sets value indicating if the asynchronous Friendly Name evaluation is possible.
+        /// Auto-property, false by default. Set to true ONLY when you are 100% sure this item won't ever
+        /// be used in sorting by SortItems().
+        /// </summary>
         public bool AllowAsyncFriendlyName { get; set; }
         /// <summary>
         /// Gets or sets the resource ID string for current PowerItem.
@@ -154,6 +159,10 @@ namespace Power8
         /// Then, tries to parse Argument into a Path and get related parts of it.
         /// Finally if this is impossible, returns Argument.
         /// Propagates changed value on Set to binding Target.
+        /// When <code>AllowAsyncFriendlyName</code> flag is set, some of these steps
+        /// are executed in the background on async threads. Of course this prohibits 
+        /// item from being used in <code>SortItems()</code>. Though it doesn't check
+        /// the flag itself.
         /// </summary>
         public string FriendlyName
         {
@@ -162,12 +171,12 @@ namespace Power8
                 if(_friendlyName != null) //Return from cache
                     return _friendlyName;
 
-                if (!AllowAsyncFriendlyName)
+                if (!AllowAsyncFriendlyName) //Run heavy part 'n'sync unless explicitly allowed to fork
                     _friendlyName = TryExtractFriendlyNameAsync();
                 if (!string.IsNullOrEmpty(_friendlyName))
                     return _friendlyName;
 
-                if (string.IsNullOrEmpty(Argument)) //will be extracted in background
+                if (string.IsNullOrEmpty(Argument)) //FN will be extracted in background, based on SFID
                 {
                     _friendlyName = string.Empty;
                 }
@@ -182,20 +191,20 @@ namespace Power8
                             _friendlyName = String.Format("{0} - {1}", Argument, DriveManager.GetDriveLabel(Argument));
                         else
                             _friendlyName = Argument; //finally we have no f***ng idea what this PowerItem is, just display Arg.
-                    }
+                    }                                 //and hope FN will be asynch'ed
                     else
                     {
-                        _friendlyName = path;
+                        _friendlyName = path; //file name or filename with extension
                     }
                 }
 
-                if(AllowAsyncFriendlyName)
-                    Util.Post(() => 
+                if(AllowAsyncFriendlyName) //Launch async extraction if allowed
+                    Util.Fork(() => 
                     {
                         var f = TryExtractFriendlyNameAsync();
                         if (!string.IsNullOrEmpty(f))
-                            FriendlyName = f;
-                    });
+                            Util.Post(() => FriendlyName = f);
+                    }, "FN async extractor for " + Argument).Start();
 
                 return _friendlyName;
             }
@@ -564,6 +573,9 @@ namespace Power8
         /// Recousively calls SortDescription on all children, then
         /// sorts owh children list putting Folders first, then 
         /// non-folders. Consult CompareTo() for details.
+        /// Though method doesn't check for <code>AllowAsyncFriendlyName</code>,
+        /// when that property is true and this method is called, a high 
+        /// possibility of race conditions occur.
         /// </summary>
         public void SortItems()
         {
@@ -655,7 +667,13 @@ namespace Power8
                 }
             }
         }
-
+        /// <summary>
+        /// This is the part of FriendlyName getter. Executes heavy part of FriendlyName evaluation either
+        /// synchronously or in async way, depending on how it's called.
+        /// </summary>
+        /// <returns>The PI's partially evaluated FriendlyName, which can be also empty string or even null.
+        /// Assign the value returned to the FriendlyName. When use this method asynchronously, always Post()
+        /// or Send() the assignment.</returns>
         private string TryExtractFriendlyNameAsync()
         {
             string fName = null;
