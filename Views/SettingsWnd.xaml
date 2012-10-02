@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		x:Class="Power8.Views.SettingsWnd"
-        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center">
+        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Height="233" Width="465">
 <Views:DisposableWindow.Resources>
 </Views:DisposableWindow.Resources>
     <Grid Margin="5">
@@ -37,10 +37,10 @@
 			<CheckBox x:Name="communicationIssuesCheckBox" Content="Don't bother me with communication issues" HorizontalAlignment="Left" Grid.Row="5" Margin="0,0,0,10"/>
         
 		</Grid>
-		<Button HorizontalAlignment="Right" Style="{DynamicResource SelectImageButtonStyle}" Width="75" Height="75" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment" Grid.Column="1"/>
+		<Button HorizontalAlignment="Right" Style="{DynamicResource SelectImageButtonStyle}" Width="75" Height="75" VerticalAlignment="Top" Grid.Column="1"/>
 		<StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
 			<Button Width="75" Style="{x:Null}" Content="Save" Margin="0,0,10,0"/>
-			<Button Width="75" Style="{x:Null}"  Content="Discard"/>
+			<Button Width="75" Style="{x:Null}"  Content="Cancel"/>
 		</StackPanel>
 	</Grid>
 </Views:DisposableWindow>
