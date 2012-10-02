@@ -304,6 +304,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Settings....
+        /// </summary>
+        internal static string CR_MWSettings {
+            get {
+                return ResourceManager.GetString("CR_MWSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No, thanks.
         ///I know what&apos;s happening and will handle the problem myself..
         /// </summary>

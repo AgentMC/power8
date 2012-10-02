@@ -350,4 +350,7 @@ Do you want to restore Windows Explorer and restart Power8?</value>
     <value>Yes!
 Please launch Explorer for me and restart Power8 process.</value>
   </data>
+  <data name="CR_MWSettings" xml:space="preserve">
+    <value>Settings...</value>
+  </data>
 </root>

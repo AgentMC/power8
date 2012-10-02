@@ -9,16 +9,17 @@
     <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" 
             VerticalContentAlignment="Stretch" Cursor="Wait"  ForceCursor="True" MouseEnter="MainBtnMouseEnter" 
             ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" LayoutUpdated="MainBtnLayoutUpdated"
-            ToolTipService.ToolTip="TODO: Click this for real POWER!!!"
+            ToolTipService.ToolTip="{Binding ElementName=Root, Path=Tip}"
             ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" >
         <Button.ContextMenu>
             <ContextMenu Name="menu">
                 <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="MWBlockMetro" IsCheckable="True" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
+                <MenuItem Name="MWSettings" Style="{StaticResource ContextMenuItemStyle}" Click="MWSettingsClick" />
                 <Separator/>
                 <MenuItem Name="MWAbout" Style="{StaticResource ContextMenuItemStyle}" Click="AboutClick" />
-                <MenuItem Name="MWExit" Click="ExitClick" Style="{StaticResource ContextMenuItemStyle}"/> 
+                <MenuItem Name="MWExit" Style="{StaticResource ContextMenuItemStyle}" Click="ExitClick" /> 
             </ContextMenu>
         </Button.ContextMenu>
     	<Grid Opacity="0.8">
