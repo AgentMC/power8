@@ -5,9 +5,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		x:Class="Power8.Views.SettingsWnd"
-        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Height="233" Width="465">
-<Views:DisposableWindow.Resources>
-</Views:DisposableWindow.Resources>
+        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Height="233" Width="465"
+        Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight">
     <Grid Margin="5">
     	<Grid.RowDefinitions>
     		<RowDefinition/>
@@ -34,7 +33,7 @@
 			<CheckBox x:Name="autoStartCheckBox" Content="Autostart Power8" HorizontalAlignment="Left" Grid.Row="2" Margin="0,0,0,10"/>
 			<CheckBox x:Name="checkForUpdatesCheckBox" Content="Check for updates" HorizontalAlignment="Left" Grid.Row="3" Margin="0,0,0,10"/>
 			<CheckBox x:Name="blockMetroFeaturesCheckBox" Content="Block Win8 UI features" HorizontalAlignment="Left" Grid.Row="4" Margin="0,0,0,10"/>
-			<CheckBox x:Name="communicationIssuesCheckBox" Content="Don't bother me with communication issues" HorizontalAlignment="Left" Grid.Row="5" Margin="0,0,0,10"/>
+			<CheckBox x:Name="communicationIssuesCheckBox" Content="Don't bother me with configuration issues" HorizontalAlignment="Left" Grid.Row="5" Margin="0,0,0,10"/>
         
 		</Grid>
 		<Button HorizontalAlignment="Right" Style="{DynamicResource SelectImageButtonStyle}" Width="75" Height="75" VerticalAlignment="Top" Grid.Column="1"/>
