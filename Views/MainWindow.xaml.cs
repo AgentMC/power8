@@ -455,6 +455,25 @@ namespace Power8.Views
             }
         }
 
+        public bool ShowWarn
+        {
+            get 
+            { 
+                return true;//TODO 
+            }
+        }
+
+        public string Tip
+        {
+            get
+            {
+                return Properties.Resources.CR_ButtonStack +
+                        (ShowWarn //TODO: move to resources
+                            ? "\r\nYou may wish to change some settings to enhance your Power8 experience"
+                            : string.Empty);
+            }
+        }
+
         #endregion
 
         #region Helpers
@@ -530,5 +549,10 @@ namespace Power8.Views
         }
 
         #endregion
+
+        private void MWSettingsClick(object sender, RoutedEventArgs e)
+        {
+            Util.InstanciateClass(t: typeof(SettingsWnd));
+        }
     }
 }

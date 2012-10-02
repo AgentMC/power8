@@ -135,6 +135,9 @@
     <Compile Include="Views\RestartExplorer.Designer.cs">
       <DependentUpon>RestartExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\SettingsWnd.xaml.cs">
+      <DependentUpon>SettingsWnd.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\UpdateNotifier.xaml.cs">
       <DependentUpon>UpdateNotifier.xaml</DependentUpon>
     </Compile>
@@ -182,6 +185,10 @@
     <Page Include="Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsWnd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UpdateNotifier.xaml">
       <SubType>Designer</SubType>
