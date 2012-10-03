@@ -25,7 +25,6 @@ namespace Power8.Views
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private bool _watch;
         private IntPtr _taskBar, _showDesktopBtn;
         private WelcomeArrow _arrow;
         private PlacementMode _placement = PlacementMode.MousePoint;
@@ -106,7 +105,6 @@ namespace Power8.Views
 
             Left = 0;
             Top = 0;
-            _watch = true;
             Util.Fork(WatchDesktopBtn, "ShowDesktop button watcher").Start();
 
             SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;
@@ -121,7 +119,6 @@ namespace Power8.Views
         private void WindowClosed(object sender, EventArgs e)
         {
             ClosedW = true;
-            _watch = false;
             if (BtnStck.IsInstantited)
                 BtnStck.Instance.Close();
             KillArrow();
@@ -210,7 +207,7 @@ namespace Power8.Views
         {
             double width = -1, height = -1;
 
-            while (_watch)
+            while (!ClosedW)
             {
                 API.RECT r;
                 if (!API.GetWindowRect(_showDesktopBtn, out r))
