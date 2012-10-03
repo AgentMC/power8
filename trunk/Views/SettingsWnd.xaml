@@ -30,7 +30,7 @@
     		<RowDefinition Height="Auto"/>
     	</Grid.RowDefinitions>
 		<StackPanel Margin="0">
-    		<CheckBox x:Name="StgSquareStart" Content="Use square button"/> <!--TODO: Localize this and children-->
+            <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" Content="Use square button"/> <!--TODO: Localize this and children-->
             <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
     			<Grid.ColumnDefinitions>
     				<ColumnDefinition/>
@@ -40,15 +40,15 @@
     			<Button HorizontalAlignment="Left" Style="{x:Null}" Grid.Column="1" Content="Browse..." Padding="1" MinWidth="75"/>
     		</Grid>
             <Separator/>
-    		<CheckBox x:Name="StgWatchRemovables" Content="Watch removable drives"/> <!--TODO: Localize-->
+            <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}" Content="Watch removable drives"/> <!--TODO: Localize-->
             <Separator/>
-            <CheckBox x:Name="MWAutoStart" Style="{StaticResource RedCheckBoxStyle}"/>
-            <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}"/>
-            <CheckBox x:Name="MWBlockMetro"/>
+            <CheckBox x:Name="MWAutoStart" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
+            <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"/>
+            <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
             <Separator/>
-            <CheckBox x:Name="StgSuggestProblems" Content="Inform me about configuration issues"/><!--TODO: Localize-->
+            <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}" Content="Inform me about configuration issues"/><!--TODO: Localize-->
         
     	</StackPanel>
-		<Button Style="{x:Null}" Content="Save" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1"/>
+		<Button Style="{x:Null}" Content="Close" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1"/>
 	</Grid>
 </Views:DisposableWindow>

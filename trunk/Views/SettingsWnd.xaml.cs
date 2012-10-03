@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Power8.Helpers;
 
 namespace Power8.Views
 {
@@ -21,6 +22,9 @@ namespace Power8.Views
         public SettingsWnd()
         {
             InitializeComponent();
+            DataContext = SettingsManager.Instance;
+            if(!Util.OsIs.EightOrMore)
+                MWBlockMetro.Visibility = Visibility.Collapsed;
         }
     }
 }
