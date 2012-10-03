@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using Power8.Helpers;
 using Power8.Views;
 
 namespace Power8
@@ -32,7 +34,27 @@ namespace Power8
             _fileChanged = changedHandler;
             _fileRenamed = renamedHandler;
             _drivesRoot = drivesRoot;
+            SettingsManager.WatchRemovablesChanged += SettingsManagerOnWatchRemovablesChanged;
             Util.Fork(Worker, "DriveWatchThread").Start();
+        }
+
+        /// <summary>
+        /// Reacts on the event raised by Settings Manager when user changes the "Watch removable drives" checkbox.
+        /// Does nothing on true 
+        /// </summary>
+        private static void SettingsManagerOnWatchRemovablesChanged(object sender, EventArgs eventArgs)
+        {
+            if (!SettingsManager.Instance.WatchRemovableDrives) //Must remove items from collection and disose handles
+            {
+                lock (DriveNames)
+                {
+                    var rDrvNames = _drives.Where(d => d.DriveType == DriveType.Removable)
+                                           .Select(d => d.Name)
+                                           .ToList();
+                    rDrvNames.ForEach(StopWatcher);
+                    DriveNames.RemoveAll(rDrvNames.Contains);
+                }
+            }
         }
 
         /// <summary>
@@ -41,71 +63,65 @@ namespace Power8
         private static void Worker ()
         {
 begin:
-            lock(DriveNames) //To ensure no InvalidOperationException occurs in GetDriveLabel()
+            lock (DriveNames) //To ensure no InvalidOperationException occurs in GetDriveLabel()
+            {                 //Also syncs handler above
                 _drives = DriveInfo.GetDrives();
 
-            //Have some drives been removed?
-            for (int i = DriveNames.Count - 1; i >= 0; i--)
-            {
-                var dName = DriveNames[i];
-                if (_drives.All(d => d.Name != dName))   //drive removed
+                //Have some drives been removed?
+                for (int i = DriveNames.Count - 1; i >= 0; i--)
                 {
-                    var watcher = Watchers.FirstOrDefault(w => w.Path == dName);
-                    if (watcher != null)                //stop drive watcher
+                    var dName = DriveNames[i];
+                    if (_drives.All(d => d.Name != dName)) //drive removed
                     {
-                        watcher.Dispose();
-                        Watchers.Remove(watcher);
+                        StopWatcher(dName);
+                        DriveNames.RemoveAt(i); //remove drive from collection
                     }
-                    Util.Send(() =>                     //remove PowerItem
-                                  {
-                                      var item =
-                                          _drivesRoot.Items.FirstOrDefault(j => j.Argument == dName);
-                                      if (item != null)
-                                          _drivesRoot.Items.Remove(item);
-                                  });
-
-                    DriveNames.RemoveAt(i);             //remove drive from collection
                 }
-            }
 
-            //Have some drives been addded?
-            foreach (var driveInfo in _drives)
-            {
-                var dName = driveInfo.Name;
-                if (DriveNames.All(d => d != dName))     //drive added
+                //Have some drives been addded?
+                foreach (var driveInfo in _drives)
                 {
-                    var dNameUcase = dName.ToUpperInvariant();
-                    if (new[]{  DriveType.Fixed, 
-                                DriveType.Network, 
-                                DriveType.Ram, //v--Do not watch removables?TODO
-                                DriveType.Removable }.Contains(driveInfo.DriveType)
-                        && dNameUcase != "A:\\"
-                        && dNameUcase != "B:\\"
-                        && driveInfo.IsReady)
+                    var dName = driveInfo.Name;
+                    if (DriveNames.All(d => d != dName)) //drive added
                     {
-                        DriveNames.Add(dName);          //Add drive to collection
+                        var dNameUcase = dName.ToUpperInvariant();
+                        if ((new[]
+                                 {
+                                     DriveType.Fixed,
+                                     DriveType.Network,
+                                     DriveType.Ram
+                                 }.Contains(driveInfo.DriveType))
+                            ||
+                            (driveInfo.DriveType == DriveType.Removable
+                             && SettingsManager.Instance.WatchRemovableDrives)
+                            && dNameUcase != "A:\\"
+                            && dNameUcase != "B:\\"
+                            && driveInfo.IsReady)
+                        {
+                            DriveNames.Add(dName); //Add drive to collection
 
-                        Util.Send(() =>                 //Add drive to UI
-                                  _drivesRoot.Items.Add(new PowerItem
-                                                            {
-                                                                Argument = dName,
-                                                                AutoExpand = true,
-                                                                IsFolder = true,
-                                                                Parent = _drivesRoot,
-                                                                NonCachedIcon = true
-                                                            }));
-                                                        //Add drive watcher
-                        var w = new FileSystemWatcher(dName);
-                        w.Created += _fileChanged;
-                        w.Deleted += _fileChanged;
-                        w.Changed += _fileChanged;
-                        w.Renamed += _fileRenamed;
-                        w.IncludeSubdirectories = true;
-                        if (BtnStck.IsInstantited)
-                            w.EnableRaisingEvents = true;
-                        else
-                            BtnStck.Instanciated += (sender, args) => w.EnableRaisingEvents = true;
-                        Watchers.Add(w);
+                            Util.Send(() => //Add drive to UI
+                                      _drivesRoot.Items.Add(new PowerItem
+                                                                {
+                                                                    Argument = dName,
+                                                                    AutoExpand = true,
+                                                                    IsFolder = true,
+                                                                    Parent = _drivesRoot,
+                                                                    NonCachedIcon = true
+                                                                }));
+                            //Add drive watcher
+                            var w = new FileSystemWatcher(dName);
+                            w.Created += _fileChanged;
+                            w.Deleted += _fileChanged;
+                            w.Changed += _fileChanged;
+                            w.Renamed += _fileRenamed;
+                            w.IncludeSubdirectories = true;
+                            if (BtnStck.IsInstantited)
+                                w.EnableRaisingEvents = true;
+                            else
+                                BtnStck.Instanciated += (sender, args) => w.EnableRaisingEvents = true;
+                            Watchers.Add(w);
+                        }
                     }
                 }
             }
@@ -114,6 +130,28 @@ begin:
 
             if (!Util.MainDisp.HasShutdownStarted)
                 goto begin;//just don't want code unneeded nesting here, anyway IL will be same.
+        }
+
+        /// <summary>
+        /// Stops FS watcher for corresponding Path and removes it from Watchers collection.
+        /// Then removes corresponding item from interface.
+        /// </summary>
+        /// <param name="dName">DriveInfo.Name, i.e. Watcher.Path for the one to stop</param>
+        private static void StopWatcher(string dName)
+        {
+            var watcher = Watchers.FirstOrDefault(w => w.Path == dName);
+            if (watcher != null) //stop drive watcher
+            {
+                watcher.Dispose();
+                Watchers.Remove(watcher);
+            }
+            Util.Send(() => //remove PowerItem from UI
+            {
+                var item =
+                    _drivesRoot.Items.FirstOrDefault(j => j.Argument == dName);
+                if (item != null)
+                    _drivesRoot.Items.Remove(item);
+            });
         }
 
         /// <summary>

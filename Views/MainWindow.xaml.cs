@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Power8.Helpers;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
-using MessageBox = System.Windows.MessageBox;
-using ThreadState = System.Threading.ThreadState;
 
 namespace Power8.Views
 {
@@ -28,11 +25,8 @@ namespace Power8.Views
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private readonly EventWaitHandle _bgrThreadLock = new EventWaitHandle(false, EventResetMode.ManualReset);
-
-        private bool _watch, _update, _blockMetro;
+        private bool _watch;
         private IntPtr _taskBar, _showDesktopBtn;
-        private Thread _updateThread, _blockMetroThread;
         private WelcomeArrow _arrow;
         private PlacementMode _placement = PlacementMode.MousePoint;
 
@@ -41,7 +35,7 @@ namespace Power8.Views
         public MainWindow()
         {
             InitializeComponent();
-            menu.DataContext = this;
+            menu.DataContext = SettingsManager.Instance;
 
             Application.SetCompatibleTextRenderingDefault(true);
             Application.EnableVisualStyles();
@@ -49,16 +43,10 @@ namespace Power8.Views
             App.Current.SessionEnding += (sender, args) => Close();
             BtnStck.Instanciated += BtnStckInstanciated;
 
-            if (CheckForUpdatesEnabled)
-                UpdateCheckThreadInit();
-            
-            if (BlockMetroEnabled && Util.OsIs.EightOrMore)
-            { 
-                BlockMetroThreadInit(); 
-            }
-            else if (Util.OsIs.SevenOrBelow)
+            SettingsManager.Init();
+            if (Util.OsIs.SevenOrBelow)
             {
-                BlockMetroEnabled = false;
+                SettingsManager.Instance.BlockMetroEnabled = false;
                 MWBlockMetro.Visibility = Visibility.Collapsed;
             }
                 
@@ -120,7 +108,9 @@ namespace Power8.Views
             Top = 0;
             _watch = true;
             Util.Fork(WatchDesktopBtn, "ShowDesktop button watcher").Start();
-            _bgrThreadLock.Set();
+
+            SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;
+            SettingsManager.BgrThreadLock.Set();
 
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
 
@@ -177,7 +167,7 @@ namespace Power8.Views
         private void ExitClick(object sender, RoutedEventArgs e)
         {
             Close();
-            _bgrThreadLock.WaitOne();
+            SettingsManager.BgrThreadLock.WaitOne();
         }
 
         private void AboutClick(object sender, RoutedEventArgs e)
@@ -200,6 +190,16 @@ namespace Power8.Views
                 ContextPlacement = PlacementWnd.Left > p.X ? PlacementMode.Right : PlacementMode.Left;
             else                         //Taskbar horizontal
                 ContextPlacement = PlacementWnd.Top > p.Y ? PlacementMode.Bottom : PlacementMode.Top;
+        }
+
+        private void ShowSettingsWindow(object sender, RoutedEventArgs e)
+        {
+            Util.InstanciateClass(t: typeof(SettingsWnd));
+        }
+
+        private void SettingsManagerOnWarnMayHaveChanged(object sender, EventArgs eventArgs)
+        {
+            FirePropChanged("Tip");
         }
 
         #endregion
@@ -260,186 +260,9 @@ namespace Power8.Views
             }
         }
 
-        private void UpdateCheckThread()
-        {
-            _bgrThreadLock.WaitOne();
-
-            int cycles = 0;
-            var client = new WebClient();
-            _update = true;
-            while (_update && _watch)
-            {
-                if (cycles == 0)
-                {
-                    try
-                    {//parsing
-                        var info =
-                            new System.IO.StringReader(
-                                client.DownloadString(NoLoc.Stg_Power8URI + NoLoc.Stg_AssemblyInfoURI));
-                        string line, verLine = null, uri7Z = null, uriMsi = null;
-                        while ((line = info.ReadLine()) != null)
-                        {
-                            if (line.StartsWith("[assembly: AssemblyVersion("))
-                                verLine = line.Substring(28).TrimEnd(new[] { ']', ')', '"' });
-                            else if (line.StartsWith(@"//7zuri="))
-                                uri7Z = line.Substring(8);
-                            else if (line.StartsWith(@"//msuri="))
-                                uriMsi = line.Substring(8);
-                        }
-                        if(verLine != null)
-                        {//updating?
-                            if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
-                            {//updating!
-                                if (uri7Z == null || uriMsi == null) //old approach
-                                {
-                                    switch (MessageBox.Show(Properties.Resources.CR_UNUpdateAvailableLong + string.Format(
-                                                Properties.Resources.Str_UpdateAvailableFormat, Application.ProductVersion, verLine),
-                                            NoLoc.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable,
-                                            MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
-                                    {
-                                        case MessageBoxResult.Cancel:
-                                            Settings.Default.IgnoreVer = verLine;
-                                            Settings.Default.Save();
-                                            break;
-                                        case MessageBoxResult.Yes:
-                                            Process.Start(NoLoc.Stg_Power8URI);
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    Util.Send(() =>
-                                              Util.InstanciateClass(
-                                                  t: typeof (UpdateNotifier),
-                                                  ctor: () => new UpdateNotifier(
-                                                                  Application.ProductVersion, verLine,
-                                                                  uri7Z,
-                                                                  uriMsi)));
-                                }
-                            }
-
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(Properties.Resources.Err_CantCheckUpdates + ex.Message,
-                                        NoLoc.Stg_AppShortName, MessageBoxButton.OK,
-                                        MessageBoxImage.Exclamation);
-                    }
-                }
-                Thread.Sleep(1000);
-                cycles++;
-                cycles %= 43200;
-            }
-        }
-
-        private void BlockMetroThread()
-        {
-            _bgrThreadLock.WaitOne();
-
-            //search for all metro windows (9 on RP)
-            var handles = new Dictionary<IntPtr, API.RECT>();
-            IntPtr last = IntPtr.Zero, desk = API.GetDesktopWindow();
-            do
-            {
-                var current = API.FindWindowEx(desk, last, API.WndIds.METRO_EDGE_WND, null);
-                if (current != IntPtr.Zero && !handles.ContainsKey(current))
-                {
-                    API.RECT r;
-                    API.GetWindowRect(current, out r);
-                    handles.Add(current, r);
-                    last = current;
-                }
-                else
-                {
-                    last = IntPtr.Zero;
-                }
-            } while (last != IntPtr.Zero);
-            
-            _blockMetro = true;
-            _bgrThreadLock.Reset();
-            while (_blockMetro && _watch) //MAIN CYCLE
-            {
-                foreach (var wnd in handles)
-                    API.MoveWindow(wnd.Key, wnd.Value.Left, wnd.Value.Top, 0, 0, false);
-                Thread.Sleep(1000);
-            }
-
-            //deinit - restore all window rects
-            foreach (var wnd in handles)
-                API.MoveWindow(wnd.Key, wnd.Value.Left, wnd.Value.Top, 
-                               wnd.Value.Right - wnd.Value.Left, 
-                               wnd.Value.Bottom - wnd.Value.Top, true);
-            _bgrThreadLock.Set();
-        }
-
         #endregion
 
         #region Bindable props
-
-        public bool AutoStartEnabled
-        {
-            get
-            {
-                var k = Microsoft.Win32.Registry.CurrentUser;
-                k = k.OpenSubKey(NoLoc.Stg_RegKeyRun, false);
-                return k != null &&
-                       string.Equals((string) k.GetValue(NoLoc.Stg_AppShortName),
-                                     Application.ExecutablePath,
-                                     StringComparison.InvariantCultureIgnoreCase);
-            }
-            set
-            {
-                if (value == AutoStartEnabled)
-                    return;
-                var k = Microsoft.Win32.Registry.CurrentUser;
-                k = k.OpenSubKey(NoLoc.Stg_RegKeyRun, true);
-                if (k == null) 
-                    return;
-                if (value)
-                    k.SetValue(NoLoc.Stg_AppShortName, Application.ExecutablePath);
-                else
-                    k.DeleteValue(NoLoc.Stg_AppShortName);
-            }
-        }
-
-        public bool CheckForUpdatesEnabled
-        {
-            get
-            {
-                return Settings.Default.CheckForUpdates;
-            }
-            set
-            {
-                if (value == CheckForUpdatesEnabled)
-                    return;
-                Settings.Default.CheckForUpdates = value;
-                Settings.Default.Save();
-                if (value)
-                    UpdateCheckThreadInit();
-                else
-                    _update = false;
-            }
-        }
-        
-        public bool BlockMetroEnabled
-        {
-            get
-            {
-                return Settings.Default.BlockMetro;
-            }
-            set
-            {
-                if (value == BlockMetroEnabled)
-                    return;
-                Settings.Default.BlockMetro = value;
-                Settings.Default.Save();
-                if (value)
-                    BlockMetroThreadInit();
-                else
-                    _blockMetro = false;
-            }
-        }
 
         public PlacementMode ContextPlacement
         {
@@ -449,17 +272,7 @@ namespace Power8.Views
                 if(_placement == value)
                     return;
                 _placement = value;
-                var h = PropertyChanged;
-                if(h!=null)
-                    PropertyChanged(this, new PropertyChangedEventArgs("ContextPlacement"));
-            }
-        }
-
-        public bool ShowWarn
-        {
-            get 
-            { 
-                return true;//TODO 
+                FirePropChanged("ContextPlacement");
             }
         }
 
@@ -468,7 +281,7 @@ namespace Power8.Views
             get
             {
                 return Properties.Resources.CR_ButtonStack +
-                        (ShowWarn //TODO: move to resources
+                        (SettingsManager.Instance.ShowWarn //TODO: move to resources
                             ? "\r\nYou may wish to change some settings to enhance your Power8 experience"
                             : string.Empty);
             }
@@ -484,27 +297,6 @@ namespace Power8.Views
                 Util.Die(className + " not found");
         }
 // ReSharper restore UnusedParameter.Local
-        
-        private void UpdateCheckThreadInit()
-        {
-            BgrThreadInit(ref _updateThread, UpdateCheckThread, "Update thread");
-        }
-
-        private void BlockMetroThreadInit()
-        {
-            BgrThreadInit(ref _blockMetroThread, BlockMetroThread, "Block Metro thread");
-        }
-
-        private static void BgrThreadInit(ref Thread thread, ThreadStart pFunc, string threadName)
-        {
-            if (thread == null || thread.ThreadState == ThreadState.Stopped)
-            {
-                thread = Util.Fork(pFunc, threadName);
-                thread.IsBackground = true;
-            }
-            thread.Start();
-        }
-
         private static void GetSetWndPosition(Window w, API.POINT screenPoint, bool ignoreTaskbarPosition)
         {
             var resPoint = new Point();
@@ -533,7 +325,7 @@ namespace Power8.Views
 
             w.Left = resPoint.X;
             w.Top = resPoint.Y;
-            if(w.Height != 10)
+            if((int)w.Height != 10)
                 w.Activate();
             var b = w as BtnStck;
             if (b != null)
@@ -548,11 +340,13 @@ namespace Power8.Views
             _arrow = null;
         }
 
-        #endregion
-
-        private void MWSettingsClick(object sender, RoutedEventArgs e)
+        private void FirePropChanged(string propName)
         {
-            Util.InstanciateClass(t: typeof(SettingsWnd));
+            var h = PropertyChanged;
+            if (h != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
+
+        #endregion
     }
 }

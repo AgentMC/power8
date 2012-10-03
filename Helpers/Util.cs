@@ -19,6 +19,7 @@ using Power8.Views;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
 using System.Xml;
+using ThreadState = System.Threading.ThreadState;
 
 namespace Power8
 {
@@ -122,6 +123,22 @@ namespace Power8
                     DispatchUnhandledException(ex);
                 }
             }) { Name = name };
+        }
+        /// <summary>
+        /// Initializes background thread with given name and starts it, but only in case referenced thread 
+        /// doesn't exist or is stopped already
+        /// </summary>
+        /// <param name="thread">Thread variable which holds or will hold the thread reference</param>
+        /// <param name="pFunc">Thread delegate</param>
+        /// <param name="threadName">Name of newly created thread</param>
+        public static void BgrThreadInit(ref Thread thread, ThreadStart pFunc, string threadName)
+        {
+            if (thread == null || thread.ThreadState == ThreadState.Stopped)
+            {
+                thread = Fork(pFunc, threadName);
+                thread.IsBackground = true;
+            }
+            thread.Start();
         }
 
         #endregion
