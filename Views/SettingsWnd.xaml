@@ -3,29 +3,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
 		xmlns:Views="clr-namespace:Power8.Views"
 		x:Class="Power8.Views.SettingsWnd"
-        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center"
-        Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight" MinWidth="400">
+        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" ResizeMode="CanMinimize"
+        Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight" MinWidth="400"><!--TODO: Localize-->
 	<Views:DisposableWindow.Resources>
-		<Style TargetType="{x:Type CheckBox}" x:Key="RedCheckBoxStyle">
+        <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxStyle">
+            <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Margin" Value="0,4,0,4"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+ 		</Style>        
+		<Style TargetType="{x:Type CheckBox}" x:Key="RedCheckBoxStyle" BasedOn="{StaticResource CheckBoxStyle}">
 			<Style.Triggers>
 				<MultiDataTrigger>
 					<MultiDataTrigger.Conditions>
-						<Condition Binding="{Binding IsChecked, ElementName=communicationIssuesCheckBox}" Value="true"/>
+						<Condition Binding="{Binding IsChecked, ElementName=StgSuggestProblems}" Value="true"/>
 						<Condition Binding="{Binding IsChecked, RelativeSource={x:Static RelativeSource.Self}}" Value="false"/>
 					</MultiDataTrigger.Conditions>
 					<Setter Property="Foreground" Value="Crimson"/>
 				</MultiDataTrigger>
 			</Style.Triggers>
 		</Style>
-	</Views:DisposableWindow.Resources>
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBoxStyle}"/>
+    </Views:DisposableWindow.Resources>
     <Grid Margin="5">
     	<Grid.RowDefinitions>
     		<RowDefinition/>
     		<RowDefinition Height="Auto"/>
     	</Grid.RowDefinitions>
 		<StackPanel Margin="0">
-    		<CheckBox x:Name="squareCheckBox" Content="Use square button" HorizontalAlignment="Left" Margin="0,0,0,8"/>
-    		<Grid Margin="0,0,0,8" IsEnabled="{Binding IsChecked, ElementName=squareCheckBox}">
+    		<CheckBox x:Name="StgSquareStart" Content="Use square button"/> <!--TODO: Localize this and children-->
+            <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
     			<Grid.ColumnDefinitions>
     				<ColumnDefinition/>
     				<ColumnDefinition Width="Auto"/>
@@ -33,11 +39,14 @@
     			<TextBox TextWrapping="NoWrap" IsReadOnly="True" Margin="0,0,5,0"/>
     			<Button HorizontalAlignment="Left" Style="{x:Null}" Grid.Column="1" Content="Browse..." Padding="1" MinWidth="75"/>
     		</Grid>
-    		<CheckBox x:Name="watchRemovableCheckBox" Content="Watch removable drives" HorizontalAlignment="Left" Margin="0,0,0,8"/>
-    		<CheckBox x:Name="autoStartCheckBox" Style="{StaticResource RedCheckBoxStyle}"  Content="Autostart Power8" HorizontalAlignment="Left" Margin="0,0,0,8"/>
-    		<CheckBox x:Name="checkForUpdatesCheckBox" Style="{StaticResource RedCheckBoxStyle}" Content="Check for updates" HorizontalAlignment="Left" Margin="0,0,0,8"/>
-    		<CheckBox x:Name="blockMetroFeaturesCheckBox" Content="Block Win8 UI features" HorizontalAlignment="Left" Margin="0,0,0,8"/>
-    		<CheckBox x:Name="communicationIssuesCheckBox" Content="Inform me about configuration issues" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+            <Separator/>
+    		<CheckBox x:Name="StgWatchRemovables" Content="Watch removable drives"/> <!--TODO: Localize-->
+            <Separator/>
+            <CheckBox x:Name="MWAutoStart" Style="{StaticResource RedCheckBoxStyle}"/>
+            <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}"/>
+            <CheckBox x:Name="MWBlockMetro"/>
+            <Separator/>
+            <CheckBox x:Name="StgSuggestProblems" Content="Inform me about configuration issues"/><!--TODO: Localize-->
         
     	</StackPanel>
 		<Button Style="{x:Null}" Content="Save" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1"/>

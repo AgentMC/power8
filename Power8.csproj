@@ -98,6 +98,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DataProviders\MfuList.cs" />
+    <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Properties\NoLoc.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
