@@ -2,44 +2,44 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
 		xmlns:Views="clr-namespace:Power8.Views"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
 		x:Class="Power8.Views.SettingsWnd"
-        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center" Height="233" Width="465"
-        Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight">
+        Title="Settings" HorizontalAlignment="Center" VerticalAlignment="Center"
+        Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight" MinWidth="400">
+	<Views:DisposableWindow.Resources>
+		<Style TargetType="{x:Type CheckBox}" x:Key="RedCheckBoxStyle">
+			<Style.Triggers>
+				<MultiDataTrigger>
+					<MultiDataTrigger.Conditions>
+						<Condition Binding="{Binding IsChecked, ElementName=communicationIssuesCheckBox}" Value="true"/>
+						<Condition Binding="{Binding IsChecked, RelativeSource={x:Static RelativeSource.Self}}" Value="false"/>
+					</MultiDataTrigger.Conditions>
+					<Setter Property="Foreground" Value="Crimson"/>
+				</MultiDataTrigger>
+			</Style.Triggers>
+		</Style>
+	</Views:DisposableWindow.Resources>
     <Grid Margin="5">
     	<Grid.RowDefinitions>
     		<RowDefinition/>
     		<RowDefinition Height="Auto"/>
     	</Grid.RowDefinitions>
-    	<Grid.ColumnDefinitions>
-    		<ColumnDefinition/>
-    		<ColumnDefinition Width="Auto"/>
-    	</Grid.ColumnDefinitions>
+		<StackPanel Margin="0">
+    		<CheckBox x:Name="squareCheckBox" Content="Use square button" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+    		<Grid Margin="0,0,0,8" IsEnabled="{Binding IsChecked, ElementName=squareCheckBox}">
+    			<Grid.ColumnDefinitions>
+    				<ColumnDefinition/>
+    				<ColumnDefinition Width="Auto"/>
+    			</Grid.ColumnDefinitions>
+    			<TextBox TextWrapping="NoWrap" IsReadOnly="True" Margin="0,0,5,0"/>
+    			<Button HorizontalAlignment="Left" Style="{x:Null}" Grid.Column="1" Content="Browse..." Padding="1" MinWidth="75"/>
+    		</Grid>
+    		<CheckBox x:Name="watchRemovableCheckBox" Content="Watch removable drives" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+    		<CheckBox x:Name="autoStartCheckBox" Style="{StaticResource RedCheckBoxStyle}"  Content="Autostart Power8" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+    		<CheckBox x:Name="checkForUpdatesCheckBox" Style="{StaticResource RedCheckBoxStyle}" Content="Check for updates" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+    		<CheckBox x:Name="blockMetroFeaturesCheckBox" Content="Block Win8 UI features" HorizontalAlignment="Left" Margin="0,0,0,8"/>
+    		<CheckBox x:Name="communicationIssuesCheckBox" Content="Inform me about configuration issues" HorizontalAlignment="Left" Margin="0,0,0,8"/>
         
-		<Grid Margin="0,0,5,0">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
-        
-			<CheckBox x:Name="squareCheckBox" Content="Use square button" HorizontalAlignment="Left" Margin="0,0,0,10"/>
-			<CheckBox x:Name="watchRemovableCheckBox" Content="Watch removable drives" HorizontalAlignment="Left" Grid.Row="1" Margin="0,0,0,10"/>
-			<CheckBox x:Name="autoStartCheckBox" Content="Autostart Power8" HorizontalAlignment="Left" Grid.Row="2" Margin="0,0,0,10"/>
-			<CheckBox x:Name="checkForUpdatesCheckBox" Content="Check for updates" HorizontalAlignment="Left" Grid.Row="3" Margin="0,0,0,10"/>
-			<CheckBox x:Name="blockMetroFeaturesCheckBox" Content="Block Win8 UI features" HorizontalAlignment="Left" Grid.Row="4" Margin="0,0,0,10"/>
-			<CheckBox x:Name="communicationIssuesCheckBox" Content="Don't bother me with configuration issues" HorizontalAlignment="Left" Grid.Row="5" Margin="0,0,0,10"/>
-        
-		</Grid>
-		<Button HorizontalAlignment="Right" Style="{DynamicResource SelectImageButtonStyle}" Width="75" Height="75" VerticalAlignment="Top" Grid.Column="1"/>
-		<StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
-			<Button Width="75" Style="{x:Null}" Content="Save" Margin="0,0,10,0"/>
-			<Button Width="75" Style="{x:Null}"  Content="Cancel"/>
-		</StackPanel>
+    	</StackPanel>
+		<Button Style="{x:Null}" Content="Save" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1"/>
 	</Grid>
 </Views:DisposableWindow>
