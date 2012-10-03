@@ -49,6 +49,6 @@
             <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}" Content="Inform me about configuration issues"/><!--TODO: Localize-->
         
     	</StackPanel>
-		<Button Style="{x:Null}" Content="Close" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1"/>
+		<Button Style="{x:Null}" Content="OK" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" IsDefault="True" Click="OkClick" />
 	</Grid>
 </Views:DisposableWindow>
