@@ -15,11 +15,10 @@ This list is maintained internally, if you want to report an issue that is not o
   
 ===Block===
 ===High===
-  #  P8 prevents safe eject of removable drives
-  #  W8RTM: no transparency;
-  #  W8RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected);
+  #  W8RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected... sometimes);
 ===Medium===
-  #  Context menu from Main button may show in inappropriate position
+  #  W8RTM: no transparency (should think twice before fixing... window may be not in Windows style after fix);
+  #  XP/8?: Menu from menu-button may show in inappropriate position 
   #  7/8: Data grid icons and text are blurred though sizes of blocks are ok
 ===Low===
   #  8/7^Classic^/XP^Classic^: Menu-button's MTLH is repainted improperly on hover 
@@ -31,4 +30,5 @@ This list is maintained internally, if you want to report an issue that is not o
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
-  #  XP/8?: Menu from menu-button may show in inappropriate position 
+  #  P8 prevents safe eject of removable drives
+  #  Context menu from Main button may show in inappropriate position
