@@ -3,47 +3,89 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" SizeToContent="WidthAndHeight"
-        Name="Root" Closed="WindowClosed" Loaded="WindowLoaded"
-        WindowStyle="None" ResizeMode="NoResize" Topmost="True"
-        AllowsTransparency="False" Background="{x:Static SystemColors.ActiveCaptionBrush}" >
-    <Button Name="b1" Style="{StaticResource MainButtonTransparentStyle}" Click="ShowButtonStack" HorizontalContentAlignment="Stretch" 
-            VerticalContentAlignment="Stretch" Cursor="Wait"  ForceCursor="True" MouseEnter="MainBtnMouseEnter" 
-            ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" LayoutUpdated="MainBtnLayoutUpdated"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        Name="Root"
+        Closed="WindowClosed"
+        Loaded="WindowLoaded"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Topmost="True"
+        AllowsTransparency="False"
+        Background="{x:Static SystemColors.ActiveCaptionBrush}">
+    <Button Name="b1"
+            Style="{StaticResource MainButtonTransparentStyle}"
+            Click="ShowButtonStack"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            Cursor="Wait"
+            ForceCursor="True"
+            MouseEnter="MainBtnMouseEnter"
+            ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}"
+            LayoutUpdated="MainBtnLayoutUpdated"
             ToolTipService.ToolTip="{Binding ElementName=Root, Path=Tip}"
-            ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}" >
+            ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}">
         <Button.ContextMenu>
             <ContextMenu Name="menu">
-                <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
-                <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
-                <MenuItem Name="MWBlockMetro" IsCheckable="True" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}" Style="{StaticResource ContextMenuItemStyle}"/>
-                <MenuItem Name="MWSettings" Style="{StaticResource ContextMenuItemStyle}" Click="ShowSettingsWindow" />
-                <Separator/>
-                <MenuItem Name="MWAbout" Style="{StaticResource ContextMenuItemStyle}" Click="AboutClick" />
-                <MenuItem Name="MWExit" Style="{StaticResource ContextMenuItemStyle}" Click="ExitClick" /> 
+                <MenuItem Name="MWAutoStart"
+                          IsCheckable="True"
+                          IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"
+                          Style="{StaticResource ContextMenuItemStyle}" />
+                <MenuItem Name="MWCheckForUpdates"
+                          IsCheckable="True"
+                          IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"
+                          Style="{StaticResource ContextMenuItemStyle}" />
+                <MenuItem Name="MWBlockMetro"
+                          IsCheckable="True"
+                          IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"
+                          Style="{StaticResource ContextMenuItemStyle}" />
+                <MenuItem Name="MWSettings"
+                          Style="{StaticResource ContextMenuItemStyle}"
+                          Click="ShowSettingsWindow" />
+                <Separator />
+                <MenuItem Name="MWAbout"
+                          Style="{StaticResource ContextMenuItemStyle}"
+                          Click="AboutClick" />
+                <MenuItem Name="MWExit"
+                          Style="{StaticResource ContextMenuItemStyle}"
+                          Click="ExitClick" />
             </ContextMenu>
         </Button.ContextMenu>
-    	<Grid Opacity="0.8">
-    		<Grid.RowDefinitions>
-    			<RowDefinition/>
-    			<RowDefinition/>
-    		</Grid.RowDefinitions>
-    		<Grid.ColumnDefinitions>
-    			<ColumnDefinition/>
-    			<ColumnDefinition/>
-    		</Grid.ColumnDefinitions>
-    		<Border Background="{DynamicResource RoundGradientBlueBrush}" Grid.Row="1">
-    			<Border Background="{DynamicResource RoundGradientBrush}"/>
-    		</Border>
-    		<Border Background="{DynamicResource RoundGradientGreenBrush}" Grid.Column="1">
-    			<Border Background="{DynamicResource RoundGradientBrush}"/>
-    		</Border>
-    		<Border Background="{DynamicResource RoundGradientRedBrush}">
-    			<Border Background="{DynamicResource RoundGradientBrush}"/>
-    		</Border>
-    		<Border Grid.Row="1" Grid.Column="1" Background="{DynamicResource RoundGradientOrangeBrush}">
-    			<Border Background="{DynamicResource RoundGradientBrush}"/>
-    		</Border>
+        <Grid>
+    		<Grid Opacity="0.8"
+    			x:Name="winGrid">
+    			<Grid.RowDefinitions>
+    				<RowDefinition />
+    				<RowDefinition />
+    			</Grid.RowDefinitions>
+    			<Grid.ColumnDefinitions>
+    				<ColumnDefinition />
+    				<ColumnDefinition />
+    			</Grid.ColumnDefinitions>
+    			<Border Background="{DynamicResource RoundGradientBlueBrush}"
+    				Grid.Row="1">
+    				<Border Background="{DynamicResource RoundGradientBrush}" />
+    			</Border>
+    			<Border Background="{DynamicResource RoundGradientGreenBrush}"
+    				Grid.Column="1">
+    				<Border Background="{DynamicResource RoundGradientBrush}" />
+    			</Border>
+    			<Border Background="{DynamicResource RoundGradientRedBrush}">
+    				<Border Background="{DynamicResource RoundGradientBrush}" />
+    			</Border>
+    			<Border Grid.Row="1"
+    				Grid.Column="1"
+    				Background="{DynamicResource RoundGradientOrangeBrush}">
+    				<Border Background="{DynamicResource RoundGradientBrush}" />
+    			</Border>
+    		</Grid>
+    		<Grid x:Name="imageGrid"/>
+    		<Viewbox Margin="0,0,0,-2" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="10" MinHeight="10" MaxWidth="26" MaxHeight="26"
+                     Visibility="{Binding ShowWarn, Converter={StaticResource BooleanToVisibilityConverter}}">    
+    			<Grid x:Name="warningGrid" Width="20" Height="20">
+    				<Path Data="M0,9 L5.5,0 11,9z" Fill="#FFFFA400" Stretch="Uniform" Stroke="Black" StrokeLineJoin="Round"/>
+    				<TextBlock TextWrapping="Wrap" Text="!" d:LayoutOverrides="Width, Height" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Padding="0,2,0,0"/></Grid>
+    		</Viewbox>
     	</Grid>
     </Button>
 </Window>
