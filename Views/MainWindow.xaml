@@ -80,11 +80,13 @@
     			</Border>
     		</Grid>
     		<Grid x:Name="imageGrid"/>
-    		<Viewbox Margin="0,0,0,-2" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="10" MinHeight="10" MaxWidth="26" MaxHeight="26"
-                     Visibility="{Binding ShowWarn, Converter={StaticResource BooleanToVisibilityConverter}}">    
+    		<Viewbox Margin="0,-2,0,-1" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="10" MinHeight="10" 
+                     MaxWidth="26" MaxHeight="26" Visibility="{Binding WarningIconVisibility, ElementName=Root}">    
     			<Grid x:Name="warningGrid" Width="20" Height="20">
     				<Path Data="M0,9 L5.5,0 11,9z" Fill="#FFFFA400" Stretch="Uniform" Stroke="Black" StrokeLineJoin="Round"/>
-    				<TextBlock TextWrapping="Wrap" Text="!" d:LayoutOverrides="Width, Height" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" Padding="0,2,0,0"/></Grid>
+    				<TextBlock TextWrapping="Wrap" Text="!" d:LayoutOverrides="Width, Height" HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" Foreground="Black" Padding="0,2,0,0" FontWeight="Bold"/>
+                </Grid>
     		</Viewbox>
     	</Grid>
     </Button>
