@@ -197,7 +197,7 @@ namespace Power8.Views
         private void SettingsManagerOnWarnMayHaveChanged(object sender, EventArgs eventArgs)
         {
             FirePropChanged("Tip");
-            FirePropChanged("ShowWarn");
+            FirePropChanged("WarningIconVisibility");
         }
 
         #endregion
@@ -282,6 +282,14 @@ namespace Power8.Views
                         (SettingsManager.Instance.ShowWarn //TODO: move to resources
                             ? "\r\nYou may wish to change some settings to enhance your Power8 experience"
                             : string.Empty);
+            }
+        }
+
+        public Visibility WarningIconVisibility
+        {
+            get
+            {
+                return SettingsManager.Instance.ShowWarn ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
