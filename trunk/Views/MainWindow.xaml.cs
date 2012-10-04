@@ -25,7 +25,7 @@ namespace Power8.Views
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IntPtr _taskBar, _showDesktopBtn;
+        private IntPtr _taskBar, _showDesktopBtn, _midPanel;
         private WelcomeArrow _arrow;
         private PlacementMode _placement = PlacementMode.MousePoint;
 
@@ -92,6 +92,8 @@ namespace Power8.Views
             CheckWnd(_taskBar, API.WndIds.TRAY_WND_CLASS);
             if (Util.OsIs.SevenOrMore)
             {
+                _midPanel = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.TRAY_REBAR_WND_CLASS, null);
+                CheckWnd(_midPanel, API.WndIds.TRAY_REBAR_WND_CLASS);
                 _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.TRAY_NTF_WND_CLASS, null);
                 CheckWnd(_showDesktopBtn, API.WndIds.TRAY_NTF_WND_CLASS);
                 _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, API.WndIds.SH_DSKTP_WND_CLASS, null);
@@ -210,7 +212,7 @@ namespace Power8.Views
 
             while (!ClosedW)
             {
-                API.RECT r;
+                API.RECT r, r2;
                 if (!API.GetWindowRect(_showDesktopBtn, out r))
                 {//looks like explorer.exe is dead!
                     Thread.Sleep(10000);//let's wait for explorer to auto-restart
@@ -242,6 +244,15 @@ namespace Power8.Views
                 }
                 var curHeight = r.Bottom - r.Top;
                 var curWidth = r.Right - r.Left;
+                bool checkTop = curHeight < curWidth;
+                var sizeCoef = 4.0/3; /*(Single)Screen.PrimaryScreen.Bounds.Width / Screen.PrimaryScreen.Bounds.Height;*/
+                if (SettingsManager.Instance.SquareStartButton)
+                {
+                    if (curHeight > curWidth) //vertical button, horiz. bar
+                        curWidth = (int)(curHeight * sizeCoef);
+                    else                      //horiz. button, vertical bar
+                        curHeight = (int)(curWidth / sizeCoef); 
+                }
 // ReSharper disable CompareOfFloatsByEqualityOperator
                 if (width != curWidth)
                 {
@@ -252,6 +263,22 @@ namespace Power8.Views
                 {
                     height = curHeight;
                     Dispatcher.Invoke(new Action(() =>  b1.Height = curHeight));
+                }
+                API.GetWindowRect(_midPanel, out r);
+                API.GetWindowRect(_taskBar, out r2);
+                r.Top -= r2.Top;
+                r.Left -= r2.Left;
+                r.Right -= r2.Left;
+                r.Bottom -= r2.Top;
+                if (checkTop && r.Top + 4 != curHeight)
+                {//move rebar down
+                    int delta = (curHeight - 4) - r.Top;
+                    API.MoveWindow(_midPanel, r.Left, r.Top + delta, r.Right - r.Left, r.Bottom - r.Top - delta, true);
+                }
+                else if (!checkTop && r.Left + 4 != curWidth)
+                {//move rebar right
+                    int delta = (curWidth - 4) - r.Left;
+                    API.MoveWindow(_midPanel, r.Left + delta, r.Top, r.Right - r.Left - delta, r.Bottom - r.Top, true);
                 }
 // ReSharper restore CompareOfFloatsByEqualityOperator
                 Thread.Sleep(100);
