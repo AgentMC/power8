@@ -30,14 +30,38 @@
     		<RowDefinition Height="Auto"/>
     	</Grid.RowDefinitions>
 		<StackPanel Margin="0">
-            <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" Content="Use square button"/> <!--TODO: Localize this and children-->
+            <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" Content="Configure Start button"/> <!--TODO: Localize this and children-->
             <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
     			<Grid.ColumnDefinitions>
     				<ColumnDefinition/>
     				<ColumnDefinition Width="Auto"/>
     			</Grid.ColumnDefinitions>
-    			<TextBox TextWrapping="NoWrap" IsReadOnly="True" Margin="0,0,5,0"/>
-    			<Button HorizontalAlignment="Left" Style="{x:Null}" Grid.Column="1" Content="Browse..." Padding="1" MinWidth="75"/>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Label>Aspect Ratio:</Label>
+                    <ComboBox Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Center">
+                        <ComboBox.Items>
+                            <ComboBoxItem>Auto (by Desktop)</ComboBoxItem>
+                            <ComboBoxItem>1:1 (Square)</ComboBoxItem>
+                            <ComboBoxItem>4:3</ComboBoxItem>
+                            <ComboBoxItem>16:9</ComboBoxItem>
+                            <ComboBoxItem>16:10</ComboBoxItem>
+                        </ComboBox.Items>
+                    </ComboBox>
+                    <CheckBox Grid.Column="2" Content="Follows taskbar orientation"/>
+                </Grid>
+                <Label Grid.Row="1" Content="Select image:"/>
+    			<TextBox TextWrapping="NoWrap" IsReadOnly="True" Margin="5,0,5,0" Grid.Row="2"/>
+    			<Button HorizontalAlignment="Left" Style="{x:Null}" Grid.Column="1" Content="Browse..." Padding="1" MinWidth="75" Grid.Row="2"/>
     		</Grid>
             <Separator/>
             <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}" Content="Watch removable drives"/> <!--TODO: Localize-->

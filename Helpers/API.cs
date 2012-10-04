@@ -16,6 +16,7 @@ namespace Power8
             public const string METRO_EDGE_WND = "EdgeUiInputWndClass";
             public const string TRAY_WND_CLASS = "Shell_TrayWnd";
             public const string TRAY_NTF_WND_CLASS = "TrayNotifyWnd";
+            public const string TRAY_REBAR_WND_CLASS = "ReBarWindow32";
             public const string SH_DSKTP_WND_CLASS = "TrayShowDesktopButtonWClass";
             public const string SH_DSKTP_START_CLASS = "Button";
         }
