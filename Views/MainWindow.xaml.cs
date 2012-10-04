@@ -34,7 +34,7 @@ namespace Power8.Views
         public MainWindow()
         {
             InitializeComponent();
-            menu.DataContext = SettingsManager.Instance;
+            b1.DataContext = SettingsManager.Instance;
 
             Application.SetCompatibleTextRenderingDefault(true);
             Application.EnableVisualStyles();
@@ -197,6 +197,7 @@ namespace Power8.Views
         private void SettingsManagerOnWarnMayHaveChanged(object sender, EventArgs eventArgs)
         {
             FirePropChanged("Tip");
+            FirePropChanged("ShowWarn");
         }
 
         #endregion

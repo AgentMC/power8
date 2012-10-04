@@ -7,6 +7,7 @@
     <!-- Resource dictionary entries should be defined here. -->
     <Converters:NameToResourceConverter x:Key="localizer"/>
     <Converters:MenuWidthToMarginConverter x:Key="themeApplier" />
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     
     <!-- Buttons -->
     <Style TargetType="{x:Type Button}">
