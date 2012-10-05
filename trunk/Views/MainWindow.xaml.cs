@@ -242,45 +242,56 @@ namespace Power8.Views
                         trd.Join();
                     }
                 }
+                //The success way
+                //Size the button by ShowDesktop buton
                 var curHeight = r.Bottom - r.Top;
                 var curWidth = r.Right - r.Left;
                 bool checkTop = curHeight < curWidth;
-                var sizeCoef = 4.0/3; /*(Single)Screen.PrimaryScreen.Bounds.Width / Screen.PrimaryScreen.Bounds.Height;*/
                 if (SettingsManager.Instance.SquareStartButton)
-                {
+                {//Apply user size modification
+                    var sizeCoef = SettingsManager.GetARModifier(!checkTop);
                     if (curHeight > curWidth) //vertical button, horiz. bar
                         curWidth = (int)(curHeight * sizeCoef);
                     else                      //horiz. button, vertical bar
                         curHeight = (int)(curWidth / sizeCoef); 
                 }
-// ReSharper disable CompareOfFloatsByEqualityOperator
-                if (width != curWidth)
+                if ((int)width != curWidth)
                 {
                     width = curWidth;
                     Dispatcher.Invoke(new Action(() =>  b1.Width = curWidth));
                 }
-                if (height != curHeight)
+                if ((int)height != curHeight)
                 {
                     height = curHeight;
                     Dispatcher.Invoke(new Action(() =>  b1.Height = curHeight));
                 }
-                API.GetWindowRect(_midPanel, out r);
-                API.GetWindowRect(_taskBar, out r2);
-                r.Top -= r2.Top;
-                r.Left -= r2.Left;
-                r.Right -= r2.Left;
-                r.Bottom -= r2.Top;
-                if (checkTop && r.Top + 4 != curHeight)
-                {//move rebar down
-                    int delta = (curHeight - 4) - r.Top;
-                    API.MoveWindow(_midPanel, r.Left, r.Top + delta, r.Right - r.Left, r.Bottom - r.Top - delta, true);
+                //If required, apply move to taskbar rebar
+                if (Util.OsIs.EightOrMore || (SettingsManager.Instance.SquareStartButton && Util.OsIs.SevenOrMore))
+                {
+                    API.GetWindowRect(_midPanel, out r);
+                    API.GetWindowRect(_taskBar, out r2);
+                    if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
+                    { //Have no idea why, but there's some kind of automatic margin applied in classic style
+                        if (checkTop)
+                            r2.Left += 4;
+                        else
+                            r2.Top += 4;
+                    }
+                    r.Top -= r2.Top;
+                    r.Left -= r2.Left;
+                    r.Right -= r2.Left;
+                    r.Bottom -= r2.Top;
+                    if (checkTop && r.Top + 4 != curHeight)
+                    {//move rebar down
+                        int delta = (curHeight - 4) - r.Top;
+                        API.MoveWindow(_midPanel, r.Left, r.Top + delta, r.Right - r.Left, r.Bottom - r.Top - delta, true);
+                    }
+                    else if (!checkTop && r.Left + 4 != curWidth)
+                    {//move rebar right
+                        int delta = (curWidth - 4) - r.Left;
+                        API.MoveWindow(_midPanel, r.Left + delta, r.Top, r.Right - r.Left - delta, r.Bottom - r.Top, true);
+                    }
                 }
-                else if (!checkTop && r.Left + 4 != curWidth)
-                {//move rebar right
-                    int delta = (curWidth - 4) - r.Left;
-                    API.MoveWindow(_midPanel, r.Left + delta, r.Top, r.Right - r.Left - delta, r.Bottom - r.Top, true);
-                }
-// ReSharper restore CompareOfFloatsByEqualityOperator
                 Thread.Sleep(100);
             }
         }

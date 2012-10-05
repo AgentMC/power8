@@ -612,8 +612,16 @@ namespace Power8
                 var listProvider = (API.IApplicationDocumentLists)new API.ApplicationDocumentLists();
                 listProvider.SetAppID(pv2.GetValue());
                 var riidObjectArray = new Guid(API.Sys.IdIObjectArray);
-                var list = (API.IObjectArray)listProvider.GetList(listType, 0, ref riidObjectArray);
-
+                API.IObjectArray list;
+                try
+                {
+                    list = (API.IObjectArray)listProvider.GetList(listType, 0, ref riidObjectArray);
+                }
+                catch (COMException) //Share violation may occur
+                {
+                    list = null;
+                }
+                
                 if (list != null)
                 {
                     //Getting the contents of the list

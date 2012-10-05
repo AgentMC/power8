@@ -32,6 +32,8 @@ namespace Power8.Helpers
         private static bool _blockMetro, _update;
         private static Thread _blockMetroThread, _updateThread;
 
+        private static readonly System.Windows.Forms.Screen Screen = System.Windows.Forms.Screen.PrimaryScreen;
+
 
         public static void Init()
         {
@@ -164,6 +166,32 @@ namespace Power8.Helpers
             BgrThreadLock.Set();
         }
 
+        public static Single GetARModifier(bool taskbarIsHorizontal)
+        {
+            Single s;
+            switch (Instance.ArSelectedIndex)
+            {
+                case 0:
+                    s = (Single) Screen.Bounds.Width/Screen.Bounds.Height;
+                    break;
+                case 1:
+                    s = 1;
+                    break;
+                case 2:
+                    s = 4.0f/3;
+                    break;
+                case 3:
+                    s = 16f/9;
+                    break;
+                default:
+                    s = 16f/10;
+                    break;
+            }
+            if (taskbarIsHorizontal && Instance.ArFollowsTaskbar)
+                s = 1/s;
+            return s;
+        }
+
 
 
         public bool AutoStartEnabled
@@ -234,6 +262,30 @@ namespace Power8.Helpers
                 if(value == SquareStartButton)
                     return;
                 Settings.Default.SquareButton = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public bool ArFollowsTaskbar
+        {
+            get { return Settings.Default.ArFollowsTaskbar; }
+            set
+            {
+                if (value == ArFollowsTaskbar)
+                    return;
+                Settings.Default.ArFollowsTaskbar = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public int ArSelectedIndex
+        {
+            get { return Settings.Default.ArIndex; }
+            set
+            {
+                if (value == ArSelectedIndex)
+                    return;
+                Settings.Default.ArIndex = value;
                 Settings.Default.Save();
             }
         }
