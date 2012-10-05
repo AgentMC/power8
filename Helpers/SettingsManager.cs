@@ -263,6 +263,7 @@ namespace Power8.Helpers
                     return;
                 Settings.Default.SquareButton = value;
                 Settings.Default.Save();
+                ImageChanged(this, null);
             }
         }
 
@@ -321,9 +322,23 @@ namespace Power8.Helpers
             get { return ReportBadSettings && (!AutoStartEnabled || !CheckForUpdatesEnabled); }
         }
 
+        public string ImageString
+        {
+            get { return Settings.Default.StartImage; }
+            set
+            {
+                if(value == ImageString)
+                    return;
+                Settings.Default.StartImage = value;
+                Settings.Default.Save();
+                ImageChanged(this, null);
+            }
+        }
+
 
         public static event EventHandler WatchRemovablesChanged;
         public static event EventHandler WarnMayHaveChanged;
+        public static event EventHandler ImageChanged;
 
     }
 }

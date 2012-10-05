@@ -152,5 +152,17 @@ namespace Power8.Properties {
                 this["ArFollowsTaskbar"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartImage {
+            get {
+                return ((string)(this["StartImage"]));
+            }
+            set {
+                this["StartImage"] = value;
+            }
+        }
     }
 }

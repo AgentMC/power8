@@ -25,5 +25,14 @@ namespace Power8.Views
         {
             get { return Util.OsIs.SevenOrMore; }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Filter = "Images|*.png";
+            ofd.Title = "Open picture";
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                pictureBox.Text = ofd.FileName;
+        }
     }
 }
