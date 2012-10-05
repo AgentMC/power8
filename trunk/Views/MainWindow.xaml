@@ -52,8 +52,8 @@
             </ContextMenu>
         </Button.ContextMenu>
         <Grid>
-    		<Grid Opacity="0.8"
-    			x:Name="winGrid">
+    		<Grid Opacity="0.8" x:Name="winGrid" 
+                  Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=false}">
     			<Grid.RowDefinitions>
     				<RowDefinition />
     				<RowDefinition />
@@ -79,8 +79,10 @@
     				<Border Background="{DynamicResource RoundGradientBrush}" />
     			</Border>
     		</Grid>
-    		<Grid x:Name="imageGrid"/>
-    		<Viewbox Margin="0,-2,0,-1" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="10" MinHeight="10" 
+            <Grid x:Name="imageGrid" Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=true}">
+                <Image Source="{Binding ElementName=Root, Path=StartImage}"/>
+            </Grid>
+            <Viewbox Margin="0,-2,0,-1" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="10" MinHeight="10" 
                      MaxWidth="26" MaxHeight="26" Visibility="{Binding WarningIconVisibility, ElementName=Root}">    
     			<Grid x:Name="warningGrid" Width="20" Height="20">
     				<Path Data="M0,9 L5.5,0 11,9z" Fill="#FFFFA400" Stretch="Uniform" Stroke="Black" StrokeLineJoin="Round"/>

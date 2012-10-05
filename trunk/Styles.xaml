@@ -7,6 +7,7 @@
     <!-- Resource dictionary entries should be defined here. -->
     <Converters:NameToResourceConverter x:Key="localizer"/>
     <Converters:MenuWidthToMarginConverter x:Key="themeApplier" />
+    <Converters:BitmapSource2VisibilityConverter x:Key="imageDisplay"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     
     <!-- Buttons -->

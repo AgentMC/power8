@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using Power8.Helpers;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
@@ -28,6 +29,8 @@ namespace Power8.Views
         private IntPtr _taskBar, _showDesktopBtn, _midPanel;
         private WelcomeArrow _arrow;
         private PlacementMode _placement = PlacementMode.MousePoint;
+        private BitmapSource _bitmap;
+        private string _lastSource;
 
         #region Window (de)init 
 
@@ -110,6 +113,7 @@ namespace Power8.Views
             Util.Fork(WatchDesktopBtn, "ShowDesktop button watcher").Start();
 
             SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;
+            SettingsManager.ImageChanged += SettingsManagerOnImageChanged;
             SettingsManager.BgrThreadLock.Set();
 
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
@@ -202,6 +206,11 @@ namespace Power8.Views
             FirePropChanged("WarningIconVisibility");
         }
 
+        private void SettingsManagerOnImageChanged(object sender, EventArgs eventArgs)
+        {
+            FirePropChanged("StartImage");
+        }
+
         #endregion
 
         #region Background threads
@@ -212,7 +221,7 @@ namespace Power8.Views
 
             while (!ClosedW)
             {
-                API.RECT r, r2;
+                API.RECT r;
                 if (!API.GetWindowRect(_showDesktopBtn, out r))
                 {//looks like explorer.exe is dead!
                     Thread.Sleep(10000);//let's wait for explorer to auto-restart
@@ -268,6 +277,7 @@ namespace Power8.Views
                 //If required, apply move to taskbar rebar
                 if (Util.OsIs.EightOrMore || (SettingsManager.Instance.SquareStartButton && Util.OsIs.SevenOrMore))
                 {
+                    API.RECT r2;
                     API.GetWindowRect(_midPanel, out r);
                     API.GetWindowRect(_taskBar, out r2);
                     if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
@@ -328,6 +338,34 @@ namespace Power8.Views
             get
             {
                 return SettingsManager.Instance.ShowWarn ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+
+        public BitmapSource StartImage
+        {
+            get
+            {
+                if(!SettingsManager.Instance.SquareStartButton)
+                    return null;
+                if (_lastSource == SettingsManager.Instance.ImageString)
+                    return _bitmap;
+                _lastSource = SettingsManager.Instance.ImageString;
+                if (string.IsNullOrWhiteSpace(_lastSource))
+                {
+                    _bitmap = null;
+                }
+                else
+                {
+                    try
+                    {
+                        _bitmap = new BitmapImage(new Uri(_lastSource, UriKind.Absolute));
+                    }
+                    catch
+                    {
+                        _bitmap = null;
+                    }
+                }
+                return _bitmap;
             }
         }
 
