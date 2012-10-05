@@ -26,13 +26,18 @@ namespace Power8.Views
             get { return Util.OsIs.SevenOrMore; }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Browse(object sender, RoutedEventArgs e)
         {
-            var ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.Filter = "Images|*.png";
-            ofd.Title = "Open picture";
+            var ofd = new System.Windows.Forms.OpenFileDialog(); //TODO: Localize!!!
+            ofd.Filter = "Images|*.png;*.gif;*.jpe*;*.tif*";
+            ofd.Title = "Choose picture";
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 pictureBox.Text = ofd.FileName;
+        }
+
+        private void Clear(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            pictureBox.Text = string.Empty;
         }
     }
 }

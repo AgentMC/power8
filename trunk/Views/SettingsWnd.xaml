@@ -60,9 +60,9 @@
                     </ComboBox>
                     <CheckBox Grid.Column="2" Content="Follows taskbar orientation" IsChecked="{Binding ArFollowsTaskbar, Mode=TwoWay}"/>
                 </Grid>
-                <Label Grid.Row="1" Content="Select image:"/>
-                <TextBox x:Name="pictureBox" TextWrapping="NoWrap" IsReadOnly="True" Margin="5,0,5,0" Grid.Row="2" Text="{Binding ImageString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    			<Button HorizontalAlignment="Left" Style="{x:Null}" Grid.Column="1" Content="Browse..." Padding="1" MinWidth="75" Grid.Row="2" Click="Button_Click" />
+                <Label Grid.Row="1" Content="Select image (doubleclick path to clear):"/>
+                <TextBox x:Name="pictureBox" TextWrapping="NoWrap" IsReadOnly="True" Margin="5,0,5,0" Grid.Row="2" Text="{Binding ImageString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="Clear"/>
+    			<Button HorizontalAlignment="Left" Style="{x:Null}" Grid.Column="1" Content="Browse..." Padding="1" MinWidth="75" Grid.Row="2" Click="Browse" />
     		</Grid>
             <Separator/>
             <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}" Content="Watch removable drives"/> <!--TODO: Localize-->
