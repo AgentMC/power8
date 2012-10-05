@@ -20,5 +20,10 @@ namespace Power8.Views
         {
             Close();
         }
+
+        public static bool NotXp
+        {
+            get { return Util.OsIs.SevenOrMore; }
+        }
     }
 }

@@ -128,5 +128,29 @@ namespace Power8.Properties {
                 this["WarnBadConfig"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int ArIndex {
+            get {
+                return ((int)(this["ArIndex"]));
+            }
+            set {
+                this["ArIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ArFollowsTaskbar {
+            get {
+                return ((bool)(this["ArFollowsTaskbar"]));
+            }
+            set {
+                this["ArFollowsTaskbar"] = value;
+            }
+        }
     }
 }
