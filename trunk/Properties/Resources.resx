@@ -353,4 +353,42 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_MWSettings" xml:space="preserve">
     <value>Settings...</value>
   </data>
+  <data name="CR_StgArByDesktop" xml:space="preserve">
+    <value>Auto (by Desktop)</value>
+  </data>
+  <data name="CR_StgBrowseBtn" xml:space="preserve">
+    <value>Browse...</value>
+  </data>
+  <data name="CR_StgInvertAr" xml:space="preserve">
+    <value>Follows taskbar orientation</value>
+  </data>
+  <data name="CR_StgLblAr" xml:space="preserve">
+    <value>Aspect Ratio:</value>
+  </data>
+  <data name="CR_StgLblChooseImage" xml:space="preserve">
+    <value>Select image (doubleclick path to clear):</value>
+  </data>
+  <data name="CR_StgSquareStart" xml:space="preserve">
+    <value>Configure Start button</value>
+  </data>
+  <data name="CR_StgSuggestProblems" xml:space="preserve">
+    <value>Inform me about configuration issues</value>
+  </data>
+  <data name="CR_StgWatchRemovables" xml:space="preserve">
+    <value>Watch removable drives</value>
+  </data>
+  <data name="CR_StgWnd" xml:space="preserve">
+    <value>Power8 settings</value>
+    <comment>Title of settings window</comment>
+  </data>
+  <data name="Str_PicDialogDescription" xml:space="preserve">
+    <value>: choose the Start Menu picture</value>
+  </data>
+  <data name="Str_PicDialogFilter" xml:space="preserve">
+    <value>Images</value>
+    <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
+  </data>
+  <data name="Str_TipWarn" xml:space="preserve">
+    <value>You may wish to change some settings to enhance your Power8 experience</value>
+  </data>
 </root>

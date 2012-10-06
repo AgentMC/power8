@@ -532,7 +532,6 @@ namespace Power8
                     using (var reader = new StreamReader(dsktp, System.Text.Encoding.Default, true))
                     {
                         string str; //TODO: rewrite!!! Currently elements located after LFN section aren't parsed!
-                                    //TODO: comment
                         while ((str = reader.ReadLine()) != null && !str.Contains("[LocalizedFileNames]"))
                         {
                             if (str.StartsWith("IconFile=") || str.StartsWith("IconResource="))

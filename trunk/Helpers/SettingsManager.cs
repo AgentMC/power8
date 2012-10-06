@@ -15,6 +15,8 @@ namespace Power8.Helpers
     {
         private SettingsManager(){}
 
+        #region Singletoning
+
         private static  SettingsManager _inst;
         private static readonly object Sync = new object();
         public static SettingsManager Instance
@@ -28,12 +30,24 @@ namespace Power8.Helpers
             }
         } //needed to be passedd as Data Context
 
+        #endregion
+
+        #region Static vars and events
+
         public static readonly EventWaitHandle BgrThreadLock = new EventWaitHandle(false, EventResetMode.ManualReset);
+
+        public static event EventHandler WatchRemovablesChanged;
+        public static event EventHandler WarnMayHaveChanged;
+        public static event EventHandler ImageChanged;
+        
+        private static readonly System.Windows.Forms.Screen Screen = System.Windows.Forms.Screen.PrimaryScreen;
+        
         private static bool _blockMetro, _update;
         private static Thread _blockMetroThread, _updateThread;
 
-        private static readonly System.Windows.Forms.Screen Screen = System.Windows.Forms.Screen.PrimaryScreen;
+        #endregion
 
+        #region Static public methods
 
         public static void Init()
         {
@@ -42,8 +56,38 @@ namespace Power8.Helpers
             if (Instance.BlockMetroEnabled && Util.OsIs.EightOrMore)
                 BlockMetroThreadInit(); 
         }
-        
-        public static void UpdateCheckThreadInit()
+
+        public static Single GetARModifier(bool taskbarIsHorizontal)
+        {
+            Single s;
+            switch (Instance.ArSelectedIndex)
+            {
+                case 0:
+                    s = (Single) Screen.Bounds.Width/Screen.Bounds.Height;
+                    break;
+                case 1:
+                    s = 1;
+                    break;
+                case 2:
+                    s = 4.0f/3;
+                    break;
+                case 3:
+                    s = 16f/9;
+                    break;
+                default:
+                    s = 16f/10;
+                    break;
+            }
+            if (taskbarIsHorizontal && Instance.ArFollowsTaskbar)
+                s = 1/s;
+            return s;
+        }
+
+        #endregion
+
+        #region Background threads
+
+        private static void UpdateCheckThreadInit()
         {
             Util.BgrThreadInit(ref _updateThread, UpdateCheckThread, "Update thread");
         }
@@ -121,7 +165,7 @@ namespace Power8.Helpers
             }
         }
 
-        public static void BlockMetroThreadInit()
+        private static void BlockMetroThreadInit()
         {
             Util.BgrThreadInit(ref _blockMetroThread, BlockMetroThread, "Block Metro thread");
         }
@@ -166,33 +210,9 @@ namespace Power8.Helpers
             BgrThreadLock.Set();
         }
 
-        public static Single GetARModifier(bool taskbarIsHorizontal)
-        {
-            Single s;
-            switch (Instance.ArSelectedIndex)
-            {
-                case 0:
-                    s = (Single) Screen.Bounds.Width/Screen.Bounds.Height;
-                    break;
-                case 1:
-                    s = 1;
-                    break;
-                case 2:
-                    s = 4.0f/3;
-                    break;
-                case 3:
-                    s = 16f/9;
-                    break;
-                default:
-                    s = 16f/10;
-                    break;
-            }
-            if (taskbarIsHorizontal && Instance.ArFollowsTaskbar)
-                s = 1/s;
-            return s;
-        }
+        #endregion
 
-
+        #region Public instance bindable properties
 
         public bool AutoStartEnabled
         {
@@ -335,10 +355,6 @@ namespace Power8.Helpers
             }
         }
 
-
-        public static event EventHandler WatchRemovablesChanged;
-        public static event EventHandler WarnMayHaveChanged;
-        public static event EventHandler ImageChanged;
-
+        #endregion
     }
 }

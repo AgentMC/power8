@@ -10,8 +10,49 @@
     <Converters:BitmapSource2VisibilityConverter x:Key="imageDisplay"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     
+    <!-- Stuff -->
+    
+    <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
+        <DockPanel IsItemsHost="True"/>
+    </ItemsPanelTemplate>
+    
+    <Style TargetType="{x:Type TextBox}" x:Key="SearchBoxStyle">
+        <Setter Property="Height" Value="24"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Style.Triggers>
+            <Trigger Property="Text" Value="">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <VisualBrush Stretch="None" AlignmentX="Left">
+                            <VisualBrush.Visual>
+                                <Grid Background="White" VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="5"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="300"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Foreground="White"><Run Text="padding"/></TextBlock>
+                                    <TextBlock Grid.Column="1" Foreground="#FFC0C0C0" x:Name="SearchBox" 
+                                        Height="22" Padding="0,2,0,0"
+                                        Text="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                                    />
+                                </Grid>
+                            </VisualBrush.Visual>
+                        </VisualBrush>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- /Stuff -->
     <!-- Buttons -->
-    <Style TargetType="{x:Type Button}">
+    <!--TODO: why not to move this to ContentControl style?-->
+    <Style TargetType="{x:Type Button}" x:Key="Localized">
+        <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+    </Style>
+        
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Localized}">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Foreground" Value="Black"/>
@@ -19,8 +60,6 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10,8"/>
         <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -285,12 +324,46 @@
         </Setter>
     </Style>
     
+	<Style x:Key="PinToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="1"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type ToggleButton}">
+					<Grid x:Name="grid" Visibility="Visible">
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="CommonStates">
+								<VisualState x:Name="Normal"/>
+								<VisualState x:Name="MouseOver"/>
+								<VisualState x:Name="Pressed"/>
+								<VisualState x:Name="Disabled"/>
+							</VisualStateGroup>
+							<VisualStateGroup x:Name="CheckStates">
+								<VisualState x:Name="Checked">
+									<Storyboard>
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PinIcon">
+											<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
+										</ObjectAnimationUsingKeyFrames>
+										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="UnpinIcon">
+											<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+										</ObjectAnimationUsingKeyFrames>
+									</Storyboard>
+								</VisualState>
+								<VisualState x:Name="Unchecked"/>
+								<VisualState x:Name="Indeterminate"/>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Image x:Name="PinIcon" Source="Images/Pin.png" Width="16" Height="16"/>
+						<Image x:Name="UnpinIcon" Source="Images/Unpin.png" Width="16" Height="16" Visibility="Collapsed"/>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	    
     <!-- /Buttons -->
-
-    <ItemsPanelTemplate x:Key="ItemsPanelTemplate">
-        <DockPanel IsItemsHost="True"/>
-    </ItemsPanelTemplate>
-
     <!-- Menu -->
     
     <HierarchicalDataTemplate ItemsSource="{Binding Items}" x:Key="MenuDataTemplate">
@@ -420,131 +493,25 @@
     </Style>
     
     <!-- /Menu -->
-
-    <Style TargetType="{x:Type TextBox}" x:Key="SearchBoxStyle">
-        <Setter Property="Height" Value="24"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <!-- Checkboxes -->
+    
+    <Style TargetType="{x:Type CheckBox}" x:Key="CheckBoxStyle">
+        <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="Margin" Value="0,4,0,4"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+    </Style>
+    
+    <Style TargetType="{x:Type CheckBox}" x:Key="RedCheckBoxStyle" BasedOn="{StaticResource CheckBoxStyle}">
         <Style.Triggers>
-            <Trigger Property="Text" Value="">
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <VisualBrush Stretch="None" AlignmentX="Left">
-                            <VisualBrush.Visual>
-                                <Grid Background="White" VerticalAlignment="Center">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="300"/>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Foreground="White"><Run Text="padding"/></TextBlock>
-                                    <TextBlock Grid.Column="1" Foreground="#FFC0C0C0" x:Name="SearchBox" 
-                                        Height="22" Padding="0,2,0,0"
-                                        Text="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
-                                    />
-                                </Grid>
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding IsChecked, ElementName=StgSuggestProblems}" Value="true"/>
+                    <Condition Binding="{Binding IsChecked, RelativeSource={x:Static RelativeSource.Self}}" Value="false"/>
+                </MultiDataTrigger.Conditions>
+                <Setter Property="Foreground" Value="Crimson"/>
+            </MultiDataTrigger>
         </Style.Triggers>
     </Style>
-   
-	<Style x:Key="PinToggleButtonStyle" TargetType="{x:Type ToggleButton}">
-		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Padding" Value="1"/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type ToggleButton}">
-					<Grid x:Name="grid" Visibility="Visible">
-						<VisualStateManager.VisualStateGroups>
-							<VisualStateGroup x:Name="CommonStates">
-								<VisualState x:Name="Normal"/>
-								<VisualState x:Name="MouseOver"/>
-								<VisualState x:Name="Pressed"/>
-								<VisualState x:Name="Disabled"/>
-							</VisualStateGroup>
-							<VisualStateGroup x:Name="CheckStates">
-								<VisualState x:Name="Checked">
-									<Storyboard>
-										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="PinIcon">
-											<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Collapsed}"/>
-										</ObjectAnimationUsingKeyFrames>
-										<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="UnpinIcon">
-											<DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
-										</ObjectAnimationUsingKeyFrames>
-									</Storyboard>
-								</VisualState>
-								<VisualState x:Name="Unchecked"/>
-								<VisualState x:Name="Indeterminate"/>
-							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
-						<Image x:Name="PinIcon" Source="Images/Pin.png" Width="16" Height="16"/>
-						<Image x:Name="UnpinIcon" Source="Images/Unpin.png" Width="16" Height="16" Visibility="Collapsed"/>
-					</Grid>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-	
-	<Style x:Key="SelectImageButtonStyle" TargetType="{x:Type Button}">
-		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="Margin" Value="0"/>
-		<Setter Property="Foreground" Value="Black"/>
-		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Padding" Value="10"/>
-		<Setter Property="FontWeight" Value="Normal"/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="{x:Type Button}">
-					<Grid Width="Auto" x:Name="LayoutRoot" Height="Auto" SnapsToDevicePixels="True" Background="Transparent">
-						<VisualStateManager.VisualStateGroups>
-							<VisualStateGroup x:Name="CommonStates">
-								<VisualStateGroup.Transitions>
-									<VisualTransition GeneratedDuration="0:0:0.02"/>
-								</VisualStateGroup.Transitions>
-								<VisualState x:Name="Normal"/>
-								<VisualState x:Name="MouseOver"/>
-								<VisualState x:Name="Pressed"/>
-								<VisualState x:Name="Disabled"/>
-							</VisualStateGroup>
-							<VisualStateGroup x:Name="FocusStates">
-								<VisualStateGroup.Transitions>
-									<VisualTransition GeneratedDuration="0:0:0.02"/>
-								</VisualStateGroup.Transitions>
-								<VisualState x:Name="Unfocused"/>
-								<VisualState x:Name="Focused"/>
-							</VisualStateGroup>
-							<VisualStateGroup x:Name="ValidationStates">
-								<VisualStateGroup.Transitions>
-									<VisualTransition GeneratedDuration="0:0:0.02"/>
-								</VisualStateGroup.Transitions>
-							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
-						<Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}">
-							<Image Source="Images/logo_alfa/Power8Logo7_Red_alfa.png"/>
-						</Border>
-						<ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="True"/>
-						<Trigger Property="IsKeyboardFocused" Value="true"/>
-						<Trigger Property="ToggleButton.IsChecked" Value="true"/>
-						<Trigger Property="IsEnabled" Value="false">
-							<Setter Property="Foreground" Value="#ADADAD"/>
-							<Setter Property="HorizontalAlignment" TargetName="LayoutRoot" Value="Stretch"/>
-							<Setter Property="VerticalAlignment" TargetName="LayoutRoot" Value="Stretch"/>
-							<Setter Property="Background" TargetName="border" Value="White"/>
-							<Setter Property="Content" TargetName="contentPresenter" Value=""/>
-						</Trigger>
-						<Trigger Property="IsPressed" Value="True"/>
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
-    
+
+    <!-- /Checkboxes -->
 </ResourceDictionary>
