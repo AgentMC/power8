@@ -327,8 +327,8 @@ namespace Power8.Views
             get
             {
                 return Properties.Resources.CR_ButtonStack +
-                        (SettingsManager.Instance.ShowWarn //TODO: move to resources
-                            ? "\r\nYou may wish to change some settings to enhance your Power8 experience"
+                        (SettingsManager.Instance.ShowWarn
+                            ? "\r\n" + Properties.Resources.Str_TipWarn
                             : string.Empty);
             }
         }
