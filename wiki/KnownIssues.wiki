@@ -31,5 +31,4 @@ This list is maintained internally, if you want to report an issue that is not o
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
-  #  P8 prevents safe eject of removable drives
-  #  Context menu from Main button may show in inappropriate position
+  #  Update notification window _may_ not display version strings
