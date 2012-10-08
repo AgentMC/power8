@@ -8,17 +8,6 @@ For all other feature requests, currently not prioritized, please consult [Featu
 For already implemented features, see [Changelog] page.
 
 
-= _Power8 v.1.1 Beta_ =
-*estimated date: 07.10.12*
-  * Bugfixes for bugs currently on hold (all high priority at least);
-  * Configuration dialog:
-    * Start button size and picture;
-    * To watch removable devices or not to (bug fix);
-    * Speedhacks for MFU: ignore `FileVersionInfo`, ignore Start menu list;
-    * Checkboxes from context menu - autostart, updater, metro blocker;
-  * User notification to use auto-update;
-
-
 = _Power8 v.1.2 Beta_ =
 *estimated date: 25.10.12*
   * Replace grid with something faster;
@@ -38,6 +27,7 @@ For already implemented features, see [Changelog] page.
       * User-Configurable list.
     * (W7+) Switch CPL Root and All CPL items;
   * "Switch User" command
+
 
 = _Power8 v.1.4 Beta_ =
 *estimated date: 25.11.12*
