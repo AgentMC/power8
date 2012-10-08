@@ -1,8 +1,25 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.1 Beta (v.1.1.0.0): 08.10.2012==
+  
+  # `[new]` Spanish localization;
+  # `[new]` Automatic notification if Autostart or Autoupdate features are turned off;
+  # `[new]` Settings window with:
+    * All checkboxes from Start button context menu;
+    * Ability to set Start button size, layout and picture (not supported on XP);
+    * Ability to switch off the monitoring of removable drives and thus be able to safe-eject them;
+    * Ability to switch off the auto-notifier described above;
+  # `[changed]` Small speedup for search;
+  # `[changed]` Considerable speedup for displaying window for the 1st time;
+  # `[changed]` MFU list now will show even less duplicates than before;
+  # `[changed]` VisualStudio launcher is filtered out from MFU list;
+  # `[fixed]` Issue when user cannot search Control panel item by camels (e.g. "paf" searched now results in "Programs and Features");
+  # `[fixed]` Invalid context menu position over main button (problem when it becomes hidden below the taskbar);
+  # `[fixed]` Random error "E_SHAREVIOLATION" when trying to open the button stack;
 
-==Version 1.0 Hotfix 2 (v.1.0.2.0): 05.08.2012==
+
+==Version 1.0 Hotfix 2 (v.1.0.2.0): 05.09.2012==
   
   # `[new]` Dutch localization;
   # `[new]` Italian localization;
