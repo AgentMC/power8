@@ -13,7 +13,7 @@
   # `[changed]` Small speedup for search;
   # `[changed]` Considerable speedup for displaying window for the 1st time;
   # `[changed]` MFU list now will show even less duplicates than before;
-  # `[changed]` VisualStudio launcher is filtered out from MFU list;
+  # `[changed]` Visual Studio launcher is filtered out from MFU list;
   # `[fixed]` Issue when user cannot search Control panel item by camels (e.g. "paf" searched now results in "Programs and Features");
   # `[fixed]` Invalid context menu position over main button (problem when it becomes hidden below the taskbar);
   # `[fixed]` Random error "E_SHAREVIOLATION" when trying to open the button stack;
