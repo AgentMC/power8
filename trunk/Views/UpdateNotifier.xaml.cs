@@ -14,9 +14,10 @@ namespace Power8.Views
     /// Inherits DisposabeWindow, so is implemented as lazy resource-friendly 
     /// singleton.
     /// </summary>
-    public partial class UpdateNotifier
+    public partial class UpdateNotifier:INotifyPropertyChanged
     {
         private readonly string _curVer, _newVer, _uri7Z, _uriMsi;
+        public event PropertyChangedEventHandler PropertyChanged;
         //Constructor-----------------------------
         /// <summary>
         /// Needed for Designer
@@ -39,6 +40,8 @@ namespace Power8.Views
             _uri7Z = uri7Z;
             _uriMsi = uriMsi;
             Title = NoLoc.Stg_AppShortName + Properties.Resources.Str_UpdateAvailable;
+            PropertyChanged(this, new PropertyChangedEventArgs("CurrentVersion"));
+            PropertyChanged(this, new PropertyChangedEventArgs("NewVersion"));
         }
         //Bindable properties---------------------
         /// <summary>
@@ -160,5 +163,6 @@ namespace Power8.Views
             wc.DownloadFileAsync(new Uri(url), where, successAction); //passing action as token
             IsEnabled = false; //this is called from UI (Click starts it)
         }
+
     }
 }
