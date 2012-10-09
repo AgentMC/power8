@@ -138,3 +138,24 @@ There are 2 kinds of Jump List elements:
   * command.
 
 Jump list element is treated as file if it exists locally on your disc. Commands are all the others (command line parameters, web addresses, ...). Command will be always launched with application, jump list of which it is located in. File, however, will be treated as usual, and opened in default associated system application.
+
+==Settings window==
+
+The new Settings window is available starting Power8 v.1.1. Right-click Start button, snd choose "Settings" to open the window.
+
+http://i26.fastpic.ru/big/2012/1009/10/9730c1a6b76d7d4c3436c7cb800b0b10.png
+
+Note that all your changes done in this window become effective immediately, you don't need to click OK to apply them!
+
+The window has the following options:
+  * Auto-Start/Check for updates/Block Metro (Win8 only) - duplicate corresponding context menu items of Start button;
+  * Watch removable drives - allows you to make Power8 bypass the removable drives when listening to changes in the file system. This will allow you to safe-eject the removable drive, but also will eliminate the drive from Power8's computer menu-button's children;
+  * Configure Start button (Win7+). Allows you to configure layout and look of the Start button to adjust it for your needs:
+    * Aspect ratio sets the size of Start button;
+    * Follow taskbar orientation will invert the Aspect Ratio when taskbar is located horizontally;
+    * Select image allows you to select png/jpeg/gif/tiff image to put on the Start button instead of Windows rectangle;
+      * You can doubleclick the textbox to clear its contents;
+  * Inform me about configuration changes will, when turned on:
+    * Mark Auto-Start and Auto-update options with Red color if they are unchecked;
+    * Display warning sign and a hint over the Start button:
+http://i39.fastpic.ru/big/2012/1009/ef/dd7ffcf8f6bd01f42fb55792cd537def.png
