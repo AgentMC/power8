@@ -351,44 +351,44 @@ Wilt u Windows Explorer herstellen en Power8 herstarten?</value>
 Start Explorer a.u.b. voor me en herstart Power8 proces.</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
-    <value>Settings...</value>
+    <value>Instellingen...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Auto (by Desktop)</value>
+    <value>Auto (door Bureaublad)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
-    <value>Browse...</value>
+    <value>Bladeren...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>Follows taskbar orientation</value>
+    <value>Volgt taakbalk orientatie</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
-    <value>Aspect Ratio:</value>
+    <value>Hoogte-breedteverhouding:</value>
   </data>
   <data name="CR_StgLblChooseImage" xml:space="preserve">
-    <value>Select image (doubleclick path to clear):</value>
+    <value>Selecteer afbeelding (dubbelklik voor leeg pad):</value>
   </data>
   <data name="CR_StgSquareStart" xml:space="preserve">
-    <value>Configure Start button</value>
+    <value>Configureer Start knop</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Inform me about configuration issues</value>
+    <value>Informeer mij over configuratie problemen</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>Watch removable drives</value>
+    <value>Bekijk verwisselbare schijven</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
-    <value>Power8 settings</value>
+    <value>Power8 instellingen</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>: choose the Start Menu picture</value>
+    <value>: kies de Start Menu afbeelding</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
-    <value>Images</value>
+    <value>Afbeeldingen</value>
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>You may wish to change some settings to enhance your Power8 experience</value>
+    <value>Misschien wil je sommige instellingen wijzigen om je Power8 ervaring te verbeteren</value>
   </data>
 </root>

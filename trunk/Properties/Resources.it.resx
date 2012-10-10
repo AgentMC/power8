@@ -229,7 +229,7 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>Windows (R) Vista (R) non è inteso per essere utilizzato con Power8. Utilizza un sistema operativo normale.</value>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
-    <value>Directory not found for </value>
+    <value>Directory non trovata per </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="Err_GotNoFile" xml:space="preserve">
@@ -352,44 +352,44 @@ Vuoi ripristinare Esplora file e riavviare Power8?</value>
 Riavvia Explorer per me e riavvia Power8.</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
-    <value>Settings...</value>
+    <value>Impostazioni...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Auto (by Desktop)</value>
+    <value>Automatico (da Desktop)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
-    <value>Browse...</value>
+    <value>Sfoglia...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>Follows taskbar orientation</value>
+    <value>Segue l'orientazione della barra delle applicazioni</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
-    <value>Aspect Ratio:</value>
+    <value>Rapporto:</value>
   </data>
   <data name="CR_StgLblChooseImage" xml:space="preserve">
-    <value>Select image (doubleclick path to clear):</value>
+    <value>Scegli immagine (doppio clic sul percorso per cancellare):</value>
   </data>
   <data name="CR_StgSquareStart" xml:space="preserve">
-    <value>Configure Start button</value>
+    <value>Configura il pulsante Start</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Inform me about configuration issues</value>
+    <value>Avvisami su problemi di configurazione</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>Watch removable drives</value>
+    <value>Guarda Dispositivi Removibili</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
-    <value>Power8 settings</value>
+    <value>Impostazioni Power8</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>: choose the Start Menu picture</value>
+    <value>: scegli l'icona del Menù Start</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
-    <value>Images</value>
+    <value>Immagini</value>
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>You may wish to change some settings to enhance your Power8 experience</value>
+    <value>Potresti desiderare di cambiare qualche impostazione per migliorare la tua esperienza con Power 8.</value>
   </data>
 </root>
