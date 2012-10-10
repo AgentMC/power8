@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using Power8.Properties;
 using System.Linq;
@@ -358,14 +359,30 @@ namespace Power8
         }
         /// <summary>
         /// Returns l-cased cached target of the link for this instance if it is Link;
-        /// returns null otherwise. 
+        /// returns null otherwise. This method is called from TryExtractFriendlyNameAsync,
+        /// so standard double-check-lock is inside.
         /// </summary>
         public string ResolvedLink
         {
             get
             {
-                if(IsLink && _resolvedLink == null)
-                    _resolvedLink = Util.ResolveLink(PowerItemTree.ResolveItem(this).FileName).ToLowerInvariant();
+                if(_resolvedLink == null && IsLink)
+                {
+                    lock (Argument)
+                    {
+                        if(_resolvedLink == null)
+                        {
+                            try
+                            {
+                                _resolvedLink = Util.ResolveLink(PowerItemTree.ResolveItem(this).FileName).ToLowerInvariant();
+                            }
+                            catch (COMException)
+                            {
+                                _resolvedLink = string.Empty;
+                            }
+                        }
+                    }
+                }
                 return _resolvedLink;
             }
         }
