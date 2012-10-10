@@ -11,55 +11,76 @@
             <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         </Style>
     </Views:DisposableWindow.Resources>
-    <Grid Margin="5">
-    	<Grid.RowDefinitions>
-    		<RowDefinition/>
-    		<RowDefinition Height="Auto"/>
-    	</Grid.RowDefinitions>
-		<StackPanel Margin="0">
-            <CheckBox x:Name="MWAutoStart" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
-            <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"/>
-            <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
-            <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}"/>
-            <Separator/>            
-            <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}"/>
-            <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
-    			<Grid.ColumnDefinitions>
-    				<ColumnDefinition/>
-    				<ColumnDefinition Width="Auto"/>
-    			</Grid.ColumnDefinitions>
+    <TabControl>
+        <TabItem Header="General">
+            <Grid Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.ColumnSpan="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Label x:Name="StgLblAr"/>
-                    <ComboBox Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Center" SelectedIndex="{Binding ArSelectedIndex, Mode=TwoWay}">
-                        <ComboBox.Items>
-                            <ComboBoxItem x:Name="StgArByDesktop" Content="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
-                            <ComboBoxItem>1:1</ComboBoxItem>
-                            <ComboBoxItem>4:3</ComboBoxItem>
-                            <ComboBoxItem>16:9</ComboBoxItem>
-                            <ComboBoxItem>16:10</ComboBoxItem>
-                        </ComboBox.Items>
-                    </ComboBox>
-                    <CheckBox x:Name="StgInvertAr" Grid.Column="2" IsChecked="{Binding ArFollowsTaskbar, Mode=TwoWay}"/>
-                </Grid>
-                <Label x:Name="StgLblChooseImage" Grid.Row="1"/>
-                <TextBox x:Name="pictureBox" TextWrapping="NoWrap" IsReadOnly="True" Margin="5,0,5,0" Grid.Row="2" 
+                <StackPanel Margin="0">
+                    <CheckBox x:Name="MWAutoStart" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
+                    <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"/>
+                    <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
+                    <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}"/>
+                    <CheckBox>Append newly installed programs to Start menu (do not sort)</CheckBox>
+                    <Separator/>
+                    <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}"/>
+                    <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label x:Name="StgLblAr"/>
+                            <ComboBox Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Center" SelectedIndex="{Binding ArSelectedIndex, Mode=TwoWay}">
+                                <ComboBox.Items>
+                                    <ComboBoxItem x:Name="StgArByDesktop" Content="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+                                    <ComboBoxItem>1:1</ComboBoxItem>
+                                    <ComboBoxItem>4:3</ComboBoxItem>
+                                    <ComboBoxItem>16:9</ComboBoxItem>
+                                    <ComboBoxItem>16:10</ComboBoxItem>
+                                </ComboBox.Items>
+                            </ComboBox>
+                            <CheckBox x:Name="StgInvertAr" Grid.Column="2" IsChecked="{Binding ArFollowsTaskbar, Mode=TwoWay}"/>
+                        </Grid>
+                        <Label x:Name="StgLblChooseImage" Grid.Row="1"/>
+                        <TextBox x:Name="pictureBox" TextWrapping="NoWrap" IsReadOnly="True" Margin="5,0,5,0" Grid.Row="2" 
                          Text="{Binding ImageString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseDoubleClick="Clear"/>
-                <Button x:Name="StgBrowseBtn" HorizontalAlignment="Left" Style="{StaticResource Localized}" Grid.Column="1" Grid.Row="2" 
+                        <Button x:Name="StgBrowseBtn" HorizontalAlignment="Left" Style="{StaticResource Localized}" Grid.Column="1" Grid.Row="2" 
                         Padding="1" MinWidth="75" Click="Browse" />
-    		</Grid>
-            <Separator/>
-            <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}"/>
-    	</StackPanel>
-		<Button Style="{x:Null}" Content="OK" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" IsDefault="True" Click="OkClick" />
-	</Grid>
+                    </Grid>
+                    <Separator/>
+                    <Label>"All programs" text (doubleclick to clear and use system defaults):</Label>
+                    <TextBox Text="Example"/>
+                    <Separator/>
+                    <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}"/>
+                </StackPanel>
+                <Button Style="{x:Null}" Content="OK" MinWidth="75" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" IsDefault="True" Click="OkClick" />
+            </Grid>
+        </TabItem>
+        <TabItem Header="Menu-buttons">
+            <StackPanel>
+                <Label>Show menu-buttons:</Label>
+                <CheckBox>Computer</CheckBox>
+                <CheckBox>Documents/Libraries</CheckBox>
+                <CheckBox>Control Panel</CheckBox>
+                <CheckBox>Administrative tools</CheckBox>
+                <CheckBox>Network</CheckBox>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Web search engines">
+            <DataGrid></DataGrid>
+        </TabItem>
+    </TabControl>
 </Views:DisposableWindow>
