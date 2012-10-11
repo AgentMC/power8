@@ -164,5 +164,65 @@ namespace Power8.Properties {
                 this["StartImage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMbComputer {
+            get {
+                return ((bool)(this["ShowMbComputer"]));
+            }
+            set {
+                this["ShowMbComputer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMbDocs {
+            get {
+                return ((bool)(this["ShowMbDocs"]));
+            }
+            set {
+                this["ShowMbDocs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMbCpl {
+            get {
+                return ((bool)(this["ShowMbCpl"]));
+            }
+            set {
+                this["ShowMbCpl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMbAdminTools {
+            get {
+                return ((bool)(this["ShowMbAdminTools"]));
+            }
+            set {
+                this["ShowMbAdminTools"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowMbNet {
+            get {
+                return ((bool)(this["ShowMbNet"]));
+            }
+            set {
+                this["ShowMbNet"] = value;
+            }
+        }
     }
 }
