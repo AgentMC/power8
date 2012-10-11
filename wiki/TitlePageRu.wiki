@@ -48,6 +48,7 @@
 ||Dutch  ||Gerard Stenveld||gstenveld@npz-nrz.nl||
 ||Italian||Michele Bastianelli||0makoblaster0@gmail.com||
 ||Spanish||Jose Vicente Bustos Ferrer||jvbferrer@gmail.com||
+||Finnish||Sami Kuusisto||sami@6sto.com||
 
 Хотите *Power8 на вашем языке?* Прочитайте страницу [Localization].
 
