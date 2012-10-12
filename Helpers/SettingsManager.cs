@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Windows;
+using System.Xml.Linq;
 using Power8.Properties;
 using Power8.Views;
 using Application = System.Windows.Forms.Application;
@@ -462,6 +463,26 @@ namespace Power8.Helpers
                     PowerItemTree.StartMenuRoot[0].Update();
             }
         }
+
+        private Dictionary<string, string> _searchData;
+        public Dictionary<string, string> WebSearchProviders
+        {
+            get
+            {
+                if (_searchData == null)
+                {
+                    _searchData = new Dictionary<string, string>();
+                    foreach (var provider in XDocument.Parse(Settings.Default.SearchProviders).Root.Elements("Provider"))  
+                        _searchData.Add(provider.Attribute("key").Value, provider.Value);
+                }
+                return _searchData;
+            }
+            set
+            {
+                
+            }
+        }
+
         #endregion
 
 
