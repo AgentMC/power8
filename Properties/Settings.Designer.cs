@@ -236,5 +236,17 @@ namespace Power8.Properties {
                 this["AutoSortTrees"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string StartMenuText {
+            get {
+                return ((string)(this["StartMenuText"]));
+            }
+            set {
+                this["StartMenuText"] = value;
+            }
+        }
     }
 }
