@@ -125,7 +125,7 @@ Uusi versio: {1}
 
 Haluatko siirtyä nettisivulle päivittämään?
 
-Kyllä: mene nettisivulle ja päivitä nyt!
+Kyllä: mene verkkosivulle ja päivitä nyt!
 Ei: muistuta myöhemmin.
 Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</value>
     <comment>Keep 2 empty lines at the beginning</comment>
@@ -199,7 +199,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <value>Lepotila</value>
   </data>
   <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Automaattinen aloitus</value>
+    <value>Automaattinen käynnistys</value>
   </data>
   <data name="CR_MWCheckForUpdates" xml:space="preserve">
     <value>Tarkista päivitykset</value>
@@ -225,7 +225,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <value>Tietokoneluettelo</value>
   </data>
   <data name="Err_VistaDetected" xml:space="preserve">
-    <value>Power8-sovellusta ei ole tarkoitettu käytettäväksi Windows Vistassa. Käytä Windows XP -, 7 - tai 8 -käyttöjärjestelmää.</value>
+    <value>Power8-sovellusta ei ole tarkoitettu käytettäväksi Windows Vistassa - ainoastaan Windows XP -, 7 - tai 8 -käyttöjärjestelmässä.</value>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
     <value> Hakemistoa ei löytynyt</value>
@@ -271,7 +271,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <value>Lataa msi</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Avaa projektin nettisivu</value>
+    <value>Avaa projektin verkkosivu</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
     <value>Älä muistuta enää tästä päivityksestä</value>
@@ -313,7 +313,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <value>Viimeksi käynnistetyt</value>
   </data>
   <data name="Str_Unpin" xml:space="preserve">
-    <value>Poista kohde</value>
+    <value>Vapauta kohde</value>
   </data>
   <data name="Str_Pin" xml:space="preserve">
     <value>Kiinnitä kohde</value>
