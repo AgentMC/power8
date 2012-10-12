@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 using Power8.Commands;
+using Power8.Helpers;
 
 namespace Power8.Views
 {
@@ -89,6 +90,8 @@ namespace Power8.Views
 
             foreach (var mb in GetAllMenuButtons())
                 mb.Item = GetSpecialItems(mb.Name);
+
+            folderButtons.DataContext = SettingsManager.Instance;
         }
 
 // ReSharper disable RedundantAssignment
