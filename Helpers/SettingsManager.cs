@@ -431,6 +431,17 @@ namespace Power8.Helpers
             }
         }
 
+        public bool AutoSortTrees
+        {
+            get { return Settings.Default.AutoSortTrees; }
+            set
+            {
+                if (value == AutoSortTrees)
+                    return;
+                Settings.Default.AutoSortTrees = value;
+                Settings.Default.Save();
+            }
+        }
 
         #endregion
 

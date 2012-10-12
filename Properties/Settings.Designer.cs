@@ -224,5 +224,17 @@ namespace Power8.Properties {
                 this["ShowMbNet"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoSortTrees {
+            get {
+                return ((bool)(this["AutoSortTrees"]));
+            }
+            set {
+                this["AutoSortTrees"] = value;
+            }
+        }
     }
 }
