@@ -72,11 +72,11 @@
         <TabItem Header="Menu-buttons">
             <StackPanel>
                 <Label>Show menu-buttons:</Label>
-                <CheckBox>Computer</CheckBox>
-                <CheckBox>Documents/Libraries</CheckBox>
-                <CheckBox>Control Panel</CheckBox>
-                <CheckBox>Administrative tools</CheckBox>
-                <CheckBox>Network</CheckBox>
+                <CheckBox IsChecked="{Binding ShowMbComputer, Mode=TwoWay}">Computer</CheckBox>
+                <CheckBox IsChecked="{Binding ShowMbDocs, Mode=TwoWay}">Documents/Libraries</CheckBox>
+                <CheckBox IsChecked="{Binding ShowMbCpl, Mode=TwoWay}">Control Panel</CheckBox>
+                <CheckBox IsChecked="{Binding ShowMbAdminTools, Mode=TwoWay}">Administrative tools</CheckBox>
+                <CheckBox IsChecked="{Binding ShowMbNet, Mode=TwoWay}">Network</CheckBox>
             </StackPanel>
         </TabItem>
         <TabItem Header="Web search engines">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
@@ -11,7 +12,7 @@ using MessageBox = System.Windows.MessageBox;
 
 namespace Power8.Helpers
 {
-    public class SettingsManager
+    public class SettingsManager : INotifyPropertyChanged
     {
         private SettingsManager(){}
 
@@ -32,7 +33,7 @@ namespace Power8.Helpers
 
         #endregion
 
-        #region Static vars and events
+        #region Static vars, events and invokators
 
         public static readonly EventWaitHandle BgrThreadLock = new EventWaitHandle(false, EventResetMode.ManualReset);
 
@@ -40,10 +41,20 @@ namespace Power8.Helpers
         public static event EventHandler WarnMayHaveChanged;
         public static event EventHandler ImageChanged;
         
+        public event PropertyChangedEventHandler PropertyChanged;
+
         private static readonly System.Windows.Forms.Screen Screen = System.Windows.Forms.Screen.PrimaryScreen;
         
         private static bool _blockMetro, _update;
         private static Thread _blockMetroThread, _updateThread;
+
+        //---------------------------
+        
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         #endregion
 
@@ -355,6 +366,74 @@ namespace Power8.Helpers
             }
         }
 
+        public bool ShowMbComputer
+        {
+            get { return Settings.Default.ShowMbComputer; }
+            set
+            {
+                if (value == ShowMbComputer)
+                    return;
+                Settings.Default.ShowMbComputer = value;
+                Settings.Default.Save();
+                OnPropertyChanged("ShowMbComputer");
+            }
+        }
+
+        public bool ShowMbDocs
+        {
+            get { return Settings.Default.ShowMbDocs; }
+            set
+            {
+                if (value == ShowMbDocs)
+                    return;
+                Settings.Default.ShowMbDocs = value;
+                Settings.Default.Save();
+                OnPropertyChanged("ShowMbDocs");
+            }
+        }
+
+        public bool ShowMbCpl
+        {
+            get { return Settings.Default.ShowMbCpl; }
+            set
+            {
+                if (value == ShowMbCpl)
+                    return;
+                Settings.Default.ShowMbCpl = value;
+                Settings.Default.Save();
+                OnPropertyChanged("ShowMbCpl");
+            }
+        }
+
+        public bool ShowMbAdminTools
+        {
+            get { return Settings.Default.ShowMbAdminTools; }
+            set
+            {
+                if (value == ShowMbAdminTools)
+                    return;
+                Settings.Default.ShowMbAdminTools = value;
+                Settings.Default.Save();
+                OnPropertyChanged("ShowMbAdminTools");
+            }
+        }
+
+        public bool ShowMbNet
+        {
+            get { return Settings.Default.ShowMbNet; }
+            set
+            {
+                if (value == ShowMbNet)
+                    return;
+                Settings.Default.ShowMbNet = value;
+                Settings.Default.Save();
+                OnPropertyChanged("ShowMbNet");
+            }
+        }
+
+
         #endregion
+
+
     }
 }
