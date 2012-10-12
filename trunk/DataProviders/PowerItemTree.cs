@@ -456,6 +456,8 @@ namespace Power8
                                 break;
                             case WatcherChangeTypes.Created:
                                 AddSubItem(item, baseAndArg.Item1, e.FullPath, isDir);
+                                if(Helpers.SettingsManager.Instance.AutoSortTrees)
+                                    item.SortItems();
                                 break;
                         }
                     });

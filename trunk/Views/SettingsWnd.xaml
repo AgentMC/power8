@@ -23,7 +23,7 @@
                     <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"/>
                     <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
                     <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}"/>
-                    <CheckBox>Append newly installed programs to Start menu (do not sort)</CheckBox>
+                    <CheckBox IsChecked="{Binding AutoSortTrees, Mode=TwoWay}">Auto-sort menus and lists when file or folder is added or renamed</CheckBox>
                     <Separator/>
                     <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}"/>
                     <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
