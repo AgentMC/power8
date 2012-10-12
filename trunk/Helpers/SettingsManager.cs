@@ -443,6 +443,25 @@ namespace Power8.Helpers
             }
         }
 
+        public string StartMenuText
+        {
+            get
+            {
+                var s = Settings.Default.StartMenuText;
+                return string.IsNullOrWhiteSpace(s) ? null : s;
+            }
+            set
+            {
+                if (value == StartMenuText)
+                    return;
+                Settings.Default.StartMenuText = value;
+                Settings.Default.Save();
+                if(!string.IsNullOrWhiteSpace(value))
+                    PowerItemTree.StartMenuRoot[0].FriendlyName = value;
+                else
+                    PowerItemTree.StartMenuRoot[0].Update();
+            }
+        }
         #endregion
 
 

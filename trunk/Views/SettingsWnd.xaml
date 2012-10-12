@@ -61,8 +61,8 @@
                         Padding="1" MinWidth="75" Click="Browse" />
                     </Grid>
                     <Separator/>
-                    <Label>"All programs" text (doubleclick to clear and use system defaults):</Label>
-                    <TextBox Text="Example"/>
+                    <Label>"All programs" text (clear to use system defaults):</Label>
+                    <TextBox Text="{Binding StartMenuText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     <Separator/>
                     <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}"/>
                 </StackPanel>

@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using Power8.Helpers;
 using Power8.Properties;
 using Power8.Views;
 
@@ -456,8 +457,8 @@ namespace Power8
                                 break;
                             case WatcherChangeTypes.Created:
                                 AddSubItem(item, baseAndArg.Item1, e.FullPath, isDir);
-                                if(Helpers.SettingsManager.Instance.AutoSortTrees)
-                                    item.SortItems();
+                                if(Helpers.SettingsManager.Instance.AutoSortTrees) 
+                                    item.SortItems(); //We're interested in Add and Rename for this. Both will go here.
                                 break;
                         }
                     });
@@ -480,6 +481,10 @@ namespace Power8
             ScanFolderSync(StartMenuRootItem, PathRoot, true);
             ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
             StartMenuRootItem.SortItems();
+            //Set configurable name. Proxy logic is put into manager, so in case 
+            //nothing is configured, null will be returned, which will cause
+            //this item to regenerate Friendly name, i.e. re-resolve the resourceId string
+            StartMenuRootItem.FriendlyName = SettingsManager.Instance.StartMenuText;
 #if DEBUG
             Debug.WriteLine("InitTree - scanned in {0}", s.ElapsedMilliseconds);
 #endif
