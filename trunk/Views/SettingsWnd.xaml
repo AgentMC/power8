@@ -80,7 +80,13 @@
             </StackPanel>
         </TabItem>
         <TabItem Header="Web search engines">
-            <DataGrid></DataGrid>
+            <DataGrid ItemsSource="{Binding WebSearchProviders, Mode=TwoWay}" AutoGenerateColumns="False" CanUserAddRows="True" 
+                      CanUserDeleteRows="True" CanUserReorderColumns="False" SelectionMode="Single" SelectionUnit="Cell">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Key}"></DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Value}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid> <!--WTF?-->
         </TabItem>
     </TabControl>
 </Views:DisposableWindow>

@@ -14,11 +14,11 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Power8.Helpers;
 using Power8.Properties;
 using Power8.Views;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.MessageBox;
-using System.Xml;
 using ThreadState = System.Threading.ThreadState;
 
 namespace Power8
@@ -37,8 +37,7 @@ namespace Power8
         private static readonly StringBuilder Buffer = new StringBuilder(1024); 
         //Singleton window manager
         private static readonly Dictionary<Type, IComponent> Instances = new Dictionary<Type, IComponent>(); 
-        //Collection of letter-websearch engine pairs
-        private static Dictionary<char, string> _searchProviders;
+
 
         #region Cross-thread operations
 
@@ -861,18 +860,9 @@ namespace Power8
 
                 if (command[1] == ' ')//web search?
                 {
-                    if (_searchProviders == null) //lazy search providers initialization.
-                    {//providers are saved as XML stored in settings.
-                        _searchProviders = new Dictionary<char, string>();
-                        var doc = new XmlDocument();
-                        doc.LoadXml(Settings.Default.SearchProviders);
-// ReSharper disable PossibleNullReferenceException
-                        foreach (XmlElement prov in doc["P8SearchProviders"].GetElementsByTagName("Provider"))
-                            _searchProviders.Add(prov.GetAttribute("key")[0], prov.InnerText);
-// ReSharper restore PossibleNullReferenceException
-                    }
-
-                    string prefix = _searchProviders.ContainsKey(command[0]) ? _searchProviders[command[0]] : null;
+                    var prefix = SettingsManager.Instance.WebSearchProviders.ContainsKey(command)
+                                     ? SettingsManager.Instance.WebSearchProviders[command]
+                                     : null;
                     if (prefix != null) //the given key was present in dictionary
                         return new Tuple<string, string>(
                             string.Format(prefix, Uri.EscapeUriString(command.Substring(2))), 
