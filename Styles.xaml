@@ -51,7 +51,7 @@
     <Style TargetType="{x:Type Button}" x:Key="Localized">
         <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
     </Style>
-        
+    
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Localized}">
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="0"/>
