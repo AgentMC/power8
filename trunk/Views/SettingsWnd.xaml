@@ -70,7 +70,7 @@
             </Grid>
         </TabItem>
         <TabItem Header="Menu-buttons">
-            <StackPanel>
+            <StackPanel  Margin="5">
                 <Label>Show menu-buttons:</Label>
                 <CheckBox IsChecked="{Binding ShowMbComputer, Mode=TwoWay}">Computer</CheckBox>
                 <CheckBox IsChecked="{Binding ShowMbDocs, Mode=TwoWay}">Documents/Libraries</CheckBox>
