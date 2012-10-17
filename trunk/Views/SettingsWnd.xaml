@@ -74,7 +74,16 @@
             </StackPanel>
         </TabItem>
         <TabItem Header="Web search engines">
-            <DataGrid ItemsSource="{Binding WebSearchProviders}" />
+            <DataGrid ItemsSource="{Binding WebSearchProviders}" AutoGenerateColumns="False"
+                      HeadersVisibility="Column" CanUserReorderColumns="False" CanUserResizeColumns="False"
+                      HorizontalGridLinesBrush="Gray"
+                      VerticalGridLinesBrush="Gray"
+                      MinColumnWidth="0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Key"  Binding="{Binding Key, Mode=TwoWay}" MinWidth="20"/>
+                    <DataGridTextColumn Header="Query"  Binding="{Binding Query, Mode=TwoWay}" MinWidth="380"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </TabItem>
     </TabControl>
 </Views:DisposableWindow>
