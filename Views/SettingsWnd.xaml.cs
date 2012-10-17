@@ -23,13 +23,11 @@ namespace Power8.Views
         }
 
         /// <summary>
-        /// Closes the window. Settings dalog is done almost in Mac style,
-        /// so your settings are applied immediately if it's possible at all.
-        /// And you're not required to press "Apply" or "OK" to achieve this.
+        /// Handles closing of the window. Initiates the SearchProviders saving
         /// </summary>
-        private void OkClick(object sender, RoutedEventArgs e)
+        private void WindowClosed(object sender, System.EventArgs e)
         {
-            Close();
+            SettingsManager.SaveActiveSearchProviders();
         }
 
         /// <summary>
@@ -39,9 +37,11 @@ namespace Power8.Views
         /// </summary>
         private void Browse(object sender, RoutedEventArgs e)
         {
-            var ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.Filter = Properties.Resources.Str_PicDialogFilter + @"|*.png;*.gif;*.jpe*;*.tif*";
-            ofd.Title = Properties.NoLoc.Stg_AppShortName + Properties.Resources.Str_PicDialogDescription;
+            var ofd = new System.Windows.Forms.OpenFileDialog
+                          {
+                              Filter = Properties.Resources.Str_PicDialogFilter + @"|*.png;*.gif;*.jpe*;*.tif*",
+                              Title = Properties.NoLoc.Stg_AppShortName + Properties.Resources.Str_PicDialogDescription
+                          };
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 pictureBox.Text = ofd.FileName;
         }

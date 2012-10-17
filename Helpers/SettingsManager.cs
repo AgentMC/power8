@@ -95,6 +95,28 @@ namespace Power8.Helpers
             return s;
         }
 
+        
+/*<P8SearchProviders>
+    <Provider key="b">http://www.bing.com/search?q={0}</Provider>
+  </P8SearchProviders>*/
+        private const string SP_ROOT = "P8SearchProviders";
+        private const string SP_NODE = "Provider";
+        private const string SP_KEYY = "key";
+        public static void SaveActiveSearchProviders()
+        {
+            var provs = Instance.WebSearchProviders;
+            for (var i = provs.Count - 1; i >= 0; i--)
+                if(provs[i].Key == Char.MinValue || string.IsNullOrWhiteSpace(provs[i].Query))
+                    provs.RemoveAt(i);
+            var d = new XDocument(new XElement(SP_ROOT));
+// ReSharper disable PossibleNullReferenceException
+            foreach (var searchProvider in provs)
+                d.Root.Add(new XElement(SP_NODE, new XAttribute(SP_KEYY, searchProvider.Key) , searchProvider.Query));
+// ReSharper restore PossibleNullReferenceException
+            Settings.Default.SearchProviders = d.ToString();
+            Settings.Default.Save();
+        }
+
         #endregion
 
         #region Background threads
@@ -464,27 +486,48 @@ namespace Power8.Helpers
             }
         }
 
-        private Dictionary<string, string> _searchData;
-        public Dictionary<string, string> WebSearchProviders
+        private List<SearchProvider> _searchData;
+        public List<SearchProvider> WebSearchProviders
         {
             get
             {
                 if (_searchData == null)
                 {
-                    _searchData = new Dictionary<string, string>();
-                    foreach (var provider in XDocument.Parse(Settings.Default.SearchProviders).Root.Elements("Provider"))  
-                        _searchData.Add(provider.Attribute("key").Value, provider.Value);
+                    _searchData = new List<SearchProvider>();
+                    foreach (var provider in XDocument.Parse(Settings.Default.SearchProviders).Root.Elements(SP_NODE))
+                        _searchData.Add(new SearchProvider()
+                                            {Key = provider.Attribute(SP_KEYY).Value[0], Query = provider.Value});
                 }
                 return _searchData;
-            }
-            set
-            {
-                
             }
         }
 
         #endregion
+    }
 
+    public class SearchProvider
+    {
+        public const string INITIAL_URI = @"http://test.org?query=",
+                            FORMATTER = @"{0}";
+        private string _q = INITIAL_URI + FORMATTER;
+        private char _k = '?';
 
+        public char Key
+        {
+            get { return _k; }
+            set { _k = Char.ToLower(value); }
+        }
+
+        public string Query { 
+            get { return _q; } 
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    value = INITIAL_URI;
+                if (!value.Contains(FORMATTER))
+                    value += FORMATTER;
+                _q = value;
+            }
+        }
     }
 }
