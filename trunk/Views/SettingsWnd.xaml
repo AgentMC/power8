@@ -11,15 +11,18 @@
         <Style TargetType="{x:Type Label}">
             <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         </Style>
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="Header" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+        </Style>
     </Views:DisposableWindow.Resources>
     <TabControl>
-        <TabItem Header="General">
+        <TabItem x:Name="StgTabGeneral">
             <StackPanel Margin="5">
                 <CheckBox x:Name="MWAutoStart" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
                 <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"/>
                 <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}"/>
-                <CheckBox IsChecked="{Binding AutoSortTrees, Mode=TwoWay}">Auto-sort menus and lists when file or folder is added or renamed</CheckBox>
+                <CheckBox x:Name="StgAutoSort" IsChecked="{Binding AutoSortTrees, Mode=TwoWay}" />
                 <Separator/>
                 <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}"/>
                 <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
@@ -57,30 +60,42 @@
                     Padding="1" MinWidth="75" Click="Browse" />
                 </Grid>
                 <Separator/>
-                <Label>"All programs" text (clear to use system defaults):</Label>
+                <Label x:Name="StgLblSetStartText"/>
                 <TextBox Text="{Binding StartMenuText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <Separator/>
                 <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}"/>
             </StackPanel>
         </TabItem>
-        <TabItem Header="Menu-buttons">
+        <TabItem x:Name="StgTabMenuBtns">
             <StackPanel  Margin="5">
-                <Label>Show menu-buttons:</Label>
-                <CheckBox IsChecked="{Binding ShowMbComputer, Mode=TwoWay}">Computer</CheckBox>
-                <CheckBox IsChecked="{Binding ShowMbDocs, Mode=TwoWay}">Documents/Libraries</CheckBox>
-                <CheckBox IsChecked="{Binding ShowMbCpl, Mode=TwoWay}">Control Panel</CheckBox>
-                <CheckBox IsChecked="{Binding ShowMbAdminTools, Mode=TwoWay}">Administrative tools</CheckBox>
-                <CheckBox IsChecked="{Binding ShowMbNet, Mode=TwoWay}">Network</CheckBox>
+                <Label x:Name="StgLblShowMenuButtons"/>
+                <CheckBox x:Name="StgCbComp" IsChecked="{Binding ShowMbComputer, Mode=TwoWay}">Computer</CheckBox>
+                <CheckBox x:Name="StgCbDocs" IsChecked="{Binding ShowMbDocs, Mode=TwoWay}">Documents/Libraries</CheckBox>
+                <CheckBox x:Name="StgCbCpnl" IsChecked="{Binding ShowMbCpl, Mode=TwoWay}">Control Panel</CheckBox>
+                <CheckBox x:Name="StgCbAdmT" IsChecked="{Binding ShowMbAdminTools, Mode=TwoWay}">Administrative tools</CheckBox>
+                <CheckBox x:Name="StgCbNtwk" IsChecked="{Binding ShowMbNet, Mode=TwoWay}">Network</CheckBox>
             </StackPanel>
         </TabItem>
-        <TabItem Header="Web search engines">
+        <TabItem x:Name="StgTabWSE">
             <DataGrid ItemsSource="{Binding WebSearchProviders}" AutoGenerateColumns="False"
                       HeadersVisibility="Column" CanUserReorderColumns="False" CanUserResizeColumns="False"
-                      HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White"
-                      MinColumnWidth="0">
+                      HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White" MinColumnWidth="0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Key"  Binding="{Binding Key, Mode=TwoWay}" MinWidth="20"/>
-                    <DataGridTextColumn Header="Query"  Binding="{Binding Query, Mode=TwoWay}" MinWidth="346"/>
+                    <!--Localized piece of crap... Must rework this to be less complex!-->
+                    <DataGridTextColumn Binding="{Binding Key, Mode=TwoWay}" MinWidth="20">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Label Name="StgWseColKey" Margin="0" Padding="0"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding Query, Mode=TwoWay}" MinWidth="346">
+                        <DataGridTextColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <Label Name="StgWseColVal" Margin="0" Padding="0"/>
+                            </DataTemplate>
+                        </DataGridTextColumn.HeaderTemplate>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </TabItem>

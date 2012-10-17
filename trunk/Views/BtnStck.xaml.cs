@@ -541,9 +541,7 @@ namespace Power8.Views
         /// </summary>
         private IEnumerable<MenuedButton> GetAllMenuButtons()
         {
-            return
-                folderButtons.Children.OfType<MenuedButton>().Union(
-                    dataGridHeightMeasure.Children.OfType<MenuedButton>());
+            return dataGridHeightMeasure.Children.OfType<MenuedButton>();
         }
 
         #endregion
