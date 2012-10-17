@@ -860,8 +860,8 @@ namespace Power8
 
                 if (command[1] == ' ')//web search?
                 {
-                    var prefix = SettingsManager.Instance.WebSearchProviders.ContainsKey(command)
-                                     ? SettingsManager.Instance.WebSearchProviders[command]
+                    var prefix = SettingsManager.Instance.WebSearchProviders.ContainsKey(command[0].ToString())
+                                     ? SettingsManager.Instance.WebSearchProviders[command[0].ToString()]
                                      : null;
                     if (prefix != null) //the given key was present in dictionary
                         return new Tuple<string, string>(
