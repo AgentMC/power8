@@ -392,4 +392,34 @@ Riavvia Explorer per me e riavvia Power8.</value>
   <data name="Str_TipWarn" xml:space="preserve">
     <value>Potresti desiderare di cambiare qualche impostazione per migliorare la tua esperienza con Power 8.</value>
   </data>
+  <data name="CR_StgAutoSort" xml:space="preserve">
+    <value>Auto-sort menus and lists when file or folder is added or renamed</value>
+  </data>
+  <data name="CR_StgLblSetStartText" xml:space="preserve">
+    <value>"All programs" text (clear to use system defaults):</value>
+  </data>
+  <data name="CR_StgTabGeneral" xml:space="preserve">
+    <value>General</value>
+    <comment>"General" tab in settings window</comment>
+  </data>
+  <data name="CR_StgTabMenuBtns" xml:space="preserve">
+    <value>Menu-buttons</value>
+  </data>
+  <data name="CR_StgTabWSE" xml:space="preserve">
+    <value>Web search engines</value>
+  </data>
+  <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
+    <value>Show menu-buttons:</value>
+  </data>
+  <data name="CR_StgWseColKey" xml:space="preserve">
+    <value>Key</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
+  </data>
+  <data name="CR_StgWseColVal" xml:space="preserve">
+    <value>Query string</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
+  </data>
+  <data name="CR_StgAutoRestart" xml:space="preserve">
+    <value>Restart application when fatal error occurs</value>
+  </data>
 </root>

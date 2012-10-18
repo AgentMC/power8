@@ -396,4 +396,34 @@ Power8 может помочь вам с этим справиться.
   <data name="Str_TipWarn" xml:space="preserve">
     <value>Возможно, некоторые настройки стоит изменить для улучшения работы Power8</value>
   </data>
+  <data name="CR_StgAutoSort" xml:space="preserve">
+    <value>Сортировать меню и списки при создании/изменении файлов и папок</value>
+  </data>
+  <data name="CR_StgLblSetStartText" xml:space="preserve">
+    <value>Текст на меню "Программы" (если пусто — берётся из системы):</value>
+  </data>
+  <data name="CR_StgTabGeneral" xml:space="preserve">
+    <value>Общие</value>
+    <comment>"General" tab in settings window</comment>
+  </data>
+  <data name="CR_StgTabMenuBtns" xml:space="preserve">
+    <value>Меню-кнопки</value>
+  </data>
+  <data name="CR_StgTabWSE" xml:space="preserve">
+    <value>Поисковые веб-движки</value>
+  </data>
+  <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
+    <value>Показывать меню-кнопки:</value>
+  </data>
+  <data name="CR_StgWseColKey" xml:space="preserve">
+    <value>Буква</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
+  </data>
+  <data name="CR_StgWseColVal" xml:space="preserve">
+    <value>Строка запроса</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
+  </data>
+  <data name="CR_StgAutoRestart" xml:space="preserve">
+    <value>Перезапускать Power8 при возникновении фатальных ошибок</value>
+  </data>
 </root>
