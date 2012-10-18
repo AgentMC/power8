@@ -61,7 +61,7 @@
                 <DataGridTemplateColumn Header="Recent>" Width="18">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" IsMainMenu="False" x:Name="showJump">
+                            <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" Background="Transparent" IsMainMenu="False" x:Name="showJump">
                                 <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemplate}" 
                                           ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0">
                                     <MenuItem.Header>
