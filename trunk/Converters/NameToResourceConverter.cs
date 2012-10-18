@@ -41,5 +41,10 @@ namespace Power8.Converters
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Static instance to be used from code-behind
+        /// </summary>
+        public static NameToResourceConverter Instance = new NameToResourceConverter();
     }
 }

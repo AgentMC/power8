@@ -19,7 +19,7 @@ namespace Power8.Views
         public RestartExplorer()
         {
             InitializeComponent();
-            var c = new NameToResourceConverter();
+            var c = NameToResourceConverter.Instance;
             base.Text = c.Convert("RE_Title");
             label1.Text = c.Convert("RE_TopLabel");
             button1.Text = c.Convert("RE_YesButton");
