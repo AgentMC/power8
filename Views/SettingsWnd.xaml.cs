@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Power8.Converters;
 using Power8.Helpers;
 
 namespace Power8.Views
@@ -12,7 +13,7 @@ namespace Power8.Views
     {
         /// <summary>
         /// Constructor. Sets window's data context to Settings Manager's current instance
-        /// and hides BlockMetro box if not Win8.
+        /// and hides BlockMetro box if not Win8. Localizes UI partially.
         /// </summary>
         public SettingsWnd()
         {
@@ -26,6 +27,9 @@ namespace Power8.Views
             StgCbCpnl.Content = PowerItemTree.ControlPanelRoot.FriendlyName;
             StgCbDocs.Content = PowerItemTree.LibrariesRoot.FriendlyName;
             StgCbNtwk.Content = PowerItemTree.NetworkRoot.FriendlyName;
+            //localization for headers (columns don't have names)
+            StgWseColKey.Header = NameToResourceConverter.Instance.Convert("StgWseColKey", null, null, null);
+            StgWseColVal.Header = NameToResourceConverter.Instance.Convert("StgWseColVal", null, null, null);
         }
 
         /// <summary>

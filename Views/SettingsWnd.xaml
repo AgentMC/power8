@@ -82,21 +82,8 @@
                       HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White" MinColumnWidth="0"
                       CellStyle="{DynamicResource DataGridCellStyle}">
                 <DataGrid.Columns>
-                    <!--Localized piece of crap... Must rework this to be less complex!-->
-                    <DataGridTextColumn Binding="{Binding Key, Mode=TwoWay}" MinWidth="20">
-                        <DataGridTextColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <Label Name="StgWseColKey" Margin="0" Padding="0"/>
-                            </DataTemplate>
-                        </DataGridTextColumn.HeaderTemplate>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding Query, Mode=TwoWay}" MinWidth="346">
-                        <DataGridTextColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <Label Name="StgWseColVal" Margin="0" Padding="0"/>
-                            </DataTemplate>
-                        </DataGridTextColumn.HeaderTemplate>
-                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="StgWseColKey" Binding="{Binding Key, Mode=TwoWay}" MinWidth="20"/>
+                    <DataGridTextColumn x:Name="StgWseColVal" Binding="{Binding Query, Mode=TwoWay}" MinWidth="346"/>
                 </DataGrid.Columns>
             </DataGrid>
         </TabItem>
