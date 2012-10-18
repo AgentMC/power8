@@ -418,4 +418,7 @@ Please launch Explorer for me and restart Power8 process.</value>
     <value>Query string</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
+  <data name="CR_StgAutoRestart" xml:space="preserve">
+    <value>Restart application when fatal error occurs</value>
+  </data>
 </root>

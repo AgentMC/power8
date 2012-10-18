@@ -381,6 +381,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restart application when fatal error occurs.
+        /// </summary>
+        internal static string CR_StgAutoRestart {
+            get {
+                return ResourceManager.GetString("CR_StgAutoRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto-sort menus and lists when file or folder is added or renamed.
         /// </summary>
         internal static string CR_StgAutoSort {

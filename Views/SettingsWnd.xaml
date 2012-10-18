@@ -23,6 +23,7 @@
                 <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgAutoSort" IsChecked="{Binding AutoSortTrees, Mode=TwoWay}" />
+                <CheckBox x:Name="StgAutoRestart" IsChecked="{Binding AutoRestart, Mode=TwoWay}" />
                 <Separator/>
                 <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}"/>
                 <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
