@@ -14,6 +14,7 @@
         <Style TargetType="{x:Type TabItem}">
             <Setter Property="Header" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         </Style>
+        <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="Gray"/>
     </Views:DisposableWindow.Resources>
     <TabControl>
         <TabItem x:Name="StgTabGeneral">
