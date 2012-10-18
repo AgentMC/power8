@@ -14,7 +14,6 @@
         <Style TargetType="{x:Type TabItem}">
             <Setter Property="Header" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         </Style>
-        <SolidColorBrush x:Key="{x:Static DataGrid.FocusBorderBrushKey}" Color="Gray"/>
     </Views:DisposableWindow.Resources>
     <TabControl>
         <TabItem x:Name="StgTabGeneral">
@@ -80,7 +79,8 @@
         <TabItem x:Name="StgTabWSE">
             <DataGrid ItemsSource="{Binding WebSearchProviders}" AutoGenerateColumns="False"
                       HeadersVisibility="Column" CanUserReorderColumns="False" CanUserResizeColumns="False"
-                      HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White" MinColumnWidth="0">
+                      HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White" MinColumnWidth="0"
+                      CellStyle="{DynamicResource DataGridCellStyle}">
                 <DataGrid.Columns>
                     <!--Localized piece of crap... Must rework this to be less complex!-->
                     <DataGridTextColumn Binding="{Binding Key, Mode=TwoWay}" MinWidth="20">

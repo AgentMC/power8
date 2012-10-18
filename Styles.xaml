@@ -514,4 +514,27 @@
     </Style>
 
     <!-- /Checkboxes -->
+    
+    <!--DataGrid-->
+    <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
+        	<Setter Property="Background" Value="Transparent"/>
+        	<Setter Property="BorderBrush" Value="Transparent"/>
+        	<Setter Property="BorderThickness" Value="0"/>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate TargetType="{x:Type DataGridCell}">
+        				<Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+        					<ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+        				</Border>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
+        	<Style.Triggers>
+        		<Trigger Property="IsSelected" Value="True">
+        			<Setter Property="Background" Value="{StaticResource {x:Static SystemColors.HighlightBrushKey  }}"/>
+        		</Trigger>
+        	</Style.Triggers>
+        </Style>
+
+    <!--/DataGrid-->
 </ResourceDictionary>
