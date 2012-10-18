@@ -1045,14 +1045,19 @@ namespace Power8
         /// <summary>
         /// Shows error message with popped up unhandled exception details.
         /// Then writes same data in event log as Application Error.
-        /// Then, quits application with code 1. 
+        /// Then, if configered, launches new instance of Power8.
+        /// Finally, quits application with code 1. 
         /// </summary>
         /// <param name="ex">The exception caused the error.</param>
         public static void DispatchUnhandledException(Exception ex)
         {
             var str = ex.ToString();
             MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
-            Die(NoLoc.Err_UnhandledGeneric + str);
+            var reason = NoLoc.Err_UnhandledGeneric + str;
+            if(SettingsManager.Instance.AutoRestart)
+                Restart(reason);
+            else
+                Die(reason);
         }
         /// <summary> Restarts Power8 writing the reason of restarting into EventLog </summary>
         /// <param name="reason">Reason to restart</param>

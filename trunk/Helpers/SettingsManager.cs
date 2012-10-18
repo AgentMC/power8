@@ -502,6 +502,17 @@ namespace Power8.Helpers
             }
         }
 
+        public bool AutoRestart
+        {
+            get { return Settings.Default.AutoRestart; }
+            set
+            {
+                if (value == AutoRestart)
+                    return;
+                Settings.Default.AutoRestart = value;
+                Settings.Default.Save();
+            }
+        }
         #endregion
     }
 
