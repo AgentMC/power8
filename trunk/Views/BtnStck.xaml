@@ -28,7 +28,8 @@
                   x:Name="dataGrid" MouseDoubleClick="DataGridMouseDoubleClick" GridLinesVisibility="None"
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single"
-                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown" Background="White">
+                  HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown" 
+                  CellStyle="{StaticResource DataGridCellStyle}" Background="White">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Icon" Width="16" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
