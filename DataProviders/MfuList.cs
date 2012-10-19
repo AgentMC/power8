@@ -345,7 +345,10 @@ namespace Power8
         }
 
         /// <summary>
-        /// Updates JumpList of PowerItem passed asynchronously
+        /// Updates JumpList of PowerItem passed asynchronously. JumpList is being built based on
+        /// - system Frequent list (W7+);
+        /// - system Recent list (W7+);
+        /// - Power8 internal jumplist (WXP+);
         /// </summary>
         /// <param name="item">the PowerItem whose JumpList may be updated</param>
         public static void GetRecentListFor(PowerItem item)
@@ -374,14 +377,16 @@ namespace Power8
                     jl = recent.Union(frequent);
                 else
                     jl = recent ?? frequent;
-            }
-            if (jl != null && p8R != null)
+            } 
+            if (jl != null && p8R != null) //merge everything
                 jl = jl.Union(p8R);
             else
                 jl = jl ?? p8R;
-            if (jl != null)
+            if (jl != null) //if anything is available
             {
-                jl = jl.Where(x => x.StartsWith("::") || File.Exists(x));
+                jl = jl.Distinct()                                          //No duplicates
+                       .Where(x => x.StartsWith("::") || File.Exists(x))    //No obsoletes
+                       .Take(25);                                           //Not too many
                 foreach (var arg in jl)
                 {
                     var local = arg;

@@ -66,6 +66,8 @@ namespace Power8
         /// In rare cases there's no shell namespace for certain virtual folder,
         /// and Argument won't help us this way. However we can use corresponding
         /// CSIDL to get PIDL of VF, and obtain all information required via it.
+        /// Also used to specify that item is P8 internal JumpList element, or
+        /// P8 internal type instantiator.
         /// Auto-property.
         /// </summary>
         public API.Csidl SpecialFolderId { get; set; }
