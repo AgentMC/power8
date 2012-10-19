@@ -245,15 +245,18 @@ namespace Power8.Views
             var q = SearchBox.Text.Trim().ToLowerInvariant(); //ignore spaces an case
             if (!String.IsNullOrWhiteSpace(q) && q.Length > 1) //we can probably start search
             {
+                //Clear selection always before (re)starting search or preparing the WebSearch.
+                //For the Search this will help P8 to handle Enter properly, because sometimes,
+                //if you're REALLY fast, UI is repainted BEFORE Items collection is being actually 
+                //updated, along with SelectedItem, so you see and try launching item different 
+                //from one being actually launched.
+                dataGrid.SelectedIndex = -1; 
                 if (q[1] != ' ') //not web search
                 {
                     dataGrid.ItemsSource = _searchView; //switch MFU list to search results and kisk search invoker
                     Util.Fork(() => PowerItemTree.SearchTree(q, _searchData, ExpandGroup), "Search root for " + q).Start();
                 }
-                else //web search - no actions from our side
-                {
-                    dataGrid.SelectedIndex = -1; //except clearing the selection from MFU list, so that Enter
-                }                                //will be handled proper way
+                //else{} //web search - no actions from our side here, wait for enter
             }
             else //no search
             {
