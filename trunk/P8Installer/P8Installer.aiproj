@@ -31,15 +31,15 @@
     <!-- <MakeDir Directories="$(OutputPath)"  Condition="!Exists('$(OutputPath)')" /> -->
     <!-- Run the advanced installer on the .aip project - build -->
     <!-- Path to the Advanced Installer version used to build .aip is specified in the registry HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS -->
-    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'=='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6))bin\x86\AdvancedInstaller.com&quot; /build &quot;%(Compile.Identity)&quot;" />
-    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'!='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6))bin\x86\AdvancedInstaller.com&quot; /build &quot;%(Compile.Identity)&quot; -buildslist $(Configuration)" />
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'=='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6.1))bin\x86\AdvancedInstaller.com&quot; /build &quot;%(Compile.Identity)&quot;" />
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'!='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6.1))bin\x86\AdvancedInstaller.com&quot; /build &quot;%(Compile.Identity)&quot; -buildslist $(Configuration)" />
   </Target>
   <Target Name="Rebuild">
     <!--Create the output directory-->
     <!-- MakeDir Directories="$(OutputPath)"  Condition="!Exists('$(OutputPath)')" /> -->
     <!-- Run the advanced installer on the .aip project - rebuild -->
-    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'=='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6))bin\x86\AdvancedInstaller.com&quot; /rebuild &quot;%(Compile.Identity)&quot;" />
-    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'!='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6))bin\x86\AdvancedInstaller.com&quot; /rebuild &quot;%(Compile.Identity)&quot; -buildslist $(Configuration)" />
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'=='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6.1))bin\x86\AdvancedInstaller.com&quot; /rebuild &quot;%(Compile.Identity)&quot;" />
+    <Exec Condition="Exists(%(Compile.Identity)) AND '$(Configuration)'!='All'" Command="&quot;$([MSBuild]::GetRegistryValue(`HKEY_CURRENT_USER\SOFTWARE\Caphyon\Advanced Installer\Extension for VS`, 9.6.1))bin\x86\AdvancedInstaller.com&quot; /rebuild &quot;%(Compile.Identity)&quot; -buildslist $(Configuration)" />
   </Target>
   <Target Name="Clean">
   </Target>
