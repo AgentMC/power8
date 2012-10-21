@@ -392,33 +392,33 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
     <value>Halunnet muuttaa joitakin asetuksia parantaaksesi Power8:n käyttökokemustasi</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
-    <value>Auto-sort menus and lists when file or folder is added or renamed</value>
+    <value>Järjestä valikot ja luettelot automaattisesti, kun tiedosto tai kansio lisätään tai nimetään uudelleen</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>"All programs" text (clear to use system defaults):</value>
+    <value>"Kaikki ohjelmat" -teksti (tyhjennä käyttääksesi oletusta):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
-    <value>General</value>
+    <value>Yleinen</value>
     <comment>"General" tab in settings window</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
-    <value>Menu-buttons</value>
+    <value>Valikko-painikkeet</value>
   </data>
   <data name="CR_StgTabWSE" xml:space="preserve">
-    <value>Web search engines</value>
+    <value>WWW-hakukoneet</value>
   </data>
   <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
-    <value>Show menu-buttons:</value>
+    <value>Näytä valikko-painikkeet:</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>Key</value>
+    <value>Avain</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
-    <value>Query string</value>
+    <value>Kyselymerkkijono</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
-    <value>Restart application when fatal error occurs</value>
+    <value>Käynnistä sovellus uudelleen kohtalokkaan virheen tapahduttua</value>
   </data>
 </root>
