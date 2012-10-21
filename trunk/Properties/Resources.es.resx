@@ -392,33 +392,33 @@ Por favor, inicia el explorador y reinicia Power8.</value>
     <value>Quizás quieras cambiar algunas opciones para mejorar tu experiencia con Power8</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
-    <value>Auto-sort menus and lists when file or folder is added or renamed</value>
+    <value>Ordenar automáticamente listas y menús cuando se añada o modifique un archivo o carpeta</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>"All programs" text (clear to use system defaults):</value>
+    <value>Texto "Todos los programas" (limpiar para usar los predeterminados del sistema):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
     <value>General</value>
     <comment>"General" tab in settings window</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
-    <value>Menu-buttons</value>
+    <value>Botones del menú</value>
   </data>
   <data name="CR_StgTabWSE" xml:space="preserve">
-    <value>Web search engines</value>
+    <value>Buscadores web</value>
   </data>
   <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
-    <value>Show menu-buttons:</value>
+    <value>Mostrar botones del menú:</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>Key</value>
+    <value>Clave</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
-    <value>Query string</value>
+    <value>Consulta</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
-    <value>Restart application when fatal error occurs</value>
+    <value>Reiniciar aplicación cuando ocurra un error</value>
   </data>
 </root>
