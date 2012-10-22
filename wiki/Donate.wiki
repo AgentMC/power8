@@ -1,12 +1,15 @@
 #summary Donate
+
 = You could donate Power 8 team =
 
 
-== WebMoney  ==
-[http://www.webmoney.ru/ WebMoney page]
+== Using  WebMoney service==
+=== Visit [http://www.webmoney.ru/ WebMoney] page===
 
-*Z318811672109 USD
-*E303125879978 EUR
+ *Z318811672109 USD
 
-*R172727927927 RUB
-*U295587260470 UAH
+ *E303125879978 EUR
+
+ *R172727927927 RUB
+
+ *U295587260470 UAH
