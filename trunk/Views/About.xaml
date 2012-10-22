@@ -31,7 +31,7 @@
         </Grid.ColumnDefinitions>
         <!---->
         <Image HorizontalAlignment="Left" x:Name="image1" Stretch="Fill" VerticalAlignment="Top" Source="{Binding Logo, ElementName=MWAbout}" 
-               Grid.RowSpan="7" Width="200" Height="200"/>
+               Grid.RowSpan="8" Width="200" Height="200"/>
         <!---->
         <TextBlock x:Name="ButtonStack" VerticalAlignment="Top" Grid.Column="1" Margin="12,4,0,0"/>
         <TextBlock Text="{Binding CopyrightContent, ElementName=MWAbout}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Margin="12,4,0,0"/>
@@ -53,11 +53,11 @@
         <Label HorizontalAlignment="Left" Padding="0" Margin="12,0,0,0" Grid.Column="1" Grid.Row="5" VerticalAlignment="Bottom">
         	<Hyperlink NavigateUri="http://www.wmtransfer.com/" Click="Navigate">
         		<InlineUIContainer>
-        			<TextBlock Text="Visit WebMoney site to donate Power8 team" Margin="0"/>
+        			<TextBlock Text="Visit WebMoney site to donate Power8 team" Margin="0" VerticalAlignment="Bottom"/>
 				</InlineUIContainer>
 			</Hyperlink>
         </Label>
-        <TextBox Margin="12,0,0,4.773" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" Text="Z318811672109 USD&#x9;E303125879978 EUR &#xd;&#xa;R172727927927 RUB&#x9;U295587260470 UAH" IsReadOnlyCaretVisible="True" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" FontSize="9.333"/>
+        <TextBox Margin="12,0,0,0" IsReadOnly="True" VerticalAlignment="Top" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left" Text="Z318811672109 USD&#x9;E303125879978 EUR &#xd;&#xa;R172727927927 RUB&#x9;U295587260470 UAH" IsReadOnlyCaretVisible="True" Background="{x:Null}" BorderBrush="{x:Null}" BorderThickness="0" FontSize="9" Foreground="#FF525252"/>
         <!---->
         <Grid Grid.Row="7" Grid.Column="1" Margin="0" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
