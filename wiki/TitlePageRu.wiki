@@ -54,6 +54,10 @@
 
 *Идеи или предложения?* Свяжитесь с нами напрямую, воспользуйтесь форумами ниже, или оставьте комментарии на этих страницах: [Roadmap], [FeatureRequests].
 
+
+
+==Поддержать разработку==
+Хотите поддержать разработку Power8? Посетите [Donate cтраницу поддержки].
 </td><td valign="top">
 <table><tr><td width="90" align="center">Оценена на <div style="white-space: nowrap"><a href="http://www.primewares.com/links.php?id=53104"><img src="http://www.primewares.com/images/star.png" />*Отлично*</a></div>сайтом Primewares<hr/>
 <a href="http://www.downloadtyphoon.com/power8/infosqixaztn"><img src="http://www.downloadtyphoon.com/templates/downty/images/award_88x31_5.gif" title="Download Typhoon 5 stars" border="0" width="88" height="31"/></a></td>
