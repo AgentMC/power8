@@ -30,6 +30,3 @@ This list is maintained internally, if you want to report an issue that is not o
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
-  #  Update notification window _may_ not display version strings
-  #  7/8: Data grid icons and text are blurred though sizes of blocks are ok
-  #  7^classic^: button is unreachable (almost) => resolved as config setting
