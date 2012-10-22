@@ -426,4 +426,7 @@ Power8 может помочь вам с этим справиться.
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Перезапускать Power8 при возникновении фатальных ошибок</value>
   </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Посетите сайт WebMoney чтобы поддержать разработку Power8</value>
+  </data>
 </root>
