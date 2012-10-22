@@ -4,7 +4,7 @@
 
 
 == Using  `WebMoney` service==
-=== Visit [http://www.webmoney.ru/ WebMoney] page===
+=== Visit [http://www.wmtransfer.com/ WebMoney] page===
 
  *Z318811672109 USD
 
