@@ -1,6 +1,27 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.2 Beta (v.1.2.0.0): 22.10.2012==
+  
+  # `[new]` Finnish translation;
+  # `[new]` Project donation info;
+  # `[new]` Settings window updated:
+    * Settings for menu-buttons visibility (label is system name);
+    * Ability to switch auto-sorting on;
+    * Configurable name for "All programs" item;
+    * Editable search providers;
+    * Ability to auto-restart application when fatal error occurs;
+  # `[changed]` Saving more resources resolving links;
+  # `[changed]` Enhanced UI a bit;
+  # `[changed]` Limited Jump-List items count to 25;
+  # `[fixed]` Update notification window _may_ not display version strings;
+  # `[fixed]` 7/8: Data grid icons and text are blurred though sizes of blocks are ok;
+  # `[fixed]` 7^classic^: button is unreachable (almost) => resolved as config setting;
+  # `[fixed]` issue preventing Power8 from showing the start menu when corrupted link exist;
+  # `[fixed]` the selectedItem may not have been changed until user presses enter (UI faster than data layer).
+
+
+
 ==Version 1.1 Beta (v.1.1.0.0): 08.10.2012==
   
   # `[new]` Spanish localization;
