@@ -61,6 +61,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Visit WebMoney site to donate Power8 team.
+        /// </summary>
+        internal static string CR_AbDonate {
+            get {
+                return ResourceManager.GetString("CR_AbDonate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This localization is done by Power8 Team.
         /// </summary>
         internal static string CR_AbLocalization {
