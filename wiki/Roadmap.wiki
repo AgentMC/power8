@@ -8,16 +8,6 @@ For all other feature requests, currently not prioritized, please consult [Featu
 For already implemented features, see [Changelog] page.
 
 
-= _Power8 v.1.2 Beta_ =
-*estimated date: 25.10.12*
-  * Replace grid with something faster;
-  * Configuration dialog:
-    * Web Search Engines settings;
-    * Configurable text for start menu;
-    * Disable some menued buttons;
-    * Auto-sort items in Start menu on add or not (as it is now);
-
-
 = _Power8 v.1.3 Beta_ =
 *estimated date: 11.11.12*
   * Configuration dialog:
