@@ -395,7 +395,7 @@ Por favor, inicia el explorador y reinicia Power8.</value>
     <value>Ordenar automáticamente listas y menús cuando se añada o modifique un archivo o carpeta</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>Texto "Todos los programas" (limpiar para usar los predeterminados del sistema):</value>
+    <value>Texto "Todos los programas" (borrar para usar los predeterminados del sistema):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
     <value>General</value>
@@ -411,7 +411,7 @@ Por favor, inicia el explorador y reinicia Power8.</value>
     <value>Mostrar botones del menú:</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>Clave</value>
+    <value>Tecla</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
