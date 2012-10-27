@@ -15,6 +15,7 @@ namespace Power8
     {
         private static readonly List<FileSystemWatcher> Watchers = new List<FileSystemWatcher>();
         private static readonly List<string> DriveNames = new List<string>();
+        private static readonly List<string> BlackList = new List<string>();
         private static FileSystemEventHandler _fileChanged;
         private static RenamedEventHandler _fileRenamed;
         private static PowerItem _drivesRoot;
@@ -77,6 +78,8 @@ begin:
                         DriveNames.RemoveAt(i); //remove drive from collection
                     }
                 }
+                //Has blacklisted drive been removed?
+                BlackList.RemoveAll(bl => _drives.All(d => d.Name != bl));
 
                 //Have some drives been addded?
                 foreach (var driveInfo in _drives)
@@ -84,20 +87,18 @@ begin:
                     var dName = driveInfo.Name;
                     if (DriveNames.All(d => d != dName)) //drive added
                     {
-                        var dNameUcase = dName.ToUpperInvariant();
-                        if ((new[]
-                                 {
-                                     DriveType.Fixed,
-                                     DriveType.Network,
-                                     DriveType.Ram
-                                 }.Contains(driveInfo.DriveType))
-                            ||
-                            (driveInfo.DriveType == DriveType.Removable
-                             && SettingsManager.Instance.WatchRemovableDrives)
-                            && dNameUcase != "A:\\"
-                            && dNameUcase != "B:\\"
-                            && driveInfo.IsReady)
+                        if (IsDriveValid(driveInfo))
                         {
+                            FileSystemWatcher w;
+                            try
+                            {
+                                w = new FileSystemWatcher(dName);
+                            }
+                            catch (ArgumentException)
+                            {
+                                BlackList.Add(dName);
+                                continue;
+                            }
                             DriveNames.Add(dName); //Add drive to collection
 
                             Util.Send(() => //Add drive to UI
@@ -110,7 +111,6 @@ begin:
                                                                     NonCachedIcon = true
                                                                 }));
                             //Add drive watcher
-                            var w = new FileSystemWatcher(dName);
                             w.Created += _fileChanged;
                             w.Deleted += _fileChanged;
                             w.Changed += _fileChanged;
@@ -129,7 +129,26 @@ begin:
             Thread.Sleep(5000);
 
             if (!Util.MainDisp.HasShutdownStarted)
-                goto begin;//just don't want code unneeded nesting here, anyway IL will be same.
+                goto begin;//just don't want unneeded code nesting here, anyway IL will be same.
+        }
+
+        /// <summary>
+        /// Gets the vaue indicating can Power8 handle the drive or not
+        /// </summary>
+        /// <param name="driveInfo">The structure describing the drive</param>
+        private static bool IsDriveValid(DriveInfo driveInfo)
+        {
+            var dNameUcase = driveInfo.Name.ToUpper();
+            return
+                (( driveInfo.DriveType == DriveType.Fixed 
+                || driveInfo.DriveType == DriveType.Network
+                || driveInfo.DriveType == DriveType.Ram)
+                ||(driveInfo.DriveType == DriveType.Removable
+                   && SettingsManager.Instance.WatchRemovableDrives))
+                && dNameUcase != "A:\\"
+                && dNameUcase != "B:\\"
+                && driveInfo.IsReady
+                && !BlackList.Contains(driveInfo.Name);
         }
 
         /// <summary>
