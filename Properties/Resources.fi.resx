@@ -421,4 +421,7 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Käynnistä sovellus uudelleen kohtalokkaan virheen tapahduttua</value>
   </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Visit WebMoney site to donate Power8 team</value>
+  </data>
 </root>

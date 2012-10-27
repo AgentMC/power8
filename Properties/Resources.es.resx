@@ -421,4 +421,7 @@ Por favor, inicia el explorador y reinicia Power8.</value>
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Reiniciar aplicación cuando ocurra un error</value>
   </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Visit WebMoney site to donate Power8 team</value>
+  </data>
 </root>

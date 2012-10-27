@@ -422,4 +422,7 @@ Riavvia Explorer per me e riavvia Power8.</value>
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Restart application when fatal error occurs</value>
   </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Visit WebMoney site to donate Power8 team</value>
+  </data>
 </root>

@@ -426,4 +426,7 @@ Vill du återställa Utforskaren och starta om Power8?</value>
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Starta om programmet om fel uppstår</value>
   </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Visit WebMoney site to donate Power8 team</value>
+  </data>
 </root>
