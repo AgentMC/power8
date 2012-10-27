@@ -421,4 +421,7 @@ Start Explorer a.u.b. voor me en herstart Power8 proces.</value>
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Herstart programma wanneer een fatale fout ontstaat</value>
   </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Visit WebMoney site to donate Power8 team</value>
+  </data>
 </root>

@@ -391,7 +391,7 @@ Bitte starte den Windows-Explorer für mich und starte den Power8-Prozess neu.</
   <data name="Str_TipWarn" xml:space="preserve">
     <value>Sie möchten vielleicht einige Einstellungen ändern, um die Power8-Erfahrung zu erweitern</value>
   </data>
-   <data name="CR_StgAutoSort" xml:space="preserve">
+  <data name="CR_StgAutoSort" xml:space="preserve">
     <value>Auto-sort menus and lists when file or folder is added or renamed</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
@@ -420,5 +420,8 @@ Bitte starte den Windows-Explorer für mich und starte den Power8-Prozess neu.</
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Restart application when fatal error occurs</value>
+  </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Visit WebMoney site to donate Power8 team</value>
   </data>
 </root>
