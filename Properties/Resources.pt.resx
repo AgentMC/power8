@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+Ôªø<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -120,25 +120,25 @@
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
 
-Vers„o atual: {0}
-Nova vers„o: {1}
+Vers√£o atual: {0}
+Nova vers√£o: {1}
 
-VocÍ deseja ir ao sÌtio para atualizar o programa?
+Voc√™ deseja ir ao s√≠tio para atualizar o programa?
 
-Sim: ir ao sÌtio da web e atualizar agora!
-N„o: lembrar-me mais tarde, por favor.
-Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value>
+Sim: ir ao s√≠tio da web e atualizar agora!
+N√£o: lembrar-me mais tarde, por favor.
+Cancelar: ignorar esta atualiza√ß√£o, nunca notificar-me sobre esta vers√£o.</value>
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
-    <value>: atualizaÁ„o disponÌvel!</value>
+    <value>: atualiza√ß√£o dispon√≠vel!</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
     <value>Erro {0} causado durante tentativa de exibir objeto Propriedades
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>N„o foi possÌvel verificar por atualizaÁıes.
+    <value>N√£o foi poss√≠vel verificar por atualiza√ß√µes.
 </value>
     <comment>Leave trailing \r\n!</comment>
   </data>
@@ -147,20 +147,20 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <comment>Default label instead of "Start menu". Currently seems useless</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>N„o foi possÌvel iniciar o objeto especificado como Administrador. Processo executado com privilÈgios de usu·rio comum.
+    <value>N√£o foi poss√≠vel iniciar o objeto especificado como Administrador. Processo executado com privil√©gios de usu√°rio comum.
 </value>
   </data>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
-    <value>Abrir todas as pastas de usu·rios</value>
+    <value>Abrir todas as pastas de usu√°rios</value>
   </data>
   <data name="CR_AppOpenContainer" xml:space="preserve">
-    <value>Abrir localizaÁ„o</value>
+    <value>Abrir localiza√ß√£o</value>
   </data>
   <data name="CR_AppOpenFolder" xml:space="preserve">
     <value>Abrir</value>
   </data>
   <data name="CR_AppOpenTargetContainer" xml:space="preserve">
-    <value>Abrir localizaÁ„o de destino</value>
+    <value>Abrir localiza√ß√£o de destino</value>
   </data>
   <data name="CR_AppRun" xml:space="preserve">
     <value>Executar</value>
@@ -181,7 +181,7 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <value>Bloquear computador</value>
   </data>
   <data name="CR_ButtonLogOff" xml:space="preserve">
-    <value>Encerrar sess„o</value>
+    <value>Encerrar sess√£o</value>
   </data>
   <data name="CR_ButtonRestart" xml:space="preserve">
     <value>Reiniciar</value>
@@ -199,16 +199,16 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <value>Dormir</value>
   </data>
   <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Inicio autom·tico</value>
+    <value>Inicio autom√°tico</value>
   </data>
   <data name="CR_MWCheckForUpdates" xml:space="preserve">
-    <value>Verificar por atualizaÁıes</value>
+    <value>Verificar por atualiza√ß√µes</value>
   </data>
   <data name="CR_MWExit" xml:space="preserve">
     <value>Sair</value>
   </data>
   <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
-    <value>N„o foi possÌvel instanciar classe {0}
+    <value>N√£o foi poss√≠vel instanciar classe {0}
 {1}</value>
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
@@ -225,14 +225,14 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <value>Lista de computadores</value>
   </data>
   <data name="Err_VistaDetected" xml:space="preserve">
-    <value>Windows (R) Vista (R) n„o deve ser usado com Power8. Por favor use um sistema operacional normal.</value>
+    <value>Windows (R) Vista (R) n√£o deve ser usado com Power8. Por favor use um sistema operacional normal.</value>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
-    <value>DiretÛrio n„o encontrado para </value>
+    <value>Diret√≥rio n√£o encontrado para </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="Err_GotNoFile" xml:space="preserve">
-    <value>Arquivo n„o encontrado para </value>
+    <value>Arquivo n√£o encontrado para </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
@@ -253,16 +253,16 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <value>Descarregar MSI e atualizar agora!</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
-    <value>Nova vers„o:</value>
+    <value>Nova vers√£o:</value>
   </data>
   <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
-    <value>H· uma atualizaÁ„o disponÌvel para o Power8!</value>
+    <value>H√° uma atualiza√ß√£o dispon√≠vel para o Power8!</value>
   </data>
   <data name="CR_UNwnd" xml:space="preserve">
-    <value>NotificaÁ„o de atualizaÁ„o</value>
+    <value>Notifica√ß√£o de atualiza√ß√£o</value>
   </data>
   <data name="CR_UNYourVersion" xml:space="preserve">
-    <value>Vers„o atual:</value>
+    <value>Vers√£o atual:</value>
   </data>
   <data name="CR_UNdown7z" xml:space="preserve">
     <value>Descarregar 7z</value>
@@ -271,22 +271,22 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <value>Descarregar MSI</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Abrir p·gina da internet do projeto</value>
+    <value>Abrir p√°gina da internet do projeto</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
-    <value>N„o avise-me novamente sobre esta atualizaÁ„o</value>
+    <value>N√£o avise-me novamente sobre esta atualiza√ß√£o</value>
   </data>
   <data name="CR_UNNextTime" xml:space="preserve">
-    <value>Avise-me da prÛxima vez</value>
+    <value>Avise-me da pr√≥xima vez</value>
   </data>
   <data name="CR_UNOther" xml:space="preserve">
-    <value>Outras opÁıes:</value>
+    <value>Outras op√ß√µes:</value>
   </data>
   <data name="Err_NoPiExtracted" xml:space="preserve">
-    <value>Nenhum elemento de dados disponÌvel</value>
+    <value>Nenhum elemento de dados dispon√≠vel</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
-    <value>N„o foi possÌvel obter dica de contexto para o objeto</value>
+    <value>N√£o foi poss√≠vel obter dica de contexto para o objeto</value>
   </data>
   <data name="Str_CplElement" xml:space="preserve">
     <value>Elemento do painel de controle</value>
@@ -319,11 +319,11 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <value>Fixar item</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
-    <value>TraduÁ„o feita por Matheus Macabu</value>
+    <value>Tradu√ß√£o feita por Matheus Macabu</value>
     <comment>Put localizer name here!</comment>
   </data>
   <data name="CR_AbVersion" xml:space="preserve">
-    <value>Vers„o:</value>
+    <value>Vers√£o:</value>
   </data>
   <data name="CR_MWAbout" xml:space="preserve">
     <value>Sobre</value>
@@ -334,51 +334,51 @@ Cancelar: ignorar esta atualizaÁ„o, nunca notificar-me sobre esta vers„o.</value
     <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
-    <value>N„o, obrigado.
-Eu sei qual È o problema e irei cuidar dele por mim mesmo.</value>
+    <value>N√£o, obrigado.
+Eu sei qual √© o problema e irei cuidar dele por mim mesmo.</value>
   </data>
   <data name="CR_RE_Title" xml:space="preserve">
-    <value>Power8 ó Windows Explorer est· morto</value>
+    <value>Power8 ‚Äî Windows Explorer est√° morto</value>
   </data>
   <data name="CR_RE_TopLabel" xml:space="preserve">
-    <value>Parece que o processo do Windows Explorer n„o est· disponÌvel.
-Power8 pode ajud·-lo a cuidar disso.
+    <value>Parece que o processo do Windows Explorer n√£o est√° dispon√≠vel.
+Power8 pode ajud√°-lo a cuidar disso.
  
-VocÍ deseja restaurar o Windows Explorer e reiniciar o Power8?</value>
+Voc√™ deseja restaurar o Windows Explorer e reiniciar o Power8?</value>
   </data>
   <data name="CR_RE_YesButton" xml:space="preserve">
     <value>Sim!
 Por favor execute o Explorer para mim e reinicie o processo do Power8.</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
-    <value>ConfiguraÁıes...</value>
+    <value>Configura√ß√µes...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Auto (por ¡rea de Trabalho)</value>
+    <value>Auto (por √Årea de Trabalho)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
     <value>Procurar...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>Seguir orientaÁ„o da barra de tarefas</value>
+    <value>Seguir orienta√ß√£o da barra de tarefas</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
-    <value>ProporÁ„o de tela:</value>
+    <value>Propor√ß√£o de tela:</value>
   </data>
   <data name="CR_StgLblChooseImage" xml:space="preserve">
     <value>Selecionar imagem (duplo-clique no caminho para limpar):</value>
   </data>
   <data name="CR_StgSquareStart" xml:space="preserve">
-    <value>Configurar bot„o Iniciar</value>
+    <value>Configurar bot√£o Iniciar</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Informe-me acerca de problemas de configuraÁ„o</value>
+    <value>Informe-me acerca de problemas de configura√ß√£o</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>Visualizar dispositivos removÌveis</value>
+    <value>Visualizar dispositivos remov√≠veis</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
-    <value>ConfiguraÁıes do Power8</value>
+    <value>Configura√ß√µes do Power8</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
@@ -389,26 +389,26 @@ Por favor execute o Explorer para mim e reinicie o processo do Power8.</value>
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>VocÍ talvez queira alterar algumas configuraÁıes para aprimorar sua experiÍncia com o Power8</value>
+    <value>Voc√™ talvez queira alterar algumas configura√ß√µes para aprimorar sua experi√™ncia com o Power8</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
     <value>Ordernar automaticamente menus e listas quando arquivos ou pastas forem adicionados ou renomeados</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>Texto para "Todos os programas" (em branco para usar o padr„o do sistema):</value>
+    <value>Texto para "Todos os programas" (em branco para usar o padr√£o do sistema):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
     <value>Geral</value>
     <comment>"General" tab in settings window</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
-    <value>Botıes do menu</value>
+    <value>Bot√µes do menu</value>
   </data>
   <data name="CR_StgTabWSE" xml:space="preserve">
     <value>Motores de busca da internet</value>
   </data>
   <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
-    <value>Exibir botıes do menu:</value>
+    <value>Exibir bot√µes do menu:</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
     <value>Tecla</value>
@@ -419,9 +419,9 @@ Por favor execute o Explorer para mim e reinicie o processo do Power8.</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
-    <value>Reiniciar aplicaÁ„o quando ocorrer um erro fatal</value>
+    <value>Reiniciar aplica√ß√£o quando ocorrer um erro fatal</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Visite o sÌtio do WebMoney e doe para o time Power8</value>
+    <value>Visite o s√≠tio do WebMoney e doe para o time Power8</value>
   </data>
 </root>
