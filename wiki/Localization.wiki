@@ -31,7 +31,8 @@ After you give us the files, we'll check them and join to the Power8 source code
 After that, we usually send the new translator the special build, that allows to quickly check the layout of windows usually hidden:
   * Welcome arrow (shown on 1st startup; currently no resources are from there, but who knows...);
   * Update Notifier (right-click the main button and choose "Check for updates". The test version is made to be something like "0.0.0.0", so it will show message);
-  * Show more computers (Main window - Network - Show more...);
+  * Settings dialog (right-click the main button and choose "Settings...". Check all the tabs);
+  * Show more computers (Main window - Network - "Show more...". Please note, it's OK that DEBUG version shows only "Computer0" to "Computer2999";
   * Restart Explorer (CTRL+SHIFT+Click the main button, note that the window's buttons do nothing via this command).
 
 
