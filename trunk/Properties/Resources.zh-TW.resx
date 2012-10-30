@@ -234,7 +234,7 @@
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - 開始鈕替換軟體相容於 Windows XP, Se7en and 8</value>
+    <value>Power8 - 開始鈕替換軟體，相容於 Windows XP, Se7en and 8</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
@@ -352,13 +352,13 @@ Power8 可以幫您處理這個問題。
     <value>設定</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>自動 (由桌面)</value>
+    <value>自動 (由桌面決定)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
     <value>瀏覽</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>遵循工作列方向</value>
+    <value>跟隨工作列的方向</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
     <value>長寬比：</value>
@@ -370,10 +370,10 @@ Power8 可以幫您處理這個問題。
     <value>設定開始鈕</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>提醒我有設定的問題</value>
+    <value>有設定的問題時提醒我</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>觀看卸除式磁碟</value>
+    <value>監看卸除式磁碟</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
     <value>Power8 設定</value>
@@ -409,7 +409,7 @@ Power8 可以幫您處理這個問題。
     <value>顯示選單按鈕</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>鍵值</value>
+    <value>按鍵</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
