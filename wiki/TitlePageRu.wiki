@@ -2,7 +2,7 @@
 
 ==Заменитель меню "Пуск" для Win8, стилизированный и интегрированный в панель задач.==
 
-<table><tr><td valign="top">Разработано для Windows8 (*v. 1.0.1 протестирована под RTM 9200*), работает также под XP SP3 и Win7.<br/> Полный список возможностей ниже под скриншотами.<br/>
+<table><tr><td valign="top">Разработано для Windows8, работает также под XP SP3 и Win7.<br/> Полный список возможностей ниже под скриншотами.<br/>
 Требует .Net Framework 4 [http://www.microsoft.com/en-us/download/details.aspx?id=17113 (здесь)]. Работает лучше с .Net 4.5 [http://www.microsoft.com/en-us/download/details.aspx?id=28978 (здесь)].
 
 Пресса о нас: [http://www.addictivetips.com/windows-tips/power8-start-menu-for-windows-8-that-can-block-metro-features/ www.addictivetips.com] | [http://www.geekissimo.com/2012/07/16/power8-miglior-menu-start-windows-8/ www.geekissimo.com] | [http://www.intowindows.com/power8-powerful-start-menu-for-windows-8/ www.intowindows.com] | [http://www.drwindows.de/content/414-power8-bisher-kompletteste-startmenue-ersatz-fuer-windows.html www.drwindows.de] | [http://www.guiadowindows.net/power8/ www.guiadowindows.net]
@@ -20,7 +20,7 @@
 
 ==Текущая версия==
 
-Текущая версия — *V. 1.1 Beta: v.1.1.0.0*.
+Текущая версия — *V. 1.2 Hotfix 1 Beta: v.1.2.1.0*.
 См. [http://code.google.com/p/power8/wiki/Changelog список изменений] для получения полной картины об изменениях в данном релизе.
 
 См. [http://code.google.com/p/power8/wiki/KnownIssues список проблем] чтобы быть в курсе того, какие проблемы уже были найдены.
