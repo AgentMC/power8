@@ -76,6 +76,13 @@ This is the search over everything known to Power8 itself:
 Minimum search length for this search is 2 characters, so "no" will already bring you Notepad up. Query string is being looked for in elements' path, description or target path if current element is a Link.
 This search is immediate. Found elements are grouped according to item under which they were found. Example of the internal search is on screenshot above.
 
+Starting from 1.0-1.1 the Internal search works in 2 modes in parallel:
+  * raw search - as described above, "no" will bring you the "notepad";
+  * camel search - much more complicated way to search your computer. It searches specific strings constructed from certain characters from the item's title, description and so on. It's simpler to show some examples:
+    * "paf" will bring you "Programs and Features";
+    * "pvz" will bring you "Plants vs. Zombies";
+    * "nfs" will bring you... yes, the `NeedForSpeed` or something in it's folder.
+
 === Windows Search ===
 This search type uses Windows Search engine and can be launched along with internal search. However, to run it, you must have Windows Search enabled on your PC. It is done on W7/W8 by default, but can be switched off. In this case there will be no search results using this search.
 
@@ -95,7 +102,7 @@ The rule about 3 search text chars is still valid for Limited Windows Search, th
 === Internet search ===
 This is completely different search type. No results will be produced in P8 window, instead you use it like a shortcut to your favorite search engines. 
 
-The format of query is "key query" (with space inside), where key is 1 character (case sensitive, "a" not equal to "A") from the table below, and query is your search string. At the moment keys are only changeable manually in settings file, in future the settings dialog will be added to set 'em up. By default, the following list is provided:
+The format of query is "key query" (with space inside), where key is 1 character (case sensitive, "a" not equal to "A") from the table below, and query is your search string. Starting from 1.2 you can change these search providers using corresponding tab in Settings dialog (see below). By default, the following list is provided:
 ||b||Bing||
 ||d||Baidu||
 ||g||Google.com (https)||
