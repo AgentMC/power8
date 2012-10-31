@@ -1,6 +1,15 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.2 Hotfix 1 Beta (v.1.2.1.0): 31.10.2012==
+  
+  # `[new]` Portuguese translation (fits both European and Brazilian);
+  # `[new]` Turkish translation;
+  # `[new]` Chinese (Taiwan) translation;
+  # `[changed]` Updated Spanish localization;
+  # `[fixed]` Error preventing Power8 from starting up on systems with outdated network connections, i.e. the network drives that utilizes connection that cannot be restored, or with drives completely encrypted by `TrueCrypt`.
+
+
 ==Version 1.2 Beta (v.1.2.0.0): 22.10.2012==
   
   # `[new]` Finnish translation;
