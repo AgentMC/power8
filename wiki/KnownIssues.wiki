@@ -21,7 +21,6 @@ This list is maintained internally, if you want to report an issue that is not o
   #  W8RTM: no transparency (should think twice before fixing... window may be not in Windows style after fix);
   #  XP/8?: Menu from menu-button may show in inappropriate position 
 ===Low===
-  #  7/8: taskbar's panels location is not restored after exit of `Power8` (low because dragging the taskbar fixes the issue)
   #  8/7^Classic^/XP^Classic^: Menu-button's MTLH is repainted improperly on hover 
   #  7/8: Menu item loses selection when context menu is shown
   #  7/8?: Cannot display properties of a Computer object
@@ -30,3 +29,4 @@ This list is maintained internally, if you want to report an issue that is not o
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
+  #  7/8: taskbar's panels location is not restored after exit of `Power8` (low because dragging the taskbar fixes the issue)
