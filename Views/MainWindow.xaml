@@ -13,6 +13,9 @@
         Topmost="True"
         AllowsTransparency="False"
         Background="{x:Static SystemColors.ActiveCaptionBrush}">
+    <Window.Resources>
+        <Style TargetType="MenuItem" BasedOn="{StaticResource ContextMenuItemStyle}"/>
+    </Window.Resources>
     <Button Name="b1"
             Style="{StaticResource MainButtonTransparentStyle}"
             Click="ShowButtonStack"
@@ -27,28 +30,13 @@
             ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}">
         <Button.ContextMenu>
             <ContextMenu Name="menu">
-                <MenuItem Name="MWAutoStart"
-                          IsCheckable="True"
-                          IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"
-                          Style="{StaticResource ContextMenuItemStyle}" />
-                <MenuItem Name="MWCheckForUpdates"
-                          IsCheckable="True"
-                          IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"
-                          Style="{StaticResource ContextMenuItemStyle}" />
-                <MenuItem Name="MWBlockMetro"
-                          IsCheckable="True"
-                          IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"
-                          Style="{StaticResource ContextMenuItemStyle}" />
-                <MenuItem Name="MWSettings"
-                          Style="{StaticResource ContextMenuItemStyle}"
-                          Click="ShowSettingsWindow" />
+                <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
+                <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"/>
+                <MenuItem Name="MWBlockMetro" IsCheckable="True" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
+                <MenuItem Name="MWSettings" Click="SettingsClick" />
                 <Separator />
-                <MenuItem Name="MWAbout"
-                          Style="{StaticResource ContextMenuItemStyle}"
-                          Click="AboutClick" />
-                <MenuItem Name="MWExit"
-                          Style="{StaticResource ContextMenuItemStyle}"
-                          Click="ExitClick" />
+                <MenuItem Name="MWAbout" Click="AboutClick" />
+                <MenuItem Name="MWExit" Click="ExitClick" />
             </ContextMenu>
         </Button.ContextMenu>
         <Grid>
