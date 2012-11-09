@@ -25,6 +25,8 @@
                 <Separator/>
                 <MenuItem Name="AppShowProperties" IsEnabled="{Binding IsNotPureControlPanelFlowItem}" Click="ShowPropertiesClick" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="AppShowTargetProperties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Style="{StaticResource ContextMenuItemStyle}"/>
+                <Separator/>
+                <MenuItem Name="AppExcludeFromMfu" Click="RemoveItemClick" Style="{StaticResource ContextMenuItemStyle}" />
             </ContextMenu>
     </ResourceDictionary>
     </Application.Resources>
