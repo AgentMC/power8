@@ -42,16 +42,19 @@ namespace Power8
 
         private static readonly List<MfuElement> LastList = new List<MfuElement>(); //The last checked state of MFU data
         private static readonly List<MfuElement> P8JlImpl = new List<MfuElement>(); //Power8's own JumpList items implementation
-        private static readonly List<String > PinList = new List<string>();         //The list of pinned elements
+        private static readonly List<String> PinList = new List<string>();          //The list of pinned elements
         private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
+        private static readonly List<String> ExclList = new List<string>();         //The list of user exclusionf from MFU in P8 mode
         private static readonly ManagementEventWatcher WatchDog;                    //Notifies when a process is created in system
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
 
         //Files with data
         private static readonly string DataBaseRoot = 
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
-        private static readonly string LaunchDB = DataBaseRoot + "LaunchData.csv";
-        private static readonly string PinDB = DataBaseRoot + "PinData.csv";
+
+        private static readonly string LaunchDB = DataBaseRoot + "LaunchData.csv",
+                                       PinDB = DataBaseRoot + "PinData.csv",
+                                       UserExclDB = DataBaseRoot + "Exclusions.csv";
 
         //Registry pathes
         private const string
@@ -111,7 +114,7 @@ namespace Power8
                             continue;
                         P8JlImpl.Add(new MfuElement
                                             {
-                                                Arg = ls[0],
+                                                Arg = ls[0].Replace('/', '\\'),
                                                 Cmd = ls[1],
                                                 LaunchCount = int.Parse(ls[2]),
                                                 LastLaunchTimeStamp =
@@ -136,6 +139,21 @@ namespace Power8
                 }
             }
 
+            //Reading exclusions
+            if (File.Exists(UserExclDB))
+            {
+                using (var f = new StreamReader(UserExclDB, Encoding.UTF8))
+                {
+                    while (!f.EndOfStream)
+                    {
+                        var l = f.ReadLine();
+                        if (string.IsNullOrEmpty(l))
+                            continue;
+                        ExclList.Add(l);
+                    }
+                }
+            }
+
             //Save all on shutdown
             Util.MainDisp.ShutdownStarted += MainDispOnShutdownStarted;
 
@@ -144,7 +162,6 @@ namespace Power8
             WatchDog.EventArrived += WatchDogOnEventArrived;
             WatchDog.Start();
         }
-
         
         // Save data on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
@@ -173,6 +190,16 @@ namespace Power8
                     f.WriteLine(pinned);
                 }
             }
+
+            //Writing exclusions list
+            using (var f = new StreamWriter(UserExclDB, false, Encoding.UTF8))
+            {
+                foreach (var excl in ExclList)
+                {
+                    f.WriteLine(excl);
+                }
+            }
+
         }
 
         //New process is created in system
@@ -203,8 +230,6 @@ namespace Power8
             if(!string.IsNullOrEmpty(cmd) && !MsFilter.Any(cmd.ToUpper().Contains))
             {//And command line doesn't include filtered elements?
                 var pair = Util.CommandToFilenameAndArgs(cmd);
-                if(string.IsNullOrEmpty(pair.Item2))
-                    return; //System will record usage, we don't need to monitor commandless launch
                 if (string.IsNullOrEmpty(pair.Item1) || pair.Item1.Length < 2 || pair.Item1[1] != ':' || !File.Exists(pair.Item1))
                     return; //As a rule, user-launched applications have full path. Something as "rundll %1 %2 %3" won't make sence for P8
                 pair = Tuple.Create(pair.Item1.ToLowerInvariant(), pair.Item2.ToLowerInvariant());
@@ -257,52 +282,10 @@ namespace Power8
         /// </summary>
         public static void UpdateStartMfuSync()
         {
-        //Step 1: parse registry
-            var list = new List<MfuElement>();
-            string ks1, ks2; //reg key strings
-            int dataWidthExpected, fileTimeOffset, launchCountCorrection; //key parameters
-            if (Util.OsIs.XPOrLess)
-            {
-                ks1 = string.Format(USERASSISTKEY, Guids.XP_1);
-                ks2 = string.Format(USERASSISTKEY, Guids.XP_2);
-                dataWidthExpected = 16;
-                fileTimeOffset = 8;
-                launchCountCorrection = 5;
-            }
-            else
-            {
-                ks1 = string.Format(USERASSISTKEY, Guids.W7_1);
-                ks2 = string.Format(USERASSISTKEY, Guids.W7_2);
-                dataWidthExpected = 72;
-                fileTimeOffset = 60;
-                launchCountCorrection = 0;
-            }
-            var k1 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks1, false);
-            var k2 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks2, false);
-            if(k1 != null && k2 != null)
-            {
-                foreach (var k in new[]{k1, k2})
-                {
-                    var ak = k;
-                    list.AddRange(
-                        (from valueName in ak.GetValueNames()
-                        let data = (byte[])ak.GetValue(valueName)
-                        let fileTime = data.Length == dataWidthExpected ? BitConverter.ToInt64(data, fileTimeOffset) : 0
-                        where fileTime != 0 && valueName.Contains("\\")
-                        select new MfuElement
-                        {
-                            Arg = DeRot13AndKnwnFldr(valueName),
-                            LaunchCount = BitConverter.ToInt32(data, 4) - launchCountCorrection,
-                            LastLaunchTimeStamp = DateTime.FromFileTime(fileTime)
-                        })
-                        .Where(mfu => mfu.IsOk())
-                    );
-                }
-                k1.Close();
-                k2.Close();
-            }
+            //Step 1: parse registry
+            var list = GetMfuFromP8JL();// UserAssist();
 
-            if (!list.Except(LastList).Any()) //Exit if list  not changed comparing to the last one
+            if (list.SequenceEqual(LastList)) //Exit if list  not changed comparing to the last one
                 return;
             
             //Copy to the last list
@@ -342,6 +325,76 @@ namespace Power8
                                   }
                               });
             }
+        }
+
+        /// <summary>
+        /// Gets list of most frequently used data from User Assist registry keys
+        /// </summary>
+        private static List<MfuElement> GetMfuFromUserAssist()
+        {
+            var list = new List<MfuElement>();
+            string ks1, ks2; //reg key strings
+            int dataWidthExpected, fileTimeOffset, launchCountCorrection; //key parameters
+            if (Util.OsIs.XPOrLess)
+            {
+                ks1 = string.Format(USERASSISTKEY, Guids.XP_1);
+                ks2 = string.Format(USERASSISTKEY, Guids.XP_2);
+                dataWidthExpected = 16;
+                fileTimeOffset = 8;
+                launchCountCorrection = 5;
+            }
+            else
+            {
+                ks1 = string.Format(USERASSISTKEY, Guids.W7_1);
+                ks2 = string.Format(USERASSISTKEY, Guids.W7_2);
+                dataWidthExpected = 72;
+                fileTimeOffset = 60;
+                launchCountCorrection = 0;
+            }
+            var k1 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks1, false);
+            var k2 = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(ks2, false);
+            if (k1 != null && k2 != null)
+            {
+                foreach (var k in new[] { k1, k2 })
+                {
+                    var ak = k;
+                    list.AddRange(
+                        (from valueName in ak.GetValueNames()
+                         let data = (byte[])ak.GetValue(valueName)
+                         let fileTime = data.Length == dataWidthExpected ? BitConverter.ToInt64(data, fileTimeOffset) : 0
+                         where fileTime != 0 && valueName.Contains("\\")
+                         select new MfuElement
+                         {
+                             Arg = DeRot13AndKnwnFldr(valueName),
+                             LaunchCount = BitConverter.ToInt32(data, 4) - launchCountCorrection,
+                             LastLaunchTimeStamp = DateTime.FromFileTime(fileTime)
+                         })
+                        .Where(mfu => mfu.IsOk())
+                    );
+                }
+                k1.Close();
+                k2.Close();
+            }
+            return list;
+        }
+        
+        /// <summary>
+        /// Gets list of most frequently used data from Power8 JL data
+        /// </summary>
+        private static List<MfuElement> GetMfuFromP8JL()
+        {
+            var list = new Dictionary<string, MfuElement>();
+            foreach (var mfuElement in P8JlImpl.Where(mfu => mfu.IsOk()))
+            {
+                var k = mfuElement.Arg;
+                if(ExclList.Any(k.Contains))
+                    continue;
+                if(list.ContainsKey(k))
+                    list[k].Mix(mfuElement);
+                else
+                    list[k] = mfuElement.Clone();
+            }
+            return list.Select(kv => kv.Value).ToList();
         }
 
         /// <summary>
@@ -440,8 +493,17 @@ namespace Power8
             var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
             StartMfu.Move(StartMfu.IndexOf(item), tIdx);
         }
-
-
+        /// <summary>
+        /// Adds an exclusion that hides MFU items that fall under it.
+        /// Exclusions work when MFU is in P8 mode.
+        /// </summary>
+        /// <param name="exclusion">text to exclude from display. 
+        /// When tested for match, used with ** on both sides</param>
+        public static void AddExclusion(string exclusion)
+        {
+            ExclList.Add(exclusion);
+            UpdateStartMfu();
+        }
 
 
         /// <summary>

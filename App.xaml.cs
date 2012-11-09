@@ -190,6 +190,13 @@ namespace Power8
             }
         }
         /// <summary>
+        /// Handles click on "Remove item". Adds an exclusion to exclusions list.
+        /// </summary>
+        private void RemoveItemClick(object sender, RoutedEventArgs e)
+        {
+            MfuList.AddExclusion(Util.ExtractRelatedPowerItem(e).Argument.ToLower());
+        }
+        /// <summary>
         /// Returns string, of a Path kind, that can be passed to a system, and will
         /// represent the passed PowerItem. Depending on Caller Name, may invoke
         /// automatic Link resolution for Link PowerItems. "Denamespaces" the 
@@ -230,5 +237,6 @@ namespace Power8
         }
 
         #endregion
+
     }
 }
