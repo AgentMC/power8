@@ -35,7 +35,7 @@ namespace Power8
         }
         /// <summary> Extended ctor </summary>
         /// <param name="items">Reference to collection of PowerItems</param>
-        public PowerItem (ObservableCollection<PowerItem> items ):this ()
+        public PowerItem (ObservableCollection<PowerItem> items):this ()
         {
             _items = items;
         }
@@ -460,6 +460,13 @@ namespace Power8
         public bool IsMfuChild
         {
             get { return Parent == MfuList.MfuSearchRoot; }
+        }
+        /// <summary>
+        /// Returnsvalue indicating that "Remove from list" for this item is displayed
+        /// </summary>
+        public bool IsCanBeHidden
+        {
+            get { return IsMfuChild && Helpers.SettingsManager.Instance.MfuIsInternal; }
         }
 
         #endregion

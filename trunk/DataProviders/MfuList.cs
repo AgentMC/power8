@@ -283,7 +283,11 @@ namespace Power8
         public static void UpdateStartMfuSync()
         {
             //Step 1: parse registry
-            var list = GetMfuFromP8JL();// UserAssist();
+            var list = Helpers.SettingsManager.Instance.MfuIsSystem
+                           ? GetMfuFromUserAssist()
+                           : Helpers.SettingsManager.Instance.MfuIsInternal
+                                 ? GetMfuFromP8JL()
+                                 : new List<MfuElement>();//<== TODO: 3rd mode for MFU
 
             if (list.SequenceEqual(LastList)) //Exit if list  not changed comparing to the last one
                 return;

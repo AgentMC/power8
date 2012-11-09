@@ -260,5 +260,41 @@ namespace Power8.Properties {
                 this["AutoRestart"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MfuFromUserAssist {
+            get {
+                return ((bool)(this["MfuFromUserAssist"]));
+            }
+            set {
+                this["MfuFromUserAssist"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MfuFromP8JL {
+            get {
+                return ((bool)(this["MfuFromP8JL"]));
+            }
+            set {
+                this["MfuFromP8JL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool MfuFromCustomData {
+            get {
+                return ((bool)(this["MfuFromCustomData"]));
+            }
+            set {
+                this["MfuFromCustomData"] = value;
+            }
+        }
     }
 }
