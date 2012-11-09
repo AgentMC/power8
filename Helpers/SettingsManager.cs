@@ -513,6 +513,45 @@ namespace Power8.Helpers
                 Settings.Default.Save();
             }
         }
+
+        public bool MfuIsSystem
+        {
+            get { return Settings.Default.MfuFromUserAssist; }
+            set
+            {
+                if (value == MfuIsSystem)
+                    return;
+                Settings.Default.MfuFromUserAssist = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public bool MfuIsInternal
+        {
+            get { return Settings.Default.MfuFromP8JL; }
+            set
+            {
+                if (value == MfuIsInternal)
+                    return;
+                Settings.Default.MfuFromP8JL = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public bool MfuIsCustom
+        {
+            get { return Settings.Default.MfuFromCustomData; }
+            set
+            {
+                if (value == MfuIsCustom)
+                    return;
+                Settings.Default.MfuFromCustomData = value;
+                Settings.Default.Save();
+            }
+        }
+
+
+
         #endregion
     }
 

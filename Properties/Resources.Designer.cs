@@ -88,6 +88,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide this item.
+        /// </summary>
+        internal static string CR_AppExcludeFromMfu {
+            get {
+                return ResourceManager.GetString("CR_AppExcludeFromMfu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open All Users Folder.
         /// </summary>
         internal static string CR_AppOpenCommonFolder {
