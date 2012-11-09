@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Str_UpdateAvailableFormat" xml:space="preserve">
+    <value>
+
+Version installée : {0}
+Dernière version : {1}
+
+Mettre à jour sur le site internet ?
+
+Oui : aller sur le site internet et mettre à jour maintenant !
+Non : veuillez me le rappeler ultérieurement.
+Annuler : Je passe cette mise à jour, veuillez ne plus me la rappeler.</value>
+    <comment>Keep 2 empty lines at the beginning</comment>
+  </data>
+  <data name="Str_UpdateAvailable" xml:space="preserve">
+    <value>: mise à jour disponible !</value>
+  </data>
+  <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
+    <value>Erreur {0} survenue lors de l'affichage des propriétés de l'objet
+{1}</value>
+  </data>
+  <data name="Err_CantCheckUpdates" xml:space="preserve">
+    <value>Impossible de vérifier les mises à jour.
+</value>
+    <comment>Leave trailing \r\n!</comment>
+  </data>
+  <data name="Str_AllPrograms" xml:space="preserve">
+    <value>Tous les programmes</value>
+    <comment>Default label instead of "Start menu". Currently seems useless</comment>
+  </data>
+  <data name="Err_StartAsAdminFailed" xml:space="preserve">
+    <value>Impossible de lancer en mode Administrateur. Processus lancé avec les droits utilisateur.
+</value>
+  </data>
+  <data name="CR_AppOpenCommonFolder" xml:space="preserve">
+    <value>Ouvrir le Dossier Tous les Utilisateurs</value>
+  </data>
+  <data name="CR_AppOpenContainer" xml:space="preserve">
+    <value>Ouvrir une adresse</value>
+  </data>
+  <data name="CR_AppOpenFolder" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="CR_AppOpenTargetContainer" xml:space="preserve">
+    <value>Ouvrir la cible</value>
+  </data>
+  <data name="CR_AppRun" xml:space="preserve">
+    <value>Exécuter</value>
+  </data>
+  <data name="CR_AppRunAs" xml:space="preserve">
+    <value>Exécuter en mode administrateur</value>
+  </data>
+  <data name="CR_AppShowProperties" xml:space="preserve">
+    <value>Propriétés</value>
+  </data>
+  <data name="CR_AppShowTargetProperties" xml:space="preserve">
+    <value>Propriétés de la cible</value>
+  </data>
+  <data name="CR_ButtonHibernate" xml:space="preserve">
+    <value>Mettre en hibernation</value>
+  </data>
+  <data name="CR_ButtonLock" xml:space="preserve">
+    <value>Vérouiller le PC</value>
+  </data>
+  <data name="CR_ButtonLogOff" xml:space="preserve">
+    <value>Déconnection</value>
+  </data>
+  <data name="CR_ButtonRestart" xml:space="preserve">
+    <value>Redémarrer</value>
+  </data>
+  <data name="CR_ButtonRun" xml:space="preserve">
+    <value>Exécuter...</value>
+  </data>
+  <data name="CR_ButtonScreensave" xml:space="preserve">
+    <value>Lancer l'économiseur d'écran</value>
+  </data>
+  <data name="CR_ButtonShutdown" xml:space="preserve">
+    <value>Extinction</value>
+  </data>
+  <data name="CR_ButtonSleep" xml:space="preserve">
+    <value>Mise en sommeil</value>
+  </data>
+  <data name="CR_MWAutoStart" xml:space="preserve">
+    <value>Auto Start</value>
+  </data>
+  <data name="CR_MWCheckForUpdates" xml:space="preserve">
+    <value>Vérifier les mises à jour</value>
+  </data>
+  <data name="CR_MWExit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
+    <value>Impossible d'instancier la classe {0}
+{1}</value>
+  </data>
+  <data name="Str_ShowMore" xml:space="preserve">
+    <value>Afficher plus...</value>
+    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
+  </data>
+  <data name="CR_CLCleanerBtn" xml:space="preserve">
+    <value>Nettoyer</value>
+  </data>
+  <data name="CR_SearchBox" xml:space="preserve">
+    <value>Recherche...</value>
+  </data>
+  <data name="CR_CLWindow" xml:space="preserve">
+    <value>Liste des ordinateurs</value>
+  </data>
+  <data name="Err_VistaDetected" xml:space="preserve">
+    <value>Windows (R) Vista (R) ne fonctionne pas avec Power8. Veuillez utiliser ce système d'exploitation seul.</value>
+  </data>
+  <data name="Err_GotNoFolder" xml:space="preserve">
+    <value>Impossible de trouver le répertoire </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="Err_GotNoFile" xml:space="preserve">
+    <value>Impossible de trouver le fichier </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="CR_ButtonStack" xml:space="preserve">
+    <value>Power8 - Remplace le menu Démarrer pour Windows XP, Se7en et 8</value>
+    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
+  </data>
+  <data name="Err_DownloadCancelled" xml:space="preserve">
+    <value>Téléchargement annulé.</value>
+  </data>
+  <data name="Str_SaveDialogDescription" xml:space="preserve">
+    <value>: choisir l'emplacement du téléchargement</value>
+  </data>
+  <data name="Str_SaveDialogFilter" xml:space="preserve">
+    <value> Mise à jour|*</value>
+    <comment>Leave starting space</comment>
+  </data>
+  <data name="CR_UNDownAndUp" xml:space="preserve">
+    <value>Télécharger en MSI et mettre à jour maintenant !</value>
+  </data>
+  <data name="CR_UNNewVersion" xml:space="preserve">
+    <value>Nouvelle version :</value>
+  </data>
+  <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
+    <value>Une mise à jour de Power8 est disponible !</value>
+  </data>
+  <data name="CR_UNwnd" xml:space="preserve">
+    <value>Notification de mise à jour</value>
+  </data>
+  <data name="CR_UNYourVersion" xml:space="preserve">
+    <value>Version installée :</value>
+  </data>
+  <data name="CR_UNdown7z" xml:space="preserve">
+    <value>Télécharger en 7z</value>
+  </data>
+  <data name="CR_UNdownMsi" xml:space="preserve">
+    <value>Télécharger en MSI</value>
+  </data>
+  <data name="CR_UNGoWeb" xml:space="preserve">
+    <value>Ouvrir le site internet du projet</value>
+  </data>
+  <data name="CR_UNIgnore" xml:space="preserve">
+    <value>Ne pas rappeler cette mise à jour</value>
+  </data>
+  <data name="CR_UNNextTime" xml:space="preserve">
+    <value>Rappeler la prochaine fois</value>
+  </data>
+  <data name="CR_UNOther" xml:space="preserve">
+    <value>Autres options :</value>
+  </data>
+  <data name="Err_NoPiExtracted" xml:space="preserve">
+    <value>Pas d'informations disponibles sur l'élément</value>
+  </data>
+  <data name="Err_CantGetTooltip" xml:space="preserve">
+    <value>Impossible d'obtenir des informations sur l'objet</value>
+  </data>
+  <data name="Str_CplElement" xml:space="preserve">
+    <value>Elément du Panneau de configuration</value>
+  </data>
+  <data name="Str_WindowsSearchResults" xml:space="preserve">
+    <value>Résultats de la recherche Windows</value>
+  </data>
+  <data name="CR_SearchMarker" xml:space="preserve">
+    <value>Recherche...</value>
+    <comment>Gray text indicating Windows search request was sent</comment>
+  </data>
+  <data name="Str_Library" xml:space="preserve">
+    <value> (lbibliothèque)</value>
+    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
+  </data>
+  <data name="CR_GroupItemsText" xml:space="preserve">
+    <value> Item(s)</value>
+    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
+  </data>
+  <data name="CR_MWBlockMetro" xml:space="preserve">
+    <value>Bloquer les fonctions de Metro</value>
+  </data>
+  <data name="Str_Recent" xml:space="preserve">
+    <value>Derniers démarrés</value>
+  </data>
+  <data name="Str_Unpin" xml:space="preserve">
+    <value>Item déconnection PIN</value>
+  </data>
+  <data name="Str_Pin" xml:space="preserve">
+    <value>Item PIN</value>
+  </data>
+  <data name="CR_AbLocalization" xml:space="preserve">
+    <value>Cette traduction est réalisée l'équipe de Power8</value>
+    <comment>Put localizer name here!</comment>
+  </data>
+  <data name="CR_AbVersion" xml:space="preserve">
+    <value>Version :</value>
+  </data>
+  <data name="CR_MWAbout" xml:space="preserve">
+    <value>A propos</value>
+    <comment>Label in main btn context menu and in About Window</comment>
+  </data>
+  <data name="Str_LocalizerUri" xml:space="preserve">
+    <value />
+    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
+  </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>Non, merci.
+Je sais ce qui se passe et je vais régler le problème.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Windows Explorer est mort</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Le processus Windows Explorer semble indisponible.
+Power8 peut régler ce problème.
+ 
+Relancer Windows Explorer et redémarrer Power8 ?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Oui !
+Launcer Explorer et redémarrer Power8.</value>
+  </data>
+  <data name="CR_MWSettings" xml:space="preserve">
+    <value>Réglages...</value>
+  </data>
+  <data name="CR_StgArByDesktop" xml:space="preserve">
+    <value>Auto (sur le Bureau)</value>
+  </data>
+  <data name="CR_StgBrowseBtn" xml:space="preserve">
+    <value>Naviguer...</value>
+  </data>
+  <data name="CR_StgInvertAr" xml:space="preserve">
+    <value>Suivre l'orientation de la barre des tâches</value>
+  </data>
+  <data name="CR_StgLblAr" xml:space="preserve">
+    <value>Ratio d'aspect :</value>
+  </data>
+  <data name="CR_StgLblChooseImage" xml:space="preserve">
+    <value>Choisir une image (double-cliquer le chemin pour nettoyer) :</value>
+  </data>
+  <data name="CR_StgSquareStart" xml:space="preserve">
+    <value>Configurer le boutton Démarrer</value>
+  </data>
+  <data name="CR_StgSuggestProblems" xml:space="preserve">
+    <value>Information sur les problèmes de configuration</value>
+  </data>
+  <data name="CR_StgWatchRemovables" xml:space="preserve">
+    <value>Regarder les disques amovibles</value>
+  </data>
+  <data name="CR_StgWnd" xml:space="preserve">
+    <value>Réglages Power8</value>
+    <comment>Title of settings window</comment>
+  </data>
+  <data name="Str_PicDialogDescription" xml:space="preserve">
+    <value>: choisir l'image du Menu Démarrer</value>
+  </data>
+  <data name="Str_PicDialogFilter" xml:space="preserve">
+    <value>Images</value>
+    <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
+  </data>
+  <data name="Str_TipWarn" xml:space="preserve">
+    <value>Changer des réglages pour améliorer l'utilisation de Power8</value>
+  </data>
+  <data name="CR_StgAutoSort" xml:space="preserve">
+    <value>Trier automatiquement les menus et les listes quand un dossier ou un dossier est ajouté ou renommé</value>
+  </data>
+  <data name="CR_StgLblSetStartText" xml:space="preserve">
+    <value>Texte "Tous les programmes" (Nettoyer pour utiliser les préférences par défaut du système) :</value>
+  </data>
+  <data name="CR_StgTabGeneral" xml:space="preserve">
+    <value>Général</value>
+    <comment>"General" tab in settings window</comment>
+  </data>
+  <data name="CR_StgTabMenuBtns" xml:space="preserve">
+    <value>Bouttons-menu</value>
+  </data>
+  <data name="CR_StgTabWSE" xml:space="preserve">
+    <value>Moteurs de recherche sur le Web</value>
+  </data>
+  <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
+    <value>Montrer les bouttons-menu :</value>
+  </data>
+  <data name="CR_StgWseColKey" xml:space="preserve">
+    <value>Clé</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
+  </data>
+  <data name="CR_StgWseColVal" xml:space="preserve">
+    <value>Chaîne de recherche</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
+  </data>
+  <data name="CR_StgAutoRestart" xml:space="preserve">
+    <value>Redémarrer l'application en cas d'erreur fatale</value>
+  </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Visiter le site WebMoney pour faire un don à l'équipe de Power8</value>
+  </data>
+</root>
