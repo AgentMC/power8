@@ -507,6 +507,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Most frequently used.
+        /// </summary>
+        internal static string CR_StgTabMfu {
+            get {
+                return ResourceManager.GetString("CR_StgTabMfu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web search engines.
         /// </summary>
         internal static string CR_StgTabWSE {

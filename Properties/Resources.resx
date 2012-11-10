@@ -427,4 +427,7 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
     <value>Hide this item</value>
   </data>
+  <data name="CR_StgTabMfu" xml:space="preserve">
+    <value>Most frequently used</value>
+  </data>
 </root>

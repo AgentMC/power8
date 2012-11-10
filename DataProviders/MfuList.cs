@@ -38,13 +38,16 @@ namespace Power8
         /// The search root for MFU. Used for different Search() methods from PITree.
         /// </summary>
         public static PowerItem MfuSearchRoot;
+        /// <summary>
+        /// The list of user exclusionf from MFU in P8 mode
+        /// </summary>
+        public static readonly ObservableCollection<StringWrapper> ExclList = new ObservableCollection<StringWrapper>();
 
 
         private static readonly List<MfuElement> LastList = new List<MfuElement>(); //The last checked state of MFU data
         private static readonly List<MfuElement> P8JlImpl = new List<MfuElement>(); //Power8's own JumpList items implementation
         private static readonly List<String> PinList = new List<string>();          //The list of pinned elements
         private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
-        private static readonly List<String> ExclList = new List<string>();         //The list of user exclusionf from MFU in P8 mode
         private static readonly ManagementEventWatcher WatchDog;                    //Notifies when a process is created in system
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
 
@@ -149,7 +152,7 @@ namespace Power8
                         var l = f.ReadLine();
                         if (string.IsNullOrEmpty(l))
                             continue;
-                        ExclList.Add(l);
+                        ExclList.Add(new StringWrapper {Value = l});
                     }
                 }
             }
@@ -194,9 +197,9 @@ namespace Power8
             //Writing exclusions list
             using (var f = new StreamWriter(UserExclDB, false, Encoding.UTF8))
             {
-                foreach (var excl in ExclList)
+                foreach (var excl in ExclList.Where(ex => !string.IsNullOrWhiteSpace(ex.Value)))
                 {
-                    f.WriteLine(excl);
+                    f.WriteLine(excl.Value);
                 }
             }
 
@@ -391,7 +394,7 @@ namespace Power8
             foreach (var mfuElement in P8JlImpl.Where(mfu => mfu.IsOk()))
             {
                 var k = mfuElement.Arg;
-                if(ExclList.Any(k.Contains))
+                if(ExclList.Any(ex => !string.IsNullOrWhiteSpace(ex.Value) && k.Contains(ex.Value)))
                     continue;
                 if(list.ContainsKey(k))
                     list[k].Mix(mfuElement);
@@ -505,7 +508,7 @@ namespace Power8
         /// When tested for match, used with ** on both sides</param>
         public static void AddExclusion(string exclusion)
         {
-            ExclList.Add(exclusion);
+            ExclList.Add(new StringWrapper{Value = exclusion});
             UpdateStartMfu();
         }
 
@@ -758,7 +761,10 @@ namespace Power8
         private static IEnumerable<string> GetP8Recent(string fsObject)
         {
             var o = fsObject.ToLowerInvariant();
-            var l = P8JlImpl.Where(j => j.Arg == o && !string.IsNullOrEmpty(j.Cmd)).ToList();
+            var l = P8JlImpl.Where(j => j.Arg == o 
+                                        && !string.IsNullOrEmpty(j.Cmd)
+                                        && j.Cmd != "::").ToList();
+                                                  // ^^-actually means "no command"
             l.Sort();
             return from mfuElement in l 
                    select mfuElement.Cmd;
@@ -833,6 +839,14 @@ namespace Power8
                     return false;
                 return GetHashCode() == obj.GetHashCode();
             }
+        }
+
+        /// <summary>
+        /// Wraps string exclusion so list of it can be bound to datagrid
+        /// </summary>
+        public class StringWrapper
+        {
+            public string Value { get; set; }
         }
     }
 }
