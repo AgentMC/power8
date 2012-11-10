@@ -471,6 +471,42 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide items containing strings:.
+        /// </summary>
+        internal static string CR_StgMfuColExcl {
+            get {
+                return ResourceManager.GetString("CR_StgMfuColExcl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use custom list (user-configurable).
+        /// </summary>
+        internal static string CR_StgMfuUseCustom {
+            get {
+                return ResourceManager.GetString("CR_StgMfuUseCustom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Power8&apos;s internal data.
+        /// </summary>
+        internal static string CR_StgMfuUseP8JL {
+            get {
+                return ResourceManager.GetString("CR_StgMfuUseP8JL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use system data (UserAssist service) to build list.
+        /// </summary>
+        internal static string CR_StgMfuUseSystem {
+            get {
+                return ResourceManager.GetString("CR_StgMfuUseSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Configure Start button.
         /// </summary>
         internal static string CR_StgSquareStart {

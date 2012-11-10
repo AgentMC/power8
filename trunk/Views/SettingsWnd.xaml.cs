@@ -30,6 +30,7 @@ namespace Power8.Views
             //localization for headers (columns don't have names)
             StgWseColKey.Header = NameToResourceConverter.Instance.Convert("StgWseColKey", null, null, null);
             StgWseColVal.Header = NameToResourceConverter.Instance.Convert("StgWseColVal", null, null, null);
+            StgMfuColExcl.Header = NameToResourceConverter.Instance.Convert("StgMfuColExcl", null, null, null);
         }
 
         /// <summary>
