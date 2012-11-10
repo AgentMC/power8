@@ -8,6 +8,9 @@
         Closed="WindowClosed">
 	<Views:DisposableWindow.Resources>
         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBoxStyle}"/>
+        <Style TargetType="{x:Type RadioButton}">
+            <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+        </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         </Style>
@@ -89,7 +92,7 @@
             </DataGrid>
         </TabItem>
         <TabItem x:Name="StgTabMfu">
-            <StackPanel>
+            <StackPanel Margin="5">
                 <RadioButton Name="StgMfuUseSystem" IsChecked="{Binding MfuIsSystem, Mode=TwoWay}"/>
                 <RadioButton Name="StgMfuUseP8JL" IsChecked="{Binding MfuIsInternal, Mode=TwoWay}"/>
                 <DataGrid Margin="16,0,0,0" IsEnabled="{Binding ElementName=StgMfuUseP8JL, Path=IsChecked}" 
@@ -98,7 +101,7 @@
                           HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White" MinColumnWidth="0"
                           CellStyle="{StaticResource DataGridCellStyle}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Exclusions" Binding="{Binding Value}" MinWidth="364"/>
+                        <DataGridTextColumn x:Name="StgMfuColExcl" Binding="{Binding Value}" MinWidth="358"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 <RadioButton Name="StgMfuUseCustom" IsChecked="{Binding MfuIsCustom, Mode=TwoWay}"/>

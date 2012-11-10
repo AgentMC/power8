@@ -430,4 +430,16 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_StgTabMfu" xml:space="preserve">
     <value>Most frequently used</value>
   </data>
+  <data name="CR_StgMfuColExcl" xml:space="preserve">
+    <value>Hide items containing strings:</value>
+  </data>
+  <data name="CR_StgMfuUseCustom" xml:space="preserve">
+    <value>Use custom list (user-configurable)</value>
+  </data>
+  <data name="CR_StgMfuUseP8JL" xml:space="preserve">
+    <value>Use Power8's internal data</value>
+  </data>
+  <data name="CR_StgMfuUseSystem" xml:space="preserve">
+    <value>Use system data (UserAssist service) to build list</value>
+  </data>
 </root>
