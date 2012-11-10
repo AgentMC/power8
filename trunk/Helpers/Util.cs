@@ -576,14 +576,27 @@ namespace Power8
         /// description for them is stored a bit differently; the function may be 
         /// enhanced in future to support files/extensions as well.</param>
         /// <param name="fallbackToInfoTip">If set to true, the function tries to get 
-        /// also "InfoTip" value, if "LocalizedString" is not available.</param>
+        /// also "InfoTip" value, if "LocalizedString" is not available.
+        /// If in this case the InfoTip is also unavailable, function checks if the
+        /// default value (fallback description for class) contains any reasonable data
+        /// and returns it if so. Such data may be directly put to FriendlyName, or 
+        /// may be stored to ResourceIdString to be transferrd to FriendlyName automatically
+        /// when required. Util supports plane text stored as ResourceId and puts it 
+        /// to FriendlyName.</param>
         /// <returns>Resource Id that, when resolved, will contain the description
-        /// for the class or shell namespace represented by passed parameter</returns>
+        /// for the class or shell namespace represented by passed parameter, or
+        /// plane resource text that should be directly (or indirectly - by storing
+        /// in ResourceIdString) transferred to FriendlyName.</returns>
         public static string GetLocalizedStringResourceIdForClass(string clsidOrApiShNs, bool fallbackToInfoTip = false)
         {
             var ls = GetResourceIdForClassCommon(clsidOrApiShNs, "", "LocalizedString");
             if(ls == null && fallbackToInfoTip)
-                return GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip");
+            {
+                ls = GetResourceIdForClassCommon(clsidOrApiShNs, "", "InfoTip") ??
+                     GetResourceIdForClassCommon(clsidOrApiShNs, "", ""); //Fallback description
+                if(string.IsNullOrWhiteSpace(ls)) //don't need empty or space resId
+                    ls = null;
+            }
             return ls;
         }
         /// <summary>
@@ -795,7 +808,7 @@ namespace Power8
                 ? 0xFFFFFFFF
                 : uint.Parse((lastSharpIdx > lastCommaIdx //lastSharpIdx may be bigger or -1 (not found)
                         ? resourceString.Substring(lastCommaIdx + 1, lastSharpIdx - (lastCommaIdx + 1))
-                        : resourceString.Substring(lastCommaIdx + 1)).TrimStart('-'));
+                        : resourceString.Substring(lastCommaIdx + 1)).TrimStart(' ', '-'));
 
             var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
                                             API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
