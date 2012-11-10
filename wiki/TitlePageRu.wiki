@@ -5,7 +5,7 @@
 <table><tr><td valign="top">Разработано для Windows8, работает также под XP SP3 и Win7.<br/> Полный список возможностей ниже под скриншотами.<br/>
 Требует .Net Framework 4 [http://www.microsoft.com/en-us/download/details.aspx?id=17113 (здесь)]. Работает лучше с .Net 4.5 [http://www.microsoft.com/en-us/download/details.aspx?id=28978 (здесь)].
 
-Пресса о нас: [http://www.addictivetips.com/windows-tips/power8-start-menu-for-windows-8-that-can-block-metro-features/ www.addictivetips.com] | [http://www.geekissimo.com/2012/07/16/power8-miglior-menu-start-windows-8/ www.geekissimo.com] | [http://www.intowindows.com/power8-powerful-start-menu-for-windows-8/ www.intowindows.com] | [http://www.drwindows.de/content/414-power8-bisher-kompletteste-startmenue-ersatz-fuer-windows.html www.drwindows.de] | [http://www.guiadowindows.net/power8/ www.guiadowindows.net]
+Пресса о нас: [http://www.addictivetips.com/windows-tips/power8-start-menu-for-windows-8-that-can-block-metro-features/ www.addictivetips.com] | [http://www.geekissimo.com/2012/07/16/power8-miglior-menu-start-windows-8/ www.geekissimo.com] | [http://www.intowindows.com/power8-powerful-start-menu-for-windows-8/ www.intowindows.com] | [http://www.drwindows.de/content/414-power8-bisher-kompletteste-startmenue-ersatz-fuer-windows.html www.drwindows.de] | [http://www.guiadowindows.net/power8/ www.guiadowindows.net] | [http://reviews.cnet.com/8301-33642_7-57496506-292/how-to-get-the-start-menu-back-in-windows-8/ cnet.com] | [http://www.geek.com/articles/chips/how-to-start-menu-in-windows-8-2012116/ geek.com]
 
 
 ==Преимущества:==
