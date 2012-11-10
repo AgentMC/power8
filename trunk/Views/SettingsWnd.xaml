@@ -81,12 +81,28 @@
             <DataGrid ItemsSource="{Binding WebSearchProviders}" AutoGenerateColumns="False"
                       HeadersVisibility="Column" CanUserReorderColumns="False" CanUserResizeColumns="False"
                       HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White" MinColumnWidth="0"
-                      CellStyle="{DynamicResource DataGridCellStyle}">
+                      CellStyle="{StaticResource DataGridCellStyle}">
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="StgWseColKey" Binding="{Binding Key, Mode=TwoWay}" MinWidth="20"/>
                     <DataGridTextColumn x:Name="StgWseColVal" Binding="{Binding Query, Mode=TwoWay}" MinWidth="346"/>
                 </DataGrid.Columns>
             </DataGrid>
+        </TabItem>
+        <TabItem x:Name="StgTabMfu">
+            <StackPanel>
+                <RadioButton Name="StgMfuUseSystem" IsChecked="{Binding MfuIsSystem, Mode=TwoWay}"/>
+                <RadioButton Name="StgMfuUseP8JL" IsChecked="{Binding MfuIsInternal, Mode=TwoWay}"/>
+                <DataGrid Margin="16,0,0,0" IsEnabled="{Binding ElementName=StgMfuUseP8JL, Path=IsChecked}" 
+                          ItemsSource="{Binding MfuInternalExclusions, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" AutoGenerateColumns="False" Name="StgMfuExcl"
+                          HeadersVisibility="Column" CanUserReorderColumns="False" CanUserResizeColumns="False"
+                          HorizontalGridLinesBrush="Gray" VerticalGridLinesBrush="White" MinColumnWidth="0"
+                          CellStyle="{StaticResource DataGridCellStyle}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Exclusions" Binding="{Binding Value}" MinWidth="364"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <RadioButton Name="StgMfuUseCustom" IsChecked="{Binding MfuIsCustom, Mode=TwoWay}"/>
+            </StackPanel>
         </TabItem>
     </TabControl>
 </Views:DisposableWindow>

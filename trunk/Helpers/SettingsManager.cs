@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Net;
@@ -494,9 +495,10 @@ namespace Power8.Helpers
                 if (_searchData == null)
                 {
                     _searchData = new List<SearchProvider>();
+// ReSharper disable PossibleNullReferenceException
                     foreach (var provider in XDocument.Parse(Settings.Default.SearchProviders).Root.Elements(SP_NODE))
-                        _searchData.Add(new SearchProvider()
-                                            {Key = provider.Attribute(SP_KEYY).Value[0], Query = provider.Value});
+                        _searchData.Add(new SearchProvider {Key = provider.Attribute(SP_KEYY).Value[0], Query = provider.Value});
+// ReSharper restore PossibleNullReferenceException
                 }
                 return _searchData;
             }
@@ -550,7 +552,10 @@ namespace Power8.Helpers
             }
         }
 
-
+        public ObservableCollection<MfuList.StringWrapper> MfuInternalExclusions
+        {
+            get { return MfuList.ExclList; }
+        }
 
         #endregion
     }
