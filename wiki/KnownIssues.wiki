@@ -7,6 +7,8 @@ This is a list of known product issues.
 
 This list is maintained internally, if you want to report an issue that is not on list, please use [http://code.google.com/p/power8/issues/list Issues] tab of the project.
 
+To do: convert to issues tab.
+
 = The list of issues =
 
 == Planned to be fixed in upcoming release == 
@@ -26,6 +28,7 @@ This list is maintained internally, if you want to report an issue that is not o
   #  7/8?: Cannot display properties of a Computer object
   #  XP: buttons are 3px lower than menu-buttons
   #  Unneeded right margin in menu items
+  #  W8RTM: when changing menu items size only to 12 (W8 feature) the negative icon margin isn't applied proper way;
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
