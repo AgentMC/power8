@@ -165,4 +165,4 @@ The window has the following options:
   * Inform me about configuration changes will, when turned on:
     * Mark Auto-Start and Auto-update options with Red color if they are unchecked;
     * Display warning sign and a hint over the Start button:
-http://i39.fastpic.ru/big/2012/1009/ef/dd7ffcf8f6bd01f42fb55792cd537def.png
+http://i48.fastpic.ru/big/2012/1115/4e/acb4325f6ebdf4bc5c26a6e759a6fc4e.png
