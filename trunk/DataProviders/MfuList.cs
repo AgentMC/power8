@@ -545,10 +545,22 @@ namespace Power8
         /// </summary>
         /// <param name="exclusion">text to exclude from display. 
         /// When tested for match, used with ** on both sides</param>
-        public static void AddExclusion(string exclusion)
+        public static void AddExclusion(PowerItem exclusion)
         {
-            ExclList.Add(new StringWrapper{Value = exclusion});
-            UpdateStartMfu();
+            ExclList.Add(new StringWrapper {Value = exclusion.Argument.ToLower()});
+            UpdateStartMfuSync();
+        }
+
+        public static void Add2Custom(PowerItem item)
+        {
+            UserList.Add(PowerItemTree.GetResolvedArgument(item));
+            UpdateStartMfuSync();
+        }
+
+        public static void RemoveCustom(PowerItem item)
+        {
+            UserList.Remove(PowerItemTree.GetResolvedArgument(item));
+            UpdateStartMfuSync();
         }
 
 

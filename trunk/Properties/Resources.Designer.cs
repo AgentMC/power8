@@ -88,11 +88,29 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove from custom MFU list.
+        /// </summary>
+        internal static string CR_AppExcludeFromCustom {
+            get {
+                return ResourceManager.GetString("CR_AppExcludeFromCustom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide this item.
         /// </summary>
         internal static string CR_AppExcludeFromMfu {
             get {
                 return ResourceManager.GetString("CR_AppExcludeFromMfu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to custom MFU list.
+        /// </summary>
+        internal static string CR_AppIncludeToCustom {
+            get {
+                return ResourceManager.GetString("CR_AppIncludeToCustom", resourceCulture);
             }
         }
         
