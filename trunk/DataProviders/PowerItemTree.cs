@@ -20,7 +20,7 @@ namespace Power8
     /// </summary>
     static class PowerItemTree
     {
-        //....Items.Add(New PowerItem{Argument=SEPARATOR_NAME}) ==> adds the separator item, visualized in menus only.
+        //....Items.Add(New PowerItem{FriendlyName=SEPARATOR_NAME}) ==> adds the separator item, visualized in menus only.
         public const string SEPARATOR_NAME = "----";
 
         private static readonly string 
@@ -40,6 +40,9 @@ namespace Power8
         //Roots backing fields
         private static PowerItem _adminToolsItem, _librariesOrMyDocsItem, _controlPanelRoot,
                                  _myComputerItem, _networkRoot;
+
+        public static readonly EventWaitHandle CplDone = new EventWaitHandle(false, EventResetMode.ManualReset);
+
         /// <summary>
         /// Bindable collection of items presented in Start Menu for current user, joined with the common Start menu entries
         /// </summary>
@@ -223,6 +226,7 @@ namespace Power8
                             Parent = _controlPanelRoot
                         });
                     }
+                    CplDone.Set();
                 }
                 return _controlPanelRoot;
             }
