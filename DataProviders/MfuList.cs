@@ -102,6 +102,7 @@ namespace Power8
             col.Add("APPLICATION SHORTCUTS");
             col.Add("HOST.EXE");
             col.Add("VSLAUNCHER.EXE");
+            col.Add("SETUP64.EXE");
             MsFilter = col.ToArray();
 
             //Reading launch data

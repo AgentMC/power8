@@ -88,7 +88,11 @@ namespace Power8
             get
             {
                 if (_icon == null && (Argument != null || SpecialFolderId != API.Csidl.INVALID))
+                {
+                    if(Argument != null && IsControlPanelItemInFact)
+                        NonCachedIcon = true; //The Icon should not be cached since thet's CPL item
                     _icon = ImageManager.GetImageContainer(this, HasLargeIcon ? API.Shgfi.LARGEICON : API.Shgfi.SMALLICON);
+                }
                 return _icon;
             }
             set
@@ -443,6 +447,18 @@ namespace Power8
             get { return !IsFolder && Parent != null && Parent.SpecialFolderId == API.Csidl.CONTROLS; }
         }
         /// <summary>
+        /// Returns value indicating is this item control panel item based on it's 
+        /// Argument, not location in tree
+        /// </summary>
+        public bool IsControlPanelItemInFact
+        {
+            get
+            {
+                return Argument.EndsWith(".cpl", StringComparison.OrdinalIgnoreCase)
+                       || Argument.StartsWith(API.ShNs.AllControlPanelItems);
+            }
+        }
+        /// <summary>
         /// Returns true if this instance references the folder under User or Common Start menu.
         /// </summary>
         public bool IsFolderUnderStartMenu
@@ -462,12 +478,27 @@ namespace Power8
             get { return Parent == MfuList.MfuSearchRoot; }
         }
         /// <summary>
-        /// Returnsvalue indicating that "Remove from list" for this item is displayed
+        /// Returns value indicating that "Remove from list" for this item is displayed
         /// </summary>
         public bool IsCanBeHidden
         {
             get { return IsMfuChild && Helpers.SettingsManager.Instance.MfuIsInternal; }
         }
+        /// <summary>
+        /// Returns value indicating that "Remove from custom list" for this item is displayed
+        /// </summary>
+        public bool IsCanBeRemoved
+        {
+            get { return IsMfuChild && Helpers.SettingsManager.Instance.MfuIsCustom; }
+        }
+        /// <summary>
+        /// Returns value indicating that "Add to custom list" for this item is displayed
+        /// </summary>
+        public bool IsCanBeAdded
+        {
+            get { return !IsCanBeRemoved && Parent != PowerItemTree.NetworkRoot ; }
+        }
+
 
         #endregion
 
@@ -759,12 +790,13 @@ namespace Power8
                             fName = ver.ProductName; //...NFS.Run and the kind of.
                     }
                 }
-                else
+                else if(IsControlPanelItemInFact)
                 {
+                    PowerItemTree.CplDone.WaitOne(); //we don't want InvalidOperationExceptions accessing Items...
                     var same = PowerItemTree.ControlPanelRoot.Items.FirstOrDefault(
-                        i => i.Argument.Equals(Argument, StringComparison.OrdinalIgnoreCase));
-                    if (same != null)
-                        fName = same.FriendlyName;
+                        i => string.Equals(i.Argument, Argument, StringComparison.OrdinalIgnoreCase));
+                    if (same != null) //if there's such item
+                        fName = same.FriendlyName; //simply return it's FriendlyName
                 }
             }
             return fName;
