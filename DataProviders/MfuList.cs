@@ -47,6 +47,7 @@ namespace Power8
         private static readonly List<MfuElement> LastList = new List<MfuElement>(); //The last checked state of MFU data
         private static readonly List<MfuElement> P8JlImpl = new List<MfuElement>(); //Power8's own JumpList items implementation
         private static readonly List<String> PinList = new List<string>();          //The list of pinned elements
+        private static readonly List<String> UserList = new List<string>();         //The Custom MFU list 
         private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
         private static readonly ManagementEventWatcher WatchDog;                    //Notifies when a process is created in system
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
@@ -57,7 +58,8 @@ namespace Power8
 
         private static readonly string LaunchDB = DataBaseRoot + "LaunchData.csv",
                                        PinDB = DataBaseRoot + "PinData.csv",
-                                       UserExclDB = DataBaseRoot + "Exclusions.csv";
+                                       UserExclDB = DataBaseRoot + "Exclusions.csv",
+                                       UserListDB = DataBaseRoot + "CustomList.csv";
 
         //Registry pathes
         private const string
@@ -157,6 +159,21 @@ namespace Power8
                 }
             }
 
+            //Reading user mfu list
+            if (File.Exists(UserListDB))
+            {
+                using (var f = new StreamReader(UserListDB, Encoding.UTF8))
+                {
+                    while (!f.EndOfStream)
+                    {
+                        var l = f.ReadLine();
+                        if (string.IsNullOrEmpty(l))
+                            continue;
+                        UserList.Add(l);
+                    }
+                }
+            }
+
             //Save all on shutdown
             Util.MainDisp.ShutdownStarted += MainDispOnShutdownStarted;
 
@@ -200,6 +217,15 @@ namespace Power8
                 foreach (var excl in ExclList.Where(ex => !string.IsNullOrWhiteSpace(ex.Value)))
                 {
                     f.WriteLine(excl.Value);
+                }
+            }
+
+            //Writing custom mfu list
+            using (var f = new StreamWriter(UserListDB, false, Encoding.UTF8))
+            {
+                foreach (var item in UserList)
+                {
+                    f.WriteLine(item);
                 }
             }
 
@@ -290,7 +316,7 @@ namespace Power8
                            ? GetMfuFromUserAssist()
                            : Helpers.SettingsManager.Instance.MfuIsInternal
                                  ? GetMfuFromP8JL()
-                                 : new List<MfuElement>();//<== TODO: 3rd mode for MFU
+                                 : GetMfuFromCustomData();
 
             if (list.SequenceEqual(LastList)) //Exit if list  not changed comparing to the last one
                 return;
@@ -402,6 +428,19 @@ namespace Power8
                     list[k] = mfuElement.Clone();
             }
             return list.Select(kv => kv.Value).ToList();
+        }
+
+        /// <summary>
+        /// Gets list of most frequently used data from user's customized list
+        /// </summary>
+        private static List<MfuElement> GetMfuFromCustomData()
+        {
+            var res = new List<MfuElement>();
+            for (int i = UserList.Count - 1; i >= 0; i--)
+            {
+                res.Add(new MfuElement {Arg = UserList[i], LaunchCount = i});
+            }
+            return res;
         }
 
         /// <summary>
