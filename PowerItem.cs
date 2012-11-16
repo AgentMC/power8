@@ -741,20 +741,30 @@ namespace Power8
             }
 
             //For Recent list...
-            if (IsMfuChild //so it must have ARGUMENT...
-                && (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase)))
-            {//...that is either link or exe (UserAssist doesn't return others but who knows)
-                var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument); //yeah, "fast"... :(
-                if (container != null)
-                    fName = container.FriendlyName;
+            if (IsMfuChild) //so it must have ARGUMENT...
+                
+            {   //...for either link or exe
+                if (IsLink || Argument.EndsWith(".exe", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var container = PowerItemTree.SearchStartMenuItemSyncFast(Argument); //yeah, "fast"... :(
+                    if (container != null)
+                        fName = container.FriendlyName;
 
-                if (string.IsNullOrEmpty(fName)/*(still)*/ && !IsLink)
-                {//get file version info table and extract data from there. Costly but provides valuable results.
-                    var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
-                    if (!string.IsNullOrWhiteSpace(ver.FileDescription)) //try description, if not fallback to...
-                        fName = ver.FileDescription;
-                    else if (!string.IsNullOrWhiteSpace(ver.ProductName)) //...Product. This is specifically for...
-                        fName = ver.ProductName;                  //...NFS.Run and the kind of.
+                    if (string.IsNullOrEmpty(fName) /*(still)*/&& !IsLink)
+                    {//get file version info table and extract data from there. Costly but provides valuable results.
+                        var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
+                        if (!string.IsNullOrWhiteSpace(ver.FileDescription)) //try description, if not fallback to...
+                            fName = ver.FileDescription;
+                        else if (!string.IsNullOrWhiteSpace(ver.ProductName)) //...Product. This is specifically for...
+                            fName = ver.ProductName; //...NFS.Run and the kind of.
+                    }
+                }
+                else
+                {
+                    var same = PowerItemTree.ControlPanelRoot.Items.FirstOrDefault(
+                        i => i.Argument.Equals(Argument, StringComparison.OrdinalIgnoreCase));
+                    if (same != null)
+                        fName = same.FriendlyName;
                 }
             }
             return fName;

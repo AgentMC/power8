@@ -25,9 +25,12 @@
                 <Separator/>
                 <MenuItem Name="AppShowProperties" IsEnabled="{Binding IsNotPureControlPanelFlowItem}" Click="ShowPropertiesClick" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="AppShowTargetProperties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Style="{StaticResource ContextMenuItemStyle}"/>
-                <Separator Visibility="{Binding IsCanBeHidden, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                <!--<Separator Visibility="{Binding IsCanBeHidden, Converter={StaticResource BooleanToVisibilityConverter}}"/>-->
+                <Separator/>
                 <MenuItem Name="AppExcludeFromMfu" Visibility="{Binding IsCanBeHidden, Converter={StaticResource BooleanToVisibilityConverter}}" 
                           Click="RemoveItemClick" Style="{StaticResource ContextMenuItemStyle}" />
+                <MenuItem Name="AppIncludeToCustom" Click="IncludeCustom" Style="{StaticResource ContextMenuItemStyle}" />
+                <MenuItem Name="AppExcludeFromCustom" Click="ExcludeCustom" Style="{StaticResource ContextMenuItemStyle}" />
             </ContextMenu>
     </ResourceDictionary>
     </Application.Resources>

@@ -194,7 +194,21 @@ namespace Power8
         /// </summary>
         private void RemoveItemClick(object sender, RoutedEventArgs e)
         {
-            MfuList.AddExclusion(Util.ExtractRelatedPowerItem(e).Argument.ToLower());
+            MfuList.AddExclusion(Util.ExtractRelatedPowerItem(e));
+        }
+        /// <summary>
+        /// Handles click on "Add item to custom list". Adds an item to user's custom MFU list.
+        /// </summary>
+        private void IncludeCustom(object sender, RoutedEventArgs e)
+        {
+            MfuList.Add2Custom(Util.ExtractRelatedPowerItem(e));
+        }
+        /// <summary>
+        /// Handles click on "Remove item from custom list". Removes an item to user's custom MFU list.
+        /// </summary>
+        private void ExcludeCustom(object sender, RoutedEventArgs e)
+        {
+            MfuList.RemoveCustom(Util.ExtractRelatedPowerItem(e));
         }
         /// <summary>
         /// Returns string, of a Path kind, that can be passed to a system, and will
