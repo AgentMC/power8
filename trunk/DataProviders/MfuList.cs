@@ -554,14 +554,37 @@ namespace Power8
 
         public static void Add2Custom(PowerItem item)
         {
-            UserList.Add(PowerItemTree.GetResolvedArgument(item));
-            UpdateStartMfuSync();
+            var arg = PowerItemTree.GetResolvedArgument(item);
+            var idx = UserList.IndexOf(arg);
+            if(idx == UserList.Count -1) //Already in list and top item
+                return;
+            if(idx != -1) //Already in list, move to top
+                UserList.RemoveAt(idx);
+            UserList.Add(arg); //Including case where item not in list
+            UpdateStartMfuSync(); //Refresh
         }
 
         public static void RemoveCustom(PowerItem item)
         {
             UserList.Remove(PowerItemTree.GetResolvedArgument(item));
             UpdateStartMfuSync();
+        }
+
+        public static int MoveCustomListItem(PowerItem which, PowerItem where)
+        {
+            //1. Change order in UserList 
+            var argFrom = PowerItemTree.GetResolvedArgument(which);
+            var argTo = PowerItemTree.GetResolvedArgument(@where);
+            int idxFrom = UserList.IndexOf(argFrom);
+            int idxTo = UserList.IndexOf(argTo);
+            UserList.RemoveAt(idxFrom);
+            UserList.Insert(idxTo + idxFrom > idxTo ? 1 : 0, argFrom);
+            //2. Update LastList
+            LastList.Clear();
+            GetMfuFromCustomData().ForEach(m => LastList.Add(m.Clone()));
+            //3. Change order in MfuList - with respect to pinning
+            StartMfu.Move(StartMfu.IndexOf(which), StartMfu.IndexOf(where));
+            return StartMfu.IndexOf(which);
         }
 
 

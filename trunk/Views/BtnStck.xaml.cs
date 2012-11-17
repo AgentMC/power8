@@ -7,9 +7,11 @@ using System.Windows.Controls;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Power8.Commands;
 using Power8.Helpers;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace Power8.Views
 {
@@ -410,7 +412,17 @@ namespace Power8.Views
                 else
                     SearchBox.Focus();
             }
-
+            if((e.Key == Key.Up || e.Key == Key.Down) 
+                && (System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0
+                && dataGrid.SelectedIndex > -1)
+            {
+                dataGrid.SelectedIndex =
+                    MfuList.MoveCustomListItem((PowerItem) dataGrid.SelectedItem,
+                                               (PowerItem) dataGrid.Items[
+                                                   dataGrid.SelectedIndex +
+                                                   (e.Key == Key.Up ? -1 : 1)]);
+                dataGrid.Focus();
+            }
         }
         /// <summary>
         /// Handles search event raised by Windows Serach threads.
