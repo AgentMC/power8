@@ -5,6 +5,12 @@
   * W7^Aero^: hide standard start button
   * W7^Classic^: fill standard start button like it's done on XP.
   * TBD: Context menu (configurable) for computer list, specific items for each computer item;
+  * Auto-add recently installed SW to MFU list;
+  * Configurable ButtonStack background/Theme support;
+  * Disable some Power buttons;
+  * Customized builds with Menu background and Main button pre-configuration.
+
 
 = List of ideas and requests we won't ever implement =
   * Skip metro shell;
+  * Hack Win key;
