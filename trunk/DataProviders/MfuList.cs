@@ -8,6 +8,7 @@ using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
+using Power8.Helpers;
 using Power8.Properties;
 
 namespace Power8
@@ -350,12 +351,14 @@ namespace Power8
                                   {
                                       var elem = mfuElement;
                                       _startMfu.Add(new PowerItem
-                                                        {
-                                                            Argument = elem.Arg,
-                                                            Parent = MfuSearchRoot,
-                                                            AllowAsyncFriendlyName = true, //Friendly Name isn't distinctive for MFU
-                                                            IsPinned = elem.LaunchCount >= 2000 //hack yeah!
-                                                        });
+                                        {
+                                            Argument = elem.Arg,
+                                            Parent = MfuSearchRoot,
+                                            AllowAsyncFriendlyName = true, //Friendly Name isn't distinctive for MFU
+                                            IsPinned = elem.LaunchCount >= 2000, //hack yeah!
+                                            IsFolder = SettingsManager.Instance.MfuIsCustom 
+                                                        && Directory.Exists(elem.Arg)
+                                        });
                                   }
                               });
             }
