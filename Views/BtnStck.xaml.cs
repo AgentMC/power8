@@ -168,14 +168,14 @@ namespace Power8.Views
         /// </summary>
         private void ButtonHibernateClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Hibernate, true, false);
+            System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, false);
         }
         /// <summary>
         /// Handler of Sleep button. Calls SetSuspendState() to put PC to sleep
         /// </summary>
         private void ButtonSleepClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.Application.SetSuspendState(System.Windows.Forms.PowerState.Suspend, true, false);
+            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, false);
         }
         /// <summary>
         /// Handler of Shutdown button. Calls shutdown.exe to turn PC off
@@ -325,57 +325,57 @@ namespace Power8.Views
         /// </summary>
         private void SearchBoxPreviewKeyDown(object sender, KeyEventArgs e)
         {
-                e.Handled = true;
-                switch (e.Key)
-                {
-                    case Key.Up:
-                        if (dataGrid.Items.Count > 0)
-                        {
-                            dataGrid.SelectedIndex = dataGrid.SelectedIndex <= 0
-                                                     ? dataGrid.Items.Count - 1
-                                                     : dataGrid.SelectedIndex - 1;
+            e.Handled = true;
+            switch (e.Key)
+            {
+                case Key.Up:
+                    if (dataGrid.Items.Count > 0)
+                    {
+                        dataGrid.SelectedIndex = dataGrid.SelectedIndex <= 0
+                                                    ? dataGrid.Items.Count - 1
+                                                    : dataGrid.SelectedIndex - 1;
                                              
-                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
-                        }
-                        return;
-                    case Key.Down:
-                        if (dataGrid.Items.Count > 0)
+                        dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                    }
+                    return;
+                case Key.Down:
+                    if (dataGrid.Items.Count > 0)
+                    {
+                        dataGrid.SelectedIndex = dataGrid.SelectedIndex >= dataGrid.Items.Count - 1
+                                                    ? 0
+                                                    : dataGrid.SelectedIndex + 1;
+                        dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                    }
+                    return;
+                case Key.Enter:
+                    if (dataGrid.SelectedItem != null)
+                    {
+                        InvokeFromDataGrid((PowerItem)dataGrid.SelectedItem);
+                    }
+                    else
+                    {
+                        var data = Util.CommandToFilenameAndArgs(SearchBox.Text);
+                        if(data != null)
                         {
-                            dataGrid.SelectedIndex = dataGrid.SelectedIndex >= dataGrid.Items.Count - 1
-                                                     ? 0
-                                                     : dataGrid.SelectedIndex + 1;
-                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
-                        }
-                        return;
-                    case Key.Enter:
-                        if (dataGrid.SelectedItem != null)
-                        {
-                            InvokeFromDataGrid((PowerItem)dataGrid.SelectedItem);
-                        }
-                        else
-                        {
-                            var data = Util.CommandToFilenameAndArgs(SearchBox.Text);
-                            if(data != null)
+                            try
                             {
-                                try
-                                {
-                                    Process.Start(data.Item1, data.Item2);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Util.DispatchCaughtException(ex);
-                                }
-                                Hide();
+                                Process.Start(data.Item1, data.Item2);
                             }
+                            catch (Exception ex)
+                            {
+                                Util.DispatchCaughtException(ex);
+                            }
+                            Hide();
                         }
-                        return;
-                    case Key.Escape:
-                        if(SearchBox.Text == string.Empty)
-                            Close();
-                        else
-                            SearchBox.Text = string.Empty;
-                        return;
-                }
+                    }
+                    return;
+                case Key.Escape:
+                    if(SearchBox.Text == string.Empty)
+                        Close();
+                    else
+                        SearchBox.Text = string.Empty;
+                    return;
+            }
             e.Handled = false;
         }
         /// <summary>
@@ -412,16 +412,45 @@ namespace Power8.Views
                 else
                     SearchBox.Focus();
             }
+// ReSharper disable PossibleUnintendedReferenceComparison
             if((e.Key == Key.Up || e.Key == Key.Down) 
                 && (System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0
-                && dataGrid.SelectedIndex > -1)
+                && dataGrid.SelectedIndex > -1                  //Item actually selected
+                && SettingsManager.Instance.MfuIsCustom         //user-MFU
+                && dataGrid.ItemsSource == MfuItems)            //No search 
+// ReSharper restore PossibleUnintendedReferenceComparison
             {
-                dataGrid.SelectedIndex =
-                    MfuList.MoveCustomListItem((PowerItem) dataGrid.SelectedItem,
-                                               (PowerItem) dataGrid.Items[
-                                                   dataGrid.SelectedIndex +
-                                                   (e.Key == Key.Up ? -1 : 1)]);
-                dataGrid.Focus();
+                var si = dataGrid.SelectedItem as PowerItem; //More than 1 in (un) pinned group
+                if (si != null && MfuItems.Count(m => m.IsPinned == si.IsPinned) > 1)
+                {
+                    e.Handled = true;
+                    dataGrid.Focus();
+                    int increment = (e.Key == Key.Up ? -1 : 1);
+                    int i = dataGrid.SelectedIndex;
+                    PowerItem target = null;
+                    do //search for nearest item with same pinning state
+                    {
+                        i += increment;
+                        if (i == -1)
+                            i = MfuItems.Count - 1;
+                        else if (i == MfuItems.Count)
+                            i = 0;
+                        if (MfuItems[i].IsPinned == si.IsPinned)
+                            target = MfuItems[i];
+                    } while (target == null);
+                    MfuList.MoveCustomListItem(si, target);
+                }
+            }
+            else if((e.Key == Key.Up || e.Key == Key.Down) 
+                && (System.Windows.Forms.Control.ModifierKeys & Keys.Control) == 0)
+            {
+                e.Handled = true;
+                var idx = dataGrid.SelectedIndex + (e.Key == Key.Up ? -1 : 1);
+                if (idx < 0)
+                    idx = dataGrid.Items.Count - 1;
+                if (idx >= dataGrid.Items.Count)
+                    idx = 0;
+                dataGrid.SelectedIndex = idx;
             }
         }
         /// <summary>
@@ -594,5 +623,6 @@ namespace Power8.Views
             get { return _cmd; }
         }
         #endregion
+
     }
 }
