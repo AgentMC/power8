@@ -225,9 +225,15 @@ namespace Power8.Views
                 return;
             var p = b1.PointToScreen(PlacementPoint);
             GetSetWndPosition(PlacementWnd, new API.POINT { X = (int)p.X, Y = (int)p.Y }, false);
-            if ((int)PlacementWnd.Left != (int)p.X)//Taskbar vertical
+            if ((int) PlacementWnd.Left == (int) p.X && (int) PlacementWnd.Top == (int) p.Y)
+            {    //Top left corner, taskbar hidden, vertical or horizontal
+                API.RECT r;
+                API.GetWindowRect(_taskBar, out r);
+                ContextPlacement = (r.Bottom - r.Top > r.Right - r.Left) ? PlacementMode.Right : PlacementMode.Bottom;
+            }
+            else if ((int) PlacementWnd.Left != (int) p.X) //Taskbar vertical
                 ContextPlacement = PlacementWnd.Left > p.X ? PlacementMode.Right : PlacementMode.Left;
-            else                         //Taskbar horizontal
+            else //Taskbar horizontal
                 ContextPlacement = PlacementWnd.Top > p.Y ? PlacementMode.Bottom : PlacementMode.Top;
         }
         /// <summary>
