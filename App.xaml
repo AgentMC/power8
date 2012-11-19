@@ -13,21 +13,6 @@
             <Commands:MenuItemClickCommand x:Key="globalClickCommand"/>
             <Converters:PiToTooltipConverter x:Key="PiToTooltipConverter1" />
             
-            <Style TargetType="Separator" x:Key="ShowableSeparatorStyle">
-                <!--<Style.Triggers> doesn't work...
-                    <MultiDataTrigger>
-                        <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding IsCanBeHidden}" Value="True"/>
-                            <Condition Binding="{Binding IsCanBeAdded}" Value="True"/>
-                            <Condition Binding="{Binding IsCanBeRemoved}" Value="True"/>
-                        </MultiDataTrigger.Conditions>
-                        <Setter Property="Visibility" Value="Visible"/>
-                    </MultiDataTrigger>
-                </Style.Triggers>
-                <Setter Property="Visibility" Value="Collapsed"/>-->
-            </Style>
-               
-            
             <ContextMenu x:Key="fsMenuItemsContextMenu" Name="fsMenuItemsContextMenu">
                 <MenuItem Name="AppRun" IsEnabled="{Binding IsFile}" Click="RunRunasOpenOpencommonClick" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="AppRunAs" IsEnabled="{Binding IsFile}" Click="RunRunasOpenOpencommonClick" Style="{StaticResource ContextMenuItemStyle}"/>
@@ -40,7 +25,24 @@
                 <Separator/>
                 <MenuItem Name="AppShowProperties" IsEnabled="{Binding IsNotPureControlPanelFlowItem}" Click="ShowPropertiesClick" Style="{StaticResource ContextMenuItemStyle}"/>
                 <MenuItem Name="AppShowTargetProperties" IsEnabled="{Binding IsLink}" Click="ShowPropertiesClick" Style="{StaticResource ContextMenuItemStyle}"/>
-                <Separator Style="{StaticResource ShowableSeparatorStyle}" />
+                <Separator> 
+                    <Separator.Style>
+                        <Style TargetType="Separator">
+                             <Style.Triggers> 
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsCanBeHidden}" Value="False"/>
+                                        <Condition Binding="{Binding IsCanBeAdded}" Value="False"/>
+                                        <Condition Binding="{Binding IsCanBeRemoved}" Value="False"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
+                            </Style.Triggers>  
+                        </Style>
+                    </Separator.Style>
+                </Separator>
                 <MenuItem Name="AppExcludeFromMfu" Visibility="{Binding IsCanBeHidden, Converter={StaticResource BooleanToVisibilityConverter}}" 
                           Click="RemoveItemClick" Style="{StaticResource ContextMenuItemStyle}" />
                 <MenuItem Name="AppIncludeToCustom" Visibility="{Binding IsCanBeAdded, Converter={StaticResource BooleanToVisibilityConverter}}"
