@@ -100,7 +100,7 @@ begin:
                                 continue;
                             }
                             DriveNames.Add(dName); //Add drive to collection
-
+                            var fn = GetFormattedDriveLabel(dName); //override deadlock
                             Util.Send(() => //Add drive to UI
                                       _drivesRoot.Items.Add(new PowerItem
                                                                 {
@@ -108,7 +108,8 @@ begin:
                                                                     AutoExpand = true,
                                                                     IsFolder = true,
                                                                     Parent = _drivesRoot,
-                                                                    NonCachedIcon = true
+                                                                    NonCachedIcon = true,
+                                                                    FriendlyName = fn
                                                                 }));
                             //Add drive watcher
                             w.Created += _fileChanged;
@@ -188,6 +189,16 @@ begin:
                 drv = _drives.FirstOrDefault(d => d.Name == driveName);
             }
             return (drv != null) ? drv.VolumeLabel : string.Empty;
+        }
+
+        /// <summary>
+        /// Thread-safely returns formatted label for drive PowerItem
+        /// </summary>
+        /// <param name="driveName">Drive name in format "C:\"</param>
+        /// <returns>Drive label if any, empty string otherwise. This doesn't return OS-set descriptions like "system", "pagefile", etc.</returns>
+        public static string GetFormattedDriveLabel(string driveName)
+        {
+            return String.Format("{0} - {1}", driveName, GetDriveLabel(driveName));
         }
     }
 }

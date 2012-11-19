@@ -193,11 +193,11 @@ namespace Power8
                     if (string.IsNullOrEmpty(path)) //and if this fails...
                     {
                         if ((Argument.Length > 1 && Argument[Argument.Length - 1] == ':')
-                            ||
-                            (Argument.Length > 2 && Argument.EndsWith(":\\"))) //drive name
-                            _friendlyName = String.Format("{0} - {1}", Argument, DriveManager.GetDriveLabel(Argument));
+                            || (Argument.Length > 2 && Argument.EndsWith(":\\"))) //drive name
+                            _friendlyName = DriveManager.GetFormattedDriveLabel(Argument);
                         else
-                            _friendlyName = Argument; //finally we have no f***ng idea what this PowerItem is, just display Arg.
+                            _friendlyName = Argument;
+                                //finally we have no f***ng idea what this PowerItem is, just display Arg.
                     }                                 //and hope FN will be asynch'ed
                     else
                     {
