@@ -441,7 +441,7 @@ namespace Power8.Views
                     MfuList.MoveCustomListItem(si, target);
                 }
             }
-            else if((e.Key == Key.Up || e.Key == Key.Down) 
+            else if ((e.Key == Key.Up || e.Key == Key.Down)
                 && (System.Windows.Forms.Control.ModifierKeys & Keys.Control) == 0)
             {
                 e.Handled = true;
