@@ -329,23 +329,8 @@ namespace Power8.Views
             switch (e.Key)
             {
                 case Key.Up:
-                    if (dataGrid.Items.Count > 0)
-                    {
-                        dataGrid.SelectedIndex = dataGrid.SelectedIndex <= 0
-                                                    ? dataGrid.Items.Count - 1
-                                                    : dataGrid.SelectedIndex - 1;
-                                             
-                        dataGrid.ScrollIntoView(dataGrid.SelectedItem);
-                    }
-                    return;
                 case Key.Down:
-                    if (dataGrid.Items.Count > 0)
-                    {
-                        dataGrid.SelectedIndex = dataGrid.SelectedIndex >= dataGrid.Items.Count - 1
-                                                    ? 0
-                                                    : dataGrid.SelectedIndex + 1;
-                        dataGrid.ScrollIntoView(dataGrid.SelectedItem);
-                    }
+                    DataGridPreviewKeyDown(sender, e);
                     return;
                 case Key.Enter:
                     if (dataGrid.SelectedItem != null)
@@ -397,7 +382,7 @@ namespace Power8.Views
         {
             if (e.Key == Key.Enter)
             {
-                var pi = Util.ExtractRelatedPowerItem(e);
+                var pi = dataGrid.SelectedItem as PowerItem;
                 if (pi != null)
                 {
                     e.Handled = true;
@@ -413,45 +398,47 @@ namespace Power8.Views
                     SearchBox.Focus();
             }
 // ReSharper disable PossibleUnintendedReferenceComparison
-            if((e.Key == Key.Up || e.Key == Key.Down) 
-                && (System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0
-                && dataGrid.SelectedIndex > -1                  //Item actually selected
-                && SettingsManager.Instance.MfuIsCustom         //user-MFU
-                && dataGrid.ItemsSource == MfuItems)            //No search 
-// ReSharper restore PossibleUnintendedReferenceComparison
-            {
-                var si = dataGrid.SelectedItem as PowerItem; //More than 1 in (un) pinned group
-                if (si != null && MfuItems.Count(m => m.IsPinned == si.IsPinned) > 1)
-                {
-                    e.Handled = true;
-                    dataGrid.Focus();
-                    int increment = (e.Key == Key.Up ? -1 : 1);
-                    int i = dataGrid.SelectedIndex;
-                    PowerItem target = null;
-                    do //search for nearest item with same pinning state
-                    {
-                        i += increment;
-                        if (i == -1)
-                            i = MfuItems.Count - 1;
-                        else if (i == MfuItems.Count)
-                            i = 0;
-                        if (MfuItems[i].IsPinned == si.IsPinned)
-                            target = MfuItems[i];
-                    } while (target == null);
-                    MfuList.MoveCustomListItem(si, target);
+            if ((e.Key == Key.Up || e.Key == Key.Down) && dataGrid.ItemsSource == MfuItems)
+            { //Not in search view when we press Up/Down
+                if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0)
+                {//with CTRL
+                    if (dataGrid.SelectedIndex > -1 && SettingsManager.Instance.MfuIsCustom)
+                    { //...and we have something selected, and we're in custom MFU...
+                        var si = dataGrid.SelectedItem as PowerItem; //...and more than 1 in (un) pinned group
+                        if (si != null && MfuItems.Count(m => m.IsPinned == si.IsPinned) > 1)
+                        { //=> move item itself
+                            e.Handled = true;
+                            dataGrid.Focus(); //.Net 4.5 hack. Datagrid in .Net4.5 doesn't switch focus to new row
+                            int increment = (e.Key == Key.Up ? -1 : 1);
+                            int i = dataGrid.SelectedIndex;
+                            PowerItem target = null;
+                            do //search for nearest item with same pinning state
+                            {
+                                i += increment;
+                                if (i == -1)
+                                    i = MfuItems.Count - 1;
+                                else if (i == MfuItems.Count)
+                                    i = 0;
+                                if (MfuItems[i].IsPinned == si.IsPinned)
+                                    target = MfuItems[i];
+                            } while (target == null);
+                            MfuList.MoveCustomListItem(si, target);
+                        }
+                    }
                 }
+                else //Not with CTRL
+                {// => just move selection
+                    e.Handled = true;
+                    var idx = dataGrid.SelectedIndex + (e.Key == Key.Up ? -1 : 1);
+                    if (idx < 0)
+                        idx = dataGrid.Items.Count - 1;
+                    if (idx >= dataGrid.Items.Count)
+                        idx = 0;
+                    dataGrid.SelectedIndex = idx;
+                }
+                dataGrid.ScrollIntoView(dataGrid.SelectedItem);
             }
-            else if ((e.Key == Key.Up || e.Key == Key.Down)
-                && (System.Windows.Forms.Control.ModifierKeys & Keys.Control) == 0)
-            {
-                e.Handled = true;
-                var idx = dataGrid.SelectedIndex + (e.Key == Key.Up ? -1 : 1);
-                if (idx < 0)
-                    idx = dataGrid.Items.Count - 1;
-                if (idx >= dataGrid.Items.Count)
-                    idx = 0;
-                dataGrid.SelectedIndex = idx;
-            }
+// ReSharper restore PossibleUnintendedReferenceComparison
         }
         /// <summary>
         /// Handles search event raised by Windows Serach threads.
