@@ -559,7 +559,7 @@ namespace Power8
         {
             var arg = PowerItemTree.GetResolvedArgument(item);
             var idx = UserList.IndexOf(arg);
-            if(idx == UserList.Count -1) //Already in list and top item
+            if(idx == UserList.Count -1 && UserList.Count > 0) //Already in list and top item
                 return;
             if(idx != -1) //Already in list, move to top
                 UserList.RemoveAt(idx);
