@@ -371,7 +371,7 @@ Power8 может помочь вам с этим справиться.
     <value>Соотношение сторон:</value>
   </data>
   <data name="CR_StgLblChooseImage" xml:space="preserve">
-    <value>Выберите изображение (дважды щёлкните путь для очитки):</value>
+    <value>Выберите изображение (дважды щёлкните путь для очистки):</value>
   </data>
   <data name="CR_StgSquareStart" xml:space="preserve">
     <value>Настроить кнопку Пуск</value>
