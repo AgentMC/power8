@@ -329,7 +329,7 @@ Mégsel: Kihagyom ezt a frissítést, ne értesítsen többet erről a verziór�
     <comment>Label in main btn context menu and in About Window</comment>
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
-    <value />
+    <value>http://lostprophet.ekapocs.com</value>
     <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
@@ -424,27 +424,27 @@ Indítsa el nekem az Intézőt és indítsa újra a Power8 folyamatot.</value>
     <value>WebMoney honlap meglátogatása és adományozás a Power8 csapatnak</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Hide this item</value>
+    <value>Elem elrejtése</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Most frequently used</value>
+    <value>Leggyakrabban használt</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Hide items containing strings:</value>
+    <value>Ezen szöveget tartalmazó elemek elrejtése:</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Use custom list (user-configurable)</value>
+    <value>Egyéni lista használata (felhasználó által)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Use Power8 internal data</value>
+    <value>Belső Power8 adatok használata</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Use system data (UserAssist) to build list</value>
+    <value>Rendszeradatok használata (UserAssist) a lista felépítéséhez</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Remove from custom launch list</value>
+    <value>Törlés az egyéni indítási listából</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Add to custom launch list</value>
+    <value>Hozzáadás az egyéni indítási listához</value>
   </data>
 </root>

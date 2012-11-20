@@ -341,20 +341,20 @@ Eu sei qual é o problema e irei cuidar dele por mim mesmo.</value>
     <value>Power8 — Windows Explorer está morto</value>
   </data>
   <data name="CR_RE_TopLabel" xml:space="preserve">
-    <value>Parece que o processo do Windows Explorer não está disponível.
+    <value>O processo do Explorador do Windows não está disponível.
 Power8 pode ajudá-lo a cuidar disso.
  
-Você deseja restaurar o Windows Explorer e reiniciar o Power8?</value>
+Você deseja restaurar o Explorador do Windows e reiniciar o Power8?</value>
   </data>
   <data name="CR_RE_YesButton" xml:space="preserve">
     <value>Sim!
-Por favor execute o Explorer para mim e reinicie o processo do Power8.</value>
+Por favor execute o Explorador do Windows e reinicie o processo do Power8.</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
     <value>Configurações...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Auto (por Área de Trabalho)</value>
+    <value>Automático (por Área de Trabalho)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
     <value>Procurar...</value>
@@ -372,7 +372,7 @@ Por favor execute o Explorer para mim e reinicie o processo do Power8.</value>
     <value>Configurar botão Iniciar</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Informe-me acerca de problemas de configuração</value>
+    <value>Informar-me acerca de problemas de configuração</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
     <value>Visualizar dispositivos removíveis</value>
@@ -415,7 +415,7 @@ Por favor execute o Explorer para mim e reinicie o processo do Power8.</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
-    <value>Texto de consulta</value>
+    <value>Endereço de consulta</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
@@ -425,27 +425,27 @@ Por favor execute o Explorer para mim e reinicie o processo do Power8.</value>
     <value>Visite o sítio do WebMoney e doe para o time Power8</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Hide this item</value>
+    <value>Esconder este item</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Most frequently used</value>
+    <value>Mais frequentemente usado</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Hide items containing strings:</value>
+    <value>Esconder itens contendo textos:</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Use custom list (user-configurable)</value>
+    <value>Usar lista personalizada (configurada pelo usuário)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Use Power8 internal data</value>
+    <value>Usar dados internos do Power8</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Use system data (UserAssist) to build list</value>
+    <value>Usar dados do sistema (UserAssist) para construir lista</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Remove from custom launch list</value>
+    <value>Remover lista personalizada de lançadores</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Add to custom launch list</value>
+    <value>Adicionar a lista personalizada de lançadores</value>
   </data>
 </root>
