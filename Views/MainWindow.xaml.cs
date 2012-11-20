@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Media.Imaging;
 using Power8.Helpers;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
+using Point = System.Windows.Point;
 
 namespace Power8.Views
 {
@@ -23,6 +25,7 @@ namespace Power8.Views
         //Both used to set proper placement for Context Menu over Main Button
         private static readonly Window PlacementWnd = new Window { Width = 10, Height = 10 };
         private static readonly Point PlacementPoint = new Point(0, 0);
+        public static float SystemScale = 1.0f;
         
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -104,6 +107,12 @@ namespace Power8.Views
         {
             _taskBar = API.FindWindow(API.WndIds.TRAY_WND_CLASS, null);
             CheckWnd(_taskBar, API.WndIds.TRAY_WND_CLASS);
+            SystemScale = 1f / 96;
+            using (var g = Graphics.FromHwnd(_taskBar))
+            {
+                SystemScale *= g.DpiX;
+            }
+
             if (Util.OsIs.SevenOrMore)
             {
                 _midPanel = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.TRAY_REBAR_WND_CLASS, null);
@@ -298,8 +307,8 @@ namespace Power8.Views
                 }
                 //The success way
                 //Size the button by ShowDesktop buton
-                var curHeight = r.Bottom - r.Top;
-                var curWidth = r.Right - r.Left;
+                var curHeight = (r.Bottom - r.Top)/SystemScale;
+                var curWidth = (r.Right - r.Left)/SystemScale;
                 bool taskBarVertical = curHeight < curWidth;
 
                 if (SettingsManager.Instance.SquareStartButton)
@@ -310,20 +319,22 @@ namespace Power8.Views
                     else                      //horiz. button, vertical bar
                         curHeight = (int)(curWidth / sizeCoef); 
                 }
-                if ((int)width != curWidth)
+// ReSharper disable CompareOfFloatsByEqualityOperator
+                if (Math.Round(width) != Math.Round(curWidth))
                 {
                     width = curWidth;
                     Dispatcher.Invoke(new Action(() =>  b1.Width = curWidth));
                 }
-                if ((int)height != curHeight)
+                if (Math.Round(height) != Math.Round(curHeight))
                 {
                     height = curHeight;
                     Dispatcher.Invoke(new Action(() =>  b1.Height = curHeight));
                 }
+// ReSharper restore CompareOfFloatsByEqualityOperator
 
                 //If required, apply move to taskbar rebar
                 if (Util.OsIs.EightOrMore || (SettingsManager.Instance.SquareStartButton && Util.OsIs.SevenOrMore))
-                    MoveReBar(taskBarVertical, curHeight, curWidth);
+                    MoveReBar(taskBarVertical, (int) (curHeight*SystemScale), (int) (curWidth*SystemScale));
 
                 Thread.Sleep(100);
             }
@@ -477,7 +488,6 @@ namespace Power8.Views
         private static void GetSetWndPosition(Window w, API.POINT screenPoint, bool ignoreTaskbarPosition)
         {
             var resPoint = new Point();
-            
             var screen = Screen.FromPoint(new System.Drawing.Point(screenPoint.X, screenPoint.Y));
             //We show stack in the corner closest to the mouse
             bool isHideTaskBarOptionOn = (screen.WorkingArea.Width == screen.Bounds.Width &&
@@ -485,20 +495,20 @@ namespace Power8.Views
                                          || ignoreTaskbarPosition;
             
             //taskbar is vertical @ left or horizontal
-            if ((isHideTaskBarOptionOn && screenPoint.X <= screen.WorkingArea.X + screen.WorkingArea.Width / 2)
+            if ((isHideTaskBarOptionOn && screenPoint.X <= screen.WorkingArea.X + screen.WorkingArea.Width/2)
                 || screen.WorkingArea.X > screen.Bounds.X
                 || (screen.WorkingArea.Width == screen.Bounds.Width & !isHideTaskBarOptionOn))
                 resPoint.X = screen.WorkingArea.X;
-            else    //vertical @ right
-                resPoint.X = screen.WorkingArea.Width + screen.WorkingArea.X - w.Width;
+            else //vertical @ right
+                resPoint.X = (screen.WorkingArea.Width + screen.WorkingArea.X - w.Width*SystemScale)/SystemScale;
             
             //taskbar is horizontal @ top or vertical
-            if ((isHideTaskBarOptionOn && screenPoint.Y <= screen.WorkingArea.Y + screen.WorkingArea.Height / 2)
+            if ((isHideTaskBarOptionOn && screenPoint.Y <= screen.WorkingArea.Y + screen.WorkingArea.Height/2)
                 || screen.WorkingArea.Y > screen.Bounds.Y
                 || (screen.WorkingArea.Height == screen.Bounds.Height & !isHideTaskBarOptionOn))
                 resPoint.Y = screen.WorkingArea.Y;
-            else    //horizontal @ bottom
-                resPoint.Y = screen.WorkingArea.Height + screen.WorkingArea.Y - w.Height;
+            else //horizontal @ bottom
+                resPoint.Y = (screen.WorkingArea.Height + screen.WorkingArea.Y - w.Height*SystemScale)/SystemScale;
 
             w.Left = resPoint.X;
             w.Top = resPoint.Y;
