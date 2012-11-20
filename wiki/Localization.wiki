@@ -53,7 +53,8 @@ We do it only in case there's someone to translate the new strings. If the local
 
 After the sync is completed, we notify translators, and this notification contains the list of new strings.
 
-Then, the preferred way is to proceed as described above except you download your culture's ResX. To do it, go [https://code.google.com/p/power8/source/browse/#svn%2Ftrunk%2FProperties here], click on ResX you need (for example, `Resources.ru.resx` file), and then on the right side, click the "View raw file" link. The file will be downloaded to your PC.
+Then, the preferred way is to proceed as described above except you download your culture's ResX. To do it, go [https://code.google.com/p/power8/source/browse/#svn%2Ftrunk%2FProperties here], click on ResX you need (for example, `Resources.ru.resx` file), and then on the right side, click the "View raw file" link and select "Save Link As.." or "Save Target As..." or whatever your browser suggests for saving link target locally. The file will be downloaded to your PC.
+https://power8.googlecode.com/svn/wiki/Power8New02.png
 
 It is recommended that you check *ALL* the strings in the file in case we forgot something and ensure that they are translated.
 
