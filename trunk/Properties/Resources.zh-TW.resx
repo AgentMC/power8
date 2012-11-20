@@ -422,4 +422,28 @@ Power8 可以幫您處理這個問題。
   <data name="CR_AbDonate" xml:space="preserve">
     <value>開啟 WebMoney 網站捐款給 Power8 團隊</value>
   </data>
+  <data name="CR_AppExcludeFromMfu" xml:space="preserve">
+    <value>Hide this item</value>
+  </data>
+  <data name="CR_StgTabMfu" xml:space="preserve">
+    <value>Most frequently used</value>
+  </data>
+  <data name="CR_StgMfuColExcl" xml:space="preserve">
+    <value>Hide items containing strings:</value>
+  </data>
+  <data name="CR_StgMfuUseCustom" xml:space="preserve">
+    <value>Use custom list (user-configurable)</value>
+  </data>
+  <data name="CR_StgMfuUseP8JL" xml:space="preserve">
+    <value>Use Power8 internal data</value>
+  </data>
+  <data name="CR_StgMfuUseSystem" xml:space="preserve">
+    <value>Use system data (UserAssist) to build list</value>
+  </data>
+  <data name="CR_AppExcludeFromCustom" xml:space="preserve">
+    <value>Remove from custom launch list</value>
+  </data>
+  <data name="CR_AppIncludeToCustom" xml:space="preserve">
+    <value>Add to custom launch list</value>
+  </data>
 </root>

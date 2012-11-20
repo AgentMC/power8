@@ -429,4 +429,28 @@ Power8 может помочь вам с этим справиться.
   <data name="CR_AbDonate" xml:space="preserve">
     <value>Посетите сайт WebMoney чтобы поддержать разработку Power8</value>
   </data>
+  <data name="CR_AppExcludeFromMfu" xml:space="preserve">
+    <value>Скрыть этот объект</value>
+  </data>
+  <data name="CR_StgTabMfu" xml:space="preserve">
+    <value>Наиболее часто используемые</value>
+  </data>
+  <data name="CR_StgMfuColExcl" xml:space="preserve">
+    <value>Прятать объекты, содержащие строки:</value>
+  </data>
+  <data name="CR_StgMfuUseCustom" xml:space="preserve">
+    <value>Использовать персональный список (настраиваемый)</value>
+  </data>
+  <data name="CR_StgMfuUseP8JL" xml:space="preserve">
+    <value>Использовать собственные данные Power8</value>
+  </data>
+  <data name="CR_StgMfuUseSystem" xml:space="preserve">
+    <value>Использовать системные данные (UserAssist) при построении списка</value>
+  </data>
+  <data name="CR_AppExcludeFromCustom" xml:space="preserve">
+    <value>Убрать из персонального списка</value>
+  </data>
+  <data name="CR_AppIncludeToCustom" xml:space="preserve">
+    <value>Добавить в персональный список</value>
+  </data>
 </root>

@@ -437,15 +437,15 @@ Please launch Explorer for me and restart Power8 process.</value>
     <value>Use custom list (user-configurable)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Use Power8's internal data</value>
+    <value>Use Power8 internal data</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Use system data (UserAssist service) to build list</value>
+    <value>Use system data (UserAssist) to build list</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Remove from custom MFU list</value>
+    <value>Remove from custom launch list</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Add to custom MFU list</value>
+    <value>Add to custom launch list</value>
   </data>
 </root>
