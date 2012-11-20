@@ -53,6 +53,8 @@ Localization is done by:
 ||Portuguese||Matheus Macabu||mkbu95@gmail.com||
 ||Turkish||Veysi Ertekin||ertekin.veysi@gmail.com||
 ||Chinese (Taiwan)||David Wang||ufjl1785@gmail.com||
+||Hungarian       ||Zsolt Brechler            ||zsolt.brechler@gmail.com||
+||French          ||Marc An                   ||mar.can2004@voila.fr||
 
 `*` Не обновляется
 
