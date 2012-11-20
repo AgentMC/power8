@@ -422,30 +422,30 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
     <value>Käynnistä sovellus uudelleen kohtalokkaan virheen tapahduttua</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Visit WebMoney site to donate Power8 team</value>
+    <value>Vieraile WebMoney-sivustolla tehdäksesi lahjoituksen Power8 teamille</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Hide this item</value>
+    <value>Piilota tämä kohde</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Most frequently used</value>
+    <value>Useimmin käytetyt</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Hide items containing strings:</value>
+    <value>Piilota kohteet, joissa on merkkijono:</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Use custom list (user-configurable)</value>
+    <value>Käytä muokattua listaa (käyttäjän muokattava)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Use Power8 internal data</value>
+    <value>Käytä Power8:n sisäistä dataa</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Use system data (UserAssist) to build list</value>
+    <value>Käytä järjestelmän dataa (UserAssist) rakentaaksesi listan</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Remove from custom launch list</value>
+    <value>Poista muokattavalta suorita-listalta</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Add to custom launch list</value>
+    <value>Lisää muokattavalle suorita-listalle</value>
   </data>
 </root>
