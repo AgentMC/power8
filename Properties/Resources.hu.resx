@@ -198,7 +198,7 @@ Mégsel: Kihagyom ezt a frissítést, ne értesítsen többet erről a verziór�
     <value>Alvás</value>
   </data>
   <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Automata indítás</value>
+    <value>Automatikus indítás</value>
   </data>
   <data name="CR_MWCheckForUpdates" xml:space="preserve">
     <value>Frissítések keresése</value>

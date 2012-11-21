@@ -335,7 +335,7 @@ Cancelar: ignorar esta atualização, nunca notificar-me sobre esta versão.</va
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
     <value>Não, obrigado.
-Eu sei qual é o problema e irei cuidar dele por mim mesmo.</value>
+Eu sei qual é o problema e irei cuidar dele por conta própria.</value>
   </data>
   <data name="CR_RE_Title" xml:space="preserve">
     <value>Power8 — Windows Explorer está morto</value>
