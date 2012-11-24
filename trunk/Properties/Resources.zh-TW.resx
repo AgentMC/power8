@@ -423,27 +423,27 @@ Power8 可以幫您處理這個問題。
     <value>開啟 WebMoney 網站捐款給 Power8 團隊</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Hide this item</value>
+    <value>隱藏此項目</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Most frequently used</value>
+    <value>常用程式</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Hide items containing strings:</value>
+    <value>隱藏包含下列字串的項目：</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Use custom list (user-configurable)</value>
+    <value>使用自訂清單 (使用者自行設定)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Use Power8 internal data</value>
+    <value>使用Power8內部資料</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Use system data (UserAssist) to build list</value>
+    <value>使用系統資料 (UserAssist) 來建立清單</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Remove from custom launch list</value>
+    <value>從自訂清單中移除</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Add to custom launch list</value>
+    <value>加入自訂清單</value>
   </data>
 </root>
