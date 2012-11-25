@@ -248,7 +248,7 @@ namespace Power8
                 Debug.WriteLine(dbgLine + "begin");
 #endif
                 //Way 1, straightforward: "Hey shell, give me an icon for that file!"
-                var shinfo = new API.Shfileinfo();
+                var shinfo = new API.ShfileinfoW();
                 var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint) Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
 #if DEBUG
                 Debug.WriteLine(dbgLine + "ShGetFileInfo returned " + zeroFails);

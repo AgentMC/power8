@@ -317,7 +317,7 @@ namespace Power8
             Debug.WriteLine("RSFN: SHGetSp.F.Loc. for id<={0} returned result code {1}", id, hRes);
 #endif
             var pwstr = IntPtr.Zero;
-            var info = new API.Shfileinfo();
+            var info = new API.ShfileinfoW();
             var zeroFails = new IntPtr(1); 
             //Fast shell call for Win7+
             if (hRes == 0 && OsIs.SevenOrMore && API.SHGetNameFromIDList(ppIdl, API.SIGDN.NORMALDISPLAY, ref pwstr) == 0)
@@ -364,7 +364,7 @@ namespace Power8
                 }
                 if (string.IsNullOrEmpty(path))//if the 8.3-conversion failed
                 {
-                    var info = new API.Shfileinfo();
+                    var info = new API.ShfileinfoW();
                     API.SHGetFileInfo(ppidl, 0, ref info, (uint) Marshal.SizeOf(info),
                                       API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES);
                     path = info.szDisplayName;
@@ -764,7 +764,7 @@ namespace Power8
                 if(icon != IntPtr.Zero) //if all above succeeded
                     return icon;
 
-                var shinfo = new API.Shfileinfo(); //otherwise let's make system extract icon for us
+                var shinfo = new API.ShfileinfoW(); //otherwise let's make system extract icon for us
                 API.SHGetFileInfo(resData.Item1, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), API.Shgfi.ICON | API.Shgfi.LARGEICON);
                 return shinfo.hIcon; //and return whatever comes as result
             }
