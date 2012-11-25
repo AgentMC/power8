@@ -400,14 +400,16 @@ namespace Power8
 
 
         //Getting icons============================================================================
-        [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Ansi)]
-        public struct Shfileinfo
+        [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
+        public struct ShfileinfoW
         {
             public IntPtr hIcon;
             public int iIcon;
             public uint dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)] public string szDisplayName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)] public string szTypeName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string szDisplayName;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+            public string szTypeName;
         };
 
         [Flags]
@@ -503,13 +505,13 @@ namespace Power8
             FLAG_MASK = 0xFF00, // mask for all possible flag values
         }
 
-        [DllImport(Lib.SHELL)]
+        [DllImport(Lib.SHELL, CharSet = CharSet.Unicode, EntryPoint = "SHGetFileInfoW")]
         public static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes,
-                                                  ref Shfileinfo psfi, uint cbSizeFileInfo, Shgfi uFlags);
+                                                  ref ShfileinfoW psfi, uint cbSizeFileInfo, Shgfi uFlags);
 
-        [DllImport(Lib.SHELL)]
+        [DllImport(Lib.SHELL, CharSet = CharSet.Unicode, EntryPoint = "SHGetFileInfoW")]
         public static extern IntPtr SHGetFileInfo(IntPtr pIdList, uint dwFileAttributes,
-                                                  ref Shfileinfo psfi, uint cbSizeFileInfo, Shgfi uFlags);
+                                                  ref ShfileinfoW psfi, uint cbSizeFileInfo, Shgfi uFlags);
 
         [DllImport(Lib.USER)]
         public static extern int DestroyIcon(IntPtr hIcon);
