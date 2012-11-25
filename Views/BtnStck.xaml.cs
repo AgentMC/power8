@@ -398,9 +398,9 @@ namespace Power8.Views
                     SearchBox.Focus();
             }
 // ReSharper disable PossibleUnintendedReferenceComparison
-            if ((e.Key == Key.Up || e.Key == Key.Down) && dataGrid.ItemsSource == MfuItems)
+            if ((e.Key == Key.Up || e.Key == Key.Down))
             { //Not in search view when we press Up/Down
-                if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0)
+                if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0 && dataGrid.ItemsSource == MfuItems)
                 {//with CTRL
                     if (dataGrid.SelectedIndex > -1 && SettingsManager.Instance.MfuIsCustom)
                     { //...and we have something selected, and we're in custom MFU...
@@ -426,8 +426,8 @@ namespace Power8.Views
                         }
                     }
                 }
-                else //Not with CTRL
-                {// => just move selection
+                else if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) == 0)//Not with CTRL,
+                {// regardless of source => just move selection
                     e.Handled = true;
                     var idx = dataGrid.SelectedIndex + (e.Key == Key.Up ? -1 : 1);
                     if (idx < 0)
@@ -507,6 +507,7 @@ namespace Power8.Views
         {
             base.Focus();
             SearchBox.Focus();
+            SearchMarker.Visibility = Visibility.Hidden;
         }
         /// <summary>
         /// Returns Root PowerItem based on the passed name of Menued button.
