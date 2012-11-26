@@ -7,26 +7,17 @@ For all other feature requests, currently not prioritized, please consult [Featu
 
 For already implemented features, see [Changelog] page.
 
-
-= _Power8 v.1.3 Beta_ =
-*estimated date: 11.11.12*
+= _Power8 v.1.4 Beta_ =
+*estimated date: 09.12.12*
+  * Drag&Drop in Start menu and User-configurable MFU list (see above);
+  * Cut/Copy/Paste/Delete for context menu;
   * Configuration dialog:
-    * What to show in MFU list:
-      * User Assist data (as it is now);
-      * Power8 MFU data;
-      * User-Configurable list.
     * (W7+) Switch CPL Root and All CPL items;
   * "Switch User" command
 
 
-= _Power8 v.1.4 Beta_ =
-*estimated date: 25.11.12*
-  * Drag&Drop in Start menu and User-configurable MFU list (see above);
-  * Cut/Copy/Paste/Delete for context menu;
-
-
 = _Power8 v.1.5 RTM_ =
-*estimated release date: 09.12.12*
+*estimated release date: 20.12.12*
   * Skins/styles;
     * In particular, Metro style.
   * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
