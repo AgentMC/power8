@@ -12,7 +12,7 @@ Each check downloads 2.26 KB file named `"AssemblyInfo.cs"` from the project sou
 
 At the moment, when version is found, there are 2 possibilities. If update files are available, the update dialog will show up.
 
-http://i36.fastpic.ru/big/2012/0528/eb/674fe358014ee5902baafe50c8e897eb.png
+http://power8.googlecode.com/svn/wiki/Power8New04.png
 
 In this window, "Download and Update" means Power8 will download the current MSI package (download progress will be shown in progress bar), launch it and exit. At the moment it is not a silent install, you'll have to go through all the steps, though previous version will be removed automatically by installer. In future this may be changed, and silent install will be applied.
 
@@ -147,6 +147,7 @@ There are 2 kinds of Jump List elements:
 Jump list element is treated as file if it exists locally on your disc. Commands are all the others (command line parameters, web addresses, ...). Command will be always launched with application, jump list of which it is located in. File, however, will be treated as usual, and opened in default associated system application.
 
 ==Settings window==
+===1.1: General tab===
 
 The new Settings window is available starting Power8 v.1.1. Right-click Start button, snd choose "Settings" to open the window.
 
@@ -166,3 +167,22 @@ The window has the following options:
     * Mark Auto-Start and Auto-update options with Red color if they are unchecked;
     * Display warning sign and a hint over the Start button:
 http://i48.fastpic.ru/big/2012/1115/4e/acb4325f6ebdf4bc5c26a6e759a6fc4e.png
+
+===1.2-1.3: Menu-buttons, web search engines and most frequently used list===
+
+http://power8.googlecode.com/svn/wiki/Power8New03.png
+
+Using these tabs, you can either hide some of Menu-buttons, or edit the list and contents of available web search engines, and  finally, set the MFU list style used by Power8.
+
+To remove web search engine, select the row and press DELETE key. 
+
+To add a search engine, click the empty space. Placeholders appear helping you to put data into appropriate places. After you wrote the proper search line, commit the changes by pressing ENTER. Try this with e.g. Youtube, which has the search query 
+{{{
+"http://www.youtube.com/results?search_query={0}"
+}}}
+
+MFU tab allows you to set what is displayed in launch list table when you open Power8 window. By default, Windows' UserAssist data is used (same that is used by Explorer; same used by Power8 starting from v.0.5). 
+
+Custom MFU list is empty by default. To add data there, right-click whatever file/folder/application/link/control panel element you want inside Power8 and choose "Add to custom launch list". To remove item, right-click it and choose "Remove item from custom launch-list" (command available only when you right-click item that is actually placed inside launch table).
+
+3rd way to build the launch list is to use Power8 internal data it collects e.g. to show JumpLists on Windows XP, etc. You can find this data under `%localappdata%\Power8_Team\` in file named "Launchdata.csv".
