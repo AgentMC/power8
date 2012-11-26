@@ -13,7 +13,8 @@ For already implemented features, see [Changelog] page.
   * Cut/Copy/Paste/Delete for context menu;
   * Configuration dialog:
     * (W7+) Switch CPL Root and All CPL items;
-  * "Switch User" command
+  * "Switch User" command;
+  * Re-work update logic to more flexible pattern.
 
 
 = _Power8 v.1.5 RTM_ =
