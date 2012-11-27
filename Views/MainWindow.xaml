@@ -36,12 +36,13 @@
                 <MenuItem Name="MWSettings" Click="SettingsClick" />
                 <Separator />
                 <MenuItem Name="MWAbout" Click="AboutClick" />
+                <MenuItem Name="MWDonate" Click="DonateClick" Visibility="{Binding Path=ShowDonateMenuItem, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <MenuItem Name="MWExit" Click="ExitClick" />
             </ContextMenu>
         </Button.ContextMenu>
         <Grid>
     		<Grid Opacity="0.8" x:Name="winGrid" 
-                  Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=false}">
+                  Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource BooleanToVisibilityConverter}}">
     			<Grid.RowDefinitions>
     				<RowDefinition />
     				<RowDefinition />

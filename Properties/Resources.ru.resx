@@ -376,6 +376,9 @@ Power8 может помочь вам с этим справиться.
   <data name="CR_StgSquareStart" xml:space="preserve">
     <value>Настроить кнопку Пуск</value>
   </data>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Показывать Жертвенный пункт меню</value>
+  </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
     <value>Сообщать о проблемах конфигурации</value>
   </data>
@@ -452,5 +455,8 @@ Power8 может помочь вам с этим справиться.
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Добавить в персональный список</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>Пожертвовать на нужды команды разработчиков</value>
   </data>
 </root>

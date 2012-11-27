@@ -374,6 +374,9 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
     <value>Inform me about configuration issues</value>
   </data>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Show Donate menu item</value>
+  </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
     <value>Watch removable drives</value>
   </data>
@@ -447,5 +450,8 @@ Please launch Explorer for me and restart Power8 process.</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Add to custom launch list</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>Donate Power8 Team</value>
   </data>
 </root>

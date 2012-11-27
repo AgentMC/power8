@@ -140,6 +140,7 @@ namespace Power8.Views
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
             this.RegisterHook(WndProc);
         }
+
         /// <summary>
         /// Sync point when closing the application. If the main window was closed by Alt+F4,
         /// by killing Explorer, or by shutdown of the system - controlls that still all the 
@@ -210,6 +211,13 @@ namespace Power8.Views
         private void AboutClick(object sender, RoutedEventArgs e)
         {
             Util.InstanciateClass(t: typeof (About));
+        }
+        /// <summary>
+        /// Shows About dialog
+        /// </summary>
+        private void DonateClick(object sender, RoutedEventArgs e)
+        {
+            Util.InstanciateClass(t: typeof(Donate));
         }
         /// <summary>
         /// Shows Settings dialog
