@@ -80,6 +80,7 @@
                 <TextBox Text="{Binding StartMenuText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                 <Separator/>
                 <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}"/>
+                <CheckBox x:Name="StgShowDonateMenuItem" IsChecked="{Binding ShowDonateMenuItem, Mode=TwoWay}"/>
             </StackPanel>
         </TabItem>
         <TabItem x:Name="StgTabMenuBtns">

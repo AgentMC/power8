@@ -35,9 +35,7 @@
                                         <Condition Binding="{Binding IsCanBeAdded}" Value="False"/>
                                         <Condition Binding="{Binding IsCanBeRemoved}" Value="False"/>
                                     </MultiDataTrigger.Conditions>
-                                    <MultiDataTrigger.Setters>
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </MultiDataTrigger.Setters>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
                                 </MultiDataTrigger>
                             </Style.Triggers>  
                         </Style>

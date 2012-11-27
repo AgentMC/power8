@@ -42,7 +42,7 @@ namespace Power8.Helpers
         public static event EventHandler WatchRemovablesChanged;
         public static event EventHandler WarnMayHaveChanged;
         public static event EventHandler ImageChanged;
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private static readonly System.Windows.Forms.Screen Screen = System.Windows.Forms.Screen.PrimaryScreen;
@@ -364,11 +364,24 @@ namespace Power8.Helpers
             get { return Settings.Default.WarnBadConfig; }
             set
             {
-                if (value == ReportBadSettings)
+                if (value == Settings.Default.WarnBadConfig)
                     return;
                 Settings.Default.WarnBadConfig = value;
                 Settings.Default.Save();
                 WarnMayHaveChanged(this, null);
+            }
+        }
+
+        public bool ShowDonateMenuItem
+        {
+            get { return Settings.Default.ShowDonateMenuItem; }
+            set
+            {
+                if (value == ShowDonateMenuItem)
+                    return;
+                Settings.Default.ShowDonateMenuItem = value;
+                Settings.Default.Save();
+                OnPropertyChanged("ShowDonateMenuItem");
             }
         }
 
