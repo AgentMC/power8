@@ -22,8 +22,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -50,13 +48,8 @@
                 <TextBlock Text="{Binding NavigateUri, ElementName=hlTranslatorURI}" Margin="0" />
             </InlineUIContainer></Hyperlink>           
         </Label>
-        <Label HorizontalAlignment="Left" Padding="0" Margin="12,0,0,0" Grid.Column="1" Grid.Row="5" VerticalAlignment="Bottom">
-        	<Hyperlink NavigateUri="http://www.wmtransfer.com/" Click="Navigate">
-        		<InlineUIContainer></InlineUIContainer>
-			</Hyperlink>
-        </Label>
         <!---->
-        <Grid Grid.Row="7" Grid.Column="1" Margin="0" VerticalAlignment="Bottom">
+        <Grid Grid.Row="5" Grid.Column="1" Margin="0" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
