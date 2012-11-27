@@ -326,7 +326,7 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>Version:</value>
   </data>
   <data name="CR_MWAbout" xml:space="preserve">
-    <value>About</value>
+    <value>About...</value>
     <comment>Label in main btn context menu and in About Window</comment>
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
@@ -373,9 +373,6 @@ Please launch Explorer for me and restart Power8 process.</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
     <value>Inform me about configuration issues</value>
-  </data>
-  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
     <value>Watch removable drives</value>
@@ -451,7 +448,10 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Add to custom launch list</value>
   </data>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Show Donate menu item</value>
+  </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team</value>
+    <value>Donate Power8 Team...</value>
   </data>
 </root>
