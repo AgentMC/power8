@@ -364,7 +364,7 @@ namespace Power8.Helpers
             get { return Settings.Default.WarnBadConfig; }
             set
             {
-                if (value == Settings.Default.WarnBadConfig)
+                if (value == ReportBadSettings)
                     return;
                 Settings.Default.WarnBadConfig = value;
                 Settings.Default.Save();

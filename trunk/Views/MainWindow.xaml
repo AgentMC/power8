@@ -42,7 +42,7 @@
         </Button.ContextMenu>
         <Grid>
     		<Grid Opacity="0.8" x:Name="winGrid" 
-                  Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource BooleanToVisibilityConverter}}">
+                  Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=false}">
     			<Grid.RowDefinitions>
     				<RowDefinition />
     				<RowDefinition />
