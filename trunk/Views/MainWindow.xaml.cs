@@ -12,6 +12,9 @@ using System.Windows.Media.Imaging;
 using Power8.Helpers;
 using Power8.Properties;
 using Application = System.Windows.Forms.Application;
+using DataFormats = System.Windows.DataFormats;
+using DragDropEffects = System.Windows.DragDropEffects;
+using DragEventArgs = System.Windows.DragEventArgs;
 using Point = System.Windows.Point;
 
 namespace Power8.Views
@@ -550,5 +553,30 @@ namespace Power8.Views
         }
 
         #endregion
+
+        private void Power8Drag(object sender, System.Windows.DragEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                if ((e.AllowedEffects & DragDropEffects.Link) > 0)
+                    e.Effects = DragDropEffects.Link;
+                else
+                    e.Effects = DragDropEffects.Copy | DragDropEffects.Move;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        private void Power8Drop(object sender, DragEventArgs e)
+        {
+            foreach (var fileOrFolder in (string[])e.Data.GetData(DataFormats.FileDrop))
+            {
+                MfuList.Add2Custom(null, fileOrFolder);
+            }
+            MfuList.UpdateStartMfu();
+        }
     }
 }

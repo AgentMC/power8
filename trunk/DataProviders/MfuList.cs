@@ -555,16 +555,17 @@ namespace Power8
             UpdateStartMfuSync();
         }
 
-        public static void Add2Custom(PowerItem item)
+        public static void Add2Custom(PowerItem item, string fullPath = null)
         {
-            var arg = PowerItemTree.GetResolvedArgument(item);
+            var arg = item == null ? fullPath : PowerItemTree.GetResolvedArgument(item);
             var idx = UserList.IndexOf(arg);
             if(idx == UserList.Count -1 && UserList.Count > 0) //Already in list and top item
                 return;
             if(idx != -1) //Already in list, move to top
                 UserList.RemoveAt(idx);
             UserList.Add(arg); //Including case where item not in list
-            UpdateStartMfuSync(); //Refresh
+            if(SettingsManager.Instance.MfuIsCustom && fullPath == null)
+                UpdateStartMfuSync(); //Refresh
         }
 
         public static void RemoveCustom(PowerItem item)
