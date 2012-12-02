@@ -27,7 +27,11 @@
             ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}"
             LayoutUpdated="MainBtnLayoutUpdated"
             ToolTipService.ToolTip="{Binding ElementName=Root, Path=Tip}"
-            ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}">
+            ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}"
+            AllowDrop="True"
+            DragOver="Power8Drag"
+            DragEnter="Power8Drag"
+            Drop="Power8Drop">
         <Button.ContextMenu>
             <ContextMenu Name="menu">
                 <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
