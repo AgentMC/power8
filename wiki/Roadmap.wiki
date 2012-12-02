@@ -22,3 +22,4 @@ For already implemented features, see [Changelog] page.
   * Skins/styles;
     * In particular, Metro style.
   * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
+  * Handling of keys in launch-list: Delete, ((Un)Pin) and (Show JL)
