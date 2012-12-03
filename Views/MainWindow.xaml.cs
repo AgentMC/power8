@@ -273,6 +273,36 @@ namespace Power8.Views
         {
             FirePropChanged("StartImage");
         }
+        /// <summary>
+        /// Handles DragEnter/DragOver events to provide proper feedback to drag source
+        /// </summary>
+        private void Power8Drag(object sender, DragEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                if ((e.AllowedEffects & DragDropEffects.Link) > 0)
+                    e.Effects = DragDropEffects.Link; //we prefer Link because it better demonstrates what will be done
+                else
+                    e.Effects = DragDropEffects.Copy | DragDropEffects.Move;
+            }
+            else
+            {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+        /// <summary>
+        /// Handles DragDrop event putting file names to custom MFU list
+        /// </summary>
+        private void Power8Drop(object sender, DragEventArgs e)
+        {
+            foreach (var fileOrFolder in (string[])e.Data.GetData(DataFormats.FileDrop))
+            {
+                MfuList.Add2Custom(null, fileOrFolder);
+            }
+            MfuList.UpdateStartMfu(); //we use 2nd way to invoke Add2Cutsom, so must 
+            //update the MFU list explicitly
+        }
 
         #endregion
 
@@ -357,44 +387,7 @@ namespace Power8.Views
                 MoveReBar(curHeight < curWidth, curHeight, curWidth);
             }
         }
-
-        /// <summary>
-        /// Moves "rebar" panel that hosts applications' buttons and different launch bars on taskbar
-        /// </summary>
-        /// <param name="taskBarVertical">Is taskbar located vertical or horizontal</param>
-        /// <param name="curHeight">Desired Height of the gap to the left/top of app buttons</param>
-        /// <param name="curWidth">Desired Width of the gap to the left/top of app buttons</param>
-        private void MoveReBar(bool taskBarVertical, int curHeight, int curWidth)
-        {
-            API.RECT r, r2;
-            API.GetWindowRect(_midPanel, out r); //absolute coord of rebar
-            API.GetWindowRect(_taskBar, out r2); //absolute coord of taskbar
-            if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
-            {//This if doesn't work on exit since it is called only for Win8 on exit
-                //Have no idea why, but there's some kind of automatic margin applied in classic style
-                if (taskBarVertical)
-                    r2.Left += 4;
-                else
-                    r2.Top += 4;
-            }
-            r.Top -= r2.Top; //getting relative coordinates...
-            r.Left -= r2.Left;
-            r.Right -= r2.Left;
-            r.Bottom -= r2.Top;
-            if (taskBarVertical && r.Top + 4 != curHeight) //start moving!
-            {
-                //move rebar down (up on exit)
-                int delta = (curHeight - 4) - r.Top;
-                API.MoveWindow(_midPanel, r.Left, r.Top + delta, r.Right - r.Left, r.Bottom - r.Top - delta, true);
-            }
-            else if (!taskBarVertical && r.Left + 4 != curWidth)
-            {
-                //move rebar right (left on exit)
-                int delta = (curWidth - 4) - r.Left;
-                API.MoveWindow(_midPanel, r.Left + delta, r.Top, r.Right - r.Left - delta, r.Bottom - r.Top, true);
-            }
-        }
-
+        
         #endregion
 
         #region Bindable props
@@ -551,32 +544,43 @@ namespace Power8.Views
             if (h != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
+        /// <summary>
+        /// Moves "rebar" panel that hosts applications' buttons and different launch bars on taskbar
+        /// </summary>
+        /// <param name="taskBarVertical">Is taskbar located vertical or horizontal</param>
+        /// <param name="curHeight">Desired Height of the gap to the left/top of app buttons</param>
+        /// <param name="curWidth">Desired Width of the gap to the left/top of app buttons</param>
+        private void MoveReBar(bool taskBarVertical, int curHeight, int curWidth)
+        {
+            API.RECT r, r2;
+            API.GetWindowRect(_midPanel, out r); //absolute coord of rebar
+            API.GetWindowRect(_taskBar, out r2); //absolute coord of taskbar
+            if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
+            {//This if doesn't work on exit since it is called only for Win8 on exit
+                //Have no idea why, but there's some kind of automatic margin applied in classic style
+                if (taskBarVertical)
+                    r2.Left += 4;
+                else
+                    r2.Top += 4;
+            }
+            r.Top -= r2.Top; //getting relative coordinates...
+            r.Left -= r2.Left;
+            r.Right -= r2.Left;
+            r.Bottom -= r2.Top;
+            if (taskBarVertical && r.Top + 4 != curHeight) //start moving!
+            {
+                //move rebar down (up on exit)
+                int delta = (curHeight - 4) - r.Top;
+                API.MoveWindow(_midPanel, r.Left, r.Top + delta, r.Right - r.Left, r.Bottom - r.Top - delta, true);
+            }
+            else if (!taskBarVertical && r.Left + 4 != curWidth)
+            {
+                //move rebar right (left on exit)
+                int delta = (curWidth - 4) - r.Left;
+                API.MoveWindow(_midPanel, r.Left + delta, r.Top, r.Right - r.Left - delta, r.Bottom - r.Top, true);
+            }
+        }
 
         #endregion
-
-        private void Power8Drag(object sender, System.Windows.DragEventArgs e)
-        {
-            e.Handled = true;
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                if ((e.AllowedEffects & DragDropEffects.Link) > 0)
-                    e.Effects = DragDropEffects.Link;
-                else
-                    e.Effects = DragDropEffects.Copy | DragDropEffects.Move;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-            }
-        }
-
-        private void Power8Drop(object sender, DragEventArgs e)
-        {
-            foreach (var fileOrFolder in (string[])e.Data.GetData(DataFormats.FileDrop))
-            {
-                MfuList.Add2Custom(null, fileOrFolder);
-            }
-            MfuList.UpdateStartMfu();
-        }
     }
 }
