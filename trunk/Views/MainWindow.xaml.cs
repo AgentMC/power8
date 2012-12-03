@@ -205,6 +205,8 @@ namespace Power8.Views
         /// </summary>
         private void ExitClick(object sender, RoutedEventArgs e)
         {
+            if(SettingsManager.Instance.BlockMetroEnabled)
+                SettingsManager.BgrThreadLock.Reset();//Main Window must not be closed while this is running
             Close();
             SettingsManager.BgrThreadLock.WaitOne();
         }
