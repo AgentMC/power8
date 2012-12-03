@@ -137,6 +137,7 @@
                 <Button Click="ButtonSleepClick" Name="ButtonSleep"/>
                 <Button Click="ButtonHibernateClick" Name="ButtonHibernate"/>
                 <Button Click="ButtonLogOffClick" Name="ButtonLogOff"/>
+                <Button Click="ButtonSwitchUserClick" Name="ButtonSwitchUser"/>
             </StackPanel>
             <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
             <Button Click="ButtonLockClick" Name="ButtonLock" Margin="0,0,0,2"/>

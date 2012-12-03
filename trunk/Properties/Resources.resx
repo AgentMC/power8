@@ -454,4 +454,7 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_MWDonate" xml:space="preserve">
     <value>Donate Power8 Team...</value>
   </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>Switch User</value>
+  </data>
 </root>

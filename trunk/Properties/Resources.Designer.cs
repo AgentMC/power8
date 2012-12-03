@@ -268,6 +268,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch User.
+        /// </summary>
+        internal static string CR_ButtonSwitchUser {
+            get {
+                return ResourceManager.GetString("CR_ButtonSwitchUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         internal static string CR_CLCleanerBtn {
