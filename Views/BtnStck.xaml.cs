@@ -221,6 +221,13 @@ namespace Power8.Views
             if (handler != null)
                 handler(this, null);
         }
+        /// <summary>
+        /// Handler of Switch User button. Executes system "Switch user" command application
+        /// </summary>
+        private void ButtonSwitchUserClick(object sender, RoutedEventArgs e)
+        {
+            StartConsoleHidden("tsdiscon.exe", null);
+        }
 
         //------------------------------------------
 
