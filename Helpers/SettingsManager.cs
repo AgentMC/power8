@@ -129,14 +129,15 @@ namespace Power8.Helpers
 
         private static void UpdateCheckThread()
         {
-            BgrThreadLock.WaitOne();
-
-            int cycles = 0;
+            BgrThreadLock.WaitOne(); //wait until main window is instantiated
+            
+            int failcount = 0;
+            DateTime scheduled = DateTime.Now; //check immediately after the thread was started
             var client = new WebClient();
             _update = true;
             while (_update && !MainWindow.ClosedW)
             {
-                if (cycles == 0)
+                if (DateTime.Now >= scheduled)
                 {
                     try
                     {//parsing
@@ -186,17 +187,34 @@ namespace Power8.Helpers
                             }
 
                         }
+                        scheduled = DateTime.Now.AddHours(12); //check in 12 hours again
+                        failcount = 0;
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(Resources.Err_CantCheckUpdates + ex.Message,
-                                        NoLoc.Stg_AppShortName, MessageBoxButton.OK,
-                                        MessageBoxImage.Exclamation);
+                        
+                        failcount++;
+                        switch (failcount)
+                        {
+                            case 1:
+                                scheduled = DateTime.Now.AddMinutes(5);
+                                break;
+                            case 2:
+                                scheduled = DateTime.Now.AddMinutes(30);
+                                break;
+                            case 3:
+                                scheduled = DateTime.Now.AddMinutes(55);
+                                break;
+                            default:
+                                failcount = 0;
+                                scheduled = DateTime.Now.AddHours(12);
+                                MessageBox.Show(Resources.Err_CantCheckUpdates + ex.Message,
+                                                NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                                break;
+                        }
                     }
                 }
-                Thread.Sleep(1000);
-                cycles++;
-                cycles %= 43200;
+                Thread.Sleep(1500);
             }
         }
 
@@ -207,7 +225,7 @@ namespace Power8.Helpers
 
         private static void BlockMetroThread()
         {
-            BgrThreadLock.WaitOne();
+            BgrThreadLock.WaitOne(); //wait until main window is instantiated
 
             //search for all metro windows (9 on RP)
             var handles = new Dictionary<IntPtr, API.RECT>();
@@ -229,7 +247,6 @@ namespace Power8.Helpers
             } while (last != IntPtr.Zero);
 
             _blockMetro = true;
-            BgrThreadLock.Reset();//Main Window must not be closed between Reset() and Set()
             while (_blockMetro && !MainWindow.ClosedW) //MAIN CYCLE
             {
                 foreach (var wnd in handles)
@@ -242,7 +259,8 @@ namespace Power8.Helpers
                 API.MoveWindow(wnd.Key, wnd.Value.Left, wnd.Value.Top,
                                wnd.Value.Right - wnd.Value.Left,
                                wnd.Value.Bottom - wnd.Value.Top, true);
-            BgrThreadLock.Set();
+            BgrThreadLock.Set(); //now Main window may close 
+            //(it will Reset() the lock in case this thread runs)
         }
 
         #endregion
