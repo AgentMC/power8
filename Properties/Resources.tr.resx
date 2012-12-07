@@ -137,9 +137,7 @@ Hayır: lütfen daha sonra tekrar hatırlat.
     <value>{1} nesnesinin özellikleri gösterilirken {0} hatası oluştu</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Güncellemeler kontrol edilemedi.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Güncellemeler kontrol edilemedi.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Tüm Programlar</value>

@@ -138,9 +138,7 @@ Cancelar: ignorar esta actualización, no volver a notificarme acerca de esta ve
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>No ha sido posible revisar nuevas actualizaciones.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>No ha sido posible revisar nuevas actualizaciones.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Todos los programas</value>
