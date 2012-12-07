@@ -232,9 +232,7 @@
     <value>Ваша версия:</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Не могу проверить обновления.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Не могу проверить обновления.</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
     <value>Невозможно получить подсказку для объекта</value>

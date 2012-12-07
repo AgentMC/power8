@@ -138,9 +138,7 @@ Annuler : Je passe cette mise à jour, veuillez ne plus me la rappeler.</value>
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Impossible de vérifier les mises à jour.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Impossible de vérifier les mises à jour.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Tous les programmes</value>

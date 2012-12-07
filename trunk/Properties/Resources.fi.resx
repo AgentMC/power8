@@ -138,9 +138,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Päivitysten tarkastus ei onnistu.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Päivitysten tarkastus ei onnistu.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Kaikki ohjelmat</value>

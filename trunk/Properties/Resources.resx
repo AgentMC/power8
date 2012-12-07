@@ -138,9 +138,7 @@ Cancel: I skip this update, never notify me about this version.</value>
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Unable to check for updates.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Unable to check for updates.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>All Programs</value>

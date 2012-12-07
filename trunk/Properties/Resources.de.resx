@@ -139,9 +139,7 @@ Abbrechen: Ich überspringe das Update. Benachrichtige mich nicht mehr über die
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Nicht möglich, nach Updates zu suchen.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Nicht möglich, nach Updates zu suchen.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Alle Programme</value>

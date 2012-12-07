@@ -138,9 +138,7 @@ Annuleren: Ik sla deze update over, informeer me niet meer over deze versie.</va
 {1} te laten zien</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Kan helaas niet op updates controleren.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Kan helaas niet op updates controleren.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Alle Programma's</value>

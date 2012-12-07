@@ -138,9 +138,7 @@ Cancelar: ignorar esta atualização, nunca notificar-me sobre esta versão.</va
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Não foi possível verificar por atualizações.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Não foi possível verificar por atualizações.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Todos os programas</value>

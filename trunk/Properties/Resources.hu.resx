@@ -137,9 +137,7 @@ Mégsel: Kihagyom ezt a frissítést, ne értesítsen többet erről a verziór�
     <value>{0} hiba történt az objektum tulajdonságok megjelenítése közben {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Frissítések keresése nem sikerült.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Frissítések keresése nem sikerült.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Minden program</value>

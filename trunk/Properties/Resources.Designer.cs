@@ -741,8 +741,7 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to check for updates.
-        ///.
+        ///   Looks up a localized string similar to Unable to check for updates..
         /// </summary>
         internal static string Err_CantCheckUpdates {
             get {

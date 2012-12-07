@@ -137,9 +137,7 @@
 </value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>無法檢查更新。
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>無法檢查更新。</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>所有程式</value>

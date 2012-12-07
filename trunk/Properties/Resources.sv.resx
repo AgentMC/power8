@@ -232,9 +232,7 @@
     <value>Din version:</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Kan inte söka efter uppdateringar.
-</value>
-    <comment>Leave trailing \r\n!</comment>
+    <value>Kan inte söka efter uppdateringar.</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
     <value>Kan inte hämta info om objektet</value>
