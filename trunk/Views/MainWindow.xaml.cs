@@ -414,13 +414,7 @@ namespace Power8.Views
         /// </summary>
         public string Tip
         {
-            get
-            {
-                return Properties.Resources.CR_ButtonStack +
-                        (SettingsManager.Instance.ShowWarn
-                            ? "\r\n" + Properties.Resources.Str_TipWarn
-                            : string.Empty);
-            }
+            get { return Properties.Resources.CR_ButtonStack + SettingsManager.Instance.WarnText; }
         }
         /// <summary>
         /// Returns value indicating should warning icon be displayed at the moment
