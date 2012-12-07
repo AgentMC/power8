@@ -189,12 +189,20 @@ namespace Power8.Helpers
                         }
                         scheduled = DateTime.Now.AddHours(12); //check in 12 hours again
                         failcount = 0;
+                        Instance.ShowUpdateWarn = false;
                     }
+#if DEBUG
                     catch (Exception ex)
+#else
+                    catch
+#endif
                     {
                         
                         failcount++;
-                        switch (failcount)
+#if DEBUG
+                        Debug.WriteLine("Can't check for updates (chance:{0}):{1}", failcount, ex.Message);
+#endif
+                        switch (failcount) //Checks 3 times during 1.5 hours, then gives up
                         {
                             case 1:
                                 scheduled = DateTime.Now.AddMinutes(5);
@@ -206,10 +214,9 @@ namespace Power8.Helpers
                                 scheduled = DateTime.Now.AddMinutes(55);
                                 break;
                             default:
-                                failcount = 0;
+                                failcount = 0; //forget it, recheck in 12 hours
                                 scheduled = DateTime.Now.AddHours(12);
-                                MessageBox.Show(Resources.Err_CantCheckUpdates + ex.Message,
-                                                NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                                Instance.ShowUpdateWarn = true;
                                 break;
                         }
                     }
@@ -261,6 +268,26 @@ namespace Power8.Helpers
                                wnd.Value.Bottom - wnd.Value.Top, true);
             BgrThreadLock.Set(); //now Main window may close 
             //(it will Reset() the lock in case this thread runs)
+        }
+
+        #endregion
+
+        #region Private props
+
+        private bool _showUpdateWarn;
+        private bool ShowUpdateWarn 
+        {
+            get { return _showUpdateWarn; }
+            set 
+            {
+                _showUpdateWarn = value;
+                WarnMayHaveChanged(this, null);
+            } 
+        }
+
+        private bool ShowSettingsWarn
+        {
+            get { return ReportBadSettings && (!AutoStartEnabled || !CheckForUpdatesEnabled); }
         }
 
         #endregion
@@ -405,7 +432,17 @@ namespace Power8.Helpers
 
         public bool ShowWarn
         {
-            get { return ReportBadSettings && (!AutoStartEnabled || !CheckForUpdatesEnabled); }
+            get { return ShowSettingsWarn || ShowUpdateWarn; }
+        }
+
+        public string WarnText
+        {
+            get
+            {
+                return
+                    (ShowSettingsWarn ? "\r\n" + Resources.Str_TipWarn : string.Empty) + 
+                    (ShowUpdateWarn ? "\r\n" + Resources.Err_CantCheckUpdates : string.Empty);
+            }
         }
 
         public string ImageString
