@@ -102,12 +102,9 @@ namespace Power8.Views
         /// </summary>
         void OnControlPanelByCategoryChanged(object sender, EventArgs e)
         {
-            foreach (var mb in GetAllMenuButtons().Where(mb => mb.Name == "ControlPanel"))
-            {
-                SpecialItems.Remove("ControlPanel");
-                PowerItemTree.RefreshControlPanelRoot();
-                mb.Item = GetSpecialItems("ControlPanel");
-            }
+            SpecialItems.Remove("ControlPanel");
+            PowerItemTree.RefreshControlPanelRoot();
+            ControlPanel.Item = GetSpecialItems("ControlPanel");
         }
 
 
@@ -274,7 +271,8 @@ namespace Power8.Views
                 //if you're REALLY fast, UI is repainted BEFORE Items collection is being actually 
                 //updated, along with SelectedItem, so you see and try launching item different 
                 //from one being actually launched.
-                dataGrid.SelectedIndex = -1; 
+                dataGrid.SelectedIndex = -1;
+                dataGrid.SelectedItem = null;
                 if (q[1] != ' ') //not web search
                 {
                     dataGrid.ItemsSource = _searchView; //switch MFU list to search results and kisk search invoker

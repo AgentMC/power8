@@ -533,7 +533,6 @@ namespace Power8.Helpers
                     return;
                 Settings.Default.ShowMbCtrlByCat = value;
                 Settings.Default.Save();
-                OnPropertyChanged("ShowMbCtrlByCat");
                 ControlPanelByCategoryChanged(this, null);
             }
         }
