@@ -115,6 +115,9 @@ namespace Power8
             }
         }
 
+        /// <summary>
+        /// Clears cached control panel item to rebuild it when required
+        /// </summary>
         public static void RefreshControlPanelRoot()
         {
             _controlPanelRoot = null;
@@ -129,17 +132,28 @@ namespace Power8
             {
                 if (_controlPanelRoot == null)
                 {
-                    //the item itself
-                    _controlPanelRoot = new PowerItem
+                    var sysMainItem = new PowerItem
                     {
-                        Argument = (Util.OsIs.SevenOrMore && Settings.Default.ShowMbCtrlByCat) ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
+                        Argument = Util.OsIs.SevenOrMore ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
                         SpecialFolderId = API.Csidl.CONTROLS,
-                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass((Util.OsIs.SevenOrMore && Settings.Default.ShowMbCtrlByCat) ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems),
+                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.ControlPanel),
                         NonCachedIcon = true,
                         HasLargeIcon = true,
                         IsFolder = true
                     };
+                    var sysExtendedItem = Util.OsIs.XPOrLess ? null : new PowerItem
+                    {
+                        Argument = API.ShNs.AllControlPanelItems,
+                        SpecialFolderId = API.Csidl.CONTROLS,
+                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
+                        IsFolder = true
+                    };
 
+                    //the item itself
+                    _controlPanelRoot = (Util.OsIs.XPOrLess || SettingsManager.Instance.ShowMbCtrlByCat)
+                                            ? sysMainItem
+                                            : sysExtendedItem;
+                    Debug.Assert(_controlPanelRoot != null, "_controlPanelRoot != null");
                     var cplCache = new List<string>();
                     //Flow items (Vista-like) and CPLs from cache
                     using (var k = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(
@@ -213,21 +227,18 @@ namespace Power8
 
                     _controlPanelRoot.SortItems();
 
-                    if (Util.OsIs.SevenOrMore && Settings.Default.ShowMbCtrlByCat) //XP only supports "All items"
+                    if (Util.OsIs.SevenOrMore) //XP only supports "All items"
                     {
                         //for 7+ we add "All Control Panel Items" + separator
-                        _controlPanelRoot.Icon = ImageManager.GetImageContainerSync(_controlPanelRoot, API.Shgfi.SMALLICON);
+                        _controlPanelRoot.Icon = ImageManager.GetImageContainerSync(sysMainItem, API.Shgfi.SMALLICON);
 
-                        _controlPanelRoot.Items.Insert(0, new PowerItem
-                        {
-                            Argument = API.ShNs.AllControlPanelItems,
-                            SpecialFolderId = API.Csidl.CONTROLS,
-                            ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AllControlPanelItems),
-                            Parent = _controlPanelRoot,
-                            Icon = _controlPanelRoot.Icon,
-                            IsFolder = true
-                        });
-
+                        _controlPanelRoot.Items.Insert(0,
+                                                       SettingsManager.Instance.ShowMbCtrlByCat
+                                                           ? sysExtendedItem
+                                                           : sysMainItem);
+                        _controlPanelRoot.Items[0].Parent = _controlPanelRoot;
+                        _controlPanelRoot.Items[0].Icon = _controlPanelRoot.Icon;
+                        
                         _controlPanelRoot.Items.Insert(1, new PowerItem
                         {
                             FriendlyName = SEPARATOR_NAME, 
