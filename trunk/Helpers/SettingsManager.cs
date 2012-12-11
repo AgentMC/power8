@@ -42,6 +42,7 @@ namespace Power8.Helpers
         public static event EventHandler WatchRemovablesChanged;
         public static event EventHandler WarnMayHaveChanged;
         public static event EventHandler ImageChanged;
+        public static event EventHandler ControlPanelByCategoryChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -520,6 +521,20 @@ namespace Power8.Helpers
                 Settings.Default.ShowMbNet = value;
                 Settings.Default.Save();
                 OnPropertyChanged("ShowMbNet");
+            }
+        }
+
+        public bool ShowMbCtrlByCat
+        {
+            get { return Settings.Default.ShowMbCtrlByCat; }
+            set
+            {
+                if (value == ShowMbCtrlByCat)
+                    return;
+                Settings.Default.ShowMbCtrlByCat = value;
+                Settings.Default.Save();
+                OnPropertyChanged("ShowMbCtrlByCat");
+                ControlPanelByCategoryChanged(this, null);
             }
         }
 

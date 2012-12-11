@@ -38,8 +38,11 @@ namespace Power8
         //Single virtual root item for both Common and User Start Menus
         private static readonly PowerItem StartMenuRootItem = new PowerItem {IsFolder = true, Argument = @"\"};
         //Roots backing fields
-        private static PowerItem _adminToolsItem, _librariesOrMyDocsItem, _controlPanelRoot,
-                                 _myComputerItem, _networkRoot;
+        private static PowerItem _adminToolsItem,
+                                 _librariesOrMyDocsItem,
+                                 _controlPanelRoot,
+                                 _myComputerItem,
+                                 _networkRoot;
 
         public static readonly EventWaitHandle CplDone = new EventWaitHandle(false, EventResetMode.ManualReset);
 
@@ -112,6 +115,11 @@ namespace Power8
             }
         }
 
+        public static void RefreshControlPanelRoot()
+        {
+            _controlPanelRoot = null;
+        }
+
         /// <summary>
         /// Element which represents OS-dependent control panel link with children
         /// </summary>
@@ -124,9 +132,9 @@ namespace Power8
                     //the item itself
                     _controlPanelRoot = new PowerItem
                     {
-                        Argument = Util.OsIs.SevenOrMore ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
+                        Argument = (Util.OsIs.SevenOrMore && Settings.Default.ShowMbCtrlByCat) ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems,
                         SpecialFolderId = API.Csidl.CONTROLS,
-                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.ControlPanel),
+                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass((Util.OsIs.SevenOrMore && Settings.Default.ShowMbCtrlByCat) ? API.ShNs.ControlPanel : API.ShNs.AllControlPanelItems),
                         NonCachedIcon = true,
                         HasLargeIcon = true,
                         IsFolder = true
@@ -205,7 +213,7 @@ namespace Power8
 
                     _controlPanelRoot.SortItems();
 
-                    if (Util.OsIs.SevenOrMore) //XP only supports "All items"
+                    if (Util.OsIs.SevenOrMore && Settings.Default.ShowMbCtrlByCat) //XP only supports "All items"
                     {
                         //for 7+ we add "All Control Panel Items" + separator
                         _controlPanelRoot.Icon = ImageManager.GetImageContainerSync(_controlPanelRoot, API.Shgfi.SMALLICON);
