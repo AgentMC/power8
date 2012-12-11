@@ -89,12 +89,27 @@ namespace Power8.Views
             App.Current.DwmCompositionChanged += (app, e) => this.MakeGlassWpfWindow();
             PowerItemTree.WinSearchThreadCompleted += HandleSearch;
             PowerItemTree.WinSearchThreadStarted += HandleSearch;
+            SettingsManager.ControlPanelByCategoryChanged += OnControlPanelByCategoryChanged;
 
             foreach (var mb in GetAllMenuButtons())
                 mb.Item = GetSpecialItems(mb.Name);
 
             folderButtons.DataContext = SettingsManager.Instance;
         }
+
+        /// <summary>
+        /// Update Control Panel menu button when ControlPanelByCategoryChanged event occured.
+        /// </summary>
+        void OnControlPanelByCategoryChanged(object sender, EventArgs e)
+        {
+            foreach (var mb in GetAllMenuButtons().Where(mb => mb.Name == "ControlPanel"))
+            {
+                SpecialItems.Remove("ControlPanel");
+                PowerItemTree.RefreshControlPanelRoot();
+                mb.Item = GetSpecialItems("ControlPanel");
+            }
+        }
+
 
 // ReSharper disable RedundantAssignment
         /// <summary>

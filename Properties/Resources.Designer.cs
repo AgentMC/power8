@@ -462,6 +462,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Control Panel items by category.
+        /// </summary>
+        internal static string CR_StgCbCtrl {
+            get {
+                return ResourceManager.GetString("CR_StgCbCtrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Follows taskbar orientation.
         /// </summary>
         internal static string CR_StgInvertAr {

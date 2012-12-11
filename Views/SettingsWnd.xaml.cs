@@ -27,6 +27,7 @@ namespace Power8.Views
             StgCbCpnl.Content = PowerItemTree.ControlPanelRoot.FriendlyName;
             StgCbDocs.Content = PowerItemTree.LibrariesRoot.FriendlyName;
             StgCbNtwk.Content = PowerItemTree.NetworkRoot.FriendlyName;
+            StgCbCtrl.Content = NameToResourceConverter.Instance.Convert("StgCbCtrl", null, null, null);
             //localization for headers (columns don't have names)
             StgWseColKey.Header = NameToResourceConverter.Instance.Convert("StgWseColKey", null, null, null);
             StgWseColVal.Header = NameToResourceConverter.Instance.Convert("StgWseColVal", null, null, null);
