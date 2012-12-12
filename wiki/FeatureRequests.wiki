@@ -9,6 +9,7 @@
   * Configurable ButtonStack background/Theme support;
   * Disable some Power buttons;
   * Customized builds with Menu background and Main button pre-configuration.
+  * Setting to disable auto-corner feature by Alt+Z;
 
 
 = List of ideas and requests we won't ever implement =
