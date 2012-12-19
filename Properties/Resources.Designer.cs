@@ -462,7 +462,7 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Control Panel items by category.
+        ///   Looks up a localized string similar to Show Control Panel with items sorted by category.
         /// </summary>
         internal static string CR_StgCbCtrl {
             get {
