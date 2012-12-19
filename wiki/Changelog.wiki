@@ -1,6 +1,19 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.4 Beta (v.1.4.0.555): 19.12.2012==
+
+  # `[new]` Drag&Drop in User-configurable MFU list. Drag any file, link or folder onto Power8 button and it will appear on Custom launch List;
+  # `[new]` "Switch User" command;
+  # `[new]` Flexible updater: 
+    * no more annoying message boxes on system startup;
+    * updater tries to reach server three times with different wait periods until gives up;
+    * when updater gives up - it shows warn sign on Power8 button just like for invalid settings, and adds corresponding text to the tooltip;
+    * last but not the least: updater switched to the scheduling from timer, so now if you turn on your PC after 12 hours of sleeping, updater will try to check for updates immediately, and not in some hours as before.
+  # `[new]` Option to switch between Control panel and "All control panel items" to show when you click "Control panel" button in Power8 window;
+  # `[changed]` Donation information stripped away from About dialog, a corresponding menu item added (hideable via settings);
+  # `[changed]` Updated ES localization up to 1.3;
+
 ==Version 1.3 Beta (v.1.3.0.524): 26.11.2012==
   
   # `[new]` Hungarian translation;
