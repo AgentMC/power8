@@ -10,6 +10,7 @@
   * Disable some Power buttons;
   * Customized builds with Menu background and Main button pre-configuration.
   * Setting to disable auto-corner feature by Alt+Z;
+  * Setting to not to stretch image on the Power8 button.
 
 
 = List of ideas and requests we won't ever implement =
