@@ -639,6 +639,18 @@ namespace Power8.Helpers
             get { return MfuList.ExclList; }
         }
 
+        public bool TryFpReset
+        {
+            get { return Settings.Default.TryFpResetBeforeUiCtors; }
+            set
+            {
+                if (value == Settings.Default.TryFpResetBeforeUiCtors)
+                    return;
+                Settings.Default.TryFpResetBeforeUiCtors = value;
+                Settings.Default.Save();
+            }
+        }
+
         #endregion
     }
 

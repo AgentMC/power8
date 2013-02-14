@@ -1044,6 +1044,62 @@ namespace Power8
             for (var i = 0; i < cb; i++)
                 Marshal.WriteByte(hMem, i, 0);
         }
+        /// <summary>
+        /// Used to reset FPU before invoking UI element constructors. Experimental.
+        /// Requires C runtime 8+ to be installed.
+        /// Hopefully will help fixing the issue with exceptions in floating-point operations.
+        /// </summary>
+        public static void FpReset()
+        {
+            if(!SettingsManager.Instance.TryFpReset)
+                return;
+            var l = IntPtr.Zero;
+            try
+            {
+                var w = Environment.ExpandEnvironmentVariables("%windir%\\system32\\");
+                var dll = Directory.GetFiles(w, "msvcr*.dll", SearchOption.TopDirectoryOnly)
+                                    .Where(d => !d.Contains("d."))      //no debug
+                                    .Where(d => !d.Contains("clr"))     //no clr-crt
+                                    .Where(d => !d.Contains("msvcrt"))  //no 6.0-runtime
+                                    .OrderBy(d => int.Parse(d.Substring(w.Length + 5, 3)
+                                                             .TrimEnd('.')))
+                                    .LastOrDefault(); //latest varsion
+                if(dll == null)
+                    throw new IOException("No C runtime available");
+#if DEBUG
+                Debug.WriteLine("fpreset: chosen dll " + dll);
+#endif
+                l = API.LoadLibrary(dll, IntPtr.Zero, API.LLF.AS_REGULAR_LOAD_LIBRARY);
+#if DEBUG
+                Debug.WriteLine("fpreset: loaded at " + l);
+#endif
+                if(l == IntPtr.Zero)
+                    throw new Win32Exception();
+                var f = API.GetProcAddress(l, "_fpreset");
+#if DEBUG
+                Debug.WriteLine("fpreset: address at " + f);
+#endif
+                if (f == IntPtr.Zero)
+                    throw new Win32Exception();
+#if DEBUG
+                Debug.WriteLine("fpreset: getting delegate...");
+#endif
+                var _fpreset = (API.FpReset) Marshal.GetDelegateForFunctionPointer(f, typeof (API.FpReset));
+                if(_fpreset == null)
+                    throw new Exception("Can't get delegate for _fpreset function in " + dll);
+#if DEBUG
+                Debug.WriteLine("fpreset: invoking...");
+#endif
+                _fpreset();
+            }
+            catch (Exception ex)
+            {
+                SettingsManager.Instance.TryFpReset = false; //this is only troubleshhoting option, if it fails better turn it off
+                if (l != IntPtr.Zero)
+                    API.FreeLibrary(l);
+                DispatchCaughtException(ex);
+            }
+        }
 
         #endregion
 
@@ -1053,6 +1109,9 @@ namespace Power8
         /// <param name="ex">Caught exception</param>
         public static void DispatchCaughtException(Exception ex)
         {
+#if DEBUG
+            Debug.Write(ex.ToString());
+#endif
             MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         /// <summary>
@@ -1065,6 +1124,9 @@ namespace Power8
         public static void DispatchUnhandledException(Exception ex)
         {
             var str = ex.ToString();
+#if DEBUG
+            Debug.Write(ex.ToString());
+#endif
             MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
             var reason = NoLoc.Err_UnhandledGeneric + str;
             if(SettingsManager.Instance.AutoRestart)

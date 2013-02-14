@@ -986,7 +986,7 @@ namespace Power8
         }
 
 
-        //Undocumented shell API===================================================================
+        //Undocumented API========================================================================
         [Flags]
         public enum RFF
         {
@@ -1024,6 +1024,8 @@ namespace Power8
         [DllImport(Lib.SHELL, EntryPoint = "#61")]
         public static extern
         void SHRunDialog(IntPtr hWnd, IntPtr hIcon, string sDir, string szTitle, string szPrompt, RFF uFlags);
+
+        public delegate void FpReset(); //_fpreset from msvcr*.dll 
 
 
         //Shell namespaces, known folders, etc=====================================================

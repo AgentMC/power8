@@ -46,6 +46,7 @@ namespace Power8.Views
         /// </summary>
         public MainWindow()
         {
+            Util.FpReset();
             InitializeComponent();
             b1.DataContext = SettingsManager.Instance;
 

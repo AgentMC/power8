@@ -13,6 +13,7 @@ namespace Power8.Views
     {
         public About()
         {
+            Util.FpReset();
             InitializeComponent();
         }
 

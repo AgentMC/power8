@@ -24,6 +24,7 @@ namespace Power8.Views
         /// </summary>
         public UpdateNotifier()
         {
+            Util.FpReset();
             InitializeComponent();
         }
         /// <summary>

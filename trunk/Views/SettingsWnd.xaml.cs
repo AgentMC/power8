@@ -17,6 +17,7 @@ namespace Power8.Views
         /// </summary>
         public SettingsWnd()
         {
+            Util.FpReset();
             InitializeComponent();
             DataContext = SettingsManager.Instance;
             if(!Util.OsIs.EightOrMore)
