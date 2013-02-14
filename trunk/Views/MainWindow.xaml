@@ -55,20 +55,20 @@
     				<ColumnDefinition />
     				<ColumnDefinition />
     			</Grid.ColumnDefinitions>
-    			<Border Background="{DynamicResource RoundGradientBlueBrush}"
+    			<Border Background="{DynamicResource RoundGradientOrangeBrush}"
     				Grid.Row="1">
     				<Border Background="{DynamicResource RoundGradientBrush}" />
     			</Border>
-    			<Border Background="{DynamicResource RoundGradientGreenBrush}"
+    			<Border Background="{DynamicResource RoundGradientPinkBrush}"
     				Grid.Column="1">
     				<Border Background="{DynamicResource RoundGradientBrush}" />
     			</Border>
-    			<Border Background="{DynamicResource RoundGradientRedBrush}">
+    			<Border Background="{DynamicResource RoundGradientCyanBrush}">
     				<Border Background="{DynamicResource RoundGradientBrush}" />
     			</Border>
     			<Border Grid.Row="1"
     				Grid.Column="1"
-    				Background="{DynamicResource RoundGradientOrangeBrush}">
+    				Background="{DynamicResource RoundGradientLightBlueBrush}">
     				<Border Background="{DynamicResource RoundGradientBrush}" />
     			</Border>
     		</Grid>
