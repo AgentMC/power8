@@ -13,26 +13,13 @@ namespace Power8.Views
     {
         public Donate()
         {
+            Util.FpReset();
             InitializeComponent();
         }
 
         private static readonly string[] Names = //different P8 images
             new[] {"", "Blue_", "Green_", "marine_", "Red_", "violet_", "yellow_"};
         private static readonly Random Rnd = new Random(); //used to get random image
-
-        /// <summary>
-        /// If the Localizer url is available in localization, returns instance of 
-        /// corresponding URI. Returns null otherwise.
-        /// </summary>
-        public Uri UriContent
-        {
-            get
-            {
-                return string.IsNullOrEmpty(Properties.Resources.Str_LocalizerUri)
-                           ? null
-                           : new Uri(Properties.Resources.Str_LocalizerUri);
-            }
-        }
 
         /// <summary>
         /// Returns string that can be used as ImageSource, and containing

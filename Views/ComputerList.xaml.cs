@@ -15,6 +15,7 @@ namespace Power8.Views
         /// </summary>
         public ComputerList()
         {
+            Util.FpReset();
             InitializeComponent();
             DataContext = this;
             foreach (var comp in NetManager.ComputersNearby)

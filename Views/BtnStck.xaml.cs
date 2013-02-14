@@ -80,6 +80,7 @@ namespace Power8.Views
         /// </summary>
         public BtnStck()
         {
+            Util.FpReset();
             InitializeComponent();
 
             _searchView = new ListCollectionView(_searchData);

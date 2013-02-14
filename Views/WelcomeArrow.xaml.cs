@@ -12,6 +12,7 @@ namespace Power8.Views
         /// </summary>
         public WelcomeArrow()
         {
+            Util.FpReset();
             InitializeComponent();
         }
 
