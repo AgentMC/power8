@@ -446,16 +446,16 @@ Por favor, inicia el explorador y reinicia Power8.</value>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Añadir a la lista personalizada</value>
   </data>
-    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Mostrar botón Donar en el menú</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>Donar al equipo de Power8...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>Cambiar usuario</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>Mostrar panel de control con los elementos ordenados por categoría</value>
   </data>
 </root>

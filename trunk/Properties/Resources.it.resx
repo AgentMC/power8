@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+ <?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -125,16 +125,16 @@ Nuova versione: {1}
 
 Vuoi andare sul sito web e aggiornare?
 
-Yes: go to web site and update now!
-No: remind me later, please.
-Cancel: I skip this update, never notify me about this version.</value>
+Sì: vai sul sito e aggiorna ora!
+No: ricordamelo più avanti, per favore.
+Annulla: Voglio saltare questo aggiornamento, non me lo ricordare.</value>
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
     <value>: Aggiornamento disponibile!</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>Errore {0} provocato mentre si provava a mostrare le proprietà dell'oggetto.
+    <value>Errore {0} provocato nel tentativo di visualizzare le proprietà dell'oggetto.
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
@@ -145,7 +145,7 @@ Cancel: I skip this update, never notify me about this version.</value>
     <comment>Default label instead of "Start menu". Currently seems useless</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>Impossibile avviare questo oggetto come Amministratore. Processo avviato con permessi regolari.
+    <value>Impossibile avviare come Amministratore. Processo avviato con permessi regolari.
 </value>
     <comment>Keep trailling /r/n</comment>
   </data>
@@ -171,7 +171,7 @@ Cancel: I skip this update, never notify me about this version.</value>
     <value>Proprietà</value>
   </data>
   <data name="CR_AppShowTargetProperties" xml:space="preserve">
-    <value>Proprietà origine</value>
+    <value>Proprietà file origine</value>
   </data>
   <data name="CR_ButtonHibernate" xml:space="preserve">
     <value>Iberna</value>
@@ -249,13 +249,13 @@ Cancel: I skip this update, never notify me about this version.</value>
     <comment>Leave starting space</comment>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>Scarica MSI e aggiorna ora!</value>
+    <value>Scarica file MSI e aggiorna ora!</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
     <value>Nuova versione:</value>
   </data>
   <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
-    <value>E' disponibile un aggiornamento di Power8!</value>
+    <value>È disponibile un aggiornamento di Power8!</value>
   </data>
   <data name="CR_UNwnd" xml:space="preserve">
     <value>Notifica aggiornamento</value>
@@ -341,7 +341,7 @@ So cosa sta succedendo e risolverò il problema per conto mio.</value>
   </data>
   <data name="CR_RE_TopLabel" xml:space="preserve">
     <value>Sembra che il processo Esplora file sia occupato.
-Power8 può aiutarti a risolvere.
+Power8 può aiutarti a risolvere il problema.
  
 Vuoi ripristinare Esplora file e riavviare Power8?</value>
   </data>
@@ -374,7 +374,7 @@ Riavvia Explorer per me e riavvia Power8.</value>
     <value>Avvisami su problemi di configurazione</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>Guarda Dispositivi Removibili</value>
+    <value>Mostra dispositivi removibili</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
     <value>Impostazioni Power8</value>
@@ -391,72 +391,72 @@ Riavvia Explorer per me e riavvia Power8.</value>
     <value>Potresti desiderare di cambiare qualche impostazione per migliorare la tua esperienza con Power 8.</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
-    <value>Auto-sort menus and lists when file or folder is added or renamed</value>
+    <value>Ordina automaticamente i menu e le liste quando viene aggiunto un file o una cartella</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>"All programs" text (clear to use system defaults):</value>
+    <value>Nome "Tutti i programmi" (lascia pulito per il predefinito):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
-    <value>General</value>
+    <value>Generale</value>
     <comment>"General" tab in settings window</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
-    <value>Menu-buttons</value>
+    <value>Pulsanti menù</value>
   </data>
   <data name="CR_StgTabWSE" xml:space="preserve">
-    <value>Web search engines</value>
+    <value>Motori di ricerca online</value>
   </data>
   <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
-    <value>Show menu-buttons:</value>
+    <value>Mostra questi pulsanti nel menù:</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>Key</value>
+    <value>Tasto</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
-    <value>Query string</value>
+    <value>Stringa query</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
-    <value>Restart application when fatal error occurs</value>
+    <value>Riavvia l'applicazione quando avviene un errore fatale</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Visit WebMoney site to donate Power8 team</value>
+    <value>Visita WebMoney per donare al team Power8</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Hide this item</value>
+    <value>Nascondi questo elemento</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Most frequently used</value>
+    <value>I più usati</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Hide items containing strings:</value>
+    <value>Nascondi elementi contenenti:</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Use custom list (user-configurable)</value>
+    <value>Usa una lista personalizzta (creabile dall'utente)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Use Power8 internal data</value>
+    <value>Usa i dati di Power8</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Use system data (UserAssist) to build list</value>
+    <value>Usa i dati di sistema (UserAssist) per creare la lista</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Remove from custom launch list</value>
+    <value>Rimuovi dalla lista di avvio rapido personalizzata</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Add to custom launch list</value>
+    <value>Aggiungi alla lista di avvio rapido personalizzata</value>
   </data>
     <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+    <value>Mostra il pulsante Dona</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>Dona al Team Power8...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>Cambia utente</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>Mostra il pannello di controllo con gli elementi ordinati per categoria</value>
   </data>
 </root>

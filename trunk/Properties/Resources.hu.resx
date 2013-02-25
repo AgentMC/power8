@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
@@ -445,16 +445,16 @@ Indítsa el nekem az Intézőt és indítsa újra a Power8 folyamatot.</value>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Hozzáadás az egyéni indítási listához</value>
   </data>
-    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Adományozás menüelem megjelenítése</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>Adományozás a Power8 csapatnak...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>Felhasználóváltás</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>Vezérlőpult elemeinek megjelenítése kategória szerint</value>
   </data>
 </root>

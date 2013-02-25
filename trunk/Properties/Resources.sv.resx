@@ -452,15 +452,15 @@ Vill du återställa Utforskaren och starta om Power8?</value>
     <value>Lägg till i anpassad lista</value>
   </data>
     <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+    <value>Visa menyobjektet 'Donera'</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>Donera till Power8...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>Växla användare</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>Sortera efter kategori i Kontrollpanelen</value>
   </data>
 </root>
