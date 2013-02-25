@@ -447,4 +447,16 @@ Riavvia Explorer per me e riavvia Power8.</value>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Add to custom launch list</value>
   </data>
+    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Show Donate menu item</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>Donate Power8 Team...</value>
+  </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>Switch User</value>
+  </data>
+  <data name="CR_StgCbCtrl" xml:space="preserve">
+    <value>Show Control Panel with items sorted by category</value>
+  </data>
 </root>

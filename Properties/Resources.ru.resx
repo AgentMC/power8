@@ -457,6 +457,9 @@ Power8 может помочь вам с этим справиться.
   <data name="CR_MWDonate" xml:space="preserve">
     <value>Пожертвовать на нужды команды разработчиков...</value>
   </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>Сменить пользователя</value>
+  </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
     <value>Открывать Панель управления с видом по категориям</value>
   </data>

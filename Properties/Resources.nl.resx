@@ -446,4 +446,16 @@ Start Explorer a.u.b. voor me en herstart Power8 proces.</value>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Voeg toe aan aangepaste programma lijst</value>
   </data>
+    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Show Donate menu item</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>Donate Power8 Team...</value>
+  </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>Switch User</value>
+  </data>
+  <data name="CR_StgCbCtrl" xml:space="preserve">
+    <value>Show Control Panel with items sorted by category</value>
+  </data>
 </root>
