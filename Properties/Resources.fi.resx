@@ -123,7 +123,7 @@
 Asennettu versio: {0}
 Uusi versio: {1}
 
-Haluatko siirtyä nettisivulle päivittämään?
+Haluatko siirtyä nettisivulle päivittämään version?
 
 Kyllä: mene verkkosivulle ja päivitä nyt!
 Ei: muistuta myöhemmin.
@@ -223,7 +223,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <value>Tietokoneluettelo</value>
   </data>
   <data name="Err_VistaDetected" xml:space="preserve">
-    <value>Power8-sovellusta ei ole tarkoitettu käytettäväksi Windows Vistassa - ainoastaan Windows XP -, 7 - tai 8 -käyttöjärjestelmässä.</value>
+    <value>Power8-sovellusta ei ole tarkoitettu käytettäväksi Windows Vistassa, vaan ainoastaan Windows XP -, 7 - tai 8 -käyttöjärjestelmässä.</value>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
     <value> Hakemistoa ei löytynyt</value>
@@ -234,7 +234,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - Käynnistä-valikon vaihtoehto Windows XP:lle, 7:lle ja 8:lle.</value>
+    <value>Power8 - Vaihtoehto Käynnistä-valikolle Windows XP:lle, 7:lle ja 8:lle.</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
@@ -248,7 +248,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <comment>Leave starting space</comment>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>Lataa msi ja päivitä nyt!</value>
+    <value>Lataa msi-tiedosto ja päivitä nyt!</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
     <value>Uusi versio:</value>
@@ -263,10 +263,10 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <value>Asennettu versio:</value>
   </data>
   <data name="CR_UNdown7z" xml:space="preserve">
-    <value>Lataa 7z</value>
+    <value>Lataa 7z-tiedosto</value>
   </data>
   <data name="CR_UNdownMsi" xml:space="preserve">
-    <value>Lataa msi</value>
+    <value>Lataa msi-tiedosto</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
     <value>Avaa projektin verkkosivu</value>
@@ -342,7 +342,7 @@ Tiedän, mitä tapahtui ja hoidan ongelman itse.</value>
     <value>Näyttää siltä, että Windows Explorer -prosessia ei ole saatavilla.
 Power8 voi auttaa sinua asian korjaamisessa.
  
-Haluatko palauttaa Windows Explorerin ja käynnistää Power8:n?</value>
+Haluatko palauttaa Windows Explorerin ja käynnistää Power8-sovelluksen?</value>
   </data>
   <data name="CR_RE_YesButton" xml:space="preserve">
     <value>Kyllä!
@@ -387,7 +387,7 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>Halunnet muuttaa joitakin asetuksia parantaaksesi Power8:n käyttökokemustasi</value>
+    <value>Halunnet muuttaa joitakin asetuksia parantaaksesi Power8-käyttökokemustasi</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
     <value>Järjestä valikot ja luettelot automaattisesti, kun tiedosto tai kansio lisätään tai nimetään uudelleen</value>
@@ -420,7 +420,7 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
     <value>Käynnistä sovellus uudelleen kohtalokkaan virheen tapahduttua</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Vieraile WebMoney-sivustolla tehdäksesi lahjoituksen Power8 teamille</value>
+    <value>Vieraile WebMoney-sivustolla tehdäksesi lahjoituksen Power8-tiimille</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
     <value>Piilota tämä kohde</value>
@@ -446,16 +446,16 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Lisää muokattavalle suorita-listalle</value>
   </data>
-    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Näytä lahjoita-valikkokohta</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>Tee lahjoitus Power8-tiimille</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>Vaihda käyttäjää</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>Näytä Ohjauspaneeli kategorian mukaan järjestettynä</value>
   </data>
 </root>
