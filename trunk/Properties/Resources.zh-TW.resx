@@ -444,4 +444,16 @@ Power8 可以幫您處理這個問題。
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>加入自訂清單</value>
   </data>
+    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Show Donate menu item</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>Donate Power8 Team...</value>
+  </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>Switch User</value>
+  </data>
+  <data name="CR_StgCbCtrl" xml:space="preserve">
+    <value>Show Control Panel with items sorted by category</value>
+  </data>
 </root>
