@@ -446,16 +446,16 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Adicionar a lista personalizada de lançadores</value>
   </data>
-    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Exibir item de doação no menu</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>Doar para a Equipe Power8...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>Trocar Usuário</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>Exibir Painel de Controle com itens organizados por categoria</value>
   </data>
 </root>
