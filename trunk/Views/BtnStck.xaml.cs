@@ -96,18 +96,8 @@ namespace Power8.Views
                 mb.Item = GetSpecialItems(mb.Name);
 
             folderButtons.DataContext = SettingsManager.Instance;
+            ButtonSwitchUser.Visibility = CheckForTsDiscon() ? Visibility.Visible : Visibility.Collapsed;
         }
-
-        /// <summary>
-        /// Update Control Panel menu button when ControlPanelByCategoryChanged event occured.
-        /// </summary>
-        void OnControlPanelByCategoryChanged(object sender, EventArgs e)
-        {
-            SpecialItems.Remove("ControlPanel");
-            PowerItemTree.RefreshControlPanelRoot();
-            ControlPanel.Item = GetSpecialItems("ControlPanel");
-        }
-
 
 // ReSharper disable RedundantAssignment
         /// <summary>
@@ -496,6 +486,19 @@ namespace Power8.Views
                 Util.DispatchCaughtException(new Exception(Properties.Resources.Err_NoPiExtracted));
             }
         }
+
+        //------------------------------------------
+
+        /// <summary>
+        /// Update Control Panel menu button when ControlPanelByCategoryChanged event occured.
+        /// </summary>
+        void OnControlPanelByCategoryChanged(object sender, EventArgs e)
+        {
+            SpecialItems.Remove("ControlPanel");
+            PowerItemTree.RefreshControlPanelRoot();
+            ControlPanel.Item = GetSpecialItems("ControlPanel");
+        }
+
         #endregion
 
         #region Helpers
@@ -596,7 +599,24 @@ namespace Power8.Views
         {
             return dataGridHeightMeasure.Children.OfType<MenuedButton>();
         }
+        /// <summary>
+        /// Checks wheather tsdiscon utility is available on system
+        /// </summary>
+        private static bool CheckForTsDiscon()
+        {
+            var path = Environment.GetEnvironmentVariable("PATH");
+            var wDir = Environment.GetEnvironmentVariable("windir");
+            if (path == null || wDir == null)
+                return false;
 
+            var paths = path.Split(';').Select(p => p.ToLower().TrimEnd('\\'));
+            var wDirs = System.IO.Directory.GetDirectories(wDir)
+                                           .Select(d => d.ToLower())
+                                           .Where(x => x.Contains("system"));
+            paths = paths.Union(wDirs);
+            return paths.Any(p => System.IO.File.Exists(p + @"\tsdiscon.exe"));
+        }
+        
         #endregion
 
         #region Bindable props
