@@ -188,6 +188,8 @@ namespace Power8
         // Save data on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
+            WatchDog.Stop();
+
             Directory.CreateDirectory(DataBaseRoot);
 
             //Writing Launch list
@@ -277,21 +279,24 @@ namespace Power8
                 var prefix = exists ? string.Empty : "::"; //If file doesn't exist, add a prefix to show that this JL item is a command
                 pair = Tuple.Create(pair.Item1.ToLowerInvariant(), prefix + checkPath.ToLowerInvariant());
                 //Add to jump list or update the launch data
-                var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
-                if(t == null)
+                lock (P8JlImpl)
                 {
-                    P8JlImpl.Add(new MfuElement
-                                     {
-                                         Arg = pair.Item1,
-                                         Cmd = pair.Item2,
-                                         LaunchCount = 1,
-                                         LastLaunchTimeStamp = DateTime.Now
-                                     });
-                }
-                else
-                {
-                    t.LaunchCount += 1;
-                    t.LastLaunchTimeStamp = DateTime.Now;
+                    var t = P8JlImpl.Find(j => j.Arg == pair.Item1 && j.Cmd == pair.Item2);
+                    if(t == null)
+                    {
+                        P8JlImpl.Add(new MfuElement
+                                         {
+                                             Arg = pair.Item1,
+                                             Cmd = pair.Item2,
+                                             LaunchCount = 1,
+                                             LastLaunchTimeStamp = DateTime.Now
+                                         });
+                    }
+                    else
+                    {
+                        t.LaunchCount += 1;
+                        t.LastLaunchTimeStamp = DateTime.Now;
+                    }
                 }
 #if DEBUG
                 Debug.WriteLine("Process Launched: {0} {1}", pair.Item1, pair.Item2);
@@ -421,15 +426,18 @@ namespace Power8
         private static List<MfuElement> GetMfuFromP8JL()
         {
             var list = new Dictionary<string, MfuElement>();
-            foreach (var mfuElement in P8JlImpl.Where(mfu => mfu.IsOk()))
+            lock (P8JlImpl)
             {
-                var k = mfuElement.Arg;
-                if(ExclList.Any(ex => !string.IsNullOrWhiteSpace(ex.Value) && k.Contains(ex.Value)))
-                    continue;
-                if(list.ContainsKey(k))
-                    list[k].Mix(mfuElement);
-                else
-                    list[k] = mfuElement.Clone();
+                foreach (var mfuElement in P8JlImpl.Where(mfu => mfu.IsOk()))
+                {
+                    var k = mfuElement.Arg;
+                    if (ExclList.Any(ex => !string.IsNullOrWhiteSpace(ex.Value) && k.Contains(ex.Value)))
+                        continue;
+                    if (list.ContainsKey(k))
+                        list[k].Mix(mfuElement);
+                    else
+                        list[k] = mfuElement.Clone();
+                }
             }
             return list.Select(kv => kv.Value).ToList();
         }
@@ -838,16 +846,18 @@ namespace Power8
         private static IEnumerable<string> GetP8Recent(string fsObject)
         {
             var o = fsObject.ToLowerInvariant();
-            var l = P8JlImpl.Where(j => j.Arg == o 
+            List<MfuElement> l;
+            lock (P8JlImpl)
+            {
+                l = P8JlImpl.Where(j => j.Arg == o
                                         && !string.IsNullOrEmpty(j.Cmd)
                                         && j.Cmd != "::").ToList();
                                                   // ^^-actually means "no command"
+            }
             l.Sort();
             return from mfuElement in l 
                    select mfuElement.Cmd;
         }
-
-
 
 
         /// <summary>
