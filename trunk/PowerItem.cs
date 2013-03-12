@@ -783,11 +783,16 @@ namespace Power8
 
                     if (string.IsNullOrEmpty(fName) /*(still)*/&& !IsLink)
                     {//get file version info table and extract data from there. Costly but provides valuable results.
-                        var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
-                        if (!string.IsNullOrWhiteSpace(ver.FileDescription)) //try description, if not fallback to...
-                            fName = ver.FileDescription;
-                        else if (!string.IsNullOrWhiteSpace(ver.ProductName)) //...Product. This is specifically for...
-                            fName = ver.ProductName; //...NFS.Run and the kind of.
+                        try
+                        {
+                            var ver = FileVersionInfo.GetVersionInfo(PowerItemTree.GetResolvedArgument(this));
+                            if (!string.IsNullOrWhiteSpace(ver.FileDescription)) //try description, if not fallback to...
+                                fName = ver.FileDescription;
+                            else if (!string.IsNullOrWhiteSpace(ver.ProductName)) //...Product. This is specifically for...
+                                fName = ver.ProductName; //...NFS.Run and the kind of.
+                        }
+                        catch (IOException) //It is possible that item existing in the last shown list is not available...
+                        {} //anymore. This is a rare situation - so try-catch seems more logical than Exists() call.
                     }
                 }
                 else if(IsControlPanelItemInFact)

@@ -47,7 +47,7 @@ namespace Power8.Views
         /// to check the window status.
         /// </summary>
         public static bool IsInstantited { get { return _instance != null; } }
-        //Bindings sometimes are executed in parallel. So this dictionary conteins data items for menued buttons
+        //Bindings sometimes are executed in parallel. So this dictionary contains data items for menued buttons
         private static readonly Dictionary<string, PowerItem> SpecialItems = new Dictionary<string, PowerItem>();
 
         //The collection of search results
