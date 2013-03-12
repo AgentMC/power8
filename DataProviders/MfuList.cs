@@ -314,9 +314,9 @@ namespace Power8
         public static void UpdateStartMfuSync()
         {
             //Step 1: parse registry
-            var list = Helpers.SettingsManager.Instance.MfuIsSystem
+            var list = SettingsManager.Instance.MfuIsSystem
                            ? GetMfuFromUserAssist()
-                           : Helpers.SettingsManager.Instance.MfuIsInternal
+                           : SettingsManager.Instance.MfuIsInternal
                                  ? GetMfuFromP8JL()
                                  : GetMfuFromCustomData();
 
@@ -485,31 +485,29 @@ namespace Power8
                 jl = jl.Union(p8R);
             else
                 jl = jl ?? p8R;
-            if (jl != null) //if anything is available
+            if (jl == null) 
+                return; //No jump list discovered -> nothing to do
+            jl = jl.Distinct()                                          //No duplicates
+                   .Where(x => x.StartsWith("::") || File.Exists(x))    //No obsoletes
+                   .Take(25);                                           //Not too many
+            foreach (var arg in jl)
             {
-                jl = jl.Distinct()                                          //No duplicates
-                       .Where(x => x.StartsWith("::") || File.Exists(x))    //No obsoletes
-                       .Take(25);                                           //Not too many
-                foreach (var arg in jl)
-                {
-                    var local = arg;
-                    Util.Post(() =>
-                              item.JumpList.Add(local.StartsWith("::")
-                                                    ? new PowerItem
-                                                          {
-                                                              Argument = local.Substring(2),
-                                                              Parent = item,
-                                                              SpecialFolderId = API.Csidl.POWER8JLITEM
-                                                          }
-                                                    : new PowerItem
-                                                          {
-                                                              Argument = local,
-                                                              Parent = item
-                                                          }
-                                  ));
-                }
+                var local = arg;
+                Util.Post(() =>
+                          item.JumpList.Add(local.StartsWith("::")
+                                                ? new PowerItem
+                                                      {
+                                                          Argument = local.Substring(2),
+                                                          Parent = item,
+                                                          SpecialFolderId = API.Csidl.POWER8JLITEM
+                                                      }
+                                                : new PowerItem
+                                                      {
+                                                          Argument = local,
+                                                          Parent = item
+                                                      }
+                              ));
             }
-
         }
 
         /// <summary>
