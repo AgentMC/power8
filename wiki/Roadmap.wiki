@@ -9,7 +9,7 @@ For already implemented features, see [Changelog] page.
 
 
 = _Power8 v.1.5 RTM_ =
-*estimated release date: 20.12.12*
+*estimated release date: no estimation, when some of us will have time*
   * Skins/styles;
     * In particular, Metro style.
   * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
