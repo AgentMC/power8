@@ -1,6 +1,17 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.4.1 Beta (v.1.4.0.569): 14.03.2013==
+
+  # `[new]` New settings hack implemented to provide fix to users of Windows7 x86 where some unexpected component exists which prevents Power8 from working in a normal way (wiki article pending); 
+  # `[changed]` Colors on Power8 button were changed to be not like Microsoft logo which is a TM;
+  # `[changed]` Updated and synchronized localizations for  ES, FI, HU, IT, SV, PT, NL;
+  # `[changed]` Switch User button will be hidden on OS that don't support it natively (i.e. Windows 8 "home");
+  # `[changed]` Corrected layout of button stack a bit. Now all items in grid have the same height and text is centered vertically;
+  # `[fixed]` Fixed rare exception after frequently used object is removed from system;
+  # `[fixed]` Fixed WMI event watcher not being freed on P8 shutdown;
+  # `[fixed]` Fixed Invalid Operation Exception that occurred in rare cases when system was recovering after sleep;
+
 ==Version 1.4 Beta (v.1.4.0.555): 19.12.2012==
 
   # `[new]` Drag&Drop in User-configurable MFU list. Drag any file, link or folder onto Power8 button and it will appear on Custom launch List;
