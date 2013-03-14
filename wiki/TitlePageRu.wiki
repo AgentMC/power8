@@ -20,7 +20,7 @@
 
 ==Текущая версия==
 
-Текущая версия — *V. 1.4 Beta: v.1.4.0.555*.
+Текущая версия — *V. 1.4.1 Beta: v.1.4.0.569*.
 См. [http://code.google.com/p/power8/wiki/Changelog список изменений] для получения полной картины об изменениях в данном релизе.
 
 См. [http://code.google.com/p/power8/wiki/KnownIssues список проблем] чтобы быть в курсе того, какие проблемы уже были найдены.
@@ -47,14 +47,14 @@ Localization is done by:
 ||Swedish||Åke Engelbrektson||[http://svenskasprakfiler.se]||
 ||German`*`||Mario Saternus||mario.saternus@satiru.de||
 ||Dutch||Gerard Stenveld||gstenveld@npz-nrz.nl||
-||Italian`*`||Michele Bastianelli||0makoblaster0@gmail.com||
+||Italian||Michele Bastianelli||0makoblaster0@gmail.com||
 ||Spanish||Jose Vicente Bustos Ferrer||jvbferrer@gmail.com||
 ||Finnish||Sami Kuusisto||sami@6sto.com||
 ||Portuguese||Matheus Macabu||mkbu95@gmail.com||
-||Turkish||Veysi Ertekin||ertekin.veysi@gmail.com||
-||Chinese (Taiwan)||David Wang||ufjl1785@gmail.com||
+||Turkish`*`||Veysi Ertekin||ertekin.veysi@gmail.com||
+||Chinese (Taiwan)`*`||David Wang||ufjl1785@gmail.com||
 ||Hungarian       ||Zsolt Brechler            ||zsolt.brechler@gmail.com||
-||French          ||Marc An                   ||mar.can2004@voila.fr||
+||French`*`       ||Marc An                   ||mar.can2004@voila.fr||
 
 `*` Не обновляется
 
@@ -78,7 +78,12 @@ Localization is done by:
 <td><a href="http://www.winload.de/download/power8-118961#utm_source=PS&utm_medium=BL&utm_campaign=Badge" target="_blank"><img src="http://www.winload.de/img/siegel/badge_1.png" alt="Download Power8" title="Download Power8" border="0" /></a></td></tr>
 <tr><td align="center"><a href="http://www.downloadatlas.com/open-source-33dc7fdb.html" target="_blank"><img src="http://www.downloadatlas.com/images/editors_choice.png" style="border:none;" width="80" height="80" alt="Power8 Editor's Choice" title="DownloadAtlas: Editor's choise!" /></a></td>
 <td align="center"><a href="http://www.downloadatlas.com/open-source-33dc7fdb.html"><img src="http://www.downloadatlas.com/clean-awards/power8-by-power8.png" style="border:none;" width="160" height="114" alt="Power8 is clean!" title="DownloadAtlas: 100% clean software!" /></a></td>
-<td align="center"><a href="http://www.chip.de/downloads/Power8_56797104.html"><img src="http://i41.fastpic.ru/big/2012/0815/15/32364238931bfc6b3d152fb70ef94315.png" style="border:none;" width="180" height="79" alt="Chip pick" title="Chip-online: the ChipPick!" /></a></td></tr></table>
+<td align="center"><a href="http://www.chip.de/downloads/Power8_56797104.html"><img src="http://i41.fastpic.ru/big/2012/0815/15/32364238931bfc6b3d152fb70ef94315.png" style="border:none;" width="180" height="79" alt="Chip pick" title="Chip-online: the ChipPick!" /></a></td>
+<td align="center"><a href="http://www.bestfreewaredownload.com/freeware/t-free-power8-freeware-tgqznqkw.html" target="_blank"><img src="http://www.bestfreewaredownload.com/images/BFD_award5.png" style="border:none;" width="115" alt="5 starts @ Best Freeware Download" title="5 stars at Best Freeware Download!" /></a></td></tr>
+<tr><td><font color="white">CELL PLACEHOLDER</font></td>
+<td align="center"><a href="http://www.windows8downloads.com/win8-power8-portable-ytnswzgk/"><img src="http://www.windows8downloads.com/img/awards/award_5.png" style="border:none;" width="160" height="80" alt="5 stars by Windows8Downloads.com" title="Windows8Downloads: 5 stars award" /></a></td>
+<td align="center"><a href="http://www.windows8downloads.com/win8-power8-portable-ytnswzgk/"><img src="http://www.windows8downloads.com/img/awards/windows8compatible.png" style="border:none;" width="160" height="80" alt="Compatible with Windows8" title="Windows8Downloads: compatible with Windows8" /></a></td>
+<td><font color="white">CELL PLACEHOLDER</font></td></tr></table>
 http://i42.fastpic.ru/big/2012/0706/6d/bd16dcd812695e8b1e609324e6dea46d.png <br/>
 http://i41.fastpic.ru/big/2012/0704/7e/823470cbeb5726d9a7cc8f85fff37d7e.png 
 </td></tr></table>
