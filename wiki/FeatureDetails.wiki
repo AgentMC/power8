@@ -147,26 +147,31 @@ There are 2 kinds of Jump List elements:
 Jump list element is treated as file if it exists locally on your disc. Commands are all the others (command line parameters, web addresses, ...). Command will be always launched with application, jump list of which it is located in. File, however, will be treated as usual, and opened in default associated system application.
 
 ==Settings window==
+
+Note that all your changes done in this window become effective immediately, you don't need to click OK to apply them!
+
 ===1.1: General tab===
 
 The new Settings window is available starting Power8 v.1.1. Right-click Start button, snd choose "Settings" to open the window.
 
 https://power8.googlecode.com/svn/wiki/Power8_401_9_Settings.png
 
-Note that all your changes done in this window become effective immediately, you don't need to click OK to apply them!
-
 The window has the following options:
   * Auto-Start/Check for updates/Block Metro (Win8 only) - duplicate corresponding context menu items of Start button;
-  * Watch removable drives - allows you to make Power8 bypass the removable drives when listening to changes in the file system. This will allow you to safe-eject the removable drive, but also will eliminate the drive from Power8's computer menu-button's children;
+  * Watch removable drives - allows you to make Power8 bypass the removable drives when listening to changes in the file system. This will allow you to safe-eject the removable drive, but also will eliminate the drive from Power8's computer menu-button's children. When switched on, this setting prevents removable devices to be ejected. So to eject these devices - switch it off. You can switch it on back after ejecting the device;
+  * Auto-sort menus and lists... will sort Start menu and Computer's children items when new file or folder appeas in the system. Default is unchecked which helps you to identify that new files or folders were created during curent session;
+  * Restart application when fatal error occurs - when Power8 faces unrecoverable error it will automatically restore itself;
   * Configure Start button (Win7+). Allows you to configure layout and look of the Start button to adjust it for your needs:
     * Aspect ratio sets the size of Start button;
     * Follow taskbar orientation will invert the Aspect Ratio when taskbar is located horizontally;
     * Select image allows you to select png/jpeg/gif/tiff image to put on the Start button instead of Windows rectangle;
       * You can doubleclick the textbox to clear its contents;
+  * All programs text - sets text of Start Menu;
   * Inform me about configuration changes will, when turned on:
     * Mark Auto-Start and Auto-update options with Red color if they are unchecked;
     * Display warning sign and a hint over the Start button:
 https://power8.googlecode.com/svn/wiki/Power8_401_10_NotifyMark.png
+  * Show Donate menu item - allows you to hide "Donate" menu item which appears in Main button context menu in case you don't want to support the developers team;
 
 ===1.2-1.3: Menu-buttons, web search engines and most frequently used list===
 
@@ -185,4 +190,4 @@ MFU tab allows you to set what is displayed in launch list table when you open P
 
 Custom MFU list is empty by default. To add data there, right-click whatever file/folder/application/link/control panel element you want inside Power8 and choose "Add to custom launch list". To remove item, right-click it and choose "Remove item from custom launch-list" (command available only when you right-click item that is actually placed inside launch table).
 
-3rd way to build the launch list is to use Power8 internal data it collects e.g. to show JumpLists on Windows XP, etc. You can find this data under `%localappdata%\Power8_Team\` in file named "Launchdata.csv".
+3rd way to build the launch list is to use Power8 internal data it collects e.g. to show Jump Lists on Windows XP, etc. You can find this data under `%localappdata%\Power8_Team\` in file named "Launchdata.csv".
