@@ -3,7 +3,7 @@
 
 ==Version 1.4.1 Beta (v.1.4.0.569): 14.03.2013==
 
-  # `[new]` New settings hack implemented to provide fix to users of Windows7 x86 where some unexpected component exists which prevents Power8 from working in a normal way (wiki article pending); 
+  # `[new]` New settings hack implemented to provide fix to users of Windows7 x86 where some unexpected component exists which prevents Power8 from working in a normal way (see Windows7ExceptionHack); 
   # `[changed]` Colors on Power8 button were changed to be not like Microsoft logo which is a TM;
   # `[changed]` Updated and synchronized localizations for  ES, FI, HU, IT, SV, PT, NL;
   # `[changed]` Switch User button will be hidden on OS that don't support it natively (i.e. Windows 8 "home");
