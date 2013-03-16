@@ -20,7 +20,7 @@ Also, when choosing this option, the path to currently run Power8 copy will be p
 
 "Download MSI" and "Download 7z" will put corresponding update packages to where you define, and navigate the system to this location.
 
-When any of update files is not available, the simplified message will be displayed<br/>http://i32.fastpic.ru/big/2012/0408/9c/9322a0036f890116bf1ff6e3c526509c.png
+When any of update files is not available, the simplified message will be displayed<br/>https://power8.googlecode.com/svn/wiki/Power8_401_5_UpdateMsg.png
 
 This behavior is a subject to change in future.
 
@@ -36,7 +36,7 @@ Pressing Alt+Z again will close the window.
 
 == Menu buttons ==
 
-http://i38.fastpic.ru/big/2012/0514/81/ab0350800653efe4cb25dba1f7dfc081.png
+https://power8.googlecode.com/svn/wiki/Power8_401_6_MenuBtns.png
 
 All 5 menu buttons have submenus that contain items. 
 
@@ -50,7 +50,7 @@ All menu items have a context menu that will allow you to Open item, show it's P
 
 == Computers List ==
 
-http://i37.fastpic.ru/big/2012/0514/04/e15e89453863e54f2dcaecc0ebbdc504.png
+https://power8.googlecode.com/svn/wiki/Power8_401_7_CompList.png
 
 When there are more than 10 computers over network available (like if you're in Enterprize-size domain), only 1st ten entries will be shown. All others are accessible via "Computers List" window, that is shown when you click "Show more..." menu item.
 
@@ -60,7 +60,7 @@ It is planned that there will be a specific configurable context menu with items
 
 == Search ==
 
-http://i36.fastpic.ru/big/2012/0611/10/0676baa21d7d64618a44081ebfa37b10.png
+https://power8.googlecode.com/svn/wiki/Power8_401_8_Search.png
 
 There are 3 ways to search using Power8.
 
@@ -151,7 +151,7 @@ Jump list element is treated as file if it exists locally on your disc. Commands
 
 The new Settings window is available starting Power8 v.1.1. Right-click Start button, snd choose "Settings" to open the window.
 
-http://i26.fastpic.ru/big/2012/1009/10/9730c1a6b76d7d4c3436c7cb800b0b10.png
+https://power8.googlecode.com/svn/wiki/Power8_401_9_Settings.png
 
 Note that all your changes done in this window become effective immediately, you don't need to click OK to apply them!
 
@@ -166,7 +166,7 @@ The window has the following options:
   * Inform me about configuration changes will, when turned on:
     * Mark Auto-Start and Auto-update options with Red color if they are unchecked;
     * Display warning sign and a hint over the Start button:
-http://i48.fastpic.ru/big/2012/1115/4e/acb4325f6ebdf4bc5c26a6e759a6fc4e.png
+https://power8.googlecode.com/svn/wiki/Power8_401_10_NotifyMark.png
 
 ===1.2-1.3: Menu-buttons, web search engines and most frequently used list===
 
