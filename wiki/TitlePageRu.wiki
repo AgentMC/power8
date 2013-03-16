@@ -84,8 +84,8 @@ Localization is done by:
 <td align="center"><a href="http://www.windows8downloads.com/win8-power8-portable-ytnswzgk/"><img src="http://www.windows8downloads.com/img/awards/award_5.png" style="border:none;" width="160" height="80" alt="5 stars by Windows8Downloads.com" title="Windows8Downloads: 5 stars award" /></a></td>
 <td align="center"><a href="http://www.windows8downloads.com/win8-power8-portable-ytnswzgk/"><img src="http://www.windows8downloads.com/img/awards/windows8compatible.png" style="border:none;" width="160" height="80" alt="Compatible with Windows8" title="Windows8Downloads: compatible with Windows8" /></a></td>
 <td><font color="white">CELL PLACEHOLDER</font></td></tr></table>
-http://i42.fastpic.ru/big/2012/0706/6d/bd16dcd812695e8b1e609324e6dea46d.png <br/>
-http://i41.fastpic.ru/big/2012/0704/7e/823470cbeb5726d9a7cc8f85fff37d7e.png 
+https://power8.googlecode.com/svn/wiki/Power8_401_0_W8.png <br/>
+https://power8.googlecode.com/svn/wiki/Power8_401_1_W7_JL2.png
 </td></tr></table>
 
 ==Получить поддержку`*`==
@@ -130,8 +130,8 @@ http://i41.fastpic.ru/big/2012/0704/7e/823470cbeb5726d9a7cc8f85fff37d7e.png
     * Вкл/выкл проверку обновлений;
     * Вкл/выкл блокировку активных углов Metro;
     * Окошко "О Программе";
-    * Выход;<br/>http://i36.fastpic.ru/big/2012/0516/d1/1a9e1b6fe307390acc2343585a99d4d1.png
-  # Контекстное меню над элементами меню (Открыть папку, Открыть общую для всех папку, Запустить, Запустить от Администратора, ...): http://i36.fastpic.ru/big/2012/0611/a8/292d014da2001cd4718eb3731210cea8.png <br/>(скрин снят под WindowsXP SP3 RU, обратите внимание как Power8 использует локализированные системные элементы);
+    * Выход;<br/>https://power8.googlecode.com/svn/wiki/Power8_401_3_MainContext.png
+  # Контекстное меню над элементами меню (Открыть папку, Открыть общую для всех папку, Запустить, Запустить от Администратора, ...): https://power8.googlecode.com/svn/wiki/Power8_401_2_WXP_Context.png <br/>(скрин снят под WindowsXP SP3 RU, обратите внимание как Power8 использует локализированные системные элементы);
   # Активируется горячей клавишей (Alt+Z) (см. детальней [http://code.google.com/p/power8/wiki/FeatureDetails#Alt+Z_hotkey здесь]);
   # Проверяет обновления (см. детальней [http://code.google.com/p/power8/wiki/FeatureDetails#Check-for-update здесь]);
   # Специальные меню-кнопки: открывают папку или показывают её содержимое (см. детальнее [http://code.google.com/p/power8/wiki/FeatureDetails#Menu_buttons здесь]);
