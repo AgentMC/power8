@@ -1,4 +1,4 @@
-#summary Whatto do if Power8 doesn't run on Windows 7.
+#summary What to do if Power8 doesn't run on Windows 7.
 
 = Introduction =
 
