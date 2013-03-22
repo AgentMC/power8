@@ -50,8 +50,9 @@ namespace Power8
         private static readonly List<String> PinList = new List<string>();          //The list of pinned elements
         private static readonly List<String> UserList = new List<string>();         //The Custom MFU list 
         private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
-        private static readonly ManagementEventWatcher WatchDog;                    //Notifies when a process is created in system
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
+
+        private static ManagementEventWatcher WatchDog;                             //Notifies when a process is created in system
 
         //Files with data
         private static readonly string DataBaseRoot = 
@@ -179,10 +180,17 @@ namespace Power8
             //Save all on shutdown
             Util.MainDisp.ShutdownStarted += MainDispOnShutdownStarted;
 
-            //React on new processes creation
-            WatchDog = new ManagementEventWatcher("SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
-            WatchDog.EventArrived += WatchDogOnEventArrived;
-            WatchDog.Start();
+            //Create COM object on main thread to prevent unexpected problems with stopping
+            Util.Post(() =>
+                          {
+                              //React on new processes creation
+                              WatchDog =
+                                  new ManagementEventWatcher(
+                                      "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
+                              WatchDog.EventArrived += WatchDogOnEventArrived;
+                              WatchDog.Start();
+                          });
+
         }
         
         // Save data on close
