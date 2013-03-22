@@ -401,10 +401,16 @@ namespace Power8
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
             if (string.IsNullOrEmpty(e.Name)
-             || string.IsNullOrEmpty(e.FullPath) 
-             || string.IsNullOrEmpty(e.OldName) 
-             || string.IsNullOrEmpty(e.OldFullPath))
+                || string.IsNullOrEmpty(e.FullPath)
+                || string.IsNullOrEmpty(e.OldName)
+                || string.IsNullOrEmpty(e.OldFullPath))
+            {
+#if DEBUG
+                Debug.WriteLine("FileRenamed: Name: {0}, FullPath: {1}, Old: {2}, OldFP: {3}",
+                                    e.Name, e.FullPath, e.OldName, e.OldFullPath);
+#endif
                 return; //Sometimes this happens
+            }
             FileChanged(sender,
                 new FileSystemEventArgs(
                     WatcherChangeTypes.Deleted,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,16 +17,19 @@ namespace Power8
         private static readonly List<FileSystemWatcher> Watchers = new List<FileSystemWatcher>();
         private static readonly List<string> DriveNames = new List<string>();
         private static readonly List<string> BlackList = new List<string>();
+        private static readonly ConcurrentQueue<FileSystemEventArgs> FsQueue = new ConcurrentQueue<FileSystemEventArgs>();
+
         private static FileSystemEventHandler _fileChanged;
         private static RenamedEventHandler _fileRenamed;
         private static PowerItem _drivesRoot;
+
         /// <summary>
         /// This is used to cache last queried list of drives, to redce time to call GetDriveLabel()
         /// </summary>
         private static DriveInfo[] _drives;
 
         /// <summary>
-        /// Runs the class. starts the drive watcher thread and saves passed parameters
+        /// Runs the class. Starts the drive watcher thread and saves passed parameters
         /// </summary>
         /// <param name="changedHandler">Delegate to be called when a file or folder is changed/created/deleted in the system</param>
         /// <param name="renamedHandler">Dalegate to be called when a file or folder is renamed in the system</param>
@@ -37,6 +41,7 @@ namespace Power8
             _drivesRoot = drivesRoot;
             SettingsManager.WatchRemovablesChanged += SettingsManagerOnWatchRemovablesChanged;
             Util.Fork(Worker, "DriveWatchThread").Start();
+            Util.Fork(FsWorker, "File system events dequeuer").Start();
         }
 
         /// <summary>
@@ -112,10 +117,10 @@ begin:
                                                                     FriendlyName = fn
                                                                 }));
                             //Add drive watcher
-                            w.Created += _fileChanged;
-                            w.Deleted += _fileChanged;
-                            w.Changed += _fileChanged;
-                            w.Renamed += _fileRenamed;
+                            w.Created += PushEvent;
+                            w.Deleted += PushEvent;
+                            w.Changed += PushEvent;
+                            w.Renamed += PushEvent;
                             w.IncludeSubdirectories = true;
                             if (BtnStck.IsInstantited)
                                 w.EnableRaisingEvents = true;
@@ -127,10 +132,50 @@ begin:
                 }
             }
 
-            Thread.Sleep(5000);
+            if (!Util.MainDisp.HasShutdownStarted)
+            {
+                Thread.Sleep(5000);
+                goto begin; //just don't want unneeded code nesting here, anyway IL will be same.
+            }
+        }
+
+        /// <summary>
+        /// Handles file system event to be processed later by FsWorker
+        /// </summary>
+        private static void PushEvent(object sender, FileSystemEventArgs e)
+        {
+            if (e != null) FsQueue.Enqueue(e);
+        }
+
+        /// <summary>
+        /// The background thread that reacts on file system events and forwards events to actual handlers
+        /// </summary>
+        private static void FsWorker()
+        {
+            begin:
+
+            while (FsQueue.Count > 0)
+            {
+                FileSystemEventArgs e;
+                if (FsQueue.TryDequeue(out e))
+                {
+                    var x = e as RenamedEventArgs;
+                    if (x == null)
+                        _fileChanged(null, e);
+                    else
+                        _fileRenamed(null, x);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             if (!Util.MainDisp.HasShutdownStarted)
-                goto begin;//just don't want unneeded code nesting here, anyway IL will be same.
+            {
+                Thread.Sleep(333);
+                goto begin; //just don't want unneeded code nesting here, anyway IL will be same.
+            }
         }
 
         /// <summary>
@@ -200,5 +245,6 @@ begin:
         {
             return String.Format("{0} - {1}", driveName, GetDriveLabel(driveName));
         }
+
     }
 }
