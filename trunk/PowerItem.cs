@@ -21,7 +21,7 @@ namespace Power8
         private ImageManager.ImageContainer _icon;
         private ObservableCollection<PowerItem> _cmdLines; //Jump list
         private string _friendlyName, _resIdString, _resolvedLink, _camels, _raws;
-        private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon, _pin;
+        private bool _expanding, _hasLargeIcon, _autoExpand, _nonCachedIcon, _pin, _childrenShown;
         private PowerItem _root; //root is always the same, this is just cache
 
 
@@ -337,6 +337,18 @@ namespace Power8
                         _root = _root.Parent;
                 }
                 return _root;
+            }
+        }
+
+        public bool AreItemsDisplayed
+        {
+            get { return _childrenShown; } 
+            set
+            {
+                if (value == _childrenShown)
+                    return;
+                _childrenShown = value;
+                OnPropertyChanged("AreItemsDisplayed");
             }
         }
 

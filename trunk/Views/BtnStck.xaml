@@ -65,7 +65,9 @@
                         <DataTemplate>
                             <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" Background="Transparent" IsMainMenu="False" x:Name="showJump">
                                 <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemplate}" 
-                                          ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0">
+                                          ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0"
+                                          IsSubmenuOpen="{Binding AreItemsDisplayed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                          SubmenuOpened="JlShown">
                                     <MenuItem.Header>
                                         <Grid Width="18" Height="16">
                                             <Path Data="M0,0 L2,2 0,4z" Fill="{StaticResource WhiteSolidBrush}" Stretch="Uniform" 
