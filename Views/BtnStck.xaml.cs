@@ -391,65 +391,84 @@ namespace Power8.Views
         /// </summary>
         private void DataGridPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            var pi = dataGrid.SelectedItem as PowerItem;
+            switch (e.Key)
             {
-                var pi = dataGrid.SelectedItem as PowerItem;
-                if (pi != null)
-                {
+                case Key.Enter:
+                    if (pi != null && !pi.AreItemsDisplayed)
+                    {
+                        e.Handled = true;
+                        InvokeFromDataGrid(pi);
+                    }
+                    break;
+                case Key.Tab:
                     e.Handled = true;
-                    InvokeFromDataGrid(pi);
-                }
-            }
-            if (e.Key == Key.Tab)
-            {
-                e.Handled = true;
-                if (Keyboard.IsKeyDown(Key.LeftShift))
-                    AllItemsMenuRoot.Focus();
-                else
-                    SearchBox.Focus();
-            }
-// ReSharper disable PossibleUnintendedReferenceComparison
-            if ((e.Key == Key.Up || e.Key == Key.Down))
-            { //Not in search view when we press Up/Down
-                if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0 && dataGrid.ItemsSource == MfuItems)
-                {//with CTRL
-                    if (dataGrid.SelectedIndex > -1 && SettingsManager.Instance.MfuIsCustom)
-                    { //...and we have something selected, and we're in custom MFU...
-                        var si = dataGrid.SelectedItem as PowerItem; //...and more than 1 in (un) pinned group
-                        if (si != null && MfuItems.Count(m => m.IsPinned == si.IsPinned) > 1)
-                        { //=> move item itself
-                            e.Handled = true;
-                            dataGrid.Focus(); //.Net 4.5 hack. Datagrid in .Net4.5 doesn't switch focus to new row
-                            int increment = (e.Key == Key.Up ? -1 : 1);
-                            int i = dataGrid.SelectedIndex;
-                            PowerItem target = null;
-                            do //search for nearest item with same pinning state
-                            {
-                                i += increment;
-                                if (i == -1)
-                                    i = MfuItems.Count - 1;
-                                else if (i == MfuItems.Count)
-                                    i = 0;
-                                if (MfuItems[i].IsPinned == si.IsPinned)
-                                    target = MfuItems[i];
-                            } while (target == null);
-                            MfuList.MoveCustomListItem(si, target);
+                    if (Keyboard.IsKeyDown(Key.LeftShift))
+                        AllItemsMenuRoot.Focus();
+                    else
+                        SearchBox.Focus();
+                    break;
+                case Key.Up:
+                case Key.Down:
+                    if (pi != null && pi.AreItemsDisplayed)
+                        return; //Do not handle keys when JL is in focus
+                    //Not in search view when we press Up/Down
+                    if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0 && dataGrid.ItemsSource == MfuItems)
+                    {//with CTRL
+                        if (dataGrid.SelectedIndex > -1 && SettingsManager.Instance.MfuIsCustom)
+                        { //...and we have something selected, and we're in custom MFU...
+                            var si = dataGrid.SelectedItem as PowerItem; //...and more than 1 in (un) pinned group
+                            if (si != null && MfuItems.Count(m => m.IsPinned == si.IsPinned) > 1)
+                            { //=> move item itself
+                                e.Handled = true;
+                                dataGrid.Focus(); //.Net 4.5 hack. Datagrid in .Net4.5 doesn't switch focus to new row
+                                int increment = (e.Key == Key.Up ? -1 : 1);
+                                int i = dataGrid.SelectedIndex;
+                                PowerItem target = null;
+                                do //search for nearest item with same pinning state
+                                {
+                                    i += increment;
+                                    if (i == -1)
+                                        i = MfuItems.Count - 1;
+                                    else if (i == MfuItems.Count)
+                                        i = 0;
+                                    if (MfuItems[i].IsPinned == si.IsPinned)
+                                        target = MfuItems[i];
+                                } while (target == null);
+                                MfuList.MoveCustomListItem(si, target);
+                            }
                         }
                     }
-                }
-                else if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) == 0)//Not with CTRL,
-                {// regardless of source => just move selection
-                    e.Handled = true;
-                    var idx = dataGrid.SelectedIndex + (e.Key == Key.Up ? -1 : 1);
-                    if (idx < 0)
-                        idx = dataGrid.Items.Count - 1;
-                    if (idx >= dataGrid.Items.Count)
-                        idx = 0;
-                    dataGrid.SelectedIndex = idx;
-                }
-                dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                    else if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) == 0)//Not with CTRL,
+                    {// regardless of source => just move selection
+                        e.Handled = true;
+                        var idx = dataGrid.SelectedIndex + (e.Key == Key.Up ? -1 : 1);
+                        if (idx < 0)
+                            idx = dataGrid.Items.Count - 1;
+                        if (idx >= dataGrid.Items.Count)
+                            idx = 0;
+                        dataGrid.SelectedIndex = idx;
+                    }
+                    dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                    break;
+                case Key.P:
+                    if (pi != null)
+                    {
+                        e.Handled = true;
+                        pi.IsPinned ^= true;
+                        PinInternal(pi);
+                        dataGrid.Focus();
+                    }
+                    break;
+                case Key.Right:
+                case Key.Left:
+                    if (pi != null)
+                    {
+                        e.Handled = true;
+                        pi.AreItemsDisplayed ^= true;
+                    }
+                    break;
             }
-// ReSharper restore PossibleUnintendedReferenceComparison
         }
         /// <summary>
         /// Handles search event raised by Windows Serach threads.
@@ -476,17 +495,9 @@ namespace Power8.Views
         private void PinClick(object sender, EventArgs e)
         {
             var pi = Util.ExtractRelatedPowerItem(e);
-            try
-            {
-                MfuList.PinUnpin(pi);
-                dataGrid.ScrollIntoView(pi);
-            }
-            catch (IndexOutOfRangeException)
-            {
-                Util.DispatchCaughtException(new Exception(Properties.Resources.Err_NoPiExtracted));
-            }
+            PinInternal(pi);
         }
-
+        
         //------------------------------------------
 
         /// <summary>
@@ -616,6 +627,22 @@ namespace Power8.Views
             paths = paths.Union(wDirs);
             return paths.Any(p => System.IO.File.Exists(p + @"\tsdiscon.exe"));
         }
+        /// <summary>
+        /// Routine to be performed after some PowerItem's IsPinned property was changed
+        /// </summary>
+        /// <param name="pi">Item whose property has changed</param>
+        private void PinInternal(PowerItem pi)
+        {
+            try
+            {
+                MfuList.PinUnpin(pi);
+                dataGrid.ScrollIntoView(pi);
+            }
+            catch (IndexOutOfRangeException)
+            {
+                Util.DispatchCaughtException(new Exception(Properties.Resources.Err_NoPiExtracted));
+            }
+        }
         
         #endregion
 
@@ -653,5 +680,10 @@ namespace Power8.Views
         }
         #endregion
 
+        private void JlShown(object sender, RoutedEventArgs e)
+        {
+            ((System.Windows.Controls.MenuItem) sender).Focus();
+            ((System.Windows.Controls.MenuItem) sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+        }
     }
 }
