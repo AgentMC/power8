@@ -8,6 +8,7 @@
   * Auto-add recently installed SW to MFU list;
   * Configurable ButtonStack background/Theme support;
   * Disable some Power buttons;
+  * Add setting to confirm Power actions;
   * Customized builds with Menu background and Main button pre-configuration.
   * Setting to disable auto-corner feature by Alt+Z;
   * Setting to not to stretch image on the Power8 button.
