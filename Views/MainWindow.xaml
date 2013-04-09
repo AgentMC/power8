@@ -47,30 +47,7 @@
         <Grid>
     		<Grid Opacity="0.8" x:Name="winGrid" 
                   Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=false}">
-    			<Grid.RowDefinitions>
-    				<RowDefinition />
-    				<RowDefinition />
-    			</Grid.RowDefinitions>
-    			<Grid.ColumnDefinitions>
-    				<ColumnDefinition />
-    				<ColumnDefinition />
-    			</Grid.ColumnDefinitions>
-    			<Border Background="{DynamicResource RoundGradientOrangeBrush}"
-    				Grid.Row="1">
-    				<Border Background="{DynamicResource RoundGradientBrush}" />
-    			</Border>
-    			<Border Background="{DynamicResource RoundGradientPinkBrush}"
-    				Grid.Column="1">
-    				<Border Background="{DynamicResource RoundGradientBrush}" />
-    			</Border>
-    			<Border Background="{DynamicResource RoundGradientCyanBrush}">
-    				<Border Background="{DynamicResource RoundGradientBrush}" />
-    			</Border>
-    			<Border Grid.Row="1"
-    				Grid.Column="1"
-    				Background="{DynamicResource RoundGradientLightBlueBrush}">
-    				<Border Background="{DynamicResource RoundGradientBrush}" />
-    			</Border>
+                  <Image Source="/Power8;component/Images/logo_alfa/Power8Logo7_Red_alfa.png"/>
     		</Grid>
             <Grid x:Name="imageGrid" Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=true}">
                 <Image Source="{Binding ElementName=Root, Path=StartImage}"/>
