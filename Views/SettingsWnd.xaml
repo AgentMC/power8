@@ -26,7 +26,7 @@
             <Setter Property="HorizontalGridLinesBrush" Value="Gray"/>
             <Setter Property="VerticalGridLinesBrush" Value="White"/>
             <Setter Property="MinColumnWidth" Value="0"/>
-            <Setter Property="MaxHeight" Value="740"/>
+            <Setter Property="MaxHeight" Value="600"/>
             <Setter Property="CellStyle" Value="{StaticResource DataGridCellStyle}"/>
         </Style>
     </Views:DisposableWindow.Resources>
