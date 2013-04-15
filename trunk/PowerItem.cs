@@ -540,7 +540,7 @@ namespace Power8
         /// </summary>
         public override int GetHashCode()
         {
-            return (FriendlyName + IsFolder + Argument).GetHashCode();
+            return ((AllowAsyncFriendlyName ? string.Empty : FriendlyName) + IsFolder + Argument).GetHashCode();
         }
         /// <summary> Compares two PowerItems based on hash codes. </summary>
         /// <param name="obj">Object to compare to</param>
