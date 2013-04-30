@@ -390,14 +390,10 @@ namespace Power8
                     {
                         if(_resolvedLink == null)
                         {
-                            try
-                            {
-                                _resolvedLink = Util.ResolveLink(PowerItemTree.ResolveItem(this).FileName).ToLowerInvariant();
-                            }
-                            catch (COMException)
-                            {
-                                _resolvedLink = string.Empty;
-                            }
+                            _resolvedLink = (
+                                                Util.ResolveLinkSafe(PowerItemTree.ResolveItem(this).FileName)
+                                                ?? string.Empty
+                                            ).ToLowerInvariant();
                         }
                     }
                 }
@@ -636,6 +632,7 @@ namespace Power8
         {
             Icon = null;
             FriendlyName = null;
+            _resolvedLink = null;
         }
         //Sort
         /// <summary>

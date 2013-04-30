@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-        xmlns:Power8="clr-namespace:Power8" mc:Ignorable="d" d:DesignHeight="515" d:DesignWidth="494" 
+        xmlns:Power8="clr-namespace:Power8" mc:Ignorable="d"
         Name="ButtonStack" AllowsTransparency="False" Background="{x:Static SystemColors.ControlBrush}" 
         Topmost="True" WindowStyle="None" ShowInTaskbar="False" SizeToContent="WidthAndHeight" 
         Closing="WindowClosing" Deactivated="WindowDeactivated" Icon="/Power8;component/Images/Power8Logo_Red48x48.ico"
