@@ -347,7 +347,7 @@ namespace Power8.Helpers
                     return;
                 Settings.Default.CheckForUpdates = value;
                 Settings.Default.Save();
-                WarnMayHaveChanged(this, null);
+                ShowUpdateWarn = false;
                 if (value)
                     UpdateCheckThreadInit();
                 else

@@ -458,7 +458,11 @@ namespace Power8
             var res = new List<MfuElement>();
             for (int i = UserList.Count - 1; i >= 0; i--)
             {
-                res.Add(new MfuElement {Arg = UserList[i], LaunchCount = i});
+                var arg = UserList[i];
+                if (arg.StartsWith("::") || File.Exists(arg) || Directory.Exists(arg))
+                {
+                    res.Add(new MfuElement {Arg = UserList[i], LaunchCount = i});
+                }
             }
             return res;
         }
@@ -686,18 +690,19 @@ namespace Power8
             var linx = (from l in
                             (from m in list
                              where m.Arg.EndsWith(".lnk", StringComparison.InvariantCultureIgnoreCase)
-                             select Tuple.Create(Util.ResolveLink(m.Arg), m))
-                        orderby l.Item1
+                             select new {Lnk = Util.ResolveLinkSafe(m.Arg), Mfu = m})
+                        where l.Lnk != null
+                        orderby l.Lnk
                         select l).ToList();
             //Step 2.3.1 : removing duplicate links
             for (int i = linx.Count - 1; i > 0; i--)
             {
-                if (linx[i - 1].Item1.Equals(linx[i].Item1, StringComparison.InvariantCultureIgnoreCase))
+                if (linx[i - 1].Lnk.Equals(linx[i].Lnk, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    linx[i - 1].Item2.Mix((linx[i].Item2));
-                    if (Util.OsIs.SevenOrMore && linx[i].Item2.Arg.Contains("TaskBar"))
-                        linx[i - 1].Item2.Arg = linx[i].Item2.Arg;//priority for taskbar elements
-                    list.Remove(linx[i].Item2);
+                    linx[i - 1].Mfu.Mix((linx[i].Mfu));
+                    if (Util.OsIs.SevenOrMore && linx[i].Mfu.Arg.Contains("TaskBar"))
+                        linx[i - 1].Mfu.Arg = linx[i].Mfu.Arg;//priority for taskbar elements
+                    list.Remove(linx[i].Mfu);
                     linx.RemoveAt(i);
                 }
             }
@@ -705,11 +710,11 @@ namespace Power8
             foreach (var tuple in linx)
             {
                 var directs =
-                    list.FindAll(q => q.Arg.Equals(tuple.Item1, StringComparison.InvariantCultureIgnoreCase));
+                    list.FindAll(q => q.Arg.Equals(tuple.Lnk, StringComparison.InvariantCultureIgnoreCase));
                 foreach (var direct in directs)
                 {
                     list.Remove(direct);
-                    tuple.Item2.Mix(direct);
+                    tuple.Mfu.Mix(direct);
                 }
             }
 
