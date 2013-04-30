@@ -279,6 +279,28 @@ namespace Power8
                 return new Tuple<string, string>(i1, Buffer.ToString());
             }
         }
+        /// <summary>
+        /// Cals ResolveLink() swallowing all exceptions inside. Use when you don't care
+        /// abour the results of such resolution.
+        /// </summary>
+        /// <param name="link">Full path to *.LNK file</param>
+        /// <returns>The target of a shell shortcul on success and null if failed</returns>
+        public static string ResolveLinkSafe(string link)
+        {
+            string res;
+            try
+            {
+                res = ResolveLink(link);
+            }
+            catch (Exception ex)
+            {
+#if DEBUG 
+                Debug.WriteLine("Link resolution failed safely.\r\n" + ex);
+#endif
+                res = null;
+            }
+            return res;
+        }
         /// <summary> Gets the path of a known folder (Win7 or higher) </summary>
         /// <param name="apiKnFldr">One of GUIDs in <code>API.KnFldrIds</code></param>
         /// <returns>FQ-Path of the FS folder for existing initialized Known Folders, or null</returns>
@@ -861,7 +883,7 @@ namespace Power8
         /// Returns null in case nothing useful was passed. 
         /// Returns [command, ""] in case the filename of the file available at the moment 
         /// was passed.
-        /// Returns [invokable search URI, null] for the web search.
+        /// Returns [invokable search URI, null] for the web search (char, space, text).
         /// Returns [command, null] for all other cases (and this likely indicates that the
         /// command is broken, or it is not the valid command for the system).</returns>
         public static Tuple<string, string> CommandToFilenameAndArgs(string command)
@@ -1169,6 +1191,7 @@ namespace Power8
             public static bool EightOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 2); } }
             public static bool EightRpOrMore { get { return Ver >= new Version(6, 2, 8400); } } //Win8ReleasePreview+
         }
+
         /// <summary> Helper class to call unmanaged ShellExecute on STA thread 
         /// (used for Verbs invokation) </summary>
         public class ShellExecuteHelper
@@ -1218,6 +1241,5 @@ namespace Power8
                 return _succeeded;
             }
         }
-
     }
 }

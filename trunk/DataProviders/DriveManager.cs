@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -58,7 +59,6 @@ namespace Power8
                                            .Select(d => d.Name)
                                            .ToList();
                     rDrvNames.ForEach(StopWatcher);
-                    DriveNames.RemoveAll(rDrvNames.Contains);
                 }
             }
         }
@@ -79,8 +79,7 @@ begin:
                     var dName = DriveNames[i];
                     if (_drives.All(d => d.Name != dName)) //drive removed
                     {
-                        StopWatcher(dName);
-                        DriveNames.RemoveAt(i); //remove drive from collection
+                        StopWatcher(dName); //stop the COM watcher and remove drive from collection
                     }
                 }
                 //Has blacklisted drive been removed?
@@ -99,8 +98,10 @@ begin:
                             {
                                 w = new FileSystemWatcher(dName);
                             }
-                            catch (ArgumentException)
+                            catch (ArgumentException ex)
                             {
+                                Debug.WriteLine("DriveManager: cannot inistantiate watcher for {0}, reason:\r\n{1}",
+                                    dName, ex.Message);
                                 BlackList.Add(dName);
                                 continue;
                             }
@@ -122,11 +123,11 @@ begin:
                             w.Changed += PushEvent;
                             w.Renamed += PushEvent;
                             w.IncludeSubdirectories = true;
-                            if (BtnStck.IsInstantited)
-                                w.EnableRaisingEvents = true;
-                            else
-                                BtnStck.Instanciated += (sender, args) => w.EnableRaisingEvents = true;
                             Watchers.Add(w);
+                            if (BtnStck.IsInstantited)
+                                StartWatcher(w);
+                            else
+                                BtnStck.Instanciated += (sender, args) => StartWatcher(w);
                         }
                     }
                 }
@@ -198,25 +199,57 @@ begin:
         }
 
         /// <summary>
+        /// Tries to start running the prepared FileSystemWatcher.
+        /// If this fails, blacklists the drive and calls StopWatcher,
+        /// which cleans up everything related to this drive.
+        /// </summary>
+        /// <param name="w">FileSystemWatcher to start.</param>
+        private static void StartWatcher(FileSystemWatcher w)
+        {
+            try
+            {
+                w.EnableRaisingEvents = true;
+            }
+            catch (IOException ex)
+            {
+                var dName = w.Path;
+                Debug.WriteLine("DriveManager: cannot inistantiate watcher for {0}, reason:\r\n{1}", dName, ex.Message);
+                BlackList.Add(dName);
+                StopWatcher(dName);
+            }
+        }
+
+        /// <summary>
         /// Stops FS watcher for corresponding Path and removes it from Watchers collection.
         /// Then removes corresponding item from interface.
         /// </summary>
         /// <param name="dName">DriveInfo.Name, i.e. Watcher.Path for the one to stop</param>
         private static void StopWatcher(string dName)
         {
-            var watcher = Watchers.FirstOrDefault(w => w.Path == dName);
-            if (watcher != null) //stop drive watcher
+            lock (DriveNames)
             {
-                watcher.Dispose();
-                Watchers.Remove(watcher);
+                //Stop watcher
+                var watcher = Watchers.FirstOrDefault(w => w.Path == dName);
+                if (watcher != null) //stop drive watcher
+                {
+                    //unsubscribe the handlers to prevent memory leak
+                    watcher.Changed -= PushEvent;
+                    watcher.Created -= PushEvent;
+                    watcher.Deleted -= PushEvent;
+                    watcher.Renamed -= PushEvent;
+                    //destroy COM component and remove watcher from the collection
+                    watcher.Dispose();
+                    Watchers.Remove(watcher);
+                }
+                Util.Send(() => //remove PowerItem from UI
+                {
+                    var item = _drivesRoot.Items.FirstOrDefault(j => j.Argument == dName);
+                    if (item != null)
+                        _drivesRoot.Items.Remove(item);
+                });
+                //Remove the name for failed drive from the actual drives list
+                DriveNames.Remove(dName);
             }
-            Util.Send(() => //remove PowerItem from UI
-            {
-                var item =
-                    _drivesRoot.Items.FirstOrDefault(j => j.Argument == dName);
-                if (item != null)
-                    _drivesRoot.Items.Remove(item);
-            });
         }
 
         /// <summary>
