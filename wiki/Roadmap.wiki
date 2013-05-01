@@ -9,9 +9,8 @@ For already implemented features, see [Changelog] page.
 
 
 = _Power8 v.1.5 RTM_ =
-*estimated release date: no estimation, when some of us will have time*
+*estimated release date: no estimation, when some of us will have time; currently we'll still work on 1.4.x to make it more stable, usable and reliable*
   * Skins/styles;
     * In particular, Metro style.
   * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
-  * Handling of keys in launch-list: Delete, ((Un)Pin) and (Show JL);
   * Cut/Copy/Paste/Delete for context menu;
