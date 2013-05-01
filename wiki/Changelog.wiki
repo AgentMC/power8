@@ -1,7 +1,22 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
-==Version 1.4.1 Beta (v.1.4.0.569): 14.03.2013==
+==Version 1.4.2 Beta (v.1.4.2.599): 01.05.2013==
+
+  # `[new]` Complete key handling for recent list (P to (un-)pin an item, Right / Left arrow opens jump list; Recent list must be focused for these keys to operate). Now really all features of Power8 can be accessed without using of mouse;
+  # `[changed]` Enhanced performance of file system event watching (moved FS watching to deferred processing in dedicated thread);
+  # `[changed]` Replaced Main button logo again. No re-use of MS logo now;
+  # `[fixed]` Random exceptions in Recent list when you select items with mouse;
+  # `[fixed]` Random issue occuring when you try to launch an application via Recent list, and another app is launched instead;
+  # `[fixed]` Exception in `MfuList` in case object added to custom list earlier was deleted from system;
+  # `[fixed]` Exception in `MfuList` in case link object added to custom list earlier was corrupted (reported by Maxim Orlov);
+  # `[fixed]` Exception on `WindowsXP` on shutdown of Power8 (processes event watcher COM object was created in wrong thread);
+  # `[fixed]` Exception in `DriveManager` if network share becomes unavailable under certain (domain related) circumstances (reported by Brian Taylor);
+  # `[fixed]` Warning sign not disappearing after "Check for updates" was unchecked;
+  # `[fixed]` Exclusions list (settings window) might be too high after a lot of items are added to exclusions;
+  # `[fixed]` Issue occurring when a link under Start Menu folder is being changed, and an item in Recent list exists that takes the name of a link as Friendly Name to display, AND in case this change might influence the item's representation - this information wasn't stored to the link object, and thus required Power8 to restart to apply required representation changes;
+
+==Version 1.4.1 Beta (v.1.4.1.569): 14.03.2013==
 
   # `[new]` New settings hack implemented to provide fix to users of Windows7 x86 where some unexpected component exists which prevents Power8 from working in a normal way (see Windows7ExceptionHack); 
   # `[changed]` Colors on Power8 button were changed to be not like Microsoft logo which is a TM;
