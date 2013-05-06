@@ -2,18 +2,24 @@
 #labels Featured
 
 = List of ideas and requests we not committed yet =
-  * W7^Aero^: hide standard start button
-  * W7^Classic^: fill standard start button like it's done on XP.
-  * TBD: Context menu (configurable) for computer list, specific items for each computer item;
-  * Auto-add recently installed SW to MFU list;
-  * Configurable ButtonStack background/Theme support;
-  * Disable some Power buttons;
-  * Add setting to confirm Power actions;
-  * Customized builds with Menu background and Main button pre-configuration.
-  * Setting to disable auto-corner feature by Alt+Z;
-  * Setting to not to stretch image on the Power8 button;
-  * Fill Start menu the way it is done for Win98, e.g. with separator, without additional Programs level.
-
+  * Start button
+    * Setting to not to stretch image on the Power8 button;
+    * Configurable text on Start button;
+    * W7^Aero^: hide standard start button
+    * W7^Classic^: fill standard start button like it's done on XP. 
+  * Start menu
+    * Fill Start menu the way it is done for Win98, e.g. with separator,  without additional Programs level;
+  * Button-Stack in general
+    * Disable some Power buttons;
+    * Auto-add recently installed SW to MFU list;
+  * Interaction
+    * Add setting to confirm Power actions;
+    * Setting to disable auto-corner feature by Alt+Z;
+  * Theming
+    * Configurable Button-Stack background/Theme support;
+      * Customized builds with Menu background and Main button pre-configuration.
+  * Miscellaneous
+      * TBD: Context menu (configurable) for computer list, specific items for each computer item;
 
 = List of ideas and requests we won't ever implement =
   * Skip metro shell;
