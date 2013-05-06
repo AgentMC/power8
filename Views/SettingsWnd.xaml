@@ -39,8 +39,16 @@
                 <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgAutoSort" IsChecked="{Binding AutoSortTrees, Mode=TwoWay}" />
                 <CheckBox x:Name="StgAutoRestart" IsChecked="{Binding AutoRestart, Mode=TwoWay}" />
+                <CheckBox x:Name="StgDynamicLayout" IsChecked="{Binding DynamicLayout, Mode=TwoWay}"/>
                 <Separator/>
-                <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}"/>
+                <Grid HorizontalAlignment="Left" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}"/>
+                    <Label Padding="4" Grid.Column="1">(Windows7+)</Label>
+                </Grid>
                 <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

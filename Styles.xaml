@@ -8,6 +8,7 @@
     <Converters:NameToResourceConverter x:Key="localizer"/>
     <Converters:MenuWidthToMarginConverter x:Key="themeApplier" />
     <Converters:BitmapSource2VisibilityConverter x:Key="imageDisplay"/>
+    <Converters:BoolToGridRowConverter x:Key="uiSwitcher"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     
     <!-- Stuff -->

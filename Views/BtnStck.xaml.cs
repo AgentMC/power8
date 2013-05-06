@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,7 +20,7 @@ namespace Power8.Views
     /// Singleton that represents ButtonStack - window with all those buttons, menus, lists...
     /// Inherits Window
     /// </summary>
-    public partial class BtnStck
+    public partial class BtnStck : INotifyPropertyChanged
     {
         private static BtnStck _instance;
         /// <summary>
@@ -67,6 +68,12 @@ namespace Power8.Views
         /// Occurs only once as BtnStck is written as singleton (need 2 start menu instances?) 
         /// </summary>
         public static event EventHandler Instanciated;
+        /// <summary>
+        /// Implements <code>INotifyPropertyChanged</code>. Raised when a property is changed, and this
+        /// property is intended to be binded to something.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
 
         #region Load, Unload, Show, Hide
 
@@ -91,6 +98,7 @@ namespace Power8.Views
             PowerItemTree.WinSearchThreadCompleted += HandleSearch;
             PowerItemTree.WinSearchThreadStarted += HandleSearch;
             SettingsManager.ControlPanelByCategoryChanged += OnControlPanelByCategoryChanged;
+            SettingsManager.DynamicLayoutChanged += (sender, e) => FirePropChanged("IsWindowAtTopOfScreen");
 
             foreach (var mb in GetAllMenuButtons())
                 mb.Item = GetSpecialItems(mb.Name);
@@ -145,7 +153,7 @@ namespace Power8.Views
         /// <summary>
         /// Overrides closing by hiding window unless P8 shuts doen now.
         /// </summary>
-        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void WindowClosing(object sender, CancelEventArgs e)
         {
             e.Cancel = !MainWindow.ClosedW;
             if (e.Cancel)
@@ -294,7 +302,7 @@ namespace Power8.Views
         /// with Content that ReferenceEquals to the Group in SearchView
         /// whose (Group's) Name value-equals to the passed root's FriendlyName.
         /// Cancellation token is checked twice during the execution.
-        /// Expander is searched and expanded only if the number of iems 
+        /// Expander is searched and expanded only if the number of items 
         /// in related group is 20 or less (performance concideration).</remarks>
         private void ExpandGroup(PowerItem root, CancellationToken token)
         {
@@ -497,6 +505,17 @@ namespace Power8.Views
             var pi = Util.ExtractRelatedPowerItem(e);
             PinInternal(pi);
         }
+        /// <summary>
+        /// Handles the event that occurs when the elements of jump list are shown for 
+        /// an item in the Recent list. The code sence: it moves focus so it is pointed to the 
+        /// "menu item" representing the [>] jumplist root's 1st child item
+        /// </summary>
+        private void JlShown(object sender, RoutedEventArgs e)
+        {
+            ((System.Windows.Controls.MenuItem)sender).Focus();
+            ((System.Windows.Controls.MenuItem)sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+        }
+
         
         //------------------------------------------
 
@@ -643,7 +662,17 @@ namespace Power8.Views
                 Util.DispatchCaughtException(new Exception(Properties.Resources.Err_NoPiExtracted));
             }
         }
-        
+        /// <summary>
+        /// Raises PropertyChanged event.
+        /// </summary>
+        /// <param name="propName">String representing property name</param>
+        private void FirePropChanged(string propName)
+        {
+            var h = PropertyChanged;
+            if (h != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+
         #endregion
 
         #region Bindable props
@@ -669,7 +698,7 @@ namespace Power8.Views
         {
             get { return _searchData; }
         }
-
+        //backing field
         private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
         /// <summary>
         /// Bindable command which performs Invoke() on item that might be extracted from source
@@ -678,12 +707,25 @@ namespace Power8.Views
         {
             get { return _cmd; }
         }
-        #endregion
-
-        private void JlShown(object sender, RoutedEventArgs e)
+        //backing field
+        private bool _isWindowAtTopOfScreen = true;
+        /// <summary>
+        /// Notifies buttonstack whether the start button was moved to above or below
+        /// the center of the /*earth*/ screen. This <i>may</i> influence on whether
+        /// Start menu and Search bar exchange their locations.
+        /// </summary>
+        public bool IsWindowAtTopOfScreen
         {
-            ((System.Windows.Controls.MenuItem) sender).Focus();
-            ((System.Windows.Controls.MenuItem) sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
+            get { return !SettingsManager.Instance.DynamicLayout || _isWindowAtTopOfScreen; }
+            set
+            {
+                if(value == _isWindowAtTopOfScreen)
+                    return;
+                _isWindowAtTopOfScreen = value;
+                FirePropChanged("IsWindowAtTopOfScreen");
+            }
         }
+
+        #endregion
     }
 }

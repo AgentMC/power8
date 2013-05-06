@@ -43,6 +43,7 @@ namespace Power8.Helpers
         public static event EventHandler WarnMayHaveChanged;
         public static event EventHandler ImageChanged;
         public static event EventHandler ControlPanelByCategoryChanged;
+        public static event EventHandler DynamicLayoutChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -648,6 +649,19 @@ namespace Power8.Helpers
                     return;
                 Settings.Default.TryFpResetBeforeUiCtors = value;
                 Settings.Default.Save();
+            }
+        }
+
+        public bool DynamicLayout
+        {
+            get { return Settings.Default.DynamicLayout; }
+            set
+            {
+                if(value == Settings.Default.DynamicLayout)
+                    return;
+                Settings.Default.DynamicLayout = value;
+                Settings.Default.Save();
+                DynamicLayoutChanged(this, null);
             }
         }
 
