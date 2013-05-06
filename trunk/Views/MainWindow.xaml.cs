@@ -96,9 +96,14 @@ namespace Power8.Views
             {
                 handled = true;
                 if (BtnStck.Instance.IsActive)
+                {
+                    Activate(); //WXP requires this
                     b1.Focus();
+                }
                 else
+                {
                     ShowButtonStack(Keyboard.PrimaryDevice, null);
+                }
             }
             return IntPtr.Zero;
         }
@@ -318,6 +323,7 @@ namespace Power8.Views
         {
             double width = -1, height = -1;
             API.RECT r;
+            var p = default(Point);
             while (!ClosedW)
             {
                 if (!API.GetWindowRect(_showDesktopBtn, out r))
@@ -375,6 +381,22 @@ namespace Power8.Views
                     Dispatcher.Invoke(new Action(() =>  b1.Height = curHeight));
                 }
 // ReSharper restore CompareOfFloatsByEqualityOperator
+                
+                //Check if the Main Button location changed within screen
+                if (BtnStck.IsInstantited && ((int)p.Y != r.Top || (int)p.X != r.Left))
+                {
+                    p.Y = r.Top;
+                    p.X = r.Left;
+                    if (Util.OsIs.SevenOrMore && taskBarVertical)
+                    {
+                        BtnStck.Instance.IsWindowAtTopOfScreen = true;
+                    }
+                    else //only 25% but that's defaults...
+                    {
+                        var activeScreen = Screen.FromPoint(new System.Drawing.Point(r.Left, r.Top));
+                        BtnStck.Instance.IsWindowAtTopOfScreen = (double)activeScreen.Bounds.Height/2 > r.Top;
+                    }
+                }
 
                 //If required, apply move to taskbar rebar
                 if (Util.OsIs.EightOrMore || (SettingsManager.Instance.SquareStartButton && Util.OsIs.SevenOrMore))

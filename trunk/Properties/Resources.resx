@@ -329,7 +329,7 @@ Cancel: I skip this update, never notify me about this version.</value>
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
     <value />
-    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
+    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org OR mailto:a1@test.com</comment>
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
     <value>No, thanks.
@@ -457,5 +457,9 @@ Please launch Explorer for me and restart Power8 process.</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
     <value>Show Control Panel with items sorted by category</value>
+  </data>
+  <data name="CR_StgDynamicLayout" xml:space="preserve">
+    <value>Exchange All programs menu and Search bar for better usability</value>
+    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>
