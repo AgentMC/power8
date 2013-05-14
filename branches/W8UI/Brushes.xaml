@@ -1,0 +1,81 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0.922,2.302" StartPoint="-0.094,-1.872">
+        <GradientStop Color="#99FFFFFF" Offset="0.186"/>
+        <GradientStop Color="#66FFFFFF" Offset="0.451"/>
+        <GradientStop Color="#99FFFFFF" Offset="0.952"/>
+        <GradientStop Color="#66FFFFFF" Offset="0.584"/>
+    </LinearGradientBrush>
+    <RadialGradientBrush x:Key="ButtonBackgroundBrush" Center="0.425,0.501" GradientOrigin="1.363,2.447" RadiusY="2.682" RadiusX="1.714">
+        <GradientStop Offset="0.526"/>
+        <GradientStop Color="#4CFFFFFF" Offset="0.552"/>
+        <GradientStop Color="#66FFFFFF" Offset="0.985"/>
+    </RadialGradientBrush>
+    <SolidColorBrush x:Key="BlackBrush" Color="#A0000000"/>
+	<LinearGradientBrush x:Key="MouseOverBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+		<GradientStop Offset="1" Color="#19FFFFFF"/>
+		<GradientStop Color="#33FFFFFF"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="PressedBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+		<GradientStop Color="#99FFFFFF" Offset="0"/>
+		<GradientStop Color="#66FFFFFF" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="ButtonOpacityMask" EndPoint="0.5,1" StartPoint="0.5,0">
+		<GradientStop Color="Black" Offset="0"/>
+		<GradientStop Color="#99000000" Offset="1"/>
+	</LinearGradientBrush>
+	<SolidColorBrush x:Key="WhiteAlfa30" Color="#4CFFFFFF"/>
+	<SolidColorBrush x:Key="WhiteAlfa60" Color="#99FFFFFF"/>
+	<RadialGradientBrush x:Key="WhiteRoundGradient" Center="0.494,0.066" GradientOrigin="0.494,0.066" RadiusX="2" RadiusY="1.161">
+		<GradientStop Offset="1"/>
+		<GradientStop Color="#33FFFFFF"/>
+		<GradientStop Offset="0.5"/>
+	</RadialGradientBrush>
+	<SolidColorBrush x:Key="WhiteSolidBrush" Color="White"/>
+    <LinearGradientBrush x:Key="MenuBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#F6F6F6" Offset="0.25"/>
+        <GradientStop Color="#EAE8E8" Offset="0.25"/>
+        <GradientStop Color="#DCD9D9" Offset="0.8"/>
+        <GradientStop Color="White" Offset="1"/>
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="PressedGradientBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+    	<GradientStop/>
+    	<GradientStop Color="#66FFFFFF" Offset="1"/>
+    </LinearGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientBrush" RadiusY="2.18" Center="0.889,0.202" GradientOrigin="0.889,0.202" RadiusX="0.879">
+    	<GradientStop Offset="1"/>
+    	<GradientStop Color="#99FFFFFF"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientBlueBrush" RadiusY="1.323" RadiusX="1.336" Center="0.771,0.236" GradientOrigin="0.771,0.236">
+    	<GradientStop Color="#FF004E83" Offset="1"/>
+    	<GradientStop Color="#CC004E83"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientGreenBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#FF416C00" Offset="1"/>
+    	<GradientStop Color="#CC416C00"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientRedBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#FFDA0300" Offset="1"/>
+    	<GradientStop Color="#CCDA0300" Offset="0.006"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientOrangeBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#FF8A00" Offset="1"/>
+    	<GradientStop Color="#CCFF8A00" Offset="0.006"/>
+    </RadialGradientBrush>
+    
+    <RadialGradientBrush x:Key="RoundGradientLightBlueBrush" RadiusY="1.323" RadiusX="1.336" Center="0.771,0.236" GradientOrigin="0.771,0.236">
+    	<GradientStop Color="#0138FF" Offset="1"/>
+    	<GradientStop Color="#CC0138FF"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientCyanBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#FF39FFFF" Offset="1"/>
+    	<GradientStop Color="#CC39FFFF"/>
+    </RadialGradientBrush>
+    <RadialGradientBrush x:Key="RoundGradientPinkBrush" Center="0.771,0.236" GradientOrigin="0.771,0.236" RadiusY="1.323" RadiusX="1.336">
+    	<GradientStop Color="#9D00FF" Offset="1"/>
+    	<GradientStop Color="#CC9D00FF" Offset="0.006"/>
+    </RadialGradientBrush>
+
+    <!-- Resource dictionary entries should be defined here. -->
+</ResourceDictionary>
