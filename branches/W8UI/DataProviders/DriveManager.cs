@@ -124,10 +124,10 @@ begin:
                             w.Renamed += PushEvent;
                             w.IncludeSubdirectories = true;
                             Watchers.Add(w);
-                            if (BtnStck.IsInstantited)
+                            if (PopupWindow.IsInstantited)
                                 StartWatcher(w);
                             else
-                                BtnStck.Instanciated += (sender, args) => StartWatcher(w);
+                                PopupWindow.Instanciated += (sender, args) => StartWatcher(w);
                         }
                     }
                 }

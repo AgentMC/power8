@@ -4,19 +4,19 @@
         xmlns:Views="clr-namespace:Power8.Views" x:Class="Power8.Views.SettingsWnd"
         HorizontalAlignment="Center" VerticalAlignment="Center" ResizeMode="CanMinimize" x:Name="StgWnd"
         Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight" MinWidth="400"
-        Title="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+        Title="{Binding Name, Converter={StaticResource LocalizerConverter}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
         Closed="WindowClosed">
     <Views:DisposableWindow.Resources>
         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBoxStyle}"/>
         <Style TargetType="{x:Type RadioButton}">
-            <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Content" Value="{Binding Name, Converter={StaticResource LocalizerConverter}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
             <Setter Property="Margin" Value="0,4"/>
         </Style>
         <Style TargetType="{x:Type Label}">
-            <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Content" Value="{Binding Name, Converter={StaticResource LocalizerConverter}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         </Style>
         <Style TargetType="{x:Type TabItem}">
-            <Setter Property="Header" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Header" Value="{Binding Name, Converter={StaticResource LocalizerConverter}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
         </Style>
         <Style TargetType="{x:Type DataGrid}">
             <Setter Property="AutoGenerateColumns" Value="False"/>
@@ -68,7 +68,7 @@
                         <Label x:Name="StgLblAr"/>
                         <ComboBox Grid.Column="1" Margin="0,0,5,0" VerticalAlignment="Center" SelectedIndex="{Binding ArSelectedIndex, Mode=TwoWay}">
                             <ComboBox.Items>
-                                <ComboBoxItem x:Name="StgArByDesktop" Content="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+                                <ComboBoxItem x:Name="StgArByDesktop" Content="{Binding Name, Converter={StaticResource LocalizerConverter}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
                                 <ComboBoxItem>1:1</ComboBoxItem>
                                 <ComboBoxItem>4:3</ComboBoxItem>
                                 <ComboBoxItem>16:9</ComboBoxItem>

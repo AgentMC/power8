@@ -54,7 +54,7 @@ namespace Power8.Views
             Application.EnableVisualStyles();
 
             App.Current.SessionEnding += (sender, args) => Close();
-            BtnStck.Instanciated += BtnStckInstanciated;
+            PopupWindow.Instanciated += PopupWindowInstanciated;
 
             SettingsManager.Init();
             if (Util.OsIs.SevenOrBelow)
@@ -69,9 +69,9 @@ namespace Power8.Views
         /// so is a part of initialization of MainWindow. 
         /// Changes cursor and shows welcome arrow if required.
         /// </summary>
-        void BtnStckInstanciated(object sender, EventArgs e)
+        void PopupWindowInstanciated(object sender, EventArgs e)
         {
-            BtnStck.Instance.RunCalled += ShowRunDialog;
+            PopupWindow.Instance.RunCalled += ShowRunDialog;
             b1.Cursor = System.Windows.Input.Cursors.Hand;
             if (!Settings.Default.FirstRunDone)
             {
@@ -95,7 +95,7 @@ namespace Power8.Views
             if (msg == (uint)API.WM.HOTKEY)
             {
                 handled = true;
-                if (BtnStck.Instance.IsActive)
+                if (PopupWindow.Instance.IsActive)
                 {
                     Activate(); //WXP requires this
                     b1.Focus();
@@ -158,8 +158,8 @@ namespace Power8.Views
         private void WindowClosed(object sender, EventArgs e)
         {
             ClosedW = true;
-            if (BtnStck.IsInstantited)
-                BtnStck.Instance.Close();
+            if (PopupWindow.IsInstantited)
+                PopupWindow.Instance.Close();
             KillArrow();
             Util.MainDisp.InvokeShutdown();
         }
@@ -175,7 +175,7 @@ namespace Power8.Views
         /// </summary>
         private void ShowButtonStack(object sender, RoutedEventArgs e)
         {
-            if(!BtnStck.IsInstantited)
+            if(!PopupWindow.IsInstantited)
                 return;
 
             KillArrow();
@@ -194,10 +194,10 @@ namespace Power8.Views
             }
 
             MfuList.UpdateStartMfu();
-            BtnStck.Instance.Show();//XP:955ms 0_o
+            PopupWindow.Instance.Show();//XP:955ms 0_o
             var screenPoint = new API.POINT();
             API.GetCursorPos(ref screenPoint);
-            GetSetWndPosition(BtnStck.Instance, screenPoint, sender == Keyboard.PrimaryDevice);
+            GetSetWndPosition(PopupWindow.Instance, screenPoint, sender == Keyboard.PrimaryDevice);
         }
         /// <summary>
         /// Shows Run dialog
@@ -383,18 +383,18 @@ namespace Power8.Views
 // ReSharper restore CompareOfFloatsByEqualityOperator
                 
                 //Check if the Main Button location changed within screen
-                if (BtnStck.IsInstantited && ((int)p.Y != r.Top || (int)p.X != r.Left))
+                if (PopupWindow.IsInstantited && ((int)p.Y != r.Top || (int)p.X != r.Left))
                 {
                     p.Y = r.Top;
                     p.X = r.Left;
                     if (Util.OsIs.SevenOrMore && taskBarVertical)
                     {
-                        BtnStck.Instance.IsWindowAtTopOfScreen = true;
+                        PopupWindow.Instance.IsWindowAtTopOfScreen = true;
                     }
                     else //only 25% but that's defaults...
                     {
                         var activeScreen = Screen.FromPoint(new System.Drawing.Point(r.Left, r.Top));
-                        BtnStck.Instance.IsWindowAtTopOfScreen = (double)activeScreen.Bounds.Height/2 > r.Top;
+                        PopupWindow.Instance.IsWindowAtTopOfScreen = (double)activeScreen.Bounds.Height/2 > r.Top;
                     }
                 }
 
@@ -539,7 +539,7 @@ namespace Power8.Views
             if(w != PlacementWnd)
                 w.Activate();
 // ReSharper restore PossibleUnintendedReferenceComparison
-            var b = w as BtnStck;
+            var b = w as PopupWindow;
             if (b != null)
                 b.Focus();//Focus() is __new on ButtonStack, must explicitly type
         }

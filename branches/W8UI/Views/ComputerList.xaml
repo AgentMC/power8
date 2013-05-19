@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:Views="clr-namespace:Power8.Views" 
         Height="300" Width="300" Icon="{Binding Path=IconEx}" 
-        Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}" >
+        Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource LocalizerConverter}}" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />

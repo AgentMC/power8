@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Power8.Commands;
+using Power8.Views;
 using Power8.Helpers;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -20,20 +21,20 @@ namespace Power8.Views
     /// Singleton that represents ButtonStack - window with all those buttons, menus, lists...
     /// Inherits Window
     /// </summary>
-    public partial class BtnStck : INotifyPropertyChanged
+    public partial class PopupWindow : INotifyPropertyChanged
     {
-        private static BtnStck _instance;
+        private static PopupWindow _instance;
         /// <summary>
         /// Gets the instance of ButtonStack. 
         /// Not thread-safe, but the instance should be ONLY created on main dispatcher thread.
         /// </summary>
-        public static BtnStck Instance
+        public static PopupWindow Instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new BtnStck();
+                    _instance = new PopupWindow();
                     var h = Instanciated;
                     if (h != null)
                         h(null, null);
@@ -65,7 +66,7 @@ namespace Power8.Views
         /// Occurs when the ButtonStack instance is created and all .ctor stuff is executed.
         /// This, among other stuff, includes lazy initialization of all data roots in 
         /// PowerItemTree and MfuList.
-        /// Occurs only once as BtnStck is written as singleton (need 2 start menu instances?) 
+        /// Occurs only once as PopupWindow is written as singleton (need 2 start menu instances?) 
         /// </summary>
         public static event EventHandler Instanciated;
         /// <summary>
@@ -85,7 +86,7 @@ namespace Power8.Views
         /// After completion of instance construction, the next point of interesting is 
         /// OnSourceInitialized.
         /// </summary>
-        public BtnStck()
+        public PopupWindow()
         {
             Util.FpReset();
             InitializeComponent();
@@ -599,7 +600,7 @@ namespace Power8.Views
                 SpecialItems[containerName] = mcItem;
             }
 #if DEBUG
-            Debug.WriteLine("BtnStck:GSI - done for {0} as of {1}", containerName, s.ElapsedMilliseconds);
+            Debug.WriteLine("PopupWindow:GSI - done for {0} as of {1}", containerName, s.ElapsedMilliseconds);
             s.Stop();
 #endif
             return SpecialItems[containerName];
@@ -625,9 +626,9 @@ namespace Power8.Views
         /// <summary>
         /// Returns enumerable collection of all Menued butons for current window
         /// </summary>
-        private IEnumerable<MenuedButton> GetAllMenuButtons()
+        private IEnumerable<MenuButtonControl> GetAllMenuButtons()
         {
-            return dataGridHeightMeasure.Children.OfType<MenuedButton>();
+            return dataGridHeightMeasure.Children.OfType<MenuButtonControl>();
         }
         /// <summary>
         /// Checks wheather tsdiscon utility is available on system

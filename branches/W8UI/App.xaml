@@ -3,11 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Commands="clr-namespace:Power8.Commands"
              xmlns:Converters="clr-namespace:Power8.Converters">
+    
     <Application.Resources>
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Brushes.xaml"/>
-                <ResourceDictionary Source="Styles.xaml"/>
+                <ResourceDictionary Source="Resources\Brushes.xaml"/>
+                <ResourceDictionary Source="Resources\Geometries.xaml" />
+                <ResourceDictionary Source="Resources\Styles.xaml"/>
+                <ResourceDictionary Source="Resources\MenuResources.xaml" />
+                <ResourceDictionary Source="Resources\ButtonsResources.xaml" />
+                <ResourceDictionary Source="Resources\DataGridResources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <Commands:MenuItemClickCommand x:Key="globalClickCommand"/>
@@ -48,6 +54,8 @@
                 <MenuItem Name="AppExcludeFromCustom"  Visibility="{Binding IsCanBeRemoved, Converter={StaticResource BooleanToVisibilityConverter}}" 
                           Click="ExcludeCustom" Style="{StaticResource ContextMenuItemStyle}" />
             </ContextMenu>
-    </ResourceDictionary>
+
+        </ResourceDictionary>
     </Application.Resources>
+    
 </Application>

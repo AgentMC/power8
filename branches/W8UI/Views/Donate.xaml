@@ -7,12 +7,12 @@
         Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight" ResizeMode="NoResize" >
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="Text" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Text" Value="{Binding Name, Converter={StaticResource LocalizerConverter}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
             <Setter  Property="Margin" Value="0,4"/>
         </Style>
     </Window.Resources>
     <Window.Title>
-        <Binding Converter="{StaticResource localizer}" Mode="OneWay" Path="Name" RelativeSource="{RelativeSource Self}"/>
+        <Binding Converter="{StaticResource LocalizerConverter}" Mode="OneWay" Path="Name" RelativeSource="{RelativeSource Self}"/>
     </Window.Title>
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="12">
         <Grid.RowDefinitions>

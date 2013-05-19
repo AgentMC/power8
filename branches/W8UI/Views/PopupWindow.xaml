@@ -1,0 +1,303 @@
+﻿<Window x:Class="Power8.Views.PopupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:power8="clr-namespace:Power8"
+        Name="ButtonStack"
+        AllowsTransparency="False"
+        Background="{x:Static SystemColors.ControlBrush}"
+        Topmost="True"
+        ShowInTaskbar="False"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStyle="None"
+        Closing="WindowClosing"
+        Deactivated="WindowDeactivated"
+        Icon="/Power8;component/Images/Power8Logo_Red48x48.ico"
+        Title="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource LocalizerConverter}}">
+
+    <Window.Resources>
+        <DataTemplate x:Key="AllItemsHeaderMenuTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock x:Name="header"
+                           Foreground="{DynamicResource WindowColorKey}"
+                           Text="START MENU" />
+                <Path Data="M0,0 L4,0 2,2z"
+                      Fill="{Binding Foreground, ElementName=header}"
+                      Stretch="Uniform"
+                      Height="5"
+                      Width="8"
+                      Margin="6,2,0,0" />
+            </StackPanel>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsHighlighted, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type MenuItem}}}"
+                             Value="True">
+                    <Setter Property="Foreground" TargetName="header" Value="#FF0099FF" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsKeyboardFocused, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type MenuItem}}}"
+                             Value="True">
+                    <Setter Property="Foreground" TargetName="header" Value="#FF0099FF" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsSubmenuOpen, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type MenuItem}}}"
+                             Value="True">
+                    <Setter Property="Foreground" TargetName="header" Value="#FF0099FF" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Name="LayoutRoot"
+          Background="{DynamicResource WindowFrameColorKey}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <Rectangle x:Name="panelHeight" Grid.Column="1" Grid.Row="1"/>
+        
+    	<Menu Margin="3,10"
+    		  x:Name="AllItemsMenuRoot"
+	    	  Style="{DynamicResource RootMenuStyle}"
+              Grid.Row="{Binding Path=IsWindowAtTopOfScreen, ElementName=ButtonStack, Converter={StaticResource UiSwitcherConverter}, 
+                                 Mode=OneWay, ConverterParameter=true}">
+    		<MenuItem ItemsSource="{Binding Items, ElementName=ButtonStack, Mode=OneWay}"
+                      ItemContainerStyle="{DynamicResource TextHighlitedMenuItemStyle}"
+    				  ItemsPanel="{StaticResource ItemsPanelTemplate}"
+                      HeaderTemplate="{DynamicResource AllItemsHeaderMenuTemplate}"
+					  ContextMenuOpening="AllItemsMenuRootContextMenuOpening" 
+                      Style="{DynamicResource TextHighlitedMenuItemStyle}">
+    		</MenuItem>
+    	</Menu>
+
+        <DataGrid HeadersVisibility="None"
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  ItemsSource="{Binding MfuItems, ElementName=ButtonStack, Mode=OneWay}"
+                  Margin="10,0,0,0"
+                  x:Name="dataGrid"
+                  MouseDoubleClick="DataGridMouseDoubleClick"
+                  GridLinesVisibility="None"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="False"
+                  CanUserSortColumns="False"
+                  AreRowDetailsFrozen="True"
+                  CanUserResizeRows="False"
+                  SelectionMode="Single"
+                  HorizontalScrollBarVisibility="Disabled"
+                  IsTabStop="True"
+                  PreviewKeyDown="DataGridPreviewKeyDown"
+                  Style="{DynamicResource DataGridStyle}"
+                  Height="{Binding ElementName=panelHeight, Mode=OneWay, Path=ActualHeight}"
+                  BorderThickness="0">
+            <DataGrid.Columns>
+                
+    			<DataGridTemplateColumn Header="Icon" Width="16" IsReadOnly="True">
+    				<DataGridTemplateColumn.CellTemplate>
+    					<DataTemplate >
+    						<Image Source="{Binding Icon.SmallBitmap}"
+    							Height="16" 
+    							Width="16"
+    							ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
+    							ContextMenu="{StaticResource fsMenuItemsContextMenu}" 
+    							ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
+    							Margin="6,1,0,1"/>
+    					</DataTemplate>
+    				</DataGridTemplateColumn.CellTemplate>
+    			</DataGridTemplateColumn>
+                
+    			<DataGridTemplateColumn Header="Item" IsReadOnly="True" Width="*" MinWidth="212">
+    				<DataGridTemplateColumn.CellTemplate>
+    					<DataTemplate >
+                            <TextBlock Text="{Binding FriendlyName}"
+                                       TextOptions.TextFormattingMode="Display"
+                                       TextTrimming="CharacterEllipsis"
+                                       Margin="4,6"
+                                       ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
+                                       ContextMenu="{StaticResource fsMenuItemsContextMenu}"
+                                       ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
+                                       VerticalAlignment="Center" />
+                        </DataTemplate>
+    				</DataGridTemplateColumn.CellTemplate>
+    			</DataGridTemplateColumn>
+                
+    			<DataGridTemplateColumn Header="Pin" Width="16">
+    				<DataGridTemplateColumn.CellTemplate>
+    					<DataTemplate>
+                            <ToggleButton Style="{DynamicResource PinToggleButtonStyle}"
+                                          Width="16"
+                                          Height="16"
+                                          Click="PinClick"
+                                          IsChecked="{Binding IsPinned, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          ToolTip="{Binding IsPinned, ConverterParameter=pin, Converter={StaticResource PiToTooltipConverter1}}"
+                                          Visibility="{Binding IsMfuChild, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        </DataTemplate>
+    				</DataGridTemplateColumn.CellTemplate>    
+    			</DataGridTemplateColumn>
+                
+    			<DataGridTemplateColumn Header="Recent&gt;" Width="18">
+    				<DataGridTemplateColumn.CellTemplate>
+    					<DataTemplate>
+                            <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
+                                  Background="Transparent"
+                                  IsMainMenu="False"
+                                  x:Name="showJump">
+                                <MenuItem ItemsSource="{Binding JumpList}"
+                                          ItemTemplate="{StaticResource MenuDataTemplate}"
+                                          ItemContainerStyle="{StaticResource TextHighlitedMenuItemStyle}"
+                                          Width="18"
+                                          Padding="0"
+                                          Margin="0">
+                                    <MenuItem.Header>
+                                        <Grid Width="16"
+                                              Height="16">
+                                            <Path Data="{DynamicResource RightArrowGeometry}"
+                                                  Fill="#FFB4B4B4"
+                                                  Stretch="Uniform"
+                                                  Width="5"
+                                                  Margin="0,8,0,0" />
+                                        </Grid>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                            </Menu>
+                            <DataTemplate.Triggers>
+    							<DataTrigger Binding="{Binding JumpList.Count}" Value="0">
+    								<Setter TargetName="showJump" Property="Visibility" Value="Collapsed"/>
+    							</DataTrigger>
+    						</DataTemplate.Triggers>
+    					</DataTemplate>
+    				</DataGridTemplateColumn.CellTemplate>
+    			</DataGridTemplateColumn>
+                
+    		</DataGrid.Columns>
+            
+    		<DataGrid.GroupStyle>
+    			<GroupStyle>
+    				<GroupStyle.HeaderTemplate>
+    					<DataTemplate>
+    						<StackPanel>
+    							<TextBlock Text="{Binding Name}" />
+    						</StackPanel>
+    					</DataTemplate>
+    				</GroupStyle.HeaderTemplate>
+    				<GroupStyle.ContainerStyle>
+    					<Style TargetType="{x:Type GroupItem}">
+    						<Setter Property="Template">
+    							<Setter.Value>
+    								<ControlTemplate TargetType="{x:Type GroupItem}">
+    									<Expander>
+    										<Expander.Header>
+    											<StackPanel Orientation="Horizontal">
+    												<TextBlock Text="{Binding Name}" />
+    												<TextBlock Text=" - "/>
+    												<TextBlock Text="{Binding ItemCount}" />
+                                                    <TextBlock x:Name="GroupItemsText"
+                                                               Text="{Binding Name, Converter={StaticResource LocalizerConverter}, 
+                                                                              Mode=OneWay, RelativeSource={RelativeSource Self}}" />
+                                                </StackPanel>
+                                            </Expander.Header>
+    										<ItemsPresenter />
+    									</Expander>
+    								</ControlTemplate>
+    							</Setter.Value>
+    						</Setter>
+    					</Style>
+    				</GroupStyle.ContainerStyle>
+    			</GroupStyle>
+    		</DataGrid.GroupStyle>
+    	</DataGrid>
+
+        <TextBox Grid.Row="{Binding ElementName=ButtonStack, Path=IsWindowAtTopOfScreen, Converter={StaticResource UiSwitcherConverter}}"
+                 x:Name="SearchBox"
+                 Margin="10,10,0,10"
+                 Style="{StaticResource SearchBoxStyle}"
+                 TextChanged="SearchBoxTextChanged"
+                 PreviewKeyDown="SearchBoxPreviewKeyDown" 
+                 BorderThickness="0" 
+                 />
+        <!--Grid.Row="2"-->
+        <TextBlock Grid.Row="{Binding ElementName=ButtonStack, Path=IsWindowAtTopOfScreen, Converter={StaticResource UiSwitcherConverter}}"
+                   x:Name="SearchMarker"
+                   Margin="10,3"
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Foreground="Gray"
+                   Visibility="Hidden"
+                   Text="{Binding Name, Converter={StaticResource LocalizerConverter}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+                   />
+        
+    	<StackPanel x:Name="folderButtons"
+    		Grid.Column="1"
+    		Grid.Row="1">
+            <StackPanel x:Name="dataGridHeightMeasure">
+                <power8:MenuButtonControl x:Name="MyComputer"
+                                          Visibility="{Binding ShowMbComputer, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Tag="{DynamicResource ComputerGeometry}" 
+                                          />
+                <power8:MenuButtonControl x:Name="Libraries"
+                                          Visibility="{Binding ShowMbDocs, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Tag="{DynamicResource LibrariesGeometry}"
+                                          />
+                <power8:MenuButtonControl x:Name="ControlPanel"
+                                          Margin="0,1,0,0"
+                                          Visibility="{Binding ShowMbCpl, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Tag="{DynamicResource ControlPanelGeometry}" 
+                                          />
+                <power8:MenuButtonControl x:Name="AdminTools"
+                                          Visibility="{Binding ShowMbAdminTools, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Tag="{DynamicResource ToolsGeometry}" 
+                                          />
+                <power8:MenuButtonControl x:Name="NetItems"
+                                          Visibility="{Binding ShowMbNet, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                          Tag="{DynamicResource NetworkGeometry}" 
+                                          />
+
+                <Button Click="ButtonRunClick"
+                        x:Name="ButtonRun"
+                        Margin="0,10,0,10"
+                        Style="{DynamicResource ControlButtonStyle}" 
+                        />
+
+                <!--Completely different design here-->
+                <Button Click="ButtonShutdownClick"
+                        x:Name="ButtonShutdown"
+                        Style="{DynamicResource ControlButtonStyle}" 
+                        />
+                <Button Click="ButtonRestartClick"
+                        x:Name="ButtonRestart"
+                        Style="{DynamicResource ControlButtonStyle}" 
+                        />
+                <Button Click="ButtonSleepClick"
+                        x:Name="ButtonSleep"
+                        Style="{DynamicResource ControlButtonStyle}" 
+                        />
+                <Button Click="ButtonHibernateClick"
+                        x:Name="ButtonHibernate"
+                        Style="{DynamicResource ControlButtonStyle}" 
+                        />
+                <Button Click="ButtonLogOffClick"
+                        x:Name="ButtonLogOff"
+                        Style="{DynamicResource ControlButtonStyle}" 
+                        />
+                <Button Click="ButtonSwitchUserClick"
+                        x:Name="ButtonSwitchUser"
+                        Style="{DynamicResource ControlButtonStyle}" 
+                        />
+            </StackPanel>
+
+            <Button Click="ButtonScreensaveClick"
+                    x:Name="ButtonScreensave"
+                    Style="{DynamicResource ControlButtonStyle}"
+                    />
+            <Button Click="ButtonLockClick"
+                    x:Name="ButtonLock"
+                    Style="{DynamicResource ControlButtonStyle}" 
+                    />
+        </StackPanel>
+    </Grid>
+    
+</Window>

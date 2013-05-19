@@ -24,7 +24,7 @@ namespace Power8.Commands
             {
                 Util.DispatchCaughtException(ex);
             }
-            BtnStck.Instance.Hide();
+            PopupWindow.Instance.Hide();
         }
 
         public bool CanExecute(object parameter)

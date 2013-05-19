@@ -4,11 +4,11 @@ using System.Windows.Controls;
 namespace Power8
 {
     /// <summary>
-    /// MenuedButton the button with image-dropdown. Represents PowerItem.
+    /// MenuButtonControl the button with image-dropdown. Represents PowerItem.
     /// </summary>
-    public partial class MenuedButton:INotifyPropertyChanged
+    public partial class MenuButtonControl:INotifyPropertyChanged
     {
-        public MenuedButton()
+        public MenuButtonControl()
         {
             InitializeComponent();
         }

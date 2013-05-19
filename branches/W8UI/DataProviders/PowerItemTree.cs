@@ -60,7 +60,7 @@ namespace Power8
             get
             {
                 if (_adminToolsItem == null)
-                {   //No race condition with InitTree() since this is triggered from BtnStck binding initializer,
+                {   //No race condition with InitTree() since this is triggered from PopupWindow binding initializer,
                     //and it will be triggered when window is shown, and window may be shown only after instance initialized,
                     //and the 1st initialization is automatically triggered right after InitTree() :)
                     var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
@@ -445,8 +445,8 @@ namespace Power8
             Debug.WriteLine("File {0}: {1}", e.ChangeType, e.FullPath);
 #endif
             //Ensuring buttonstack is created on Main thread
-            if(!BtnStck.IsInstantited)
-                Util.Send(() => BtnStck.Instance.InvalidateVisual());
+            if(!PopupWindow.IsInstantited)
+                Util.Send(() => PopupWindow.Instance.InvalidateVisual());
 
             var isDir = Directory.Exists(e.FullPath);
             var baseAndArg = PathToBaseAndArg(e.FullPath);
@@ -517,7 +517,7 @@ namespace Power8
 #if DEBUG
             Debug.WriteLine("InitTree - scanned in {0}", s.ElapsedMilliseconds);
 #endif
-            Util.Send(() => BtnStck.Instance.InvalidateVisual());
+            Util.Send(() => PopupWindow.Instance.InvalidateVisual());
 #if DEBUG
             Debug.WriteLine("InitTree - done in {0}", s.ElapsedMilliseconds);
             s.Stop();

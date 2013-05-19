@@ -160,7 +160,7 @@ namespace Power8
                     fMask = //need all them for Properties verb
                         API.SEIFlags.SEE_MASK_INVOKEIDLIST | API.SEIFlags.SEE_MASK_NOCLOSEPROCESS |
                         API.SEIFlags.SEE_MASK_FLAG_NO_UI | API.SEIFlags.SEE_MASK_NOASYNC,
-                    hwnd = BtnStck.Instance.GetHandle(), //otherwise will be in background
+                    hwnd = PopupWindow.Instance.GetHandle(), //otherwise will be in background
                     nShow = API.SWCommands.HIDE, //hides some other window, kind of worker one
                     lpVerb = API.SEVerbs.Properties, 
                     lpFile = Args4PropsAndCont(Util.ExtractRelatedPowerItem(e), ((MenuItem)sender).Name)
