@@ -1,0 +1,461 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Str_UpdateAvailableFormat" xml:space="preserve">
+    <value>
+
+您的版本： {0}
+新版本： {1}
+
+您想去网站更新吗？
+
+是的：马上去网站更新！
+不：请稍后提醒我。
+取消：跳过本次更新，不要再提醒我这个版本。</value>
+    <comment>Keep 2 empty lines at the beginning</comment>
+  </data>
+  <data name="Str_UpdateAvailable" xml:space="preserve">
+    <value>：更新可用！</value>
+  </data>
+  <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
+    <value>错误 {0} 发生当尝试显示对象属性
+{1}</value>
+  </data>
+  <data name="Err_CantCheckUpdates" xml:space="preserve">
+    <value>不能检查更新。</value>
+  </data>
+  <data name="Str_AllPrograms" xml:space="preserve">
+    <value>所有程序</value>
+    <comment>Default label instead of "Start menu". Currently seems useless</comment>
+  </data>
+  <data name="Err_StartAsAdminFailed" xml:space="preserve">
+    <value>不能以管理员身份运行指定对象。进程以普通用户权限启动。
+</value>
+  </data>
+  <data name="CR_AppOpenCommonFolder" xml:space="preserve">
+    <value>打开所有用户文件夹</value>
+  </data>
+  <data name="CR_AppOpenContainer" xml:space="preserve">
+    <value>打开位置</value>
+  </data>
+  <data name="CR_AppOpenFolder" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="CR_AppOpenTargetContainer" xml:space="preserve">
+    <value>打开目标位置</value>
+  </data>
+  <data name="CR_AppRun" xml:space="preserve">
+    <value>运行</value>
+  </data>
+  <data name="CR_AppRunAs" xml:space="preserve">
+    <value>以管理员身份运行</value>
+  </data>
+  <data name="CR_AppShowProperties" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="CR_AppShowTargetProperties" xml:space="preserve">
+    <value>目标属性</value>
+  </data>
+  <data name="CR_ButtonHibernate" xml:space="preserve">
+    <value>休眠</value>
+  </data>
+  <data name="CR_ButtonLock" xml:space="preserve">
+    <value>锁定</value>
+  </data>
+  <data name="CR_ButtonLogOff" xml:space="preserve">
+    <value>注销</value>
+  </data>
+  <data name="CR_ButtonRestart" xml:space="preserve">
+    <value>重启</value>
+  </data>
+  <data name="CR_ButtonRun" xml:space="preserve">
+    <value>运行...</value>
+  </data>
+  <data name="CR_ButtonScreensave" xml:space="preserve">
+    <value>启动屏保</value>
+  </data>
+  <data name="CR_ButtonShutdown" xml:space="preserve">
+    <value>关机</value>
+  </data>
+  <data name="CR_ButtonSleep" xml:space="preserve">
+    <value>睡眠</value>
+  </data>
+  <data name="CR_MWAutoStart" xml:space="preserve">
+    <value>自动启动</value>
+  </data>
+  <data name="CR_MWCheckForUpdates" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="CR_MWExit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
+    <value>不能引用类 {0}
+{1}</value>
+  </data>
+  <data name="Str_ShowMore" xml:space="preserve">
+    <value>显示更多...</value>
+    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
+  </data>
+  <data name="CR_CLCleanerBtn" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="CR_SearchBox" xml:space="preserve">
+    <value>搜索...</value>
+  </data>
+  <data name="CR_CLWindow" xml:space="preserve">
+    <value>电脑列表</value>
+  </data>
+  <data name="Err_VistaDetected" xml:space="preserve">
+    <value>Windows (R) Vista (R)不推荐使用Power8。请使用正常的操作系统。</value>
+  </data>
+  <data name="Err_GotNoFolder" xml:space="preserve">
+    <value>目录未找到 </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="Err_GotNoFile" xml:space="preserve">
+    <value>文件未找到 </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="CR_ButtonStack" xml:space="preserve">
+    <value>Power8 - Windows XP、Se7en和8的开始按钮替代者</value>
+    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
+  </data>
+  <data name="Err_DownloadCancelled" xml:space="preserve">
+    <value>下载被取消了。</value>
+  </data>
+  <data name="Str_SaveDialogDescription" xml:space="preserve">
+    <value>：选择下载文件的位置</value>
+  </data>
+  <data name="Str_SaveDialogFilter" xml:space="preserve">
+    <value> 更新|*</value>
+    <comment>Leave starting space</comment>
+  </data>
+  <data name="CR_UNDownAndUp" xml:space="preserve">
+    <value>下载MSI马上更新！</value>
+  </data>
+  <data name="CR_UNNewVersion" xml:space="preserve">
+    <value>新版本：</value>
+  </data>
+  <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
+    <value>一个Power8的更新可用！</value>
+  </data>
+  <data name="CR_UNwnd" xml:space="preserve">
+    <value>更新通知</value>
+  </data>
+  <data name="CR_UNYourVersion" xml:space="preserve">
+    <value>您的版本：</value>
+  </data>
+  <data name="CR_UNdown7z" xml:space="preserve">
+    <value>下载7z</value>
+  </data>
+  <data name="CR_UNdownMsi" xml:space="preserve">
+    <value>下载MSI</value>
+  </data>
+  <data name="CR_UNGoWeb" xml:space="preserve">
+    <value>打开项目网站</value>
+  </data>
+  <data name="CR_UNIgnore" xml:space="preserve">
+    <value>不要再提醒我这个更新</value>
+  </data>
+  <data name="CR_UNNextTime" xml:space="preserve">
+    <value>下次提醒我</value>
+  </data>
+  <data name="CR_UNOther" xml:space="preserve">
+    <value>其他选项：</value>
+  </data>
+  <data name="Err_NoPiExtracted" xml:space="preserve">
+    <value>没有可用的数据元素</value>
+  </data>
+  <data name="Err_CantGetTooltip" xml:space="preserve">
+    <value>无法获得此对象的工具提示</value>
+  </data>
+  <data name="Str_CplElement" xml:space="preserve">
+    <value>控制面板元素</value>
+  </data>
+  <data name="Str_WindowsSearchResults" xml:space="preserve">
+    <value>Windows搜索结果</value>
+  </data>
+  <data name="CR_SearchMarker" xml:space="preserve">
+    <value>搜索...</value>
+    <comment>Gray text indicating Windows search request was sent</comment>
+  </data>
+  <data name="Str_Library" xml:space="preserve">
+    <value> （库）</value>
+    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
+  </data>
+  <data name="CR_GroupItemsText" xml:space="preserve">
+    <value> 项</value>
+    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
+  </data>
+  <data name="CR_MWBlockMetro" xml:space="preserve">
+    <value>屏蔽Metro功能</value>
+  </data>
+  <data name="Str_Recent" xml:space="preserve">
+    <value>最近开始</value>
+  </data>
+  <data name="Str_Unpin" xml:space="preserve">
+    <value>取消固定项</value>
+  </data>
+  <data name="Str_Pin" xml:space="preserve">
+    <value>固定项</value>
+  </data>
+  <data name="CR_AbLocalization" xml:space="preserve">
+    <value>此本地化由王笑宇完成</value>
+    <comment>Put localizer name here!</comment>
+  </data>
+  <data name="CR_AbVersion" xml:space="preserve">
+    <value>版本：</value>
+  </data>
+  <data name="CR_MWAbout" xml:space="preserve">
+    <value>关于...</value>
+    <comment>Label in main btn context menu and in About Window</comment>
+  </data>
+  <data name="Str_LocalizerUri" xml:space="preserve">
+    <value>http://48596.qzone.qq.com</value>
+    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
+  </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>不，谢谢。
+我知道怎么回事可以自己解决。</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Windows资源管理器崩溃了</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>看起来Windows资源管理器进程不可用。
+Power8可以帮您解决。
+ 
+您想恢复Windows资源管理器并重启Power8吗？</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>是的！
+请为我启动资源管理器并重启Power8进程。</value>
+  </data>
+  <data name="CR_MWSettings" xml:space="preserve">
+    <value>设置...</value>
+  </data>
+  <data name="CR_StgArByDesktop" xml:space="preserve">
+    <value>自动（通过桌面）</value>
+  </data>
+  <data name="CR_StgBrowseBtn" xml:space="preserve">
+    <value>浏览...</value>
+  </data>
+  <data name="CR_StgInvertAr" xml:space="preserve">
+    <value>遵循任务栏取向</value>
+  </data>
+  <data name="CR_StgLblAr" xml:space="preserve">
+    <value>纵横比：</value>
+  </data>
+  <data name="CR_StgLblChooseImage" xml:space="preserve">
+    <value>选择图片（双击路径以清除）：</value>
+  </data>
+  <data name="CR_StgSquareStart" xml:space="preserve">
+    <value>配置开始按钮</value>
+  </data>
+  <data name="CR_StgSuggestProblems" xml:space="preserve">
+    <value>通知我有关配置问题</value>
+  </data>
+  <data name="CR_StgWatchRemovables" xml:space="preserve">
+    <value>查看可移动驱动器</value>
+  </data>
+  <data name="CR_StgWnd" xml:space="preserve">
+    <value>Power8设置</value>
+    <comment>Title of settings window</comment>
+  </data>
+  <data name="Str_PicDialogDescription" xml:space="preserve">
+    <value>：选择开始菜单图片</value>
+  </data>
+  <data name="Str_PicDialogFilter" xml:space="preserve">
+    <value>图片</value>
+    <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
+  </data>
+  <data name="Str_TipWarn" xml:space="preserve">
+    <value>您可能想修改一些设置来增强Power8体验</value>
+  </data>
+  <data name="CR_StgAutoSort" xml:space="preserve">
+    <value>当添加或重命名文件或文件夹时自动排列菜单和列表</value>
+  </data>
+  <data name="CR_StgLblSetStartText" xml:space="preserve">
+    <value>“所有程序”文本（清空以使用系统默认）：</value>
+  </data>
+  <data name="CR_StgTabGeneral" xml:space="preserve">
+    <value>一般</value>
+    <comment>"General" tab in settings window</comment>
+  </data>
+  <data name="CR_StgTabMenuBtns" xml:space="preserve">
+    <value>菜单按钮</value>
+  </data>
+  <data name="CR_StgTabWSE" xml:space="preserve">
+    <value>网页搜索引擎</value>
+  </data>
+  <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
+    <value>显示菜单按钮：</value>
+  </data>
+  <data name="CR_StgWseColKey" xml:space="preserve">
+    <value>键</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
+  </data>
+  <data name="CR_StgWseColVal" xml:space="preserve">
+    <value>查询字符串</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
+  </data>
+  <data name="CR_StgAutoRestart" xml:space="preserve">
+    <value>当致命错误发生时重启程序</value>
+  </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>访问网上银行捐赠Power8团队</value>
+  </data>
+  <data name="CR_AppExcludeFromMfu" xml:space="preserve">
+    <value>隐藏此项</value>
+  </data>
+  <data name="CR_StgTabMfu" xml:space="preserve">
+    <value>最经常使用的</value>
+  </data>
+  <data name="CR_StgMfuColExcl" xml:space="preserve">
+    <value>隐藏项目包含字符串：</value>
+  </data>
+  <data name="CR_StgMfuUseCustom" xml:space="preserve">
+    <value>使用自定义列表（用户可配置）</value>
+  </data>
+  <data name="CR_StgMfuUseP8JL" xml:space="preserve">
+    <value>使用Power8内置数据</value>
+  </data>
+  <data name="CR_StgMfuUseSystem" xml:space="preserve">
+    <value>使用系统数据（用户帮助）建立列表</value>
+  </data>
+  <data name="CR_AppExcludeFromCustom" xml:space="preserve">
+    <value>从自定义启动列表移除</value>
+  </data>
+  <data name="CR_AppIncludeToCustom" xml:space="preserve">
+    <value>添加到自定义启动列表</value>
+  </data>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>显示捐赠菜单项</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>捐赠Power8团队...</value>
+  </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>切换用户</value>
+  </data>
+  <data name="CR_StgCbCtrl" xml:space="preserve">
+    <value>显示项目按类别排列的控制面板</value>
+  </data>
+</root>
