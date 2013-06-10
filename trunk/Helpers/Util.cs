@@ -67,8 +67,8 @@ namespace Power8
         private static void PostBackgroundReleaseResourceCall(Action method)
         {
 #if DEBUG
-            var mName = method.Method; //In debug, we log the resource release usage
-            method = (Action) Delegate.Combine(method, new Action(() => Debug.WriteLine("PBRRC invoked for " + mName)));
+            var mName = method.Method.Name; //In debug, we log the resource release usage
+            method = (Action) Delegate.Combine(method, new Action(() => Log.Raw("...invoked", mName)));
 #endif
             MainDisp.BeginInvoke(DispatcherPriority.ApplicationIdle, method);
         }
@@ -292,10 +292,13 @@ namespace Power8
             {
                 res = ResolveLink(link);
             }
-            catch (Exception ex)
+            catch 
+#if DEBUG
+                   (Exception ex)
+#endif
             {
 #if DEBUG 
-                Debug.WriteLine("Link resolution failed safely.\r\n" + ex);
+                Log.Raw("failed safely.\r\n" + ex, link);
 #endif
                 res = null;
             }
@@ -335,9 +338,7 @@ namespace Power8
         {
             var ppIdl = IntPtr.Zero; //Sinse some of special folders are virtual, we'll use PIDLs
             var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, id, ref ppIdl); //Obtain PIDL to folder
-#if DEBUG
-            Debug.WriteLine("RSFN: SHGetSp.F.Loc. for id<={0} returned result code {1}", id, hRes);
-#endif
+            Log.Fmt("SHGetSp.F.Loc. returned result code "+ hRes, id.ToString());
             var pwstr = IntPtr.Zero;
             var info = new API.ShfileinfoW();
             var zeroFails = new IntPtr(1); 
@@ -355,9 +356,7 @@ namespace Power8
                                                 API.Shgfi.DISPLAYNAME | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES));
             }
             Marshal.FreeCoTaskMem(ppIdl);
-#if DEBUG
-            Debug.WriteLine("RSFN: ShGetFileInfo returned " + zeroFails);      
-#endif
+            Log.Raw("ShGetFileInfo returned " + zeroFails, id.ToString());      
             return zeroFails == IntPtr.Zero ? null : info.szDisplayName;
         }
         /// <summary>
@@ -424,13 +423,11 @@ namespace Power8
             var res = API.SHGetSpecialFolderLocation(IntPtr.Zero, (API.Csidl)id, ref pidl);
             if (res != 0)
             {
-#if DEBUG
-                Debug.WriteLine("Can't SHget folder PIDL, error " + res);
-#endif
+                Log.Raw("Can't SHget folder PIDL, error " + res);
                 return;
             }
 
-            if (OsIs.XPOrLess) //Use old awfull shell COM hell from the Raymond Chen...
+            if (OsIs.XPOrLess) //Use old awfull shell COM hell from Raymond Chen...
             {
                 API.IShellWindows shWndList = null;     //Opened Explorer windows, excl. Desktop, ProgMan...
                 API.IServiceProvider provider = null;   //Browser accessor for Explorer window
@@ -455,10 +452,13 @@ namespace Power8
                                                         //Use browser to navigate where needed
                     browser.BrowseObject(pidl, launchNew ? API.SBSP.NEWBROWSER : API.SBSP.SAMEBROWSER);
                 }
-                catch (Exception e)
+                catch 
+#if DEBUG
+                      (Exception e)
+#endif
                 {
 #if DEBUG
-                    Debug.WriteLine(e.ToString());
+                    Log.Raw(e.ToString());
 #endif
                 }
                 finally                                 //Cleanup
@@ -480,10 +480,13 @@ namespace Power8
                     browser = (API.IExplorerBrowser)new API.ExplorerBrowser();
                     browser.BrowseToIDList(pidl, API.SBSP.NEWBROWSER);
                 }
-                catch (Exception e)
+                catch
+#if DEBUG
+                      (Exception e)
+#endif
                 {
 #if DEBUG
-                    Debug.WriteLine(e.ToString());
+                    Log.Raw(e.ToString());
 #endif
                 }
                 finally //Cleanup
@@ -757,9 +760,7 @@ namespace Power8
                 lock (Buffer.Clear())
                 {
                     var number = API.LoadString(resData.Item2, resData.Item3, Buffer, Buffer.Capacity);
-#if DEBUG
-                    Debug.WriteLine("RSR: number => " + number + ", data: " + Buffer);
-#endif
+                    Log.Fmt("number: {0}, data: {1}", number, Buffer);
                     PostBackgroundDllUnload(resData.Item2);
                     if (number > 0)
                         return Buffer.ToString();
@@ -779,9 +780,7 @@ namespace Power8
                 IntPtr icon = resData.Item3 == 0xFFFFFFFF //e.g. the ID was not present
                                   ? API.ExtractIcon(resData.Item2, resData.Item1, 0) //Get first icon available
                                   : API.LoadIcon(resData.Item2, resData.Item3); //otherwise load proper resource
-#if DEBUG
-                Debug.WriteLine("RIR: icon => " + icon);
-#endif
+                Log.Raw("icon => " + icon);
                 PostBackgroundDllUnload(resData.Item2);
                 if(icon != IntPtr.Zero) //if all above succeeded
                     return icon;
@@ -813,9 +812,7 @@ namespace Power8
         /// implemented because usually it's not. Method may be enhanced in future.</returns>
         private static Tuple<string, IntPtr, uint> ResolveResourceCommon(string resourceString)
         {
-#if DEBUG
-            Debug.WriteLine("RRC: in => " + resourceString);
-#endif
+            Log.Raw("in => " + resourceString);
             resourceString = resourceString.TrimStart('@');
 
             var lastCommaIdx = Math.Max(resourceString.LastIndexOf(','), 0);
@@ -834,10 +831,7 @@ namespace Power8
 
             var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
                                             API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
-#if DEBUG
-            Debug.WriteLine("RRC: hModule<={0}, resId<={1}, resDll<={2}", dllHandle, resId, resDll);
-#endif
-
+            Log.Fmt("hModule<={0}, resId<={1}, resDll<={2}", dllHandle, resId, resDll);
             return new Tuple<string, IntPtr, uint>(resDll, dllHandle, resId);
         }
 
@@ -923,9 +917,7 @@ namespace Power8
             var info = new API.CplInfo {lData = new IntPtr(0xDEADC0D)}; //just for dbg
             //Load CPL as DLL and perform PE init
             var hModule = API.LoadLibrary(cplFileName, IntPtr.Zero, API.LLF.AS_REGULAR_LOAD_LIBRARY);
-#if DEBUG
-            Debug.WriteLine("GCplI: begin 4 {1}, hModule<={0}", hModule, cplFileName);
-#endif
+            Log.Raw("begin, hModule<=" + hModule, cplFileName);
 
             if(hModule != IntPtr.Zero) //SUCCEEDED()?
             {   //Get pointer to CPL wndProc as a delegate
@@ -938,30 +930,24 @@ namespace Power8
                     if (cplProc != null) //SUCCEEDED()?
                     {
                         var hWnd = API.GetDesktopWindow();
-#if DEBUG
-                        Debug.WriteLine("GCplI: doing INIT...");
-#endif                  //CPL initializes required data
+                        Log.Raw("doing INIT...");
                         var res = cplProc(hWnd, API.CplMsg.INIT, IntPtr.Zero, IntPtr.Zero);
                         if (res != 0)
                         {
-#if DEBUG
-                            Debug.WriteLine("GCplI: doing GETCOUNT...");
-#endif                      //How many CPLs are available, basically Cpl.Windows.Any()
+                            Log.Raw("doing GETCOUNT...");
+                            //How many CPLs are available, basically Cpl.Windows.Any()
                             res = cplProc(hWnd, API.CplMsg.GETCOUNT, IntPtr.Zero, IntPtr.Zero);
                             if (res > 0)
                             {
-#if DEBUG
-                                Debug.WriteLine("GCplI: GETCOUNT returned {0}, doing INQUIRE...", res);
-#endif                          //Will work with 1st available
+                                Log.Fmt("GETCOUNT returned {0}, doing INQUIRE...", res);
+                                //Will work with 1st available
                                 var structSize = Marshal.SizeOf(typeof (API.CplInfo));
                                 var hMem = Marshal.AllocHGlobal(structSize);
                                 ZeroMemory(hMem, structSize);
                                 //Reserved place and cleared space for data. Now do Inquire.
                                 cplProc(hWnd, API.CplMsg.INQUIRE, IntPtr.Zero, hMem);
                                 Marshal.PtrToStructure(hMem, info);
-#if DEBUG
-                                Debug.WriteLine("GCplI: INQUIRE returned {0},{1},{2}", info.idIcon, info.idInfo, info.idName);
-#endif
+                                Log.Fmt("INQUIRE returned {0}, {1}, {2}", info.idIcon, info.idInfo, info.idName);
 
                                 var idIcon = info.idIcon;
                                 var idName = info.idName == 0 ? info.idInfo : info.idName;
@@ -976,9 +962,7 @@ namespace Power8
                                     structSize = Marshal.SizeOf(typeof (API.NewCplInfoW)); 
                                     hMem = Marshal.ReAllocHGlobal(hMem, new IntPtr(structSize*2));
                                     ZeroMemory(hMem, structSize*2);
-#if DEBUG
-                                    Debug.WriteLine("GCplI: doing NEWINQUIRE...");
-#endif
+                                    Log.Raw("doing NEWINQUIRE...");
                                     cplProc(hWnd, API.CplMsg.NEWINQUIRE, IntPtr.Zero, hMem);
                                     //After we did the NewInquire without specifiing the dwSize, data will be 
                                     //returned in the format CPL wants. Let's check for it.
@@ -988,33 +972,24 @@ namespace Power8
                                     {
                                         var infoNew =
                                             (API.NewCplInfoW) Marshal.PtrToStructure(hMem, typeof (API.NewCplInfoW));
-#if DEBUG
-                                        Debug.WriteLine("GCplI: got NewCplInfoW: {0},{1},{2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);
-#endif
-                                        unmanagedIcon = infoNew.hIcon;
+                                        Log.Fmt("got NewCplInfoW: {0}, {1}, {2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);                                        unmanagedIcon = infoNew.hIcon;
                                         name = infoNew.szName ?? infoNew.szInfo;
                                     }
                                     else if (gotSize == Marshal.SizeOf(typeof(API.NewCplInfoA)))
                                     {
                                         var infoNewA =
                                             (API.NewCplInfoA)Marshal.PtrToStructure(hMem, typeof(API.NewCplInfoA));
-#if DEBUG
-                                        Debug.WriteLine("GCplI: got NewCplInfoA: {0},{1},{2}", infoNewA.hIcon, infoNewA.szInfo, infoNewA.szName);
-#endif
+                                        Log.Fmt("got NewCplInfoA: {0},{1},{2}", infoNewA.hIcon, infoNewA.szInfo, infoNewA.szName);
                                         unmanagedIcon = infoNewA.hIcon;
                                         name = infoNewA.szName ?? infoNewA.szInfo;
                                     }
-#if DEBUG
                                     else
                                     {
-                                        Debug.WriteLine("GCplI: NEWINQUIRE: structure size not supported: 0x{0:x} with IntPtr size 0x{1:x}", gotSize, IntPtr.Size);
+                                        Log.Fmt("NEWINQUIRE: structure size not supported: 0x{0:x} with IntPtr size 0x{1:x}", gotSize, IntPtr.Size);
                                     }
-#endif
                                 }
                                 Marshal.FreeHGlobal(hMem);
-#if DEBUG
-                                Debug.WriteLine("GCplI: freed, conditional load string...");
-#endif
+                                Log.Raw("freed, conditional load string...");
 
                                 if (name == null) //No NewInquire or failed or has no dynamic name
                                 {
@@ -1024,29 +999,23 @@ namespace Power8
                                             name = Buffer.ToString();
                                     }
                                 }
-#if DEBUG
-                                Debug.WriteLine("GCplI: name={0}, conditional load icon...", new object[]{name});
-#endif
+                                Log.Fmt("name={0}, conditional load icon...", new object[]{name});
 
                                 if(unmanagedIcon == IntPtr.Zero) //No NewInquire or failed or has no dynamic icon
                                     unmanagedIcon = API.LoadIcon(hModule, idIcon);
-#if DEBUG
-                                Debug.WriteLine("GCplI: icon={0}", unmanagedIcon);
-#endif
+                                Log.Raw("icon=" + unmanagedIcon);
                                 if(unmanagedIcon != IntPtr.Zero) //If we have icon anyway
                                 {//convert to ImageContainer and free unmanaged one
                                     container = ImageManager.GetImageContainerForIconSync(cplFileName, unmanagedIcon);
                                     PostBackgroundIconDestroy(unmanagedIcon);
                                 }
 
-#if DEBUG
-                                Debug.WriteLine("GCplI: doing STOP...");
-#endif                          //This will affect only curent instance of CPL. At least it should...
+                                Log.Raw("doing STOP...");
+                                //This will affect only curent instance of CPL. At least it should...
                                 cplProc(hWnd, API.CplMsg.STOP, IntPtr.Zero, info.lData);
                             }
-#if DEBUG
-                            Debug.WriteLine("GCplI: doing EXIT...");
-#endif                      //Same as above
+                            Log.Raw("doing EXIT...");
+                            //Same as above
                             cplProc(hWnd, API.CplMsg.EXIT, IntPtr.Zero, IntPtr.Zero);
                         }
                     }
@@ -1088,31 +1057,21 @@ namespace Power8
                                     .LastOrDefault(); //latest varsion
                 if(dll == null)
                     throw new IOException("No C runtime available");
-#if DEBUG
-                Debug.WriteLine("fpreset: chosen dll " + dll);
-#endif
+                Log.Raw("fpreset: chosen dll " + dll);
                 l = API.LoadLibrary(dll, IntPtr.Zero, API.LLF.AS_REGULAR_LOAD_LIBRARY);
-#if DEBUG
-                Debug.WriteLine("fpreset: loaded at " + l);
-#endif
+                Log.Raw("fpreset: loaded at " + l);
                 if(l == IntPtr.Zero)
                     throw new Win32Exception();
                 var f = API.GetProcAddress(l, "_fpreset");
-#if DEBUG
-                Debug.WriteLine("fpreset: address at " + f);
-#endif
+                Log.Raw("fpreset: address at " + f);
                 if (f == IntPtr.Zero)
                     throw new Win32Exception();
-#if DEBUG
-                Debug.WriteLine("fpreset: getting delegate...");
-#endif
-                var _fpreset = (API.FpReset) Marshal.GetDelegateForFunctionPointer(f, typeof (API.FpReset));
-                if(_fpreset == null)
+                Log.Raw("fpreset: getting delegate...");
+                var fpreset = (API.FpReset) Marshal.GetDelegateForFunctionPointer(f, typeof (API.FpReset));
+                if(fpreset == null)
                     throw new Exception("Can't get delegate for _fpreset function in " + dll);
-#if DEBUG
-                Debug.WriteLine("fpreset: invoking...");
-#endif
-                _fpreset();
+                Log.Raw("fpreset: invoking...");
+                fpreset();
             }
             catch (Exception ex)
             {
@@ -1131,9 +1090,7 @@ namespace Power8
         /// <param name="ex">Caught exception</param>
         public static void DispatchCaughtException(Exception ex)
         {
-#if DEBUG
-            Debug.Write(ex.ToString());
-#endif
+            Log.Raw(ex.ToString());
             MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         /// <summary>
@@ -1146,9 +1103,7 @@ namespace Power8
         public static void DispatchUnhandledException(Exception ex)
         {
             var str = ex.ToString();
-#if DEBUG
-            Debug.Write(ex.ToString());
-#endif
+            Log.Raw(ex.ToString());
             MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
             var reason = NoLoc.Err_UnhandledGeneric + str;
             if(SettingsManager.Instance.AutoRestart)

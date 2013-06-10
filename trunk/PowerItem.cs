@@ -545,6 +545,20 @@ namespace Power8
         {
             return obj is PowerItem && obj.GetHashCode() == GetHashCode();
         }
+        /// <summary>
+        /// Checks if 2 PowerItems are pointing to same instance
+        /// </summary>
+        public static bool operator ==(PowerItem p1, PowerItem p2)
+        {
+            return ReferenceEquals(p1, p2);
+        }
+        /// <summary>
+        /// Checks if 2 PowerItems are pointing to different instance
+        /// </summary>
+        public static bool operator !=(PowerItem p1, PowerItem p2)
+        {
+            return !ReferenceEquals(p1, p2);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>

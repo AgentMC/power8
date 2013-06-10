@@ -1,9 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
-#if DEBUG
-using System.Diagnostics;
-#endif
+using Power8.Helpers;
 
 namespace Power8.Views
 {
@@ -31,9 +29,7 @@ namespace Power8.Views
         /// </summary>
         public void Dispose()
         {
-#if DEBUG
-            Debug.WriteLine("Dispose called for " + GetType().FullName);
-#endif
+            Log.Raw("called", GetType().FullName);
             lock (this)
             {
                 if (_disposing)

@@ -193,16 +193,15 @@ namespace Power8.Helpers
                         failcount = 0;
                         Instance.ShowUpdateWarn = false;
                     }
+                    catch 
 #if DEBUG
-                    catch (Exception ex)
-#else
-                    catch
+                           (Exception ex)
 #endif
                     {
                         
                         failcount++;
 #if DEBUG
-                        Debug.WriteLine("Can't check for updates (chance:{0}):{1}", failcount, ex.Message);
+                        Log.Fmt("Can't check for updates (chance:{0}):{1}", failcount, ex.Message);
 #endif
                         switch (failcount) //Checks 3 times during 1.5 hours, then gives up
                         {

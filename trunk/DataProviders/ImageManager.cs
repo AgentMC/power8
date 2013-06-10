@@ -4,9 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-#if DEBUG
-using System.Diagnostics;
-#endif
+using Power8.Helpers;
 
 namespace Power8
 {
@@ -57,10 +55,7 @@ namespace Power8
         /// <returns>ImageContainer with ImageSources extracted. Can be null.</returns>
         public static ImageContainer GetImageContainerSync(PowerItem item, API.Shgfi iconNeeded)
         {
-#if DEBUG
-            var dbgLine = "GICS for " + item.FriendlyName + ": ";
-            Debug.WriteLine(dbgLine + "begin");
-#endif
+            Log.Raw("begin>>>>>>>>>>>>>>>", item.FriendlyName);
             //Checking if there's cached ImageContainer
             string resolvedArg, descr;
             try
@@ -75,10 +70,8 @@ namespace Power8
             lock (Cache)
             {
                 var container = (ImageContainer)(Cache.ContainsKey(descr) ? Cache[descr] : null);
-#if DEBUG
-                Debug.WriteLine("{3}arg<={0}, descr<={1}, container<={2}", resolvedArg, descr,
-                                (container != null ? "not " : "") + "null", dbgLine);
-#endif
+                Log.Fmt("arg<={0}, descr<={1}, container<={2}", resolvedArg, descr,
+                        (container != null ? "not " : "") + "null");
                 if (container == null) //No cached instance
                 {
                     container = new ImageContainer(resolvedArg, descr, item.SpecialFolderId);
@@ -89,7 +82,7 @@ namespace Power8
                         container.ExtractLarge();
                 }
 #if DEBUG
-                Debug.WriteLine(dbgLine + "end<<<<<<<<<<<<<<");
+                Log.Raw("end<<<<<<<<<<<<<<", item.FriendlyName);
 #endif
                 return container;
             }
@@ -196,7 +189,7 @@ namespace Power8
 #if DEBUG
                 else
                 {
-                    Debug.WriteLine("!!!ExtractSmall failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
+                    Log.Raw("FAILED with code " + Marshal.GetLastWin32Error(), _initialObject);
                 }
 #endif
                 _smallExtracted = true;
@@ -218,7 +211,7 @@ namespace Power8
 #if DEBUG
                 else
                 {
-                    Debug.WriteLine("!!!ExtractLarge failed for {0} with code {1}", _initialObject, Marshal.GetLastWin32Error());
+                    Log.Raw("FAILED with code " + Marshal.GetLastWin32Error(), _initialObject);
                 }
 #endif
                 _largeExtracted = true;
@@ -243,30 +236,21 @@ namespace Power8
             /// <param name="iconType"></param>
             private IntPtr GetUnmanagedIcon(API.Shgfi iconType)
             {
-#if DEBUG
-                var dbgLine = "GUIc for " + _initialObject + ": ";
-                Debug.WriteLine(dbgLine + "begin");
-#endif
+                Log.Raw("begin", _initialObject);
                 //Way 1, straightforward: "Hey shell, give me an icon for that file!"
                 var shinfo = new API.ShfileinfoW();
                 var zeroFails = API.SHGetFileInfo(_initialObject, 0, ref shinfo, (uint) Marshal.SizeOf(shinfo), API.Shgfi.ICON | iconType);
-#if DEBUG
-                Debug.WriteLine(dbgLine + "ShGetFileInfo returned " + zeroFails);
-#endif
+                Log.Raw("ShGetFileInfo returned " + zeroFails);
                 if (zeroFails == IntPtr.Zero) //lot of stuff will work via this
                 {
                     //Shell failed
                     //Way 2: way around: "Hey registry, and how should display the stuff of a kind?"
                     var temp = Util.GetDefaultIconResourceIdForClass(_initialObject);
-#if DEBUG
-                    Debug.WriteLine(dbgLine + "GetDefaultIconResourceIdForClass returned " + (temp ?? "NULL!!"));
-#endif
+                    Log.Raw("GetDefaultIconResourceIdForClass returned " + (temp ?? "NULL!!"));
                     if (!string.IsNullOrEmpty(temp))
                     {
                         zeroFails = Util.ResolveIconicResource(temp);
-#if DEBUG
-                        Debug.WriteLine(dbgLine + "ResolveIconicResource returned " + zeroFails);
-#endif
+                        Log.Raw("ResolveIconicResource returned " + zeroFails);
                     }
                     if(zeroFails != IntPtr.Zero)//ResolveIconicResource() succeeded and zeroFails contains required handle
                     {
@@ -277,22 +261,16 @@ namespace Power8
                         //Way 3, cumbersome: "Hey shell, I know that stuff means something for ya. Give me the icon for the thing this staff means!"
                         var ppIdl = IntPtr.Zero;
                         var hRes = API.SHGetSpecialFolderLocation(IntPtr.Zero, _id, ref ppIdl); //I know, obsolete, but works ;)
-#if DEBUG
-                        Debug.WriteLine("{2}SHGetSp.F.Loc. for id<={0} returned result code {1}", _id, hRes, dbgLine);
-#endif
+                        Log.Fmt("SHGetSp.F.Loc. for id<={0} returned result code {1}", _id, hRes);
                         zeroFails = (hRes != 0
                                          ? IntPtr.Zero
                                          : API.SHGetFileInfo(ppIdl, 0, ref shinfo, (uint) Marshal.SizeOf(shinfo),
                                                              API.Shgfi.ICON | API.Shgfi.PIDL | API.Shgfi.USEFILEATTRIBUTES | iconType));
                         Marshal.FreeCoTaskMem(ppIdl);
-#if DEBUG
-                        Debug.WriteLine(dbgLine + "ShGetFileInfo (2p) returned " + zeroFails);      
-#endif
+                        Log.Raw("ShGetFileInfo (2p) returned " + zeroFails);      
                     }
                 }
-#if DEBUG
-                Debug.WriteLine("{2}end<<<<<, zf={0}, hi={1}", zeroFails, shinfo.hIcon, dbgLine);
-#endif
+                Log.Fmt("end<<<<<, zf={0}, hi={1}", zeroFails, shinfo.hIcon);
                 return zeroFails == IntPtr.Zero || shinfo.hIcon == IntPtr.Zero ? IntPtr.Zero : shinfo.hIcon;
             }
         }

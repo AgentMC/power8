@@ -405,10 +405,8 @@ namespace Power8
                 || string.IsNullOrEmpty(e.OldName)
                 || string.IsNullOrEmpty(e.OldFullPath))
             {
-#if DEBUG
-                Debug.WriteLine("FileRenamed: Name: {0}, FullPath: {1}, Old: {2}, OldFP: {3}",
+                Log.Fmt("FileRenamed: Name: {0}, FullPath: {1}, Old: {2}, OldFP: {3}",
                                     e.Name, e.FullPath, e.OldName, e.OldFullPath);
-#endif
                 return; //Sometimes this happens
             }
             FileChanged(sender,
@@ -441,9 +439,7 @@ namespace Power8
             var fpLow = e.FullPath.ToLowerInvariant();
             if(fpLow.StartsWith(IcrAppData) || fpLow.StartsWith(IclAppData) || fpLow.StartsWith(IcTemp))
                 return;
-#if DEBUG
-            Debug.WriteLine("File {0}: {1}", e.ChangeType, e.FullPath);
-#endif
+            Log.Fmt("File {0}: {1}", e.ChangeType, e.FullPath);
             //Ensuring buttonstack is created on Main thread
             if(!BtnStck.IsInstantited)
                 Util.Send(() => BtnStck.Instance.InvalidateVisual());
@@ -486,7 +482,7 @@ namespace Power8
                                 break;
                             case WatcherChangeTypes.Created:
                                 AddSubItem(item, baseAndArg.Item1, e.FullPath, isDir);
-                                if(Helpers.SettingsManager.Instance.AutoSortTrees) 
+                                if(SettingsManager.Instance.AutoSortTrees) 
                                     item.SortItems(); //We're interested in Add and Rename for this. Both will go here.
                                 break;
                         }
@@ -515,11 +511,11 @@ namespace Power8
             //this item to regenerate Friendly name, i.e. re-resolve the resourceId string
             StartMenuRootItem.FriendlyName = SettingsManager.Instance.StartMenuText;
 #if DEBUG
-            Debug.WriteLine("InitTree - scanned in {0}", s.ElapsedMilliseconds);
+            Log.Fmt("InitTree - scanned in {0}", s.ElapsedMilliseconds);
 #endif
             Util.Send(() => BtnStck.Instance.InvalidateVisual());
 #if DEBUG
-            Debug.WriteLine("InitTree - done in {0}", s.ElapsedMilliseconds);
+            Log.Fmt("InitTree - done in {0}", s.ElapsedMilliseconds);
             s.Stop();
 #endif
         }
@@ -1091,9 +1087,7 @@ namespace Power8
             }
             catch (Exception e)
             {
-#if DEBUG
-                Debug.WriteLine(e.ToString());
-#endif
+                Log.Raw(e.ToString());
             }
             finally
             {

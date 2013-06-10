@@ -599,7 +599,7 @@ namespace Power8.Views
                 SpecialItems[containerName] = mcItem;
             }
 #if DEBUG
-            Debug.WriteLine("BtnStck:GSI - done for {0} as of {1}", containerName, s.ElapsedMilliseconds);
+            Log.Raw("done in " + s.ElapsedMilliseconds, containerName);
             s.Stop();
 #endif
             return SpecialItems[containerName];
