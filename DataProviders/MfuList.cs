@@ -52,7 +52,7 @@ namespace Power8
         private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
         private static readonly int SessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
 
-        private static ManagementEventWatcher WatchDog;                             //Notifies when a process is created in system
+        private static ManagementEventWatcher _watchDog;                             //Notifies when a process is created in system
 
         //Files with data
         private static readonly string DataBaseRoot = 
@@ -184,11 +184,11 @@ namespace Power8
             Util.Post(() =>
                           {
                               //React on new processes creation
-                              WatchDog =
+                              _watchDog =
                                   new ManagementEventWatcher(
                                       "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
-                              WatchDog.EventArrived += WatchDogOnEventArrived;
-                              WatchDog.Start();
+                              _watchDog.EventArrived += WatchDogOnEventArrived;
+                              _watchDog.Start();
                           });
 
         }
@@ -196,7 +196,7 @@ namespace Power8
         // Save data on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
-            WatchDog.Stop();
+            _watchDog.Stop();
 
             Directory.CreateDirectory(DataBaseRoot);
 
@@ -306,9 +306,7 @@ namespace Power8
                         t.LastLaunchTimeStamp = DateTime.Now;
                     }
                 }
-#if DEBUG
-                Debug.WriteLine("Process Launched: {0} {1}", pair.Item1, pair.Item2);
-#endif
+                Log.Fmt("Process Launched: {0} {1}", pair.Item1, pair.Item2);
             }
         }
 

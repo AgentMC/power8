@@ -3,9 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-#if DEBUG
-using System.Diagnostics;
-#endif
+using Power8.Helpers;
 
 namespace Power8.Converters
 {
@@ -41,9 +39,7 @@ namespace Power8.Converters
             {
                 return Util.OsIs.EightRpOrMore ? W8RPMenuHack : Regular;
             }
-#if DEBUG
-            Debug.WriteLine("dbl="+dbl);
-#endif
+            Log.Raw("dbl=" + dbl);
             return new Thickness(0, 0, 0, 0);
         }
 
