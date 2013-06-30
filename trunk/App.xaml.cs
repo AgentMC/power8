@@ -53,30 +53,9 @@ namespace Power8
             }
 
             //Initialize standard folder icon
-            foreach (Environment.SpecialFolder sf in Enum.GetValues(typeof(Environment.SpecialFolder)))
-            {//we just seek for appropriate special folder to get folder icon...
-                bool isOk = false;
-                switch (sf)
-                {
-                    case Environment.SpecialFolder.Desktop:
-                    case Environment.SpecialFolder.DesktopDirectory:
-                    case Environment.SpecialFolder.CommonDesktopDirectory:
-                    case Environment.SpecialFolder.MyComputer:
-                        break; //from switch
-                    default:
-                        var path = Environment.GetFolderPath(sf);
-                        if (!File.Exists(path + @"\desktop.ini")) //we need generic folder, not the customized one
-                        {
-                            ImageManager.GetImageContainerSync(new PowerItem {Argument = path, IsFolder = true},
-                                                           API.Shgfi.SMALLICON);
-                            isOk = true;
-                        }
-                        break; //from switch
-                }
-                if(isOk)
-                    break; //from foreach
-            }
-
+            var path = Environment.GetEnvironmentVariable("appdata");
+            ImageManager.GetImageContainerSync(new PowerItem { Argument = path, IsFolder = true }, API.Shgfi.SMALLICON);
+            
             //Build tree
             Util.Fork(PowerItemTree.InitTree, "InitTree").Start();
 

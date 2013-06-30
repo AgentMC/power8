@@ -32,7 +32,7 @@ namespace Power8.Views
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private IntPtr _taskBar, _showDesktopBtn, _midPanel; //system windows handles
+        private IntPtr _taskBar, _showDesktopBtn, _midPanel, _startBtn; //system windows handles
         private WelcomeArrow _arrow;
         private PlacementMode _placement = PlacementMode.MousePoint; //used for context menu
         private BitmapSource _bitmap; //picture on the Main Button
@@ -126,6 +126,11 @@ namespace Power8.Views
             {
                 _midPanel = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.TRAY_REBAR_WND_CLASS, null);
                 CheckWnd(_midPanel, API.WndIds.TRAY_REBAR_WND_CLASS);
+                if(Util.OsIs.EightBlueOrMore)
+                {
+                    _startBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.SH_W8_1_START_CLASS, null);
+                    CheckWnd(_startBtn, API.WndIds.SH_W8_1_START_CLASS);
+                }
                 _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.TRAY_NTF_WND_CLASS, null);
                 CheckWnd(_showDesktopBtn, API.WndIds.TRAY_NTF_WND_CLASS);
                 _showDesktopBtn = API.FindWindowEx(_showDesktopBtn, IntPtr.Zero, API.WndIds.SH_DSKTP_WND_CLASS, null);
@@ -324,6 +329,11 @@ namespace Power8.Views
             double width = -1, height = -1;
             API.RECT r;
             var p = default(Point);
+            //Hide start button for Win8.1+
+            if(Util.OsIs.EightBlueOrMore)
+            {
+                API.ShowWindow(_startBtn, API.SWCommands.HIDE);
+            }
             while (!ClosedW)
             {
                 if (!API.GetWindowRect(_showDesktopBtn, out r))
@@ -369,6 +379,13 @@ namespace Power8.Views
                     else                      //horiz. button, vertical bar
                         curHeight = (int)(curWidth / sizeCoef); 
                 }
+                //A kind of "Minimum size" for Win8.1
+                if (Util.OsIs.EightBlueOrMore)
+                {
+                    const float W8_DEF_SH_DSKTP_WDT = 15f;
+                    curWidth = Math.Max(curWidth, W8_DEF_SH_DSKTP_WDT);
+                    curHeight = Math.Max(curHeight, W8_DEF_SH_DSKTP_WDT);
+                }
 // ReSharper disable CompareOfFloatsByEqualityOperator
                 if (Math.Round(width) != Math.Round(curWidth))
                 {
@@ -409,7 +426,19 @@ namespace Power8.Views
             {//free space to the left/up is the same as in right/down, which is show desktop btn
                 var curHeight = r.Bottom - r.Top;
                 var curWidth = r.Right - r.Left;
-                MoveReBar(curHeight < curWidth, curHeight, curWidth);
+                bool isVertical = curHeight < curWidth;
+                //For Win8.1 we still determine isVertical by ShowDesktop, but position is determined by Start button
+                if(Util.OsIs.EightBlueOrMore && API.GetWindowRect(_startBtn, out r))
+                {
+                    curHeight = r.Bottom - r.Top;
+                    curWidth = r.Right - r.Left;
+                }
+                MoveReBar(isVertical, curHeight, curWidth);
+            }
+            //Restoring start button for win 8.1
+            if (Util.OsIs.EightBlueOrMore)
+            {
+                API.ShowWindow(_startBtn, API.SWCommands.SHOW);
             }
         }
         

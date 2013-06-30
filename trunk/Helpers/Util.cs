@@ -1145,6 +1145,7 @@ namespace Power8
             public static bool SevenOrBelow { get { return Ver.Major < 6 || (Ver.Major == 6 && Ver.Minor <= 1); } }
             public static bool EightOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 2); } }
             public static bool EightRpOrMore { get { return Ver >= new Version(6, 2, 8400); } } //Win8ReleasePreview+
+            public static bool EightBlueOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 3); } } //Win8.1
         }
 
         /// <summary> Helper class to call unmanaged ShellExecute on STA thread 

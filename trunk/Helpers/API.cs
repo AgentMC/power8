@@ -19,6 +19,7 @@ namespace Power8
             public const string TRAY_REBAR_WND_CLASS = "ReBarWindow32";
             public const string SH_DSKTP_WND_CLASS = "TrayShowDesktopButtonWClass";
             public const string SH_DSKTP_START_CLASS = "Button";
+            public const string SH_W8_1_START_CLASS = "Start";
         }
 
         public static class SEVerbs
