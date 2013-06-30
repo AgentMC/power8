@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
@@ -456,5 +456,9 @@ Indítsa el nekem az Intézőt és indítsa újra a Power8 folyamatot.</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
     <value>Vezérlőpult elemeinek megjelenítése kategória szerint</value>
+  </data>
+  <data name="CR_StgDynamicLayout" xml:space="preserve">
+    <value>Exchange All programs menu and Search bar for better usability</value>
+    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>

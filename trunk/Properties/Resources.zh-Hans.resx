@@ -458,4 +458,8 @@ Power8可以帮您解决。
   <data name="CR_StgCbCtrl" xml:space="preserve">
     <value>显示项目按类别排列的控制面板</value>
   </data>
+  <data name="CR_StgDynamicLayout" xml:space="preserve">
+    <value>Exchange All programs menu and Search bar for better usability</value>
+    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+  </data>
 </root>

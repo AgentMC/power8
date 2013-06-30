@@ -463,4 +463,8 @@ Power8 может помочь вам с этим справиться.
   <data name="CR_StgCbCtrl" xml:space="preserve">
     <value>Открывать Панель управления с видом по категориям</value>
   </data>
+  <data name="CR_StgDynamicLayout" xml:space="preserve">
+    <value>Менять местами меню Пуск и строку поиска когда это убыстряет к ним доступ</value>
+    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+  </data>
 </root>

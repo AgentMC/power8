@@ -451,7 +451,7 @@ Vill du återställa Utforskaren och starta om Power8?</value>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
     <value>Lägg till i anpassad lista</value>
   </data>
-    <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
     <value>Visa menyobjektet 'Donera'</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
@@ -462,5 +462,9 @@ Vill du återställa Utforskaren och starta om Power8?</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
     <value>Sortera efter kategori i Kontrollpanelen</value>
+  </data>
+  <data name="CR_StgDynamicLayout" xml:space="preserve">
+    <value>Exchange All programs menu and Search bar for better usability</value>
+    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>
