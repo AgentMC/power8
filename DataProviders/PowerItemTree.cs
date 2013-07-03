@@ -64,7 +64,11 @@ namespace Power8
                     //and it will be triggered when window is shown, and window may be shown only after instance initialized,
                     //and the 1st initialization is automatically triggered right after InitTree() :)
                     var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
-                    _adminToolsItem = SearchContainerByArgument(PathToBaseAndArg(path), StartMenuRootItem, false);
+                    Log.Raw("CommonAdminTools=" + path);
+                    var p2ba = PathToBaseAndArg(path);
+                    Log.Fmt("Path2B&A returns 1:{0}, 2:{1}", p2ba.Item1, p2ba.Item2);
+                    _adminToolsItem = SearchContainerByArgument(p2ba, StartMenuRootItem, false);
+                    Log.Raw("SearchContainer returned " + (_adminToolsItem == null ? "null" : _adminToolsItem.FriendlyName));
                     _adminToolsItem = SearchItemByArgument(path, true, _adminToolsItem);
                     _adminToolsItem.Argument = API.ShNs.AdministrationTools; //Converting explicit FS item to shell-like
                     _adminToolsItem.ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AdministrationTools);
@@ -544,11 +548,15 @@ namespace Power8
             try
             {   //Obtain full fs path to current location
                 var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
+                Log.Raw("In: " + curDir, item.ToString());
                 //Parse child directories and recoursively call the ScanFolderSync
                 foreach (var directory in item.IsLibrary ? GetLibraryDirectories(curDir) : Directory.GetDirectories(curDir))
                 {   //Skip hidden directories
                     if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
+                    {
+                        Log.Raw("Skipped because item appears to be hidden");
                         continue;
+                    }
                     //Otherwise add the directory item to this PowerItem
                     var subitem = AddSubItem(item, basePath, directory, true, autoExpand: !recoursive);
                     if (recoursive)
@@ -601,9 +609,9 @@ namespace Power8
                 }
             }
             catch (UnauthorizedAccessException)
-            { }//Don't care if user is not allowed to access fileor directory or it's contents
+            { Log.Raw("UnauthorizedAccessException"); }//Don't care if user is not allowed to access fileor directory or it's contents
             catch (IOException)
-            { }//Don't care as well if file was deleted on-the-fly, watcher will notify list
+            { Log.Raw("IOException"); }//Don't care as well if file was deleted on-the-fly, watcher will notify list
             finally
             {  //Explicitly set marker showing that enumeration operations may occur on Items from this moment
                 item.AutoExpandIsPending = false;
@@ -632,11 +640,13 @@ namespace Power8
         private static PowerItem AddSubItem(PowerItem item, string basePath, string fsObject, bool isFolder, string resourceId = null, bool autoExpand = false)
         {
             var argStr = fsObject.Substring(basePath.Length); //Expected relative argument in case of Start Menu item
+            Log.Raw("In: " + fsObject, item.ToString());
             var child = autoExpand || item.AutoExpandIsPending //Searching...
                     ? null
                     : item.Items.FirstOrDefault(i =>
                                 string.Equals(i.Argument, argStr, StringComparison.CurrentCultureIgnoreCase)
                                 && i.IsFolder == isFolder);
+            Log.Raw("child: " + (child == null ? "null" : child.ToString()), item.ToString());
             if(child == null) //Generating...
             {
                 child = new PowerItem
