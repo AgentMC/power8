@@ -234,7 +234,7 @@ Cancelar: ignorar esta atualização, nunca notificar-me sobre esta versão.</va
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - substituinte do Menu Iniciar para Windows XP, Se7en and 8</value>
+    <value>Power8 - substituinte do Menu Iniciar para Windows XP, Se7en e 8</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
@@ -269,10 +269,10 @@ Cancelar: ignorar esta atualização, nunca notificar-me sobre esta versão.</va
     <value>Descarregar MSI</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Abrir página da internet do projeto</value>
+    <value>Abrir página do projeto na internet</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
-    <value>Não avise-me novamente sobre esta atualização</value>
+    <value>Não me avisar novamente sobre esta atualização</value>
   </data>
   <data name="CR_UNNextTime" xml:space="preserve">
     <value>Avise-me da próxima vez</value>
@@ -317,7 +317,7 @@ Cancelar: ignorar esta atualização, nunca notificar-me sobre esta versão.</va
     <value>Fixar item</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
-    <value>Tradução feita por Matheus Macabu</value>
+    <value>Tradução realizada por Matheus Macabu</value>
     <comment>Put localizer name here!</comment>
   </data>
   <data name="CR_AbVersion" xml:space="preserve">
@@ -336,7 +336,7 @@ Cancelar: ignorar esta atualização, nunca notificar-me sobre esta versão.</va
 Eu sei qual é o problema e irei cuidar dele por conta própria.</value>
   </data>
   <data name="CR_RE_Title" xml:space="preserve">
-    <value>Power8 — Windows Explorer está morto</value>
+    <value>Power8 — Explorador do Windows está morto</value>
   </data>
   <data name="CR_RE_TopLabel" xml:space="preserve">
     <value>O processo do Explorador do Windows não está disponível.
@@ -355,7 +355,7 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
     <value>Automático (por Área de Trabalho)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
-    <value>Procurar...</value>
+    <value>Pesquisar...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
     <value>Seguir orientação da barra de tarefas</value>
@@ -370,7 +370,7 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
     <value>Configurar botão Iniciar</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Informar-me acerca de problemas de configuração</value>
+    <value>Me informar acerca de problemas de configuração</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
     <value>Visualizar dispositivos removíveis</value>
@@ -380,7 +380,7 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>: escolha a imagem do Menu Iniciare</value>
+    <value>: escolha a imagem do Menu Iniciar</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
     <value>Imagens</value>
@@ -420,7 +420,7 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
     <value>Reiniciar aplicação quando ocorrer um erro fatal</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Visite o sítio do WebMoney e doe para o time Power8</value>
+    <value>Visite o sítio do WebMoney e doe para a equipe do Power8</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
     <value>Esconder este item</value>
@@ -450,7 +450,7 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
     <value>Exibir item de doação no menu</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Doar para a Equipe Power8...</value>
+    <value>Doar para a Equipe do Power8...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
     <value>Trocar Usuário</value>
@@ -459,7 +459,7 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
     <value>Exibir Painel de Controle com itens organizados por categoria</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Exchange All programs menu and Search bar for better usability</value>
+    <value>Mover menu de Todos os programas e Barra de pesquisa para melhor usabilidade</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>

@@ -422,43 +422,43 @@ Explorer'ı benim için geri yükle ve Power8'ı tekrar başlat.</value>
     <value>Power8'i destek için WebMoney sitesini ziyaret edin</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Hide this item</value>
+    <value>Bu öğeyi gizle</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Most frequently used</value>
+    <value>Çokça kullanılanlar</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Hide items containing strings:</value>
+    <value>Yazıyı içerenleri gizle</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Use custom list (user-configurable)</value>
+    <value>Kişisel ayarları kullan (kullanıcı değiştirebilir)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Use Power8 internal data</value>
+    <value>Power8'in kendi verisini kullan</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Use system data (UserAssist) to build list</value>
+    <value>Listeyi oluşturmak için sistem verisini kullan (KullanıcıAsistanı)</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Remove from custom launch list</value>
+    <value>Kişisel çalıştırma listesinden sil</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Add to custom launch list</value>
+    <value>Kişisel çalıştırma listesine ekle</value>
   </data>
   <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+    <value>Bağışla menü öğesini göster</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>Power8 Ekibine Bağışta Bulun...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>Kullanıcı Değiştir</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>Kontrol Panelini kategoriye göre sıralanmış olarak göster</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Exchange All programs menu and Search bar for better usability</value>
+    <value>Bütün programlarım menüsünü ve Arama kutucuğunu daha iyi kullanışlılık için birbiriyle değiştir</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>
