@@ -962,7 +962,7 @@ namespace Power8
         [DllImport(Lib.KERNEL)]
         public static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)] string lpProcName);
 
-        [DllImport(Lib.USER)]
+        [DllImport(Lib.USER, CharSet = CharSet.Unicode, EntryPoint = "LoadStringW")]
         public static extern int LoadString(IntPtr hInstance, uint resourceID, StringBuilder lpBuffer, int nBufferMax);
 
         [DllImport(Lib.USER, CharSet = CharSet.Unicode, EntryPoint = "LoadIconW")]
