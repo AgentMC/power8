@@ -196,7 +196,7 @@ Hayır: lütfen daha sonra tekrar hatırlat.
     <value>Uykuya Al</value>
   </data>
   <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Otomatik Başlat</value>
+    <value>Otomatik başlat</value>
   </data>
   <data name="CR_MWCheckForUpdates" xml:space="preserve">
     <value>Güncellemeleri kontrol et</value>
@@ -316,7 +316,7 @@ Hayır: lütfen daha sonra tekrar hatırlat.
     <value>Öğeri iğnele</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
-    <value>Çeviri Veysi Ertekin tarafından yapıldı</value>
+    <value>Çeviri -Veysi Ertekin- tarafından yapıldı</value>
     <comment>Put localizer name here!</comment>
   </data>
   <data name="CR_AbVersion" xml:space="preserve">
@@ -369,7 +369,7 @@ Explorer'ı benim için geri yükle ve Power8'ı tekrar başlat.</value>
     <value>Başlat simgesini düzenleyin</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Ayarla ilgili konularda beni bilgilandir</value>
+    <value>Ayarlarla ilgili konularda beni bilgilendir</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
     <value>Çıkarılabilir aygıtları izle</value>
@@ -446,7 +446,7 @@ Explorer'ı benim için geri yükle ve Power8'ı tekrar başlat.</value>
     <value>Kişisel çalıştırma listesine ekle</value>
   </data>
   <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Bağışla menü öğesini göster</value>
+    <value>"Bağışla" menü öğesini göster</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
     <value>Power8 Ekibine Bağışta Bulun...</value>
@@ -458,7 +458,7 @@ Explorer'ı benim için geri yükle ve Power8'ı tekrar başlat.</value>
     <value>Kontrol Panelini kategoriye göre sıralanmış olarak göster</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Bütün programlarım menüsünü ve Arama kutucuğunu daha iyi kullanışlılık için birbiriyle değiştir</value>
+    <value>Bütün programlarım menüsünü ve arama kutucuğunu daha iyi kullanışlılık için birbiriyle değiştir</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>
