@@ -459,7 +459,7 @@ Start Explorer a.u.b. voor me en herstart Power8 proces.</value>
     <value>Toon Configuratiescherm met items gesorteerd op categorie</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Exchange All programs menu and Search bar for better usability</value>
+    <value>Verwissel Alle programma's en Zoeken voor handiger gebruik</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>
