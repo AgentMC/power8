@@ -12,5 +12,5 @@ For already implemented features, see [Changelog] page.
 *estimated release date: no estimation, when some of us will have time; currently we'll still work on 1.4.x to make it more stable, usable and reliable*
   * Skins/styles;
     * In particular, Metro style.
-  * `[concept]` Exchange the Search bar and Start Menu locations based on taskbar position (vertical/horizontal);
   * Cut/Copy/Paste/Delete for context menu;
+  * Everything else still under discussion...
