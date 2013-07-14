@@ -21,7 +21,7 @@ To do: convert to issues tab.
 ===Medium===
   #  W8RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected... sometimes, cannot reproduce so lowered to Medium for now);
   #  W8RTM: no transparency (should think twice before fixing... window may be not in Windows style after fix);
-  #  XP/8?: Menu from menu-button may show in inappropriate position 
+  #  XP: Menu from menu-button may show in inappropriate position 
 ===Low===
   #  8/7^Classic^/XP^Classic^: Menu-button's MTLH is repainted improperly on hover 
   #  7/8: Menu item loses selection when context menu is shown
