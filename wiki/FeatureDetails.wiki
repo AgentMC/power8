@@ -150,7 +150,7 @@ Jump list element is treated as file if it exists locally on your disc. Commands
 
 Note that all your changes done in this window become effective immediately, you don't need to click OK to apply them!
 
-===1.1: General tab===
+===1.1+: General tab===
 
 The new Settings window is available starting Power8 v.1.1. Right-click Start button, snd choose "Settings" to open the window.
 
@@ -161,6 +161,8 @@ The window has the following options:
   * Watch removable drives - allows you to make Power8 bypass the removable drives when listening to changes in the file system. This will allow you to safe-eject the removable drive, but also will eliminate the drive from Power8's computer menu-button's children. When switched on, this setting prevents removable devices to be ejected. So to eject these devices - switch it off. You can switch it on back after ejecting the device;
   * Auto-sort menus and lists... will sort Start menu and Computer's children items when new file or folder appeas in the system. Default is unchecked which helps you to identify that new files or folders were created during curent session;
   * Restart application when fatal error occurs - when Power8 faces unrecoverable error it will automatically restore itself;
+  * Exchange All Programs and Search bar for better usability - starting from 1.4.3, you can use this option to add a bit of AI to Power8. That is, when it detects that it's running inside horizontal taskbar which is at the bottom of the screen, it automatically exchanges 2 mentioned controls to make you be able to access Start menu faster and move mouse less after clicking the main Power8 button:
+http://power8.googlecode.com/svn/wiki/Power8_413_0_ExApSeBar.png
   * Configure Start button (Win7+). Allows you to configure layout and look of the Start button to adjust it for your needs:
     * Aspect ratio sets the size of Start button;
     * Follow taskbar orientation will invert the Aspect Ratio when taskbar is located horizontally;
