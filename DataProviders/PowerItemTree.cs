@@ -69,7 +69,15 @@ namespace Power8
                     Log.Fmt("Path2B&A returns 1:{0}, 2:{1}", p2ba.Item1, p2ba.Item2);
                     _adminToolsItem = SearchContainerByArgument(p2ba, StartMenuRootItem, false);
                     Log.Raw("SearchContainer returned " + (_adminToolsItem == null ? "null" : _adminToolsItem.FriendlyName));
-                    _adminToolsItem = SearchItemByArgument(path, true, _adminToolsItem);
+                    if (_adminToolsItem == null)
+                    {
+                        _adminToolsItem = new PowerItem { Argument = path };
+                        ScanFolderSync(_adminToolsItem, string.Empty, true);
+                    }
+                    else
+                    {
+                        _adminToolsItem = SearchItemByArgument(path, true, _adminToolsItem);
+                    }
                     _adminToolsItem.Argument = API.ShNs.AdministrationTools; //Converting explicit FS item to shell-like
                     _adminToolsItem.ResourceIdString = Util.GetLocalizedStringResourceIdForClass(API.ShNs.AdministrationTools);
                     _adminToolsItem.SpecialFolderId = API.Csidl.COMMON_ADMINTOOLS;
