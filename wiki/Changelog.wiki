@@ -1,6 +1,19 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.4.3 Beta (v.1.4.3.619): 14.07.2013==
+
+  # `[new]` Windows 8.1 Preview support including, but not limited to:
+    * hiding of MS start button when P8 works;
+    * P8's main button has minimum size now equal to 15 px (width of `ShowDesktop` button on W8);
+    * incorrect taskbar buttons positioning on exit;
+  # `[new]` Option to exchange the Start Menu with Search bar when taskbar is horizontal at the bottom of the screen. Benefit is that you have to less draw mouse from Power8 main button to Start Menu;
+  # `[new]` Simplified Chinese localization;
+  # `[changed]` Updated translations for all except de, es, fr, zh-TW;
+  # `[fixed]` Invalid focus after double Alt+Z;
+  # `[fixed]` Display of certain localized CPL items under non-Unicode environment (proper version of `LoadString()` used);
+  # `[unconfirmed fix]` Issue19: no feedback from issue reporter, but I hope the bug is fixed now. `NullReferenceException` when Admin Tools folder cannot be inferred from Start Menu;
+
 ==Version 1.4.2 Beta (v.1.4.2.599): 01.05.2013==
 
   # `[new]` Complete key handling for recent list (P to (un-)pin an item, Right / Left arrow opens jump list; Recent list must be focused for these keys to operate). Now really all features of Power8 can be accessed without using of mouse;
