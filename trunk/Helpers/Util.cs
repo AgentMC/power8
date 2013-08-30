@@ -1103,7 +1103,7 @@ namespace Power8
         public static void DispatchUnhandledException(Exception ex)
         {
             var str = ex.ToString();
-            Log.Raw(ex.ToString());
+            Log.Raw(str);
             MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
             var reason = NoLoc.Err_UnhandledGeneric + str;
             if(SettingsManager.Instance.AutoRestart)
