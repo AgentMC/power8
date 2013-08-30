@@ -1,4 +1,5 @@
-﻿using Power8.Views;
+﻿using System.Runtime.ExceptionServices;
+using Power8.Views;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -42,7 +43,9 @@ namespace Power8
             Debug.AutoFlush = true;
             Debug.Listeners.Add(l);
 #endif
+            
             DispatcherUnhandledException += (sender, e) => Util.DispatchUnhandledException(e.Exception);
+            AppDomain.CurrentDomain.UnhandledException += HandleUnhandled;
 
             //Move settings from previous ver
             var std = Power8.Properties.Settings.Default;
@@ -68,6 +71,18 @@ namespace Power8
         public static new App Current
         {
             get { return (App) Application.Current; }
+        }
+
+        /// <summary>
+        /// Handles Unhandled appdomain exception and calls the code to write that down everywhere.
+        /// Undr DEBUG it also catches uncatchable exceptions
+        /// </summary>
+#if DEBUG
+        [HandleProcessCorruptedStateExceptions]
+#endif
+        public void HandleUnhandled(object sender, UnhandledExceptionEventArgs e)
+        {
+            Util.DispatchUnhandledException(e.ExceptionObject as Exception);
         }
 
         #region DWM CompositionChanged event
