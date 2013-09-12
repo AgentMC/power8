@@ -20,7 +20,7 @@
 
 ==Текущая версия==
 
-Текущая версия — *V. 1.4.3 Beta: v.1.4.3.619*.
+Текущая версия — *V. 1.4.4 Beta: v.1.4.4.628*.
 См. [http://code.google.com/p/power8/wiki/Changelog список изменений] для получения полной картины об изменениях в данном релизе.
 
 См. [http://code.google.com/p/power8/wiki/KnownIssues список проблем] чтобы быть в курсе того, какие проблемы уже были найдены.
@@ -56,6 +56,7 @@ Localization is done by:
 ||Hungarian       ||Zsolt Brechler            ||zsolt.brechler@gmail.com||
 ||French`*`       ||Marc An                   ||mar.can2004@voila.fr||
 ||Chinese (Simplified)||Xiaoyu Wang              ||chsome@gmail.com||
+||Arabic             ||Zakaria Belbali           ||gestapoz3000@gmail.com||
 
 `*` Не обновляется
 
