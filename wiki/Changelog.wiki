@@ -1,6 +1,11 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.4.4 Beta (v.1.4.4.628): 12.09.2013==
+
+  # `[new]` Arabic localization;
+  # `[changed]` Enhanced error handling. Now we get more information in case somethin goes wrong;
+
 ==Version 1.4.3 Beta (v.1.4.3.619): 14.07.2013==
 
   # `[new]` Windows 8.1 Preview support including, but not limited to:
