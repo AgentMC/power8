@@ -145,7 +145,7 @@ namespace Power8.Views
             Left = 0;
             Top = 0;
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
-            Util.Fork(WatchDesktopBtn, "ShowDesktop button watcher").Start();
+            Util.ForkStart(WatchDesktopBtn, "ShowDesktop button watcher");
             
             SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;
             SettingsManager.ImageChanged += SettingsManagerOnImageChanged;

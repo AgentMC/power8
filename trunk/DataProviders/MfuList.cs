@@ -316,7 +316,7 @@ namespace Power8
         /// </summary>
         public static void UpdateStartMfu()
         {
-            Util.Fork(UpdateStartMfuSync, "Update MFU").Start();
+            Util.ForkPool(UpdateStartMfuSync, "Update MFU");
         }
 
         /// <summary>
@@ -474,7 +474,7 @@ namespace Power8
         /// <param name="item">the PowerItem whose JumpList may be updated</param>
         public static void GetRecentListFor(PowerItem item)
         {
-            Util.Fork(() => GetRecentListForSync(item), "MFU worker for " + item.Argument).Start();
+            Util.ForkPool(() => GetRecentListForSync(item), "MFU worker for " + item.Argument);
         }
         //Same as above but inSync
         private static void GetRecentListForSync(PowerItem item)

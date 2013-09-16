@@ -124,7 +124,36 @@ namespace Power8
             }) { Name = name };
         }
         /// <summary>
-        /// Initializes background thread with given name and starts it, but only in case referenced thread 
+        /// A shortcut fo Fork(something).Start()
+        /// </summary>
+        /// <param name="method">The delegate which can be used as non-parametrized thread start</param>
+        /// <param name="name">Optional. Managed name of a Thread being created, default is "P8 forked"</param>
+        public static void ForkStart(ThreadStart method, string name = "unnamed")
+        {
+            Fork(method, name).Start();
+        }
+        /// <summary>
+        /// Unkile ForkStart() or simple Fork(), uses thread pool to lower system load when multiple threads are initialized. 
+        /// </summary>
+        /// <param name="method">The delegate which can be used as non-parametrized thread start</param>
+        /// <param name="name">Optional. Managed name of a Thread being created, default is "P8 forked"</param>
+        public static void ForkPool(ThreadStart method, string name = "unnamed")
+        {
+            Log.Raw("Thread forked to pool: " + name);
+            ThreadPool.QueueUserWorkItem(state => 
+            {
+                try
+                {
+                    method();
+                }
+                catch (Exception ex)
+                {
+                    DispatchUnhandledException(ex);
+                }
+            });
+        }
+        /// <summary>
+        /// Forks background thread with given name and starts it, but only in case referenced thread 
         /// doesn't exist or is stopped already
         /// </summary>
         /// <param name="thread">Thread variable which holds or will hold the thread reference</param>

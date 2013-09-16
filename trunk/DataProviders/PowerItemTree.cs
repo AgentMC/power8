@@ -348,7 +348,7 @@ namespace Power8
 
 
                     //Search for computers
-                    Util.Fork(() =>
+                    Util.ForkPool(() =>
                                   {
                                       if (Util.OsIs.SevenOrMore) //Name won't be resolved automatically on 7+
                                           xpNet7Wrkgrp.FriendlyName = NetManager.DomainOrWorkgroup;
@@ -399,7 +399,7 @@ namespace Power8
                                                                             Icon = _networkRoot.Items[0].Icon
                                                                         });
                                             });
-                                  }, "Network Scan Thread").Start();
+                                  }, "Network Scan Thread");
                 }
                 return _networkRoot;
             }
@@ -963,13 +963,13 @@ namespace Power8
                                                  NetworkRoot, LibrariesRoot, MfuList.MfuSearchRoot })
                     {
                         var r = root;
-                        Util.Fork(() =>
+                        Util.ForkPool(() =>
                                       {
                                         SearchItems(query, r, destination, _lastSearchToken.Token);
                                         if(!_lastSearchToken.IsCancellationRequested)
                                             Util.Post(() => callback(r, _lastSearchToken.Token));
                                       },
-                                  "Tree search for " + r.FriendlyName).Start();
+                                  "Tree search for " + r.FriendlyName);
                     }
                 }
                 else //type-filtered WinSearch, splitter part
@@ -979,8 +979,8 @@ namespace Power8
                     query = pair[1];
                 }
                 if (query.Length >= 3) //init WinSearch
-                    Util.Fork(() => SearchWindows(query, ext, destination, _lastSearchToken.Token), 
-                                "WinSearch worker for " + ext + "/" + query).Start();
+                    Util.ForkPool(() => SearchWindows(query, ext, destination, _lastSearchToken.Token), 
+                                "WinSearch worker for " + ext + "/" + query);
             }
         }
 

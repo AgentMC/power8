@@ -206,12 +206,12 @@ namespace Power8
                 }
 
                 if(AllowAsyncFriendlyName) //Launch async extraction if allowed
-                    Util.Fork(() => 
+                    Util.ForkPool(() => 
                     {
                         var f = TryExtractFriendlyNameAsync();
                         if (!string.IsNullOrEmpty(f))
                             Util.Post(() => FriendlyName = f);
-                    }, "FN async extractor for " + Argument).Start();
+                    }, "FN async extractor for " + Argument);
 
                 return _friendlyName;
             }

@@ -60,7 +60,7 @@ namespace Power8
             ImageManager.GetImageContainerSync(new PowerItem { Argument = path, IsFolder = true }, API.Shgfi.SMALLICON);
             
             //Build tree
-            Util.Fork(PowerItemTree.InitTree, "InitTree").Start();
+            Util.ForkPool(PowerItemTree.InitTree, "InitTree");
 
             //react on DwmCompositionChanged event
             ComponentDispatcher.ThreadFilterMessage += WndProc;
