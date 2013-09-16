@@ -275,7 +275,7 @@ namespace Power8.Views
                 if (q[1] != ' ') //not web search
                 {
                     dataGrid.ItemsSource = _searchView; //switch MFU list to search results and kisk search invoker
-                    Util.Fork(() => PowerItemTree.SearchTree(q, _searchData, ExpandGroup), "Search root for " + q).Start();
+                    Util.ForkPool(() => PowerItemTree.SearchTree(q, _searchData, ExpandGroup), "Search root for " + q);
                 }
                 //else{} //web search - no actions from our side here, wait for enter
             }

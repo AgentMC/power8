@@ -41,8 +41,8 @@ namespace Power8
             _fileRenamed = renamedHandler;
             _drivesRoot = drivesRoot;
             SettingsManager.WatchRemovablesChanged += SettingsManagerOnWatchRemovablesChanged;
-            Util.Fork(Worker, "DriveWatchThread").Start();
-            Util.Fork(FsWorker, "File system events dequeuer").Start();
+            Util.ForkStart(Worker, "DriveWatchThread");
+            Util.ForkStart(FsWorker, "File system events dequeuer");
         }
 
         /// <summary>
