@@ -2,6 +2,7 @@
 using System.Collections;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Power8.Helpers;
@@ -39,11 +40,11 @@ namespace Power8
         /// <returns>Always null</returns>
         public static ImageContainer GetImageContainer(PowerItem item, API.Shgfi iconNeeded)
         {
-            Util.Fork(() =>
+            Util.ForkPool(() =>
                           {
                               var asyncContainer = GetImageContainerSync(item, iconNeeded);
                               Util.Send(() => item.Icon = asyncContainer);
-                          }, "Icon getter for " + item.Argument).Start();
+                          }, "Icon getter for " + item.Argument);
             return null;
         }
 
@@ -223,10 +224,13 @@ namespace Power8
             /// <param name="handle">HICON that is already extracted</param>
             private static BitmapSource ExtractInternal(IntPtr handle)
             {
-                //TODO:Buggy staff. replace with own reimplementation
-                var bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(handle,
-                                                      System.Windows.Int32Rect.Empty,
-                                                      BitmapSizeOptions.FromEmptyOptions());
+                var bs = Imaging.CreateBitmapSourceFromHIcon(handle, System.Windows.Int32Rect.Empty,
+                                                             BitmapSizeOptions.FromEmptyOptions());
+                var bsib = bs as InteropBitmap;
+                if (bsib != null)
+                {
+                    bsib.Invalidate();
+                }
                 bs.Freeze();
                 return bs;
             }
