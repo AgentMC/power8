@@ -21,7 +21,7 @@ There are many tools to do this. The first simple one I found is [http://sourcef
 Open the file you got with Resx Editor you got, and translate all the rows you can find.
 
 ==4. Join your translation to Power8==
-After you translated everything, contact any of the project team members, giving us these files and the Culture you're translating them into. 
+After you translated everything, contact any of the project team members, giving us these files and the Culture you're translating them into. For more information on culture, visit http://msdn.microsoft.com/ru-ru/goglobal/bb896001.aspx
 
 That's it! 
 
