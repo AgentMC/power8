@@ -264,6 +264,7 @@
       <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.sr.resx" />
     <EmbeddedResource Include="Properties\Resources.sv.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.sv.Designer.cs</LastGenOutput>

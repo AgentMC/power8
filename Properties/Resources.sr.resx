@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Str_UpdateAvailableFormat" xml:space="preserve">
+    <value>
+
+Тренутна верзија: {0}
+Нова верзија: {1}
+
+Желите ли да посетите веб страницу и преузмете је?
+
+Да: иди на веб страницу и ажурирај.
+Не: подсети ме касније.
+Откажи: не обавештавај ме о овој верзији.</value>
+    <comment>Keep 2 empty lines at the beginning</comment>
+  </data>
+  <data name="Str_UpdateAvailable" xml:space="preserve">
+    <value>: доступно је ажурирање!</value>
+  </data>
+  <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
+    <value>Дошло је до грешке {0} при приказивању објекта „Својства“
+{1}</value>
+  </data>
+  <data name="Err_CantCheckUpdates" xml:space="preserve">
+    <value>Не могу да проверим има ли ажурирања.</value>
+  </data>
+  <data name="Str_AllPrograms" xml:space="preserve">
+    <value>Сви програми</value>
+    <comment>Default label instead of "Start menu". Currently seems useless</comment>
+  </data>
+  <data name="Err_StartAsAdminFailed" xml:space="preserve">
+    <value>Не могу да покренем наведени објекат као администратор. Процес је покренут с обичним корисничким правима.</value>
+  </data>
+  <data name="CR_AppOpenCommonFolder" xml:space="preserve">
+    <value>Отвори фасциклу „Сви корисници“</value>
+  </data>
+  <data name="CR_AppOpenContainer" xml:space="preserve">
+    <value>Отвори локацију</value>
+  </data>
+  <data name="CR_AppOpenFolder" xml:space="preserve">
+    <value>Отвори</value>
+  </data>
+  <data name="CR_AppOpenTargetContainer" xml:space="preserve">
+    <value>Отвори одредишну локацију</value>
+  </data>
+  <data name="CR_AppRun" xml:space="preserve">
+    <value>Покрени</value>
+  </data>
+  <data name="CR_AppRunAs" xml:space="preserve">
+    <value>Покрени као администратор</value>
+  </data>
+  <data name="CR_AppShowProperties" xml:space="preserve">
+    <value>Својства</value>
+  </data>
+  <data name="CR_AppShowTargetProperties" xml:space="preserve">
+    <value>Својства одредишта</value>
+  </data>
+  <data name="CR_ButtonHibernate" xml:space="preserve">
+    <value>Стање хибернације</value>
+  </data>
+  <data name="CR_ButtonLock" xml:space="preserve">
+    <value>Закључај рачунар</value>
+  </data>
+  <data name="CR_ButtonLogOff" xml:space="preserve">
+    <value>Одјави ме</value>
+  </data>
+  <data name="CR_ButtonRestart" xml:space="preserve">
+    <value>Поново покрени</value>
+  </data>
+  <data name="CR_ButtonRun" xml:space="preserve">
+    <value>Покрени…</value>
+  </data>
+  <data name="CR_ButtonScreensave" xml:space="preserve">
+    <value>Чувар екрана</value>
+  </data>
+  <data name="CR_ButtonShutdown" xml:space="preserve">
+    <value>Искључи</value>
+  </data>
+  <data name="CR_ButtonSleep" xml:space="preserve">
+    <value>Стање спавања</value>
+  </data>
+  <data name="CR_MWAutoStart" xml:space="preserve">
+    <value>Покрени са системом</value>
+  </data>
+  <data name="CR_MWCheckForUpdates" xml:space="preserve">
+    <value>Проверавај има ли ажурирања</value>
+  </data>
+  <data name="CR_MWExit" xml:space="preserve">
+    <value>Изађи</value>
+  </data>
+  <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
+    <value>Не могу да предочим класу {0}
+{1}</value>
+  </data>
+  <data name="Str_ShowMore" xml:space="preserve">
+    <value>Прикажи још…</value>
+    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
+  </data>
+  <data name="CR_CLCleanerBtn" xml:space="preserve">
+    <value>Очисти</value>
+  </data>
+  <data name="CR_SearchBox" xml:space="preserve">
+    <value>Претражи…</value>
+  </data>
+  <data name="CR_CLWindow" xml:space="preserve">
+    <value>Списак рачунара</value>
+  </data>
+  <data name="Err_VistaDetected" xml:space="preserve">
+    <value>Power8 није намењен за оперативни систем Windows Vista. Користите други.</value>
+  </data>
+  <data name="Err_GotNoFolder" xml:space="preserve">
+    <value>Не могу да пронађем фасциклу за </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="Err_GotNoFile" xml:space="preserve">
+    <value>Не могу да пронађем датотеку за </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="CR_ButtonStack" xml:space="preserve">
+    <value>Power8 – замена за мени „Старт“ за Windows XP, 7 и 8.</value>
+    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
+  </data>
+  <data name="Err_DownloadCancelled" xml:space="preserve">
+    <value>Преузимање је завршено.</value>
+  </data>
+  <data name="Str_SaveDialogDescription" xml:space="preserve">
+    <value>: изаберите одредиште датотеке</value>
+  </data>
+  <data name="Str_SaveDialogFilter" xml:space="preserve">
+    <value> ажурирање|*</value>
+    <comment>Leave starting space</comment>
+  </data>
+  <data name="CR_UNDownAndUp" xml:space="preserve">
+    <value>Преузмите MSI и одмах ажурирајте.</value>
+  </data>
+  <data name="CR_UNNewVersion" xml:space="preserve">
+    
+  <value>Нова верзија:</value></data>
+  <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
+    <value>Доступно је ажурирање за Power8!</value>
+  </data>
+  <data name="CR_UNwnd" xml:space="preserve">
+    <value>Обавештење о ажурирању</value>
+  </data>
+  <data name="CR_UNYourVersion" xml:space="preserve">
+    <value>Тренутна верзија:</value>
+  </data>
+  <data name="CR_UNdown7z" xml:space="preserve">
+    <value>Преузми 7z</value>
+  </data>
+  <data name="CR_UNdownMsi" xml:space="preserve">
+    <value>Преузми MSI</value>
+  </data>
+  <data name="CR_UNGoWeb" xml:space="preserve">
+    <value>Отвори страницу пројекта</value>
+  </data>
+  <data name="CR_UNIgnore" xml:space="preserve">
+    <value>Не питај поново за ово ажурирање</value>
+  </data>
+  <data name="CR_UNNextTime" xml:space="preserve">
+    <value>Подсети ме следећи пут</value>
+  </data>
+  <data name="CR_UNOther" xml:space="preserve">
+    <value>Друге опције:</value>
+  </data>
+  <data name="Err_NoPiExtracted" xml:space="preserve">
+    <value>Није пронађен ниједан елемент</value>
+  </data>
+  <data name="Err_CantGetTooltip" xml:space="preserve">
+    <value>Не могу да добијем опис објекта</value>
+  </data>
+  <data name="Str_CplElement" xml:space="preserve">
+    <value>Елемент у контролној табли</value>
+  </data>
+  <data name="Str_WindowsSearchResults" xml:space="preserve">
+    <value>Резултати Windows претраге</value>
+  </data>
+  <data name="CR_SearchMarker" xml:space="preserve">
+    <value>Тражим…</value>
+    <comment>Gray text indicating Windows search request was sent</comment>
+  </data>
+  <data name="Str_Library" xml:space="preserve">
+    <value> (библиотека)</value>
+    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
+  </data>
+  <data name="CR_GroupItemsText" xml:space="preserve">
+    <value> ставки</value>
+    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
+  </data>
+  <data name="CR_MWBlockMetro" xml:space="preserve">
+    <value>Блокирај функције Metro-а</value>
+  </data>
+  <data name="Str_Recent" xml:space="preserve">
+    <value>Недавно отворено</value>
+  </data>
+  <data name="Str_Unpin" xml:space="preserve">
+    <value>Откачи ставку</value>
+  </data>
+  <data name="Str_Pin" xml:space="preserve">
+    <value>Закачи ставку</value>
+  </data>
+  <data name="CR_AbLocalization" xml:space="preserve">
+    <value>Превод: Ђорђе Васиљевић</value>
+    <comment>Put localizer name here!</comment>
+  </data>
+  <data name="CR_AbVersion" xml:space="preserve">
+    <value>Верзија:</value>
+  </data>
+  <data name="CR_MWAbout" xml:space="preserve">
+    <value>О програму…</value>
+    <comment>Label in main btn context menu and in About Window</comment>
+  </data>
+  <data name="Str_LocalizerUri" xml:space="preserve">
+    <value>mailto:djordje.vasiljevich@gmail.com</value>
+    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org OR mailto:a1@test.com</comment>
+  </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>Не, хвала.
+Знам шта се дешава и сам ћу решити проблем.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 – Windows истраживач је окончан</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Изгледа да је процес Windows истраживач недоступан.
+Power8 вам може помоћи да то решите.
+ 
+Желите ли да вратите Windows истраживач и поново покренете Power8?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Да!
+Поново покрените Истраживач заједно са процесом Power8.</value>
+  </data>
+  <data name="CR_MWSettings" xml:space="preserve">
+    <value>Поставке…</value>
+  </data>
+  <data name="CR_StgArByDesktop" xml:space="preserve">
+    <value>Аутоматски (од радне површине)</value>
+  </data>
+  <data name="CR_StgBrowseBtn" xml:space="preserve">
+    <value>Потражи…</value>
+  </data>
+  <data name="CR_StgInvertAr" xml:space="preserve">
+    <value>Прати усмерење траке задат.</value>
+  </data>
+  <data name="CR_StgLblAr" xml:space="preserve">
+    <value>Размера:</value>
+  </data>
+  <data name="CR_StgLblChooseImage" xml:space="preserve">
+    <value>Изаберите слику (двокликните на путању да бисте је очистили):</value>
+  </data>
+  <data name="CR_StgSquareStart" xml:space="preserve">
+    <value>Подеси дугме „Старт“</value>
+  </data>
+  <data name="CR_StgSuggestProblems" xml:space="preserve">
+    <value>Обавести ме о проблемима са подешавањима</value>
+  </data>
+  <data name="CR_StgWatchRemovables" xml:space="preserve">
+    <value>Надгледај преносиве јединице</value>
+  </data>
+  <data name="CR_StgWnd" xml:space="preserve">
+    <value>Поставке програма Power8</value>
+    <comment>Title of settings window</comment>
+  </data>
+  <data name="Str_PicDialogDescription" xml:space="preserve">
+    <value>: изаберите слику менија „Старт“</value>
+  </data>
+  <data name="Str_PicDialogFilter" xml:space="preserve">
+    <value>Слике</value>
+    <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
+  </data>
+  <data name="Str_TipWarn" xml:space="preserve">
+    <value>Можете да прилагодите поставке својим потребама.</value>
+  </data>
+  <data name="CR_StgAutoSort" xml:space="preserve">
+    <value>Сортирај меније и спискове када је датотека или фасцикла додата или преименована</value>
+  </data>
+  <data name="CR_StgLblSetStartText" xml:space="preserve">
+    <value>Текст за „Сви програми“ (оставите празно за подразумеване вредности):</value>
+  </data>
+  <data name="CR_StgTabGeneral" xml:space="preserve">
+    <value>Опште</value>
+    <comment>"General" tab in settings window</comment>
+  </data>
+  <data name="CR_StgTabMenuBtns" xml:space="preserve">
+    <value>Дугмад у менију</value>
+  </data>
+  <data name="CR_StgTabWSE" xml:space="preserve">
+    <value>Веб претраживачи</value>
+  </data>
+  <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
+    <value>Дугмад у менију за приказ:</value>
+  </data>
+  <data name="CR_StgWseColKey" xml:space="preserve">
+    <value>Тастер</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
+  </data>
+  <data name="CR_StgWseColVal" xml:space="preserve">
+    <value>Ниска за упит</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
+  </data>
+  <data name="CR_StgAutoRestart" xml:space="preserve">
+    <value>Поново покрени програм када дође до кобне грешке</value>
+  </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>Посетите сајт WebMoney и дајте прилог тиму Power8-а.</value>
+  </data>
+  <data name="CR_AppExcludeFromMfu" xml:space="preserve">
+    <value>Сакриј ову ставку</value>
+  </data>
+  <data name="CR_StgTabMfu" xml:space="preserve">
+    <value>Најчешће коришћено</value>
+  </data>
+  <data name="CR_StgMfuColExcl" xml:space="preserve">
+    <value>Сакриј ставке које садрже:</value>
+  </data>
+  <data name="CR_StgMfuUseCustom" xml:space="preserve">
+    <value>Прилагођени списак</value>
+  </data>
+  <data name="CR_StgMfuUseP8JL" xml:space="preserve">
+    <value>Унутрашњи подаци Power8-а</value>
+  </data>
+  <data name="CR_StgMfuUseSystem" xml:space="preserve">
+    <value>Системски подаци</value>
+  </data>
+  <data name="CR_AppExcludeFromCustom" xml:space="preserve">
+    <value>Уклони са прилагођеног списка за покретање</value>
+  </data>
+  <data name="CR_AppIncludeToCustom" xml:space="preserve">
+    <value>Додај у прилагођени списак за покретање</value>
+  </data>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Мени за давање прилога</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>Дајте прилог…</value>
+  </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>Промени корисника</value>
+  </data>
+  <data name="CR_StgCbCtrl" xml:space="preserve">
+    <value>Ставке поређане по категоријама</value>
+  </data>
+  <data name="CR_StgDynamicLayout" xml:space="preserve">
+    <value>Замени места менија „Сви програми“ и траке за претрагу</value>
+    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+  </data>
+</root>
