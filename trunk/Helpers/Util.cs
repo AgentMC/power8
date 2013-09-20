@@ -111,17 +111,24 @@ namespace Power8
         /// <returns>The Thread class instance created, ready to be started</returns>
         public static Thread Fork(ThreadStart method, string name = "P8 forked")
         {
-            return new Thread(() => 
-            {
-                try
-                {
-                    method(); 
-                }
-                catch (Exception ex)
-                {
-                    DispatchUnhandledException(ex);
-                }
-            }) { Name = name };
+            return new Thread(() =>
+                                  {
+                                      try
+                                      {
+                                          method();
+                                      }
+                                      catch (Exception ex)
+                                      {
+                                          DispatchUnhandledException(ex);
+                                      }
+                                  })
+                       {
+                           Name = name,
+#if DEBUG
+                           CurrentCulture = Thread.CurrentThread.CurrentCulture,
+                           CurrentUICulture = Thread.CurrentThread.CurrentUICulture
+#endif
+                       };
         }
         /// <summary>
         /// A shortcut fo Fork(something).Start()
@@ -140,10 +147,22 @@ namespace Power8
         public static void ForkPool(ThreadStart method, string name = "unnamed")
         {
             Log.Raw("Thread forked to pool: " + name);
+#if DEBUG
+            var cc = Thread.CurrentThread.CurrentCulture;
+            var cuic = Thread.CurrentThread.CurrentUICulture;
+            ThreadPool.QueueUserWorkItem(state =>
+            {
+                try
+                {
+                    Thread.CurrentThread.CurrentCulture = cc;
+                    Thread.CurrentThread.CurrentUICulture = cuic;
+#else
             ThreadPool.QueueUserWorkItem(state => 
             {
                 try
                 {
+
+#endif
                     method();
                 }
                 catch (Exception ex)
