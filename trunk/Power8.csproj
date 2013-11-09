@@ -244,6 +244,7 @@
     <EmbeddedResource Include="Properties\Resources.fi.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.hr.resx" />
     <EmbeddedResource Include="Properties\Resources.hu.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -277,7 +278,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="Power8.manifest" />
+    <None Include="Power8.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
