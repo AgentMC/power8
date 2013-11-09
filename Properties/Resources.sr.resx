@@ -131,7 +131,7 @@
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
-    <value>: доступно је ажурирање!</value>
+    <value>: доступно је ажурирање</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
     <value>Дошло је до грешке {0} при приказивању објекта „Својства“
@@ -240,14 +240,14 @@
     <value>Преузимање је завршено.</value>
   </data>
   <data name="Str_SaveDialogDescription" xml:space="preserve">
-    <value>: изаберите одредиште датотеке</value>
+    <value>: избор одредишта датотеке</value>
   </data>
   <data name="Str_SaveDialogFilter" xml:space="preserve">
     <value> ажурирање|*</value>
     <comment>Leave starting space</comment>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>Преузмите MSI и одмах ажурирајте.</value>
+    <value>Преузми MSI и одмах ажурирај</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
     
@@ -271,7 +271,7 @@
     <value>Отвори страницу пројекта</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
-    <value>Не питај поново за ово ажурирање</value>
+    <value>Не питај ме поново за ово ажурирање</value>
   </data>
   <data name="CR_UNNextTime" xml:space="preserve">
     <value>Подсети ме следећи пут</value>
@@ -351,7 +351,7 @@ Power8 вам може помоћи да то решите.
     <value>Поставке…</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Аутоматски (од радне површине)</value>
+    <value>Аутоматски (из радне површине)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
     <value>Потражи…</value>
@@ -379,7 +379,7 @@ Power8 вам може помоћи да то решите.
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>: изаберите слику менија „Старт“</value>
+    <value>: избор слике менија „Старт“</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
     <value>Слике</value>
@@ -389,10 +389,10 @@ Power8 вам може помоћи да то решите.
     <value>Можете да прилагодите поставке својим потребама.</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
-    <value>Сортирај меније и спискове када је датотека или фасцикла додата или преименована</value>
+    <value>Сортирај меније и спискове при ажурирању система датотека</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>Текст за „Сви програми“ (оставите празно за подразумеване вредности):</value>
+    <value>Име менија са програмима (оставите празно за подразумеване вредности):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
     <value>Опште</value>
@@ -419,7 +419,7 @@ Power8 вам може помоћи да то решите.
     <value>Поново покрени програм када дође до кобне грешке</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Посетите сајт WebMoney и дајте прилог тиму Power8-а.</value>
+    <value>Посетите сајт WebMoney и дајте прилог тиму Power8-а</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
     <value>Сакриј ову ставку</value>
@@ -458,7 +458,7 @@ Power8 вам може помоћи да то решите.
     <value>Ставке поређане по категоријама</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Замени места менија „Сви програми“ и траке за претрагу</value>
+    <value>Замени места менија са програмима и траке за претрагу</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
 </root>
