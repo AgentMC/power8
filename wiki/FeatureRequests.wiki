@@ -12,6 +12,7 @@
   * Button-Stack in general
     * Disable some Power buttons;
     * Auto-add recently installed SW to MFU list;
+    * Automatically expand menu-button contents on hover (probably configurable, with pause);
   * Interaction
     * Add setting to confirm Power actions;
     * Setting to disable auto-corner feature by Alt+Z;
