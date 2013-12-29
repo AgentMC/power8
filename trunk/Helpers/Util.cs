@@ -70,7 +70,7 @@ namespace Power8
             var mName = method.Method.Name; //In debug, we log the resource release usage
             method = (Action) Delegate.Combine(method, new Action(() => Log.Raw("...invoked", mName)));
 #endif
-            MainDisp.BeginInvoke(DispatcherPriority.ApplicationIdle, method);
+            MainDisp.BeginInvoke(DispatcherPriority.SystemIdle, method);
         }
         /// <summary>
         /// Initiates the procedure of unloading the unmanaged dll, and immediately returns.
@@ -807,7 +807,7 @@ namespace Power8
             {//i2 = hModule of DLL, i3 = id of resource
                 lock (Buffer.Clear())
                 {
-                    var number = API.LoadString(resData.Item2, resData.Item3, Buffer, Buffer.Capacity);
+                    var number = API.LoadString(resData.Item2, (uint)Math.Abs(resData.Item3), Buffer, Buffer.Capacity);
                     Log.Fmt("number: {0}, data: {1}", number, Buffer);
                     PostBackgroundDllUnload(resData.Item2);
                     if (number > 0)
@@ -825,9 +825,9 @@ namespace Power8
             var resData = ResolveResourceCommon(localizeableResourceId);
             if (resData.Item2 != IntPtr.Zero) //the dll or exe was loaded ok
             {
-                IntPtr icon = resData.Item3 == 0xFFFFFFFF //e.g. the ID was not present
-                                  ? API.ExtractIcon(resData.Item2, resData.Item1, 0) //Get first icon available
-                                  : API.LoadIcon(resData.Item2, resData.Item3); //otherwise load proper resource
+                var icon = resData.Item3 >= 0 //e.g. the ID was not present or index provided in resource
+                    ? API.ExtractIcon(resData.Item2, resData.Item1, (uint) resData.Item3) //Get icon by index
+                    : API.LoadIcon(resData.Item2, (uint) Math.Abs(resData.Item3)); //otherwise load proper resource by ID
                 Log.Raw("icon => " + icon);
                 PostBackgroundDllUnload(resData.Item2);
                 if(icon != IntPtr.Zero) //if all above succeeded
@@ -858,7 +858,7 @@ namespace Power8
         /// Note that the last tuple item at the moment doesn't explicitely include 
         /// Resource Indices, so the value returned may be an index. This is not
         /// implemented because usually it's not. Method may be enhanced in future.</returns>
-        private static Tuple<string, IntPtr, uint> ResolveResourceCommon(string resourceString)
+        private static Tuple<string, IntPtr, int> ResolveResourceCommon(string resourceString)
         {
             Log.Raw("in => " + resourceString);
             resourceString = resourceString.TrimStart('@');
@@ -872,15 +872,15 @@ namespace Power8
 
             var resId = 
                 lastCommaIdx == 0 //id/index not present => default to idx 0 which is described by special value
-                ? 0xFFFFFFFF
-                : uint.Parse((lastSharpIdx > lastCommaIdx //lastSharpIdx may be bigger or -1 (not found)
+                ? 0
+                : int.Parse((lastSharpIdx > lastCommaIdx //lastSharpIdx may be bigger or -1 (not found)
                         ? resourceString.Substring(lastCommaIdx + 1, lastSharpIdx - (lastCommaIdx + 1))
-                        : resourceString.Substring(lastCommaIdx + 1)).TrimStart(' ', '-'));
+                        : resourceString.Substring(lastCommaIdx + 1)).TrimStart(' '));
 
             var dllHandle = API.LoadLibrary(resDll, IntPtr.Zero,
                                             API.LLF.LOAD_LIBRARY_AS_DATAFILE | API.LLF.LOAD_LIBRARY_AS_IMAGE_RESOURCE);
             Log.Fmt("hModule<={0}, resId<={1}, resDll<={2}", dllHandle, resId, resDll);
-            return new Tuple<string, IntPtr, uint>(resDll, dllHandle, resId);
+            return new Tuple<string, IntPtr, int>(resDll, dllHandle, resId);
         }
 
         #endregion
@@ -902,14 +902,15 @@ namespace Power8
                                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.GetProperty)
                           .GetValue(o, null)
                           as FrameworkElement;
-                if (mi != null && mi.DataContext is PowerItem)
-                    return (PowerItem)mi.DataContext;
+                if (mi != null)
+                {
+                    return mi.DataContext as PowerItem;
+                }
             }
             if (o is RoutedEventArgs)
             {
                 var obj = ((FrameworkElement)((RoutedEventArgs)o).OriginalSource).DataContext;
-                if (obj is PowerItem)
-                    return (PowerItem)obj;
+                return obj as PowerItem;
             }
 // ReSharper restore CanBeReplacedWithTryCastAndCheckForNull
             return null;
