@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -15,7 +17,41 @@ namespace Power8
     public static class ImageManager
     {
         //Image cache
-        private static readonly Hashtable Cache = new Hashtable(); 
+        private static readonly Hashtable Cache = new Hashtable();
+        //Image processing queue
+        private static readonly ConcurrentQueue<Tuple<PowerItem, API.Shgfi>> ImageQueue =
+            new ConcurrentQueue<Tuple<PowerItem, API.Shgfi>>();
+
+        static ImageManager()
+        {
+            Util.ForkStart(ImageProcessor, "Image processsor");
+        }
+
+        private static void ImageProcessor()
+        {
+            begin:
+
+            while (ImageQueue.Count > 0)
+            {
+                Tuple<PowerItem, API.Shgfi> e;
+                if (ImageQueue.TryDequeue(out e))
+                {
+                    var asyncContainer = GetImageContainerSync(e.Item1, e.Item2);
+                    Util.Send(() => e.Item1.Icon = asyncContainer);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (!Util.MainDisp.HasShutdownStarted)
+            {
+                Thread.Sleep(333);
+                goto begin; //just don't want unneeded code nesting here, anyway IL will be same.
+            }
+        }
+
         /// <summary>
         /// Gets a string that represents a kind of tag for icon for PowerItem passed
         /// </summary>
@@ -40,11 +76,7 @@ namespace Power8
         /// <returns>Always null</returns>
         public static ImageContainer GetImageContainer(PowerItem item, API.Shgfi iconNeeded)
         {
-            Util.ForkPool(() =>
-                          {
-                              var asyncContainer = GetImageContainerSync(item, iconNeeded);
-                              Util.Send(() => item.Icon = asyncContainer);
-                          }, "Icon getter for " + item.Argument);
+            ImageQueue.Enqueue(new Tuple<PowerItem, API.Shgfi>(item, iconNeeded));
             return null;
         }
 
@@ -226,14 +258,10 @@ namespace Power8
             {
                 var bs = Imaging.CreateBitmapSourceFromHIcon(handle, System.Windows.Int32Rect.Empty,
                                                              BitmapSizeOptions.FromEmptyOptions());
-                var bsib = bs as InteropBitmap;
-                if (bsib != null)
-                {
-                    bsib.Invalidate();
-                }
                 bs.Freeze();
                 return bs;
             }
+
             /// <summary>
             /// Returns HICON of provided size (or of default size if requested one isn't available)
             /// </summary>
