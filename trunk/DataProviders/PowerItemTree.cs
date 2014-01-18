@@ -950,9 +950,8 @@ namespace Power8
         /// <param name="destination">The IList ofPowerItems, where to store the search results.</param>
         /// <param name="callback">The callback to be executed after the some root search thread is completed.
         /// NOTE: this is not valid for WinSearch, use WinThread* events for it.</param>
-        public static void SearchTree(string query, IList<PowerItem> destination, Action<PowerItem, CancellationToken> callback)
+        public static void SearchTree(string query, IList<PowerItem> destination, Action<PowerItem, CancellationToken> callback, CancellationToken token)
         {
-            var token = SearchTreeCancel(); //Stop previous searches and initializes new search token
             lock (destination)  //Just hang here until previous searches are all done
             {                   //...and BTW, pre-pause all child threads
                 Util.Send(destination.Clear);
