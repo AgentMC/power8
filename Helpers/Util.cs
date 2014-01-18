@@ -163,12 +163,15 @@ namespace Power8
                 {
 
 #endif
+                    Log.Raw("Started execution of task " + name);
                     method();
                 }
                 catch (Exception ex)
                 {
                     DispatchUnhandledException(ex);
                 }
+                Log.Raw("Done execution of task " + name);
+
             });
         }
         /// <summary>
