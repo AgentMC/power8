@@ -65,9 +65,9 @@ namespace Power8
                     //and the 1st initialization is automatically triggered right after InitTree() :)
                     var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonAdminTools);
                     Log.Raw("CommonAdminTools=" + path);
-                    var p2ba = PathToBaseAndArg(path);
-                    Log.Fmt("Path2B&A returns 1:{0}, 2:{1}", p2ba.Item1, p2ba.Item2);
-                    _adminToolsItem = SearchContainerByArgument(p2ba, StartMenuRootItem, false);
+                    var p2Ba = PathToBaseAndArg(path);
+                    Log.Fmt("Path2B&A returns 1:{0}, 2:{1}", p2Ba.Item1, p2Ba.Item2);
+                    _adminToolsItem = SearchContainerByArgument(p2Ba, StartMenuRootItem, false);
                     Log.Raw("SearchContainer returned " + (_adminToolsItem == null ? "null" : _adminToolsItem.FriendlyName));
                     if (_adminToolsItem == null)
                     {
@@ -858,7 +858,7 @@ namespace Power8
         }
 
         private static CancellationTokenSource _lastSearchToken;
-        private static object _searchTokenSyncLock = new object();
+        private static readonly object SearchTokenSyncLock = new object();
 
         //Indicate the state chenage of Windows Search thread.
         public static event EventHandler<WinSearchEventArgs> WinSearchThreadCompleted, WinSearchThreadStarted;
@@ -950,6 +950,7 @@ namespace Power8
         /// <param name="destination">The IList ofPowerItems, where to store the search results.</param>
         /// <param name="callback">The callback to be executed after the some root search thread is completed.
         /// NOTE: this is not valid for WinSearch, use WinThread* events for it.</param>
+        /// <param name="token">CancellationToken used to stop current search</param>
         public static void SearchTree(string query, IList<PowerItem> destination, Action<PowerItem, CancellationToken> callback, CancellationToken token)
         {
             lock (destination)  //Just hang here until previous searches are all done
@@ -988,7 +989,7 @@ namespace Power8
         /// </summary>
         public static CancellationToken SearchTreeCancel()
         {
-            lock (_searchTokenSyncLock)
+            lock (SearchTokenSyncLock)
             {
                 if (_lastSearchToken != null)
                     _lastSearchToken.Cancel();

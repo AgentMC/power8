@@ -20,9 +20,8 @@
         </Grid.ColumnDefinitions>
         <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
               ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
-              ItemContainerStyle="{StaticResource MenuItemStyle}" ItemsPanel="{StaticResource ItemsPanelTemplate}"
-              Grid.Row="{Binding ElementName=ButtonStack, Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}, 
-              Mode=OneWay, ConverterParameter=true}"/>
+              ItemContainerStyle="{StaticResource MenuItemStyle}" Grid.Row="{Binding ElementName=ButtonStack, 
+              Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}, Mode=OneWay, ConverterParameter=true}"/>
         <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=MfuItems, Mode=OneWay}" Margin="3" 
                   Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
@@ -34,7 +33,7 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Icon" Width="16" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate >
+                        <DataTemplate DataType="Power8:PowerItem" >
                             <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"
                                    ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
                                    ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
@@ -44,7 +43,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Item" IsReadOnly="True" Width="*" MinWidth="212">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate >
+                        <DataTemplate DataType="Power8:PowerItem" >
                             <TextBlock Text="{Binding FriendlyName}" TextOptions.TextFormattingMode="Display" 
                                        TextTrimming="CharacterEllipsis" ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
                                        ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
@@ -54,7 +53,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Pin" Width="16">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="Power8:PowerItem">
                             <ToggleButton Style="{DynamicResource PinToggleButtonStyle}" Width="16" Height="16" Click="PinClick" 
                                           IsChecked="{Binding IsPinned, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           ToolTip="{Binding IsPinned, Converter={StaticResource PiToTooltipConverter1}, ConverterParameter=pin}"
@@ -64,7 +63,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Recent>" Width="18">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="Power8:PowerItem">
                             <Menu ContextMenuOpening="AllItemsMenuRootContextMenuOpening" Background="Transparent" IsMainMenu="False" x:Name="showJump">
                                 <MenuItem ItemsSource="{Binding JumpList}" ItemTemplate="{StaticResource MenuDataTemplate}" 
                                           ItemContainerStyle="{StaticResource MenuItemStyle}" Width="18" Padding="0" Margin="0"
@@ -90,7 +89,7 @@
             <DataGrid.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
+                        <DataTemplate DataType="CollectionViewGroup">
                             <StackPanel>
                                 <TextBlock Text="{Binding Path=Name}" />
                             </StackPanel>

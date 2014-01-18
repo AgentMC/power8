@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Documents;
 using System.Diagnostics;
@@ -18,7 +17,7 @@ namespace Power8.Views
         }
 
         private static readonly string[] Names = //different P8 images
-            new[] {"", "Blue_", "Green_", "marine_", "Red_", "violet_", "yellow_"};
+            {"", "Blue_", "Green_", "marine_", "Red_", "violet_", "yellow_"};
         private static readonly Random Rnd = new Random(); //used to get random image
 
         /// <summary>

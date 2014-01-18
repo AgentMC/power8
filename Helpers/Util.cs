@@ -979,97 +979,94 @@ namespace Power8
                     var cplProc = (API.CplAppletProc) Marshal.GetDelegateForFunctionPointer(
                                                                 cplProcAddress, 
                                                                 typeof (API.CplAppletProc));
-                    if (cplProc != null) //SUCCEEDED()?
+                    var hWnd = API.GetDesktopWindow();
+                    Log.Raw("doing INIT...");
+                    var res = cplProc(hWnd, API.CplMsg.INIT, IntPtr.Zero, IntPtr.Zero);
+                    if (res != 0)
                     {
-                        var hWnd = API.GetDesktopWindow();
-                        Log.Raw("doing INIT...");
-                        var res = cplProc(hWnd, API.CplMsg.INIT, IntPtr.Zero, IntPtr.Zero);
-                        if (res != 0)
+                        Log.Raw("doing GETCOUNT...");
+                        //How many CPLs are available, basically Cpl.Windows.Any()
+                        res = cplProc(hWnd, API.CplMsg.GETCOUNT, IntPtr.Zero, IntPtr.Zero);
+                        if (res > 0)
                         {
-                            Log.Raw("doing GETCOUNT...");
-                            //How many CPLs are available, basically Cpl.Windows.Any()
-                            res = cplProc(hWnd, API.CplMsg.GETCOUNT, IntPtr.Zero, IntPtr.Zero);
-                            if (res > 0)
-                            {
-                                Log.Fmt("GETCOUNT returned {0}, doing INQUIRE...", res);
-                                //Will work with 1st available
-                                var structSize = Marshal.SizeOf(typeof (API.CplInfo));
-                                var hMem = Marshal.AllocHGlobal(structSize);
-                                ZeroMemory(hMem, structSize);
-                                //Reserved place and cleared space for data. Now do Inquire.
-                                cplProc(hWnd, API.CplMsg.INQUIRE, IntPtr.Zero, hMem);
-                                Marshal.PtrToStructure(hMem, info);
-                                Log.Fmt("INQUIRE returned {0}, {1}, {2}", info.idIcon, info.idInfo, info.idName);
+                            Log.Fmt("GETCOUNT returned {0}, doing INQUIRE...", res);
+                            //Will work with 1st available
+                            var structSize = Marshal.SizeOf(typeof (API.CplInfo));
+                            var hMem = Marshal.AllocHGlobal(structSize);
+                            ZeroMemory(hMem, structSize);
+                            //Reserved place and cleared space for data. Now do Inquire.
+                            cplProc(hWnd, API.CplMsg.INQUIRE, IntPtr.Zero, hMem);
+                            Marshal.PtrToStructure(hMem, info);
+                            Log.Fmt("INQUIRE returned {0}, {1}, {2}", info.idIcon, info.idInfo, info.idName);
 
-                                var idIcon = info.idIcon;
-                                var idName = info.idName == 0 ? info.idInfo : info.idName;
-                                var unmanagedIcon = IntPtr.Zero;
+                            var idIcon = info.idIcon;
+                            var idName = info.idName == 0 ? info.idInfo : info.idName;
+                            var unmanagedIcon = IntPtr.Zero;
 
-                                if (idIcon == 0 || idName == 0) //this means not fail, but just we need to 
-                                {//perform very bad operation, not recommended by MS and so on, but still
-                                    //actively used by many-many-many...
+                            if (idIcon == 0 || idName == 0) //this means not fail, but just we need to 
+                            {//perform very bad operation, not recommended by MS and so on, but still
+                                //actively used by many-many-many...
 
-                                    //Ok, let's go. First the memory. Let's alloc twice we might need, to
-                                    //expect someone mixes byte- and char-functions for Unicode... 
-                                    structSize = Marshal.SizeOf(typeof (API.NewCplInfoW)); 
-                                    hMem = Marshal.ReAllocHGlobal(hMem, new IntPtr(structSize*2));
-                                    ZeroMemory(hMem, structSize*2);
-                                    Log.Raw("doing NEWINQUIRE...");
-                                    cplProc(hWnd, API.CplMsg.NEWINQUIRE, IntPtr.Zero, hMem);
-                                    //After we did the NewInquire without specifiing the dwSize, data will be 
-                                    //returned in the format CPL wants. Let's check for it.
-                                    var gotSize = Marshal.ReadInt32(hMem);
+                                //Ok, let's go. First the memory. Let's alloc twice we might need, to
+                                //expect someone mixes byte- and char-functions for Unicode... 
+                                structSize = Marshal.SizeOf(typeof (API.NewCplInfoW)); 
+                                hMem = Marshal.ReAllocHGlobal(hMem, new IntPtr(structSize*2));
+                                ZeroMemory(hMem, structSize*2);
+                                Log.Raw("doing NEWINQUIRE...");
+                                cplProc(hWnd, API.CplMsg.NEWINQUIRE, IntPtr.Zero, hMem);
+                                //After we did the NewInquire without specifiing the dwSize, data will be 
+                                //returned in the format CPL wants. Let's check for it.
+                                var gotSize = Marshal.ReadInt32(hMem);
 
-                                    if (gotSize == structSize) //NewCplInfoW
-                                    {
-                                        var infoNew =
-                                            (API.NewCplInfoW) Marshal.PtrToStructure(hMem, typeof (API.NewCplInfoW));
-                                        Log.Fmt("got NewCplInfoW: {0}, {1}, {2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);                                        unmanagedIcon = infoNew.hIcon;
-                                        name = infoNew.szName ?? infoNew.szInfo;
-                                    }
-                                    else if (gotSize == Marshal.SizeOf(typeof(API.NewCplInfoA)))
-                                    {
-                                        var infoNewA =
-                                            (API.NewCplInfoA)Marshal.PtrToStructure(hMem, typeof(API.NewCplInfoA));
-                                        Log.Fmt("got NewCplInfoA: {0},{1},{2}", infoNewA.hIcon, infoNewA.szInfo, infoNewA.szName);
-                                        unmanagedIcon = infoNewA.hIcon;
-                                        name = infoNewA.szName ?? infoNewA.szInfo;
-                                    }
-                                    else
-                                    {
-                                        Log.Fmt("NEWINQUIRE: structure size not supported: 0x{0:x} with IntPtr size 0x{1:x}", gotSize, IntPtr.Size);
-                                    }
-                                }
-                                Marshal.FreeHGlobal(hMem);
-                                Log.Raw("freed, conditional load string...");
-
-                                if (name == null) //No NewInquire or failed or has no dynamic name
+                                if (gotSize == structSize) //NewCplInfoW
                                 {
-                                    lock (Buffer.Clear()) //load resource from Inquire
-                                    {
-                                        if (0 < API.LoadString(hModule, idName, Buffer, Buffer.Capacity))
-                                            name = Buffer.ToString();
-                                    }
+                                    var infoNew =
+                                        (API.NewCplInfoW) Marshal.PtrToStructure(hMem, typeof (API.NewCplInfoW));
+                                    Log.Fmt("got NewCplInfoW: {0}, {1}, {2}", infoNew.hIcon, infoNew.szInfo, infoNew.szName);                                        unmanagedIcon = infoNew.hIcon;
+                                    name = infoNew.szName ?? infoNew.szInfo;
                                 }
-                                Log.Fmt("name={0}, conditional load icon...", new object[]{name});
-
-                                if(unmanagedIcon == IntPtr.Zero) //No NewInquire or failed or has no dynamic icon
-                                    unmanagedIcon = API.LoadIcon(hModule, idIcon);
-                                Log.Raw("icon=" + unmanagedIcon);
-                                if(unmanagedIcon != IntPtr.Zero) //If we have icon anyway
-                                {//convert to ImageContainer and free unmanaged one
-                                    container = ImageManager.GetImageContainerForIconSync(cplFileName, unmanagedIcon);
-                                    PostBackgroundIconDestroy(unmanagedIcon);
+                                else if (gotSize == Marshal.SizeOf(typeof(API.NewCplInfoA)))
+                                {
+                                    var infoNewA =
+                                        (API.NewCplInfoA)Marshal.PtrToStructure(hMem, typeof(API.NewCplInfoA));
+                                    Log.Fmt("got NewCplInfoA: {0},{1},{2}", infoNewA.hIcon, infoNewA.szInfo, infoNewA.szName);
+                                    unmanagedIcon = infoNewA.hIcon;
+                                    name = infoNewA.szName ?? infoNewA.szInfo;
                                 }
-
-                                Log.Raw("doing STOP...");
-                                //This will affect only curent instance of CPL. At least it should...
-                                cplProc(hWnd, API.CplMsg.STOP, IntPtr.Zero, info.lData);
+                                else
+                                {
+                                    Log.Fmt("NEWINQUIRE: structure size not supported: 0x{0:x} with IntPtr size 0x{1:x}", gotSize, IntPtr.Size);
+                                }
                             }
-                            Log.Raw("doing EXIT...");
-                            //Same as above
-                            cplProc(hWnd, API.CplMsg.EXIT, IntPtr.Zero, IntPtr.Zero);
+                            Marshal.FreeHGlobal(hMem);
+                            Log.Raw("freed, conditional load string...");
+
+                            if (name == null) //No NewInquire or failed or has no dynamic name
+                            {
+                                lock (Buffer.Clear()) //load resource from Inquire
+                                {
+                                    if (0 < API.LoadString(hModule, idName, Buffer, Buffer.Capacity))
+                                        name = Buffer.ToString();
+                                }
+                            }
+                            Log.Fmt("name={0}, conditional load icon...", new object[]{name});
+
+                            if(unmanagedIcon == IntPtr.Zero) //No NewInquire or failed or has no dynamic icon
+                                unmanagedIcon = API.LoadIcon(hModule, idIcon);
+                            Log.Raw("icon=" + unmanagedIcon);
+                            if(unmanagedIcon != IntPtr.Zero) //If we have icon anyway
+                            {//convert to ImageContainer and free unmanaged one
+                                container = ImageManager.GetImageContainerForIconSync(cplFileName, unmanagedIcon);
+                                PostBackgroundIconDestroy(unmanagedIcon);
+                            }
+
+                            Log.Raw("doing STOP...");
+                            //This will affect only curent instance of CPL. At least it should...
+                            cplProc(hWnd, API.CplMsg.STOP, IntPtr.Zero, info.lData);
                         }
+                        Log.Raw("doing EXIT...");
+                        //Same as above
+                        cplProc(hWnd, API.CplMsg.EXIT, IntPtr.Zero, IntPtr.Zero);
                     }
                 }
                 PostBackgroundDllUnload(hModule);
@@ -1120,8 +1117,6 @@ namespace Power8
                     throw new Win32Exception();
                 Log.Raw("fpreset: getting delegate...");
                 var fpreset = (API.FpReset) Marshal.GetDelegateForFunctionPointer(f, typeof (API.FpReset));
-                if(fpreset == null)
-                    throw new Exception("Can't get delegate for _fpreset function in " + dll);
                 Log.Raw("fpreset: invoking...");
                 fpreset();
             }
