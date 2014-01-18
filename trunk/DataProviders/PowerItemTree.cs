@@ -858,6 +858,7 @@ namespace Power8
         }
 
         private static CancellationTokenSource _lastSearchToken;
+        private static object _searchTokenSyncLock = new object();
 
         //Indicate the state chenage of Windows Search thread.
         public static event EventHandler<WinSearchEventArgs> WinSearchThreadCompleted, WinSearchThreadStarted;
@@ -951,11 +952,10 @@ namespace Power8
         /// NOTE: this is not valid for WinSearch, use WinThread* events for it.</param>
         public static void SearchTree(string query, IList<PowerItem> destination, Action<PowerItem, CancellationToken> callback)
         {
-            SearchTreeCancel(); //Stop previous searches
+            var token = SearchTreeCancel(); //Stop previous searches and initializes new search token
             lock (destination)  //Just hang here until previous searches are all done
             {                   //...and BTW, pre-pause all child threads
                 Util.Send(destination.Clear);
-                _lastSearchToken = new CancellationTokenSource();
                 string ext = null; //requested extension for filtered WinSearch ("exe|paint net")
                 if(!query.Contains("|")) //not filtered, regular search
                 {
@@ -964,12 +964,12 @@ namespace Power8
                     {
                         var r = root;
                         Util.ForkPool(() =>
-                                      {
-                                        SearchItems(query, r, destination, _lastSearchToken.Token);
-                                        if(!_lastSearchToken.IsCancellationRequested)
-                                            Util.Post(() => callback(r, _lastSearchToken.Token));
-                                      },
-                                  "Tree search for " + r.FriendlyName);
+                            {
+                                SearchItems(query, r, destination, token);
+                                if (!token.IsCancellationRequested)
+                                    Util.Post(() => callback(r, token));
+                            },
+                            "Tree search in " + r.FriendlyName + " for " + query);
                     }
                 }
                 else //type-filtered WinSearch, splitter part
@@ -979,18 +979,23 @@ namespace Power8
                     query = pair[1];
                 }
                 if (query.Length >= 3) //init WinSearch
-                    Util.ForkPool(() => SearchWindows(query, ext, destination, _lastSearchToken.Token), 
-                                "WinSearch worker for " + ext + "/" + query);
+                    Util.ForkPool(() => SearchWindows(query, ext, destination, token), 
+                                "WinSearch worker for (" + ext + ")/" + query);
             }
         }
 
         /// <summary>
         /// Cancels previously started Tree search, including WinSearch query
         /// </summary>
-        public static void SearchTreeCancel()
+        public static CancellationToken SearchTreeCancel()
         {
-            if (_lastSearchToken != null)
-                _lastSearchToken.Cancel();
+            lock (_searchTokenSyncLock)
+            {
+                if (_lastSearchToken != null)
+                    _lastSearchToken.Cancel();
+                _lastSearchToken = new CancellationTokenSource();
+                return _lastSearchToken.Token;
+            }
         }
 
         /// <summary>
@@ -1013,7 +1018,7 @@ namespace Power8
                 {
                     if (!stop.IsCancellationRequested && //this item wasn't added before
                         !destination.Any(d => d.FriendlyName == source.FriendlyName && d.IsFolder == source.IsFolder))
-                            Util.Send(() => destination.Add(source));
+                            Util.Send(() => { if (!stop.IsCancellationRequested) destination.Add(source); });
                 }
             }
             if (!source.AutoExpandIsPending)
@@ -1096,7 +1101,7 @@ namespace Power8
                                              };
                             if (!destination.Contains(source))
                             { //switch to UI context
-                                Util.Send(() => destination.Add(source));
+                                Util.Send(() => { if (!stop.IsCancellationRequested) destination.Add(source); });
                                 added++;
                             }
                         }
