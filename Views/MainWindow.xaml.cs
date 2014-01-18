@@ -95,12 +95,12 @@ namespace Power8.Views
             if (msg == (uint)API.WM.HOTKEY)
             {
                 handled = true;
-                if (BtnStck.Instance.IsActive)
+                if (BtnStck.IsInstantited && BtnStck.Instance.IsActive)
                 {
                     Activate(); //WXP requires this
                     b1.Focus();
                 }
-                else
+                else if (BtnStck.IsInstantited)
                 {
                     ShowButtonStack(Keyboard.PrimaryDevice, null);
                 }
