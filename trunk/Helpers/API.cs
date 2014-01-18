@@ -769,8 +769,8 @@ namespace Power8
             public static readonly PKEY AppUserModel_RelaunchIconResource =
                 new PKEY(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 3U);
 
-            private readonly Guid _fmtid;
-            private readonly uint _pid;
+            public readonly Guid _fmtid;
+            public readonly uint _pid;
 
             private PKEY(Guid fmtid, uint pid)
             {

@@ -382,9 +382,9 @@ namespace Power8.Views
                 //A kind of "Minimum size" for Win8.1
                 if (Util.OsIs.EightBlueOrMore)
                 {
-                    const float W8_DEF_SH_DSKTP_WDT = 15f;
-                    curWidth = Math.Max(curWidth, W8_DEF_SH_DSKTP_WDT);
-                    curHeight = Math.Max(curHeight, W8_DEF_SH_DSKTP_WDT);
+                    const float w8DefShDsktpWdt = 15f;
+                    curWidth = Math.Max(curWidth, w8DefShDsktpWdt);
+                    curHeight = Math.Max(curHeight, w8DefShDsktpWdt);
                 }
 // ReSharper disable CompareOfFloatsByEqualityOperator
                 if (Math.Round(width) != Math.Round(curWidth))

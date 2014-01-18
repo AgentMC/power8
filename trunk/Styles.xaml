@@ -367,7 +367,7 @@
     <!-- /Buttons -->
     <!-- Menu -->
     
-    <HierarchicalDataTemplate ItemsSource="{Binding Items}" x:Key="MenuDataTemplate">
+    <HierarchicalDataTemplate ItemsSource="{Binding Items}" x:Key="MenuDataTemplate" DataType="my:PowerItem">
         <Grid>
             <Border Height="{Binding ActualHeight, ElementName=contentPresenter, Mode=OneWay}" 
                     Width="{Binding ActualWidth, ElementName=contentPresenter, Mode=OneWay}" 
