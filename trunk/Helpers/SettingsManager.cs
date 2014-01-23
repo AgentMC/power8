@@ -664,6 +664,18 @@ namespace Power8.Helpers
             }
         }
 
+        public bool DontFreeLibs
+        {
+            get { return Settings.Default.DoNotFreeLibraries; }
+            set
+            {
+                if (value == Settings.Default.DoNotFreeLibraries)
+                    return;
+                Settings.Default.DoNotFreeLibraries = value;
+                Settings.Default.Save();
+            }
+        }
+
         #endregion
     }
 
