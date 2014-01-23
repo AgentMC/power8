@@ -79,7 +79,8 @@ namespace Power8
         /// <param name="hModule">A handle to the DLL obtained by LoadLibrary() call.</param>
         public static void PostBackgroundDllUnload(IntPtr hModule)
         {
-            PostBackgroundReleaseResourceCall(() => API.FreeLibrary(hModule));
+            if (!SettingsManager.Instance.DontFreeLibs)
+                PostBackgroundReleaseResourceCall(() => API.FreeLibrary(hModule));
         }
         /// <summary>
         /// Initiates the procedure of unloading the unmanaged icon, and immediately returns.
