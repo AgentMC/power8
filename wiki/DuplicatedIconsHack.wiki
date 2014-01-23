@@ -1,0 +1,27 @@
+#summary What to do if Power8 shows duplicated icons for Control Panel items.
+
+= Introduction =
+
+There were some reports about issues on Windows 7 and Windows 8.1 where Power8 didn't show Control panel items' icons correctly. The hack-fix was implemented in version 1.4.5, but it requires manual activation. This page is about how to use it to fix the issue.
+
+= Symptoms = 
+
+When you open Control Panel menu-button, you can see that some icons are duplicated. Candidates for duplication are: Action Center, Credential manager, Biometric Devices, and so on. The issue is purely graphical and doesn't affect performance or functionality of application.
+
+= Cause =
+
+This is not an issue in Power8. The issue is caused by certain changes in .Net Framework 4.5.1 and/or DLL loader of Windows 8.1 (potentially the last one, since similar behavior was from time to time achievable on Windows 7).
+
+This issue has been sent to Microsoft, and you can get acquainted with details here: [https://connect.microsoft.com/VisualStudio/feedback/details/812220/consecutive-loadlibrary-lib1-freelibrary-hlib1-and-loadlibrary-lib2-from-managed-code-through-p-invoke-results-in-same-hinstance-for-lib1-and-lib2-on-windows-8-1]
+
+= Solution =
+
+Power8 may not free loaded dlls after extracting images. This results in always different HMODULE, and so always different HICON retrieved. However, _theoretically_ this can lead to bigger memory consumption, and thus hack is disabled by default.
+
+BTW, practical tests unexpectedly show up to 5% *LESS* memory consumption with hack on, so activation may be useful even on the system without the glitch.
+
+To activate and use the hack:
+
+ # Open Power8.exe.config file in Power8 installation directory with notepad;
+ # Find setting `DoNotFreeLibraries` and set it's `Value` to `True` (by default it's `False`);
+ # Save file and (re)start Power8.
