@@ -307,19 +307,44 @@ namespace Power8.Views
         /// in related group is 20 or less (performance concideration).</remarks>
         private void ExpandGroup(PowerItem root, CancellationToken token)
         {
-            if(token.IsCancellationRequested       //thread cancelled
-                || _searchView.Groups == null 
+            var expander = GetExpanderForRoot(root, token);
+            if (expander != null)                   //Expander was found?
+            {
+                expander.IsExpanded = true;         //expand it and set the selection
+                if (dataGrid.SelectedIndex == -1)
+                    dataGrid.SelectedIndex = 0;     //TODO: probably not 0, but idx(first available)?
+            }
+        }
+        /// <summary>
+        /// Switches the state of expander in search view from open to closed and back again
+        /// </summary>
+        /// <param name="root">Can be the <code>PowerItem</code> that lies in search view</param>
+        private void ExpandCollapseGroup(PowerItem root)
+        {
+            var expander = GetExpanderForRoot(root, CancellationToken.None);
+            if (expander != null)                   //Expander was found?
+                expander.IsExpanded ^= true;        //expand it and set the selection
+        }
+
+        /// <summary>
+        /// Tries to retrieve expander control for data grid in search state.
+        /// See <code>ExpandGroup</code> method for details on parameters
+        /// </summary>
+        private Expander GetExpanderForRoot(PowerItem root, CancellationToken token)
+        {
+            if (token.IsCancellationRequested       //thread cancelled
+                || _searchView.Groups == null
                 || _searchView.Groups.Count == 0   //no groups available
                 || root == null)                   //argument exception should be here...
-                return;
+                return null;
             var group = _searchView.Groups         //get group whose name equals to root's 
                 .Cast<CollectionViewGroup>()       //Friendly name
-                .FirstOrDefault(g => ((string) g.Name) == root.Root.FriendlyName);
-            if(group == null || group.ItemCount > 20)
-                return;                            //If no such group or it's to large to expand
-            if(token.IsCancellationRequested)      // Just in case
-                return;
-            var expander = (Expander)dataGrid      //get the expander. Method is extension, so no exceptions here,
+                .FirstOrDefault(g => ((string)g.Name) == root.Root.FriendlyName);
+            if (group == null || (group.ItemCount > 20 && token != CancellationToken.None))
+                return null;                            //If no such group or it's to large to expand
+            if (token.IsCancellationRequested)      // Just in case
+                return null;
+            return (Expander)dataGrid      //get the expander. Method is extension, so no exceptions here,
                 .GetFirstVisualChildOfTypeByContent() //only null may be returned
                  .GetFirstVisualChildOfTypeByContent()
                   .GetFirstVisualChildOfTypeByContent()
@@ -328,12 +353,6 @@ namespace Power8.Views
                      .GetFirstVisualChildOfTypeByContent()
                       .GetFirstVisualChildOfTypeByContent(content: group)
                        .GetFirstVisualChildOfTypeByContent();
-            if (expander != null)                   //Expander was found?
-            {
-                expander.IsExpanded = true;         //expand it and set the selection
-                if (dataGrid.SelectedIndex == -1)
-                    dataGrid.SelectedIndex = 0;     //TODO: probably not 0, but idx(first available)?
-            }
         }
         /// <summary>
         /// Handles specific key presses when caret is in search box:
@@ -422,7 +441,7 @@ namespace Power8.Views
                     if (pi != null && pi.AreItemsDisplayed)
                         return; //Do not handle keys when JL is in focus
                     //Not in search view when we press Up/Down
-                    if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0 && dataGrid.ItemsSource == MfuItems)
+                    if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0 && dataGrid.ItemsSource.Equals(MfuItems))
                     {//with CTRL
                         if (dataGrid.SelectedIndex > -1 && SettingsManager.Instance.MfuIsCustom)
                         { //...and we have something selected, and we're in custom MFU...
@@ -461,11 +480,19 @@ namespace Power8.Views
                     dataGrid.ScrollIntoView(dataGrid.SelectedItem);
                     break;
                 case Key.P:
-                    if (pi != null)
+                    if (pi != null && pi.IsMfuChild)
                     {
                         e.Handled = true;
                         pi.IsPinned ^= true;
                         PinInternal(pi);
+                        dataGrid.Focus();
+                    }
+                    break;
+                case Key.X:
+                    if (pi != null && dataGrid.ItemsSource.Equals(_searchView))
+                    {
+                        e.Handled = true;
+                        ExpandCollapseGroup(pi);
                         dataGrid.Focus();
                     }
                     break;
