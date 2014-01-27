@@ -74,7 +74,7 @@ namespace Power8.Views
         /// </summary>
         private void Navigate(object sender, RoutedEventArgs e)
         {
-            Process.Start(((Hyperlink) sender).NavigateUri.AbsoluteUri);
+            Util.CreateProcess(((Hyperlink) sender).NavigateUri.AbsoluteUri);
         }
         /// <summary>
         /// Handles OK button click

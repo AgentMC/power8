@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.Win32;
 using Power8.Helpers;
 using Power8.Properties;
 using Power8.Views;
@@ -456,7 +457,7 @@ namespace Power8
         /// </summary>
         public static void DisplaySpecialFolder(API.Csidl id)
         {
-            new Thread(DisplaySpecialFolderSync).Start(id);
+            ForkStart(() => DisplaySpecialFolderSync(id), "Async DisplaySpecialFolder executor");
         }
         /// <summary>
         /// Displays the special folder specified in Explorer window, blocking calling thread until 
@@ -558,10 +559,7 @@ namespace Power8
         public static void StartExplorer(string command = null)
         {
             const string explorerString = "explorer.exe";
-            if (command != null)
-                Process.Start(explorerString, command);
-            else
-                Process.Start(explorerString);
+            CreateProcess(explorerString, command);
         }
         /// <summary>
         /// Displays in Explorer the folder that is a container for the FS element
@@ -636,6 +634,65 @@ namespace Power8
             catch (Exception ex) //User won't ever see this I believe... so we can use not the Dispatch... methods
             {
                 MessageBox.Show(string.Format(Resources.Err_CantInstanciateClassFormatString, className, ex.Message));
+            }
+        }
+        /// <summary>
+        /// Creates a process, from just command (e.g. exe to launch or url to open or file to load, etc.) or from command 
+        /// (application) and command line, or from complete startup information. Command or startInfo must be set, but only 
+        /// one of them must be. 
+        /// Before creating the process, updates own envioronment to comply with Explorer. This means whenever you change
+        /// environment variables in system properties dialog, new processes launched will have them already updated/added.
+        /// </summary>
+        /// <param name="command">Application to launch, documanet to open, etc. 
+        /// See <code>Process.Start(string)</code> for details.</param>
+        /// <param name="args">Argiments passed to application launched when <code>command</code> points to one.
+        /// See <code>Process.Start(string, string)</code> for details.</param>
+        /// <param name="startInfo">Complete startup information for process.
+        /// See <code>Process.Start(StartupInfo)</code> for details.</param>
+        public static void CreateProcess(string command = null, string args = null, ProcessStartInfo startInfo = null)
+        {
+            //validate
+            if (command == null && startInfo == null)
+                throw new Exception("CreateProcess: both process start info and command are null!");
+            if (command != null && startInfo != null)
+                throw new Exception("CreateProcess: launch mode undefined: both start info and command are set!");
+
+            //update variables
+            UpdateEnvironment();
+
+            //run
+            if (command != null)
+            {
+                if (args != null)
+                    Process.Start(command, args);
+                else
+                    Process.Start(command);
+            }
+            else
+            {
+                Process.Start(startInfo);
+            }
+        }
+        /// <summary>
+        /// Updates environment variables from those stored by Explorer in registry, so Power8 has same environment 
+        /// variables as Explorer does. Call this method before direct or indirect creation of new child processes.
+        /// </summary>
+        public static void UpdateEnvironment()
+        {
+            using (var k = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"))
+            {
+                Log.Raw("Starting process, k = " + (k == null ? "" : "not ") + "null");
+                if (k != null)
+                {
+                    foreach (var valueName in k.GetValueNames())
+                    {
+                        var value = k.GetValue(valueName).ToString();
+                        if (Environment.GetEnvironmentVariable(valueName) == value) 
+                            continue;
+                        Environment.SetEnvironmentVariable(valueName, value);
+                        Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
+                    }
+                }
             }
         }
         
@@ -1163,7 +1220,7 @@ namespace Power8
         /// <param name="reason">Reason to restart</param>
         public static void Restart(string reason)
         {
-            Process.Start(Application.ExecutablePath);
+            CreateProcess(Application.ExecutablePath);
             Die(reason);
         }
         /// <summary> Shuts down the Power8  writing the reason of exiting into EventLog </summary>

@@ -209,6 +209,7 @@ namespace Power8.Views
         /// </summary>
         private void ShowRunDialog(object sender, EventArgs e)
         {
+            Util.UpdateEnvironment();
             API.SHRunDialog(IntPtr.Zero, IntPtr.Zero, null, null, null, API.RFF.NORMAL);
         }
         /// <summary>
@@ -257,6 +258,11 @@ namespace Power8.Views
             if (!IsLoaded || Util.OsIs.XPOrLess)
                 return;
             var p = b1.PointToScreen(PlacementPoint);
+            if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
+            {
+                p.X -= 2;
+                p.Y -= 2;
+            }
             GetSetWndPosition(PlacementWnd, new API.POINT { X = (int)p.X, Y = (int)p.Y }, false);
             if ((int) PlacementWnd.Left == (int) p.X && (int) PlacementWnd.Top == (int) p.Y)
             {    //Top left corner, taskbar hidden, vertical or horizontal
@@ -340,8 +346,7 @@ namespace Power8.Views
                 {//looks like explorer.exe is dead!
                     Thread.Sleep(10000);//let's wait for explorer to auto-restart
                     var explorers = Process.GetProcessesByName("explorer");
-                    var ses = Process.GetCurrentProcess().SessionId;
-                    if (explorers.Any(e => e.SessionId == ses))
+                    if (explorers.Any(e => e.SessionId == MfuList.ProcessSessionId))
                     {//explorer is restarted already?
                         Util.Restart("explorer.exe restarted.");//need reinit handles tree
                     }
@@ -630,5 +635,6 @@ namespace Power8.Views
         }
 
         #endregion
+
     }
 }

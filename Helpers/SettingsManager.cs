@@ -172,7 +172,7 @@ namespace Power8.Helpers
                                             Settings.Default.Save();
                                             break;
                                         case MessageBoxResult.Yes:
-                                            Process.Start(NoLoc.Stg_Power8URI);
+                                            Util.CreateProcess(NoLoc.Stg_Power8URI);
                                             break;
                                     }
                                 }
