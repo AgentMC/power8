@@ -383,7 +383,7 @@ namespace Power8.Views
                         {
                             try
                             {
-                                Process.Start(data.Item1, data.Item2);
+                                Util.CreateProcess(data.Item1, data.Item2);
                             }
                             catch (Exception ex)
                             {
@@ -579,7 +579,7 @@ namespace Power8.Views
         private static void StartConsoleHidden(string exe, string args)
         {
             var si = new ProcessStartInfo(exe, args) {CreateNoWindow = true, WindowStyle = ProcessWindowStyle.Hidden};
-            Process.Start(si);
+            Util.CreateProcess(startInfo: si);
         }
         /// <summary>
         /// Overrides Focus() to forward it to the search bar, 

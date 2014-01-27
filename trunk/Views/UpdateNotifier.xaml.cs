@@ -107,19 +107,18 @@ namespace Power8.Views
         {
             var file = Environment.ExpandEnvironmentVariables("%temp%\\" + Path.GetFileName(_uriMsi));
             InitDownload(_uriMsi, file, () =>
-                        {
-                            Process.Start("msiexec.exe",
-                                            string.Format("/i \"{0}\" APPDIR=\"{1}\"", file,
-                                                        System.Windows.Forms.Application.StartupPath.Trim('"')));
-                            Environment.Exit(0);
-                        });
+            {
+                var startupFolder = System.Windows.Forms.Application.StartupPath.Trim('"');
+                Util.CreateProcess("msiexec.exe", string.Format("/i \"{0}\" APPDIR=\"{1}\"", file, startupFolder));
+                Environment.Exit(0);
+            });
         }
         /// <summary>
         /// Opens project website. Then closes the window.
         /// </summary>
         private void GoWebClick(object sender, RoutedEventArgs e)
         {
-            Process.Start(NoLoc.Stg_Power8URI);
+            Util.CreateProcess(NoLoc.Stg_Power8URI);
             Close();
         }
         //Download helpers------------------------

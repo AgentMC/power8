@@ -622,14 +622,14 @@ namespace Power8
                 psi.UseShellExecute = false;
             try
             {
-                Process.Start(psi);
+                Util.CreateProcess(startInfo: psi);
             }
             catch (Win32Exception w32E) //Any exception will be handled really out of here, but we
             {                           //shall report proper error
                 if (w32E.NativeErrorCode == 0x483) //1155, e.g. when doing "runas" on "*.hlp"
                 {
                     psi.Verb = null;
-                    Process.Start(psi);
+                    Util.CreateProcess(startInfo: psi);
                     throw new InvalidProgramException(Resources.Err_StartAsAdminFailed + w32E.Message);
                 }
                 throw;

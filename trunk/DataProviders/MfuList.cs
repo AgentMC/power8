@@ -43,6 +43,7 @@ namespace Power8
         /// The list of user exclusionf from MFU in P8 mode
         /// </summary>
         public static readonly ObservableCollection<StringWrapper> ExclList = new ObservableCollection<StringWrapper>();
+        public static readonly int ProcessSessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
 
 
         private static readonly List<MfuElement> LastList = new List<MfuElement>(); //The last checked state of MFU data
@@ -50,7 +51,6 @@ namespace Power8
         private static readonly List<String> PinList = new List<string>();          //The list of pinned elements
         private static readonly List<String> UserList = new List<string>();         //The Custom MFU list 
         private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
-        private static readonly int SessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
 
         private static ManagementEventWatcher _watchDog;                             //Notifies when a process is created in system
 
@@ -250,7 +250,7 @@ namespace Power8
             if (proc == null) //The instance is available?
                 return;
             var sId = (int)(uint) proc["SessionId"];
-            if (sId != SessionId) //It is in our session?
+            if (sId != ProcessSessionId) //It is in our session?
                 return;
             var parentPid = (int) (uint) proc["ParentProcessId"];
             if(parentPid != 0) //Parent available
@@ -258,7 +258,7 @@ namespace Power8
                 try
                 {
                     var parentProcess = Process.GetProcessById(parentPid);
-                    if(parentProcess.SessionId != SessionId) //And parent is in our session?
+                    if(parentProcess.SessionId != ProcessSessionId) //And parent is in our session?
                         return;
                 }
                 catch (InvalidOperationException)
