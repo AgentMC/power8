@@ -17,13 +17,11 @@ To do: convert to issues tab.
   
 ===Block===
 ===High===
-  #  W8.1RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected...;
-  #  W8.1RTM: Locks during search don't work as expected;
-  #  7/8: seems sometimes something bad happens in unmanaged code, and heap corruption occurs in CLR. No STR yet, must investigate.
 ===Medium===
   #  W8RTM: no transparency (should think twice before fixing... window may be not in Windows style after fix);
   #  No error message may be shown when user has no right to do power action;
-  #  XP: Menu from menu-button may show in inappropriate position 
+  #  XP: Menu from menu-button may show in inappropriate position;
+  #  7/8: seems sometimes something bad happens in unmanaged code, and heap corruption occurs in CLR. No STR yet, must investigate. Not reproduced for half a year
 ===Low===
   #  8/7^Classic^/XP^Classic^: Menu-button's MTLH is repainted improperly on hover 
   #  7/8: Menu item loses selection when context menu is shown
@@ -35,3 +33,5 @@ To do: convert to issues tab.
 
 == Done => goes to next release ==
   #  7/8: taskbar's panels location is not restored after exit of `Power8` (low because dragging the taskbar fixes the issue)
+  #  W8.1RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected...;
+  #  W8.1RTM: Locks during search don't work as expected;
