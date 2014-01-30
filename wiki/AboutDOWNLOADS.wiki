@@ -4,6 +4,7 @@
 = Introduction =
 
 In the beginning of 2014 Google deprecated Downloads feature on .Googlecode.com
+
 Senseless, criticized and inefficient, it was their decision, anyway.
 This page is how to get *latest* version of Power8.
 
