@@ -331,16 +331,16 @@ Chci spustit Průzkumníka a restartovat Power8.</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_UNdown7z" xml:space="preserve">
-    <value>Stáhnout 7z</value>
+    <value>Stáhnout v .7z</value>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>Stáhnout MSI a aktualizovat!</value>
+    <value>Stáhnout instalátor a aktualizovat!</value>
   </data>
   <data name="CR_UNdownMsi" xml:space="preserve">
-    <value>Stáhnout MSI</value>
+    <value>Stáhnout instalátor</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Navštívit web projektu Power8</value>
+    <value>Navštívit web Power8</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
     <value>Nepřipomínat tuto aktualizaci</value>
@@ -438,7 +438,7 @@ Chci spustit Průzkumníka a restartovat Power8.</value>
     <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>Možná budete chtít změnit nějaká nastavení, pro lepší využití Power8</value>
+    <value>Pro lepší využití Power8 jděte do nastavení - klikněte pravým tlačítkem...</value>
   </data>
   <data name="Str_Unpin" xml:space="preserve">
     <value>Uvolnit položku</value>
