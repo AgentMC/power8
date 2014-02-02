@@ -642,6 +642,9 @@ namespace Power8.Views
         {
             try
             {
+                PowerItemTree.SearchTreeCancel(); //if search thread is really slow compared to this UI one,
+                //the following call may execute before search was finished, and MFUList may receive
+                //"process launched" event and update itself, which will cause InvalidOperationException
                 item.Invoke();
             }
             catch (Exception ex)
