@@ -18,7 +18,7 @@ namespace Power8.Helpers
 
         public static void PostEvent(Category category, string action, string label, int? value)
         {
-            AnalyticsCall("event", new Dictionary<string, string>
+            AnalyticsCallAsync("event", new Dictionary<string, string>
             {
                 {"ec", category.ToString()},
                 {"ea", action},
@@ -32,22 +32,25 @@ namespace Power8.Helpers
             Deploy, Runtime
         }
 
-        private static void AnalyticsCall(string hitType, Dictionary<string, string> args)
+        private static void AnalyticsCallAsync(string hitType, Dictionary<string, string> args)
         {
             if (_web == null)
             {
                 Log.Raw("Analytics subsystem is not initialized");
                 return;
             }
-            try
+            Util.ForkPool(() =>
             {
-                var result = _web.PostAnalyticsHit(hitType, args);
-                Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)));
-            }
-            catch (Exception ex)
-            {
-               Log.Raw(ex.ToString());
-            }
+                try
+                {
+                    var result = _web.PostAnalyticsHit(hitType, args);
+                    Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)));
+                }
+                catch (Exception ex)
+                {
+                    Log.Raw(ex.ToString());
+                }
+            }, "Google Analytics call");
         }
 
         private class AnalyticsClient : WebClient
