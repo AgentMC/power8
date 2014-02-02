@@ -39,7 +39,7 @@ namespace Power8.Views
         /// </summary>
         public string VersionContent
         {
-            get { return Assembly.GetEntryAssembly().GetName().Version.ToString(); }
+            get { return Util.GetAppVersion().ToString(); }
         }
         /// <summary>
         /// If the Localizer url is available in localization, returns instance of 
