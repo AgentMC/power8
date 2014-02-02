@@ -158,12 +158,12 @@ namespace Power8.Helpers
                         }
                         if (verLine != null)
                         {//updating?
-                            if (new Version(verLine) > new Version(Application.ProductVersion) && Settings.Default.IgnoreVer != verLine)
+                            if (new Version(verLine) > Util.GetAppVersion() && Settings.Default.IgnoreVer != verLine)
                             {//updating!
                                 if (uri7Z == null || uriMsi == null) //old approach
                                 {
                                     switch (MessageBox.Show(Resources.CR_UNUpdateAvailableLong + string.Format(
-                                                Resources.Str_UpdateAvailableFormat, Application.ProductVersion, verLine),
+                                                Resources.Str_UpdateAvailableFormat, Util.GetAppVersion(), verLine),
                                             NoLoc.Stg_AppShortName + Resources.Str_UpdateAvailable,
                                             MessageBoxButton.YesNoCancel, MessageBoxImage.Information))
                                     {

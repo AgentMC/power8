@@ -1186,6 +1186,22 @@ namespace Power8
                 DispatchCaughtException(ex);
             }
         }
+        /// <summary>
+        /// Returns path to folder that contains different P8 db files, unique clientID, etc.
+        /// </summary>
+        public static string GetSettingsIndependentDbRoot()
+        {
+            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
+        }
+
+        private static Version _verCache;
+        /// <summary>
+        /// Returns application version
+        /// </summary>
+        public static Version GetAppVersion()
+        {
+            return _verCache ?? (_verCache = Assembly.GetEntryAssembly().GetName().Version);
+        }
 
         #endregion
 

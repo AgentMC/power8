@@ -71,6 +71,7 @@ namespace Power8.Views
         /// </summary>
         void BtnStckInstanciated(object sender, EventArgs e)
         {
+            Analytics.PostEvent(Analytics.Category.Runtime, "Start", null, 1);
             BtnStck.Instance.RunCalled += ShowRunDialog;
             b1.Cursor = System.Windows.Input.Cursors.Hand;
             if (!Settings.Default.FirstRunDone)

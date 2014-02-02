@@ -1,4 +1,5 @@
 ﻿using System.Runtime.ExceptionServices;
+using Power8.Helpers;
 using Power8.Views;
 using System;
 using System.IO;
@@ -47,17 +48,39 @@ namespace Power8
             DispatcherUnhandledException += (sender, e) => Util.DispatchUnhandledException(e.Exception);
             AppDomain.CurrentDomain.UnhandledException += HandleUnhandled;
 
+            var dbRoot = Util.GetSettingsIndependentDbRoot();
+            try
+            {
+                var ids = Directory.GetFiles(dbRoot, "*" + CLIENT_ID_EXTENSION);
+                if (ids.Length == 0)
+                {
+                    ClientId = Guid.NewGuid().ToString();
+                    File.Create(dbRoot + "\\" + ClientId + CLIENT_ID_EXTENSION);
+                }
+                else
+                {
+                    ClientId = Path.GetFileNameWithoutExtension(ids[0]);
+                }
+                Analytics.Init(TRACKID, ClientId, Power8.Properties.NoLoc.Stg_AppShortName,
+                    Util.GetAppVersion().ToString());
+            }
+            catch (Exception ex)
+            {
+                Log.Raw("Unable to read client ID to init analytics: " + ex);
+                ClientId = null;
+            }
+
             //Move settings from previous ver
             var std = Power8.Properties.Settings.Default;
             if (!std.FirstRunDone)
             {
                 std.Upgrade();
                 std.Save();//FirstRunDone is updated later in Main Window code
+                Analytics.PostEvent(Analytics.Category.Deploy, std.FirstRunDone ? "Update" : "Fresh", null, 1);
             }
 
             //Initialize standard folder icon
-            var path = Environment.GetEnvironmentVariable("appdata");
-            ImageManager.GetImageContainerSync(new PowerItem { Argument = path, IsFolder = true }, API.Shgfi.SMALLICON);
+            ImageManager.GetImageContainerSync(new PowerItem { Argument = dbRoot, IsFolder = true }, API.Shgfi.SMALLICON);
             
             //Build tree
             Util.ForkPool(PowerItemTree.InitTree, "InitTree");
@@ -72,6 +95,11 @@ namespace Power8
         {
             get { return (App) Application.Current; }
         }
+
+        private const string CLIENT_ID_EXTENSION = ".clientid";
+        public const string TRACKID = "UA-30314159-2";
+
+        public string ClientId { get; private set; }
 
         /// <summary>
         /// Handles Unhandled appdomain exception and calls the code to write that down everywhere.

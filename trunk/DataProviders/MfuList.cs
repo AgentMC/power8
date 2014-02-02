@@ -55,8 +55,7 @@ namespace Power8
         private static ManagementEventWatcher _watchDog;                             //Notifies when a process is created in system
 
         //Files with data
-        private static readonly string DataBaseRoot = 
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
+        private static readonly string DataBaseRoot = Util.GetSettingsIndependentDbRoot();
 
         private static readonly string LaunchDB = DataBaseRoot + "LaunchData.csv",
                                        PinDB = DataBaseRoot + "PinData.csv",
