@@ -20,7 +20,7 @@
 
 ==Текущая версия==
 
-Текущая версия — *V. 1.4.4 Beta: v.1.4.4.628*.
+Текущая версия — *V. 1.4.5 Beta: v.1.4.5.666*.
 См. [http://code.google.com/p/power8/wiki/Changelog список изменений] для получения полной картины об изменениях в данном релизе.
 
 См. [http://code.google.com/p/power8/wiki/KnownIssues список проблем] чтобы быть в курсе того, какие проблемы уже были найдены.
@@ -30,7 +30,7 @@
 
 ==Скачать==
 
-Зайдите на [http://code.google.com/p/power8/downloads/list страницу загрузок] для получения ссылок на основные и прочие закачки. Пожалуйста *НЕ* используйте Internet Explorer для скачивания, поскольку это может доставить вам неудобства при установке.
+Зайдите на [http://code.google.com/p/power8/wiki/AboutDOWNLOADS страницу загрузок] для получения ссылок на основные и прочие закачки. Пожалуйста *НЕ* используйте Internet Explorer для скачивания, поскольку это может доставить вам неудобства при установке.
 
 Также вы можете просмотреть исходники в онлайне или скачать их любым svn клиентом, например [http://tortoisesvn.net/ Tortoise Svn]. Если вы хотите собрать полный пакет, вам придётся также поставить [http://www.advancedinstaller.com/ Advanced Installer] чтобы получить MSI-установщик. Заметьте, файлы .aip и .aiproj находятся под системой контроля версий и в будущем могут (и будут) меняться.
 
@@ -57,13 +57,14 @@ Localization is done by:
 ||French`*`       ||Marc An                   ||mar.can2004@voila.fr||
 ||Chinese (Simplified)||Xiaoyu Wang              ||chsome@gmail.com||
 ||Arabic             ||Zakaria Belbali           ||gestapoz3000@gmail.com||
+||Serbian, Croatian  ||George Vasiljevich        ||djordje.vasiljevich@gmail.com||
+||Czech              ||DžejPý                    ||dzejpy@klikni.cz||
 
 `*` Не обновляется
 
 Хотите *Power8 на вашем языке?* Прочитайте страницу [Localization].
 
 *Идеи или предложения?* Свяжитесь с нами напрямую, воспользуйтесь форумами ниже, или оставьте комментарии на этих страницах: [Roadmap], [FeatureRequests].
-
 
 
 ==Поддержать разработку==
@@ -77,7 +78,7 @@ Localization is done by:
 <a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/award_88x31_5.gif" title="X 64-bit Download 5 stars" border="0" width="88" height="31"/></a>
 <a href="http://www.x64bitdownload.com/downloads/t-64-bit-power8-download-pqqeynhd.html"><img src="http://www.x64bitdownload.com/img/compatible_88x31.gif" title="X 64-bit Download: x64 Compatible" border="0" width="88" height="31"/></a>
 </td>
-<td><a href="http://www.winload.de/download/power8-118961#utm_source=PS&utm_medium=BL&utm_campaign=Badge" target="_blank"><img src="http://www.winload.de/img/siegel/badge_1.png" alt="Download Power8" title="Download Power8" border="0" /></a></td></tr>
+<td align="center"><a href="http://www.winload.de/download/power8-118961#utm_source=PS&utm_medium=BL&utm_campaign=Badge" target="_blank"><img src="http://www.giga.de/static/badges/img/2320325_software.png" alt="Download Power8" title="Download Power8" border="0" /></a></td></tr>
 <tr><td align="center"><a href="http://www.downloadatlas.com/open-source-33dc7fdb.html" target="_blank"><img src="http://www.downloadatlas.com/images/editors_choice.png" style="border:none;" width="80" height="80" alt="Power8 Editor's Choice" title="DownloadAtlas: Editor's choise!" /></a></td>
 <td align="center"><a href="http://www.downloadatlas.com/open-source-33dc7fdb.html"><img src="http://www.downloadatlas.com/clean-awards/power8-by-power8.png" style="border:none;" width="160" height="114" alt="Power8 is clean!" title="DownloadAtlas: 100% clean software!" /></a></td>
 <td align="center"><a href="http://www.chip.de/downloads/Power8_56797104.html"><img src="http://i41.fastpic.ru/big/2012/0815/15/32364238931bfc6b3d152fb70ef94315.png" style="border:none;" width="180" height="79" alt="Chip pick" title="Chip-online: the ChipPick!" /></a></td>
@@ -148,3 +149,5 @@ https://power8.googlecode.com/svn/wiki/Power8_401_1_W7_JL2.png
   # Позволяет прикреплять/откреплять элементы MFU;
   # Локализирован (см. список языков выше);
   # Позволяет менять различные настройки в специальном окне.
+
+*Больше информации на странице FeatureDetails.*
