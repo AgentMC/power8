@@ -1,6 +1,24 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.4.5 Beta (v.1.4.5.666): 03.02.2014==
+
+  # `[new]` Serbian, Croatian and Czech localization;
+  # `[new]` Hack against doubling icons in Control Panel menu-button under Windows 8.1, see DuplicatedIconsHack for details;
+  # `[new]` Key X is now used to expand/collapse current search group;
+  # `[new]` Power8 now watches environment variables changes and propagates them to child processes on launch;
+  # `[new]` Instead of deprecated Downloads page, Power8 uses Google analytics to track downloads and launches;
+  # `[changed]` Most operations are moved to thread pool. This doesn't make them faster but Power8's should impact system load less;
+  # `[changed]` Icon extraction is making even less influence on the application performance;
+  # `[changed]` Update Notification dialog: progress bar is shown only when download started;
+  # `[fixed]` Search returning unexpectedly big amount of results;
+  # `[fixed]` Format of logging;
+  # `[fixed]` `IndexOutOfRangeException` occurring when pressing P in search results and item selected is not from Recent applications list;
+  # `[fixed]` `InvalidOperationException` after Alt+Z being pressed before launch-time initialization is finished;
+  # `[fixed]` `InvalidOperationException` when the process is launched on Enter key faster than search finishes;
+  # `[fixed]` Update Notification dialog was not auto-sizable, and layout of buttons was broken;
+  # `[fixed]` Main button's context menu and tooltip layout on Windows7 with Aero disabled (they were partially hidden by toolbar; this doesn't fix that the button itself is hidden by Start button on W7^classic^ by default).
+
 ==Version 1.4.4 Beta (v.1.4.4.628): 12.09.2013==
 
   # `[new]` Arabic localization;
