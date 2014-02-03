@@ -44,7 +44,7 @@ namespace Power8.Helpers
                 try
                 {
                     var result = _web.PostAnalyticsHit(hitType, args);
-                    Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)));
+                    Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)).Replace('\0', ' '));
                 }
                 catch (Exception ex)
                 {

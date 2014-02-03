@@ -259,7 +259,7 @@ namespace Power8.Views
             if (!IsLoaded || Util.OsIs.XPOrLess)
                 return;
             var p = b1.PointToScreen(PlacementPoint);
-            if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
+            if (Util.OsIs.SevenOrBelow && !Util.OsIs.XPOrLess && !API.DwmIsCompositionEnabled())
             {
                 p.X -= 2;
                 p.Y -= 2;

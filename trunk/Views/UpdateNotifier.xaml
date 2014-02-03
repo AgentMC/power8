@@ -7,67 +7,62 @@
     <Views:DisposableWindow.Resources>
     	<Style TargetType="{x:Type TextBlock}">
     		<Setter Property="FontSize" Value="20"/>
-    		<Setter Property="Margin" Value="4,0"/>
     		<Setter Property="Text" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
-
     	</Style>
     	<Style TargetType="{x:Type Button}">
-    		<Setter Property="Margin" Value="4,2"/>
+    		<Setter Property="Padding" Value="8,1"/>
     		<Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
     	</Style>
       </Views:DisposableWindow.Resources>
 	<Views:DisposableWindow.Title>
 		<Binding Converter="{StaticResource localizer}" Mode="OneWay" Path="Name" RelativeSource="{RelativeSource Self}"/>
 	</Views:DisposableWindow.Title>
-	<Grid>
-		<Grid VerticalAlignment="Top">
-			<StackPanel Margin="12">
+	<Grid VerticalAlignment="Top">
+		<StackPanel Margin="12">
 
-				<TextBlock VerticalAlignment="Top" FontSize="24" TextAlignment="Center" 
-					x:Name="UNUpdateAvailableLong" Margin="0"/>
+			<TextBlock VerticalAlignment="Top" FontSize="24" TextAlignment="Center" x:Name="UNUpdateAvailableLong"/>
             
-				<Grid Margin="0,12,0,0" >
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition/>
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>
-					</Grid.RowDefinitions>
+			<Grid Margin="0,12,0,0" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
                 
-					<TextBlock x:Name="UNYourVersion" Margin="0,0,6,0" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-					<TextBlock x:Name="UNNewVersion" Grid.Row="1" Margin="0,0,6,0" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-					<TextBlock Text="{Binding CurrentVersion, ElementName=UNwnd}" Grid.Column="1" Margin="0,0,12,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-					<TextBlock Text="{Binding NewVersion, ElementName=UNwnd}" Grid.Column="1" Grid.Row="1" Margin="0,0,12,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-					<Button x:Name="UNDownAndUp" Grid.Column="2" Grid.RowSpan="2" FontSize="20" FontWeight="Bold" 
-						Click="DownAndUpClick" Margin="0" Padding="8,1" VerticalContentAlignment="Center" />
-					<ProgressBar Grid.Row="2" Grid.ColumnSpan="3" Height="24" Margin="0,12,0,0" x:Name="progress" Visibility ="Hidden"/>
+				<TextBlock x:Name="UNYourVersion" Margin="0,0,6,0" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				<TextBlock x:Name="UNNewVersion" Grid.Row="1" Margin="0,0,6,0" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				<TextBlock Text="{Binding CurrentVersion, ElementName=UNwnd}" Grid.Column="1" Margin="0,0,12,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				<TextBlock Text="{Binding NewVersion, ElementName=UNwnd}" Grid.Column="1" Grid.Row="1" Margin="0,0,12,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+				<Button x:Name="UNDownAndUp" Grid.Column="2" Grid.RowSpan="2" FontSize="20" FontWeight="Bold" 
+					Click="DownAndUpClick" VerticalContentAlignment="Center" />
+				<ProgressBar Grid.Row="2" Grid.ColumnSpan="3" Height="24" Margin="0,12,0,0" x:Name="progress" Visibility ="Hidden"/>
                 
-				</Grid>
+			</Grid>
             
-				<TextBlock x:Name="UNOther" FontSize="14" Margin="0,12,0,0"/>
-				<Grid Margin="0,3,0,0" Grid.IsSharedSizeScope="True" >
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition SharedSizeGroup="group1"/>
-						<ColumnDefinition SharedSizeGroup="group1"/>
-						<ColumnDefinition SharedSizeGroup="group1"/>
-					</Grid.ColumnDefinitions>
-					<Button x:Name="UNdownMsi" FontSize="16" Click="DownloadFileClick" Margin="0,0,3,0" Padding="8,1" VerticalAlignment="Top" />
-					<Button x:Name="UNdown7z" Grid.Column="1" FontSize="16" Click="DownloadFileClick" Margin="3,0" Padding="8,1" VerticalAlignment="Top"/>
-					<Button x:Name="UNGoWeb" Grid.Column="2" FontSize="16" Click="GoWebClick" Margin="3,0,0,0" Padding="8,1" VerticalAlignment="Top" />
-				</Grid>
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition/>
-						<ColumnDefinition/>
-					</Grid.ColumnDefinitions>
-					<Button x:Name="UNNextTime" Click="CloseClick" Margin="0,6,3,0" Padding="8,1" VerticalAlignment="Top" />
-					<Button x:Name="UNIgnore" Grid.Column="1" Click="IgnoreClick" Margin="3,6,0,0" Padding="8,1" VerticalAlignment="Top" />
-				</Grid>
-			</StackPanel>
-		</Grid>
+			<TextBlock x:Name="UNOther" FontSize="14" Margin="0,12,0,0"/>
+			<Grid Margin="0,3,0,0" Grid.IsSharedSizeScope="True" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition SharedSizeGroup="group1"/>
+					<ColumnDefinition SharedSizeGroup="group1"/>
+					<ColumnDefinition SharedSizeGroup="group1"/>
+				</Grid.ColumnDefinitions>
+				<Button x:Name="UNdownMsi" FontSize="16" Click="DownloadFileClick" Margin="0,0,3,0" VerticalAlignment="Top" />
+				<Button x:Name="UNdown7z" Grid.Column="1" FontSize="16" Click="DownloadFileClick" Margin="3,0" VerticalAlignment="Top"/>
+				<Button x:Name="UNGoWeb" Grid.Column="2" FontSize="16" Click="GoWebClick" Margin="3,0,0,0" VerticalAlignment="Top" />
+			</Grid>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Button x:Name="UNNextTime" Click="CloseClick" Margin="0,6,3,0" VerticalAlignment="Top" />
+				<Button x:Name="UNIgnore" Grid.Column="1" Click="IgnoreClick" Margin="3,6,0,0" VerticalAlignment="Top" />
+			</Grid>
+		</StackPanel>
 	</Grid>
 </Views:DisposableWindow>
