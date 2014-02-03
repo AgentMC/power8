@@ -193,3 +193,24 @@ MFU tab allows you to set what is displayed in launch list table when you open P
 Custom MFU list is empty by default. To add data there, right-click whatever file/folder/application/link/control panel element you want inside Power8 and choose "Add to custom launch list". To remove item, right-click it and choose "Remove item from custom launch-list" (command available only when you right-click item that is actually placed inside launch table).
 
 3rd way to build the launch list is to use Power8 internal data it collects e.g. to show Jump Lists on Windows XP, etc. You can find this data under `%localappdata%\Power8_Team\` in file named "Launchdata.csv".
+
+= 1.4 Keyboard navigation =
+Power8 enables you to use it with keyboard only.
+  * Use *Alt+Z* to open main window;
+  * Use *double Alt+Z* to focus main button. Then you can press menu key on windows keyboard to activate context menu. If it doesn't work, this means system thinks you pressed Alt key and not Alt+Z combination. Press *Esc* key couple of times to exit Alt mode;
+  * Press *Space* key to set checks in context menu and dialogs, to push buttons, etc.;
+  * Press *Tab* or *Shift+Tab* to navigate through dialog windows and Power8 main window;
+  * Press *Right*, then *Down* when menu-button is in focus to activate dropdown. Press *Esc* to close it. Depending on OS you may need to press it 2 times;
+  * In main window, press *Alt* to quickly navigate to main menu. Then, press *down* to show dropdown. Press *Esc* to close it. Depending on OS you may need to press it 2 times;
+  * Press *Enter* to run the item selected in Main menu or in dropdown lists of menu-buttons;
+  * In Search Box:
+    * Press *Up* and *Down* to move selection in Recent list or in search results - depending on what is going on at the moment;
+    * Press *Enter* to launch item selected in Recent list or Search results. If nothing is selected, Power8 will try to launch the text typed in the Search box as Operating System command;
+    * Press *Esc* to clear text entered and display the Recent list. Press *Esc* again to close the main window;
+  * In Recent list or Search results:
+    * Press *Enter* to launch selected application of file;
+    * Press *Up* and *Down* to navigate through lists. Please note: groups expanders are not accessible by these keys, but you can expand/collapse them by using *X* key;
+    * Press *Ctrl+Up*, *Ctrl+Down* in Recent list when "Use custom list" is selected in Settings window, Most Frequently Used page to move selected item up or down;
+    * Press *Right* or *Left* to open Jump-List dropdown;
+    * Press *P* in Recent list to pin or unpin item. In Search results you can also press this key to pin/unpin an item in case it originates from the Recent list, however, this change will only affect Recent list layout and not the Search results;
+    * Press *X* in Search results to expand or collapse group selected item is in.
