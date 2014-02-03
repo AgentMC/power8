@@ -32,6 +32,3 @@ To do: convert to issues tab.
   #  (?) Some W8 immersive links aren't run properly - have to investigate
 
 == Done => goes to next release ==
-  #  7/8: taskbar's panels location is not restored after exit of `Power8` (low because dragging the taskbar fixes the issue)
-  #  W8.1RTM: icons for CPL may double (`PostBackgroundDllUnload()` doesn't work as expected...;
-  #  W8.1RTM: Locks during search don't work as expected;
