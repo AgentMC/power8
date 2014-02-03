@@ -10,14 +10,16 @@ This page is how to get *latest* version of Power8.
 
 = Details =
 
-The [https://code.google.com/p/power8/downloads/list Downloads] page won't contain all latest releases now. Last one available there is 1.4.4. Instead, you should use links from within this page, which will always point to latest build, and a previous one.
+==The latest version available is 1.4.5. See links below.==
+
+The [https://code.google.com/p/power8/downloads/list Downloads] page won't contain all latest releases now. Last one available _there_ is 1.4.4. Instead, you should use links from within this page, which will always point to latest build, and a previous one.
 
 = Links =
 ||<b>Status</b>||<b>Type</b>||<b>Version</b>||<b>Link</b>||<b>Changelog</b>|| 
-||Latest||MSI||1.4.4.628||[http://power8.googlecode.com/files/Power8_v.1.4.4.628.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.4_Beta_(v.1.4.4.628):_12.09.2013 Read]||
-||Latest||7z||1.4.4.628||[http://power8.googlecode.com/files/Power8_v.1.4.4.628.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.4_Beta_(v.1.4.4.628):_12.09.2013 Read]||
-||Pre-latest||MSI||1.4.3.619||[http://power8.googlecode.com/files/Power8_v.1.4.3.619.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.3_Beta_(v.1.4.3.619):_14.07.2013 Read]||
-||Pre-latest||7z||1.4.3.619||[http://power8.googlecode.com/files/Power8_v.1.4.3.619.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.3_Beta_(v.1.4.3.619):_14.07.2013 Read]||
+||Latest||MSI||1.4.5.666||[http://power8.googlecode.com/svn/filez/Power8_v.1.4.5.666.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.5_Beta_(v.1.4.5.666):_03.02.2014 Read]||
+||Latest||7z||1.4.5.666||[http://power8.googlecode.com/svn/filez/Power8_v.1.4.5.666.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.5_Beta_(v.1.4.5.666):_03.02.2014 Read]||
+||Pre-Latest||MSI||1.4.4.628||[http://power8.googlecode.com/files/Power8_v.1.4.4.628.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.4_Beta_(v.1.4.4.628):_12.09.2013 Read]||
+||Pre-Latest||7z||1.4.4.628||[http://power8.googlecode.com/files/Power8_v.1.4.4.628.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.4_Beta_(v.1.4.4.628):_12.09.2013 Read]||
 
 = Older versions =
   * Versions up to 1.4.4 are available under legacy [https://code.google.com/p/power8/downloads/list?can=1 Downloads page];
