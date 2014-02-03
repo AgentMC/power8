@@ -1,10 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Windows;
-using System.Windows.Documents;
 using Microsoft.Win32;
 using Power8.Properties;
 
@@ -59,19 +57,6 @@ namespace Power8.Views
         public string NewVersion
         {
             get { return _newVer; }
-        }
-        /// <summary>
-        /// If the Localizer url is available in localization, returns instance of 
-        /// corresponding URI. Returns null otherwise.
-        /// </summary>
-        public Uri UriContent
-        {
-            get
-            {
-                return string.IsNullOrEmpty(Properties.Resources.Str_LocalizerUri)
-                           ? null
-                           : new Uri(Properties.Resources.Str_LocalizerUri);
-            }
         }
         //Handlers--------------------------------
         /// <summary>

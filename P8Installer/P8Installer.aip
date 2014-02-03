@@ -19,10 +19,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="Manufacturer" Value="Power8 team" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{d8e31d82-456e-4e4e-8cb7-722b9975754b} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{F049C997-BE50-4B74-B6E4-51F6F3BC5239} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Power8" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="1.4.4.628" Type="32"/>
+    <ROW Property="ProductVersion" Value="1.4.5.666" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{7962d988-6f9a-4949-bf14-3444d80b29e5}"/>
