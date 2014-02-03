@@ -27,3 +27,20 @@ The [https://code.google.com/p/power8/downloads/list Downloads] page won't conta
 
 = Auto-update = 
 Auto-update feature should work just like before. From it's point of view nothing changed at all actually.
+
+= Statistics tracing = 
+Previously we used simple and straightforward approach involving built-in Googlecode's analytics binding. Along with the number of downloads of certain versions, this provided us required statistics to analyse usages and trends.
+
+Unfortunately, the downloads feature was deprecated and we have to use other ways to analyse spreading of Power8, the target audience and the download count. For this, starting with 1.4.5, we send http requests to Google analytics service:
+  * When application is updated;
+  * When application is successfully launched.
+The requests (so-called "events") contain only "ping" itself and bear no other user information. Data we receive is:
+  * The event itself - Deploy or Startup in our case;
+  * Country of user launching Power8 - calculated by Google automatically based on IP. Power8 doesn't collect this information;
+  * Power8 version & OS version - sent by Power8. Only pure version string (e.g. Windows NT 6.3.x.x) is sent, no other information is shared.
+This is safe because:
+  * We do not send any user-, computer-, domain- or network-specific information;
+  * We send data over encrypted connection (https);
+  * The content has length of two-three hundred BYTES so it won't affect your traffic plan;
+  * Statistics reporting is completely independent from Power8 engine, application will not disturb you with errors if the reporting fails;
+  * You can simply view data being sent by installing network scanner like Fiddler and use it to see the request Power8 sends on startup.
