@@ -1,0 +1,65 @@
+﻿<Window x:Class="Power8.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        x:Name="Root"
+        Closed="WindowClosed"
+        Loaded="WindowLoaded"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Topmost="True"
+        AllowsTransparency="False"
+        Background="{x:Static SystemColors.ActiveCaptionBrush}">
+    <Window.Resources>
+        <Style TargetType="MenuItem" BasedOn="{StaticResource ContextMenuItemStyle}"/>
+    </Window.Resources>
+    <Button Name="b1"
+            Style="{StaticResource MainButtonTransparentStyle}"
+            Click="ShowButtonStack"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            Cursor="Wait"
+            ForceCursor="True"
+            MouseEnter="MainBtnMouseEnter"
+            ContextMenuService.Placement="{Binding ElementName=Root, Path=ContextPlacement}"
+            LayoutUpdated="MainBtnLayoutUpdated"
+            ToolTipService.ToolTip="{Binding ElementName=Root, Path=Tip}"
+            ToolTipService.Placement="{Binding ElementName=Root, Path=ContextPlacement}"
+            AllowDrop="True"
+            DragOver="Power8Drag"
+            DragEnter="Power8Drag"
+            Drop="Power8Drop">
+        <Button.ContextMenu>
+            <ContextMenu Name="menu">
+                <MenuItem Name="MWAutoStart" IsCheckable="True" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
+                <MenuItem Name="MWCheckForUpdates" IsCheckable="True" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}"/>
+                <MenuItem Name="MWBlockMetro" IsCheckable="True" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}"/>
+                <MenuItem Name="MWSettings" Click="SettingsClick" />
+                <Separator />
+                <MenuItem Name="MWAbout" Click="AboutClick" />
+                <MenuItem Name="MWDonate" Click="DonateClick" Visibility="{Binding Path=ShowDonateMenuItem, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <MenuItem Name="MWExit" Click="ExitClick" />
+            </ContextMenu>
+        </Button.ContextMenu>
+        <Grid>
+    		<Grid Opacity="0.8" x:Name="winGrid" 
+                  Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=false}">
+                  <Image Source="/Power8;component/Images/logo_alfa/Power8Logo7_Red_alfa.png"/>
+    		</Grid>
+            <Grid x:Name="imageGrid" Visibility="{Binding ElementName=Root, Path=StartImage, Converter={StaticResource imageDisplay}, ConverterParameter=true}">
+                <Image Source="{Binding ElementName=Root, Path=StartImage}"/>
+            </Grid>
+            <Viewbox Margin="0,-2,0,-1" VerticalAlignment="Bottom" HorizontalAlignment="Right" MinWidth="10" MinHeight="10" 
+                     MaxWidth="26" MaxHeight="26" Visibility="{Binding WarningIconVisibility, ElementName=Root}">    
+    			<Grid x:Name="warningGrid" Width="20" Height="20">
+    				<Path Data="M0,9 L5.5,0 11,9z" Fill="#FFFFA400" Stretch="Uniform" Stroke="Black" StrokeLineJoin="Round"/>
+    				<TextBlock TextWrapping="Wrap" Text="!" d:LayoutOverrides="Width, Height" HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" Foreground="Black" Padding="0,2,0,0" FontWeight="Bold"/>
+                </Grid>
+    		</Viewbox>
+    	</Grid>
+    </Button>
+</Window>
