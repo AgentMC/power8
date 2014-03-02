@@ -610,12 +610,10 @@ namespace Power8.Views
             API.GetWindowRect(_midPanel, out r); //absolute coord of rebar
             API.GetWindowRect(_taskBar, out r2); //absolute coord of taskbar
             if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
-            {//This if doesn't work on exit since it is called only for Win8 on exit
+            {//This doesn't work on exit since it is called only for Win8 on exit
                 //Have no idea why, but there's some kind of automatic margin applied in classic style
-                if (taskBarVertical)
-                    r2.Left += 4;
-                else
-                    r2.Top += 4;
+                r2.Left += 4;
+                r2.Top += 4;
             }
             r.Top -= r2.Top; //getting relative coordinates...
             r.Left -= r2.Left;
