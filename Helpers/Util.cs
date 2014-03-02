@@ -679,19 +679,28 @@ namespace Power8
         /// </summary>
         public static void UpdateEnvironment()
         {
-            using (var k = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"))
+            var keys = new[]
             {
-                Log.Raw("Starting process, k = " + (k == null ? "" : "not ") + "null");
-                if (k != null)
+                new {Key = Registry.LocalMachine, Path = @"SYSTEM\CurrentControlSet\Control\Session Manager\"},
+                new {Key = Registry.CurrentUser, Path = string.Empty}
+            };
+            foreach (var key in keys)
+            {
+                using (var k = key.Key.OpenSubKey(key.Path + "Environment"))
                 {
-                    foreach (var valueName in k.GetValueNames())
+                    Log.Raw("Starting process, k = " + (k == null ? "" : "not ") + "null");
+                    if (k != null)
                     {
-                        var value = k.GetValue(valueName).ToString();
-                        if (Environment.GetEnvironmentVariable(valueName) == value) 
-                            continue;
-                        Environment.SetEnvironmentVariable(valueName, value);
-                        Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
+                        foreach (var valueName in k.GetValueNames())
+                        {
+                            var value = k.GetValue(valueName).ToString();
+                            if (Environment.GetEnvironmentVariable(valueName) == value)
+                                continue;
+                            Environment.SetEnvironmentVariable(valueName, value);
+                            Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
+                        }
                     }
+                    Log.Raw("Done");
                 }
             }
         }
@@ -798,8 +807,7 @@ namespace Power8
                     var key = GetRegistryContainer(clsidOrApiShNs);
                     if (key != null)
                     {
-                        using (var k = Microsoft.Win32.Registry.ClassesRoot
-                                .OpenSubKey(key + subkey, false))
+                        using (var k = Registry.ClassesRoot.OpenSubKey(key + subkey, false))
                         {
                             if (k != null)
                                 return ((string)k.GetValue(valueName, null));
@@ -830,8 +838,7 @@ namespace Power8
                 return "CLSID\\" + NameSpaceToGuidWithBraces(pathClsidGuidOrApishnamespace);
             }
             //file
-            using (var k = Microsoft.Win32.Registry.ClassesRoot
-                .OpenSubKey(pathClsidGuidOrApishnamespace.Substring(i), false))
+            using (var k = Registry.ClassesRoot.OpenSubKey(pathClsidGuidOrApishnamespace.Substring(i), false))
             {//"hkcr\.doc\@" => "Word.document"
                 return (k != null)
                            ? ((string) k.GetValue(String.Empty, null))
@@ -907,7 +914,7 @@ namespace Power8
         /// ResId = @%ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
         /// or like @C:\data\a.dll,-2000#embedding8
         /// or      @B:\wakawaka\foo.dlx
-        /// or      @%windir%\msm.dll,8 => 8 is index, not id TODO: handle indices well.
+        /// or      @%windir%\msm.dll,8 => 8 is index, not id 
         /// Note that when Resource string doesn't start with @ it is verbatim string and this 
         /// method shan't be called. However no error will occur, you'll only get the 
         /// Tuple &lt;ResourceId,IntPtr.Zero,0xFFFFFFFF&gt;.
