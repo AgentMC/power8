@@ -325,7 +325,6 @@ namespace Power8.Views
             if (expander != null)                   //Expander was found?
                 expander.IsExpanded ^= true;        //expand it and set the selection
         }
-
         /// <summary>
         /// Tries to retrieve expander control for data grid in search state.
         /// See <code>ExpandGroup</code> method for details on parameters
@@ -399,6 +398,13 @@ namespace Power8.Views
                     else
                         SearchBox.Text = string.Empty;
                     return;
+                case Key.Tab: //CTRL+Tab >> put path to item to search bar
+                    if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0)
+                    {
+                        DataGridPreviewKeyDown(sender, e);
+                        return;
+                    }
+                    break;
             }
             e.Handled = false;
         }
@@ -430,11 +436,23 @@ namespace Power8.Views
                     }
                     break;
                 case Key.Tab:
-                    e.Handled = true;
-                    if (Keyboard.IsKeyDown(Key.LeftShift))
-                        AllItemsMenuRoot.Focus();
-                    else
+                    e.Handled = true; //todo: check why CTRL is tested differently in other places
+                    if (pi != null && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+                    {//CTRL+Tab >> put path to item to search bar
+                        var t = string.Format("\"{0}\" {1}", PowerItemTree.GetResolvedTarget(pi), SearchBox.Text);
+                        SearchBox.Text = t;
                         SearchBox.Focus();
+                        SearchBox.CaretIndex = t.Length;
+
+                    }
+                    else if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                    {
+                        AllItemsMenuRoot.Focus(); //SHIFT+Tab >> focus backwards
+                    }
+                    else
+                    {
+                        SearchBox.Focus(); //Tab >> focus forwards
+                    }
                     break;
                 case Key.Up:
                 case Key.Down:
