@@ -777,6 +777,16 @@ namespace Power8
             var psi = ResolveItem(item);
             return item.IsFolder ? psi.Arguments : psi.FileName;
         }
+        /// <summary>Safely converts PowerItem to a string representation of it's final target.
+        /// Functionally equivalent to <code>GetResolvedArgument()</code> except that for links
+        /// it returns actual link target. </summary>
+        /// <param name="item">The PowerItem to convert</param>
+        /// <returns>For Power Items that reference a link, returns link's target.
+        /// See <see cref="GetResolvedArgument"/> for other options.</returns>
+        public static string GetResolvedTarget(PowerItem item)
+        {
+            return item.IsLink ? item.ResolvedLink : GetResolvedArgument(item);
+        }
 
         /// <summary>
         /// Breaks full path into predicate base (one of User Start Menu and Common Start Menu) and the trailling stuff

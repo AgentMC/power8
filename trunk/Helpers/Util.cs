@@ -684,25 +684,24 @@ namespace Power8
                 new {Key = Registry.LocalMachine, Path = @"SYSTEM\CurrentControlSet\Control\Session Manager\"},
                 new {Key = Registry.CurrentUser, Path = string.Empty}
             };
+            Log.Raw("Starting process");
             foreach (var key in keys)
             {
                 using (var k = key.Key.OpenSubKey(key.Path + "Environment"))
                 {
-                    Log.Raw("Starting process, k = " + (k == null ? "" : "not ") + "null");
-                    if (k != null)
+                    Log.Fmt("For key={0}, k = {1}", key.Key, (k == null ? "" : "not ") + "null");
+                    if (k == null) continue;
+                    foreach (var valueName in k.GetValueNames())
                     {
-                        foreach (var valueName in k.GetValueNames())
-                        {
-                            var value = k.GetValue(valueName).ToString();
-                            if (Environment.GetEnvironmentVariable(valueName) == value)
-                                continue;
-                            Environment.SetEnvironmentVariable(valueName, value);
-                            Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
-                        }
+                        var value = k.GetValue(valueName).ToString();
+                        if (Environment.GetEnvironmentVariable(valueName) == value)
+                            continue;
+                        Environment.SetEnvironmentVariable(valueName, value);
+                        Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
                     }
-                    Log.Raw("Done");
                 }
             }
+            Log.Raw("Done");
         }
         
         #endregion
