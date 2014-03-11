@@ -439,11 +439,10 @@ namespace Power8.Views
                     e.Handled = true; //todo: check why CTRL is tested differently in other places
                     if (pi != null && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
                     {//CTRL+Tab >> put path to item to search bar
-                        var t = string.Format("\"{0}\" {1}", PowerItemTree.GetResolvedTarget(pi), SearchBox.Text);
+                        var t = "\"" + PowerItemTree.GetResolvedTarget(pi) + "\" ";
                         SearchBox.Text = t;
                         SearchBox.Focus();
                         SearchBox.CaretIndex = t.Length;
-
                     }
                     else if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
                     {
