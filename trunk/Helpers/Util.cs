@@ -14,7 +14,9 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using Microsoft.Win32;
+using Power8.DataProviders;
 using Power8.Helpers;
 using Power8.Properties;
 using Power8.Views;
@@ -660,6 +662,11 @@ namespace Power8
             //update variables
             UpdateEnvironment();
 
+            if (OsIs.EightOrMore && TryLaunchMetroApp(command ?? startInfo.FileName))
+            {
+                return;
+            }
+            
             //run
             if (command != null)
             {
@@ -673,6 +680,72 @@ namespace Power8
                 Process.Start(startInfo);
             }
         }
+
+        private static bool TryLaunchMetroApp(string targ)
+        {
+            string appUserModelId;
+            try
+            {
+// ReSharper disable AssignNullToNotNullAttribute
+                var manifest = Path.Combine(Path.GetDirectoryName(targ), "AppxManifest.xml");
+                if (!File.Exists(manifest) && targ.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
+                {
+                    targ = ResolveLinkSafe(targ);
+                    manifest = Path.Combine(Path.GetDirectoryName(targ), "AppxManifest.xml");
+                }
+// ReSharper restore AssignNullToNotNullAttribute
+                if (!File.Exists(manifest))
+                {
+                    return false;
+                }
+                var xm = XElement.Load(manifest);
+                var ns = xm.GetDefaultNamespace();
+// ReSharper disable PossibleNullReferenceException
+                var identity = xm.Element(ns + "Identity")
+                                 .Attribute("Name")
+                                 .Value;
+                var apps = xm.Element(ns + "Applications")
+                             .Elements(ns + "Application")
+                             .Select(x => new
+                                          {
+                                              Id = x.Attribute("Id").Value,
+                                              File = (x.Attribute("Executable") ?? x.Attribute("StartPage")).Value
+                                          });
+// ReSharper restore PossibleNullReferenceException
+                var app = apps.FirstOrDefault(a => targ.EndsWith(a.File, StringComparison.OrdinalIgnoreCase));
+                if (app == null)
+                {
+                    return false;
+                }
+                appUserModelId = AppUserModelIdProvider.GetAppUserModelId(identity, app.Id);
+            }
+            catch (Exception ex)
+            {
+                DispatchCaughtException(ex);
+                return false;
+            }
+            if (appUserModelId == null)
+            {
+                return false;
+            }
+            var muiActivator = (API.IApplicationActivationManager)new API.ApplicationActivationManager();
+            try
+            {
+                /*var pid = */
+                muiActivator.ActivateApplication(appUserModelId, string.Empty, API.ACTIVATEOPTIONS.AO_NONE);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DispatchCaughtException(ex);
+                return false;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(muiActivator);
+            }
+        }
+
         /// <summary>
         /// Updates environment variables from those stored by Explorer in registry, so Power8 has same environment 
         /// variables as Explorer does. Call this method before direct or indirect creation of new child processes.
