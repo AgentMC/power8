@@ -7,6 +7,14 @@ namespace Power8.Helpers
 {
     public static class Log
     {
+        /// <summary>
+        /// Logs message passed to the current debug log.
+        /// Prepends calling method name, date, time and thread id.
+        /// Optionally adds info on object which the callee was invoked to serve for.
+        /// </summary>
+        /// <param name="message">Text to log</param>
+        /// <param name="obj">Description or name of the object calling method is working on.
+        /// If the method doesn't serve any particular object at the moment, leave it unset.</param>
         [Conditional("DEBUG")]
         public static void Raw(string message, string obj = null)
         {
@@ -19,7 +27,12 @@ namespace Power8.Helpers
             b.Append("\t" + message);
             Debug.WriteLine(b.ToString());
         }
-
+        /// <summary>
+        /// Logs message passed to the current debug log.
+        /// Prepends calling method name, date, time and thread id.
+        /// </summary>
+        /// <param name="format">Format string as used by String.Format().</param>
+        /// <param name="args">Format string args as used by String.Format().</param>
         [Conditional("DEBUG")]
         public static void Fmt(string format, params object[] args)
         {

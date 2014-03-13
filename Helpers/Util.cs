@@ -663,7 +663,7 @@ namespace Power8
             UpdateEnvironment();
 
             if (OsIs.EightOrMore && TryLaunchMetroApp(command ?? startInfo.FileName))
-            {
+            {//check if the app is Metro-style one and launch it correspondingly.
                 return;
             }
             
@@ -680,13 +680,22 @@ namespace Power8
                 Process.Start(startInfo);
             }
         }
-
-        private static bool TryLaunchMetroApp(string targ)
+        /// <summary>
+        /// This method tries launching ModernUI application using it's exe, htm or link to one as a source.
+        /// It automatically resolves it's identity, AppId and finally queries AppUserModelId to activate one.
+        /// If any data is unavailable the launch doesn't occur.  
+        /// </summary>
+        /// <param name="targ">Path to exe, htm or lnk file pointing to exe or htm</param>
+        /// <returns>True if OS ActivationManager reported that app was launched successfully, 
+        /// false if any required information was not found or ActivationManager failed.</returns>
+        public static bool TryLaunchMetroApp(string targ)
         {
             string appUserModelId;
             try
             {
 // ReSharper disable AssignNullToNotNullAttribute
+                //First, try locating the manifest that contains identity and ID
+                Log.Raw("Searching for manifest", targ);
                 var manifest = Path.Combine(Path.GetDirectoryName(targ), "AppxManifest.xml");
                 if (!File.Exists(manifest) && targ.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
                 {
@@ -696,8 +705,12 @@ namespace Power8
 // ReSharper restore AssignNullToNotNullAttribute
                 if (!File.Exists(manifest))
                 {
+                    Log.Raw("No manifest found!", targ);
                     return false;
                 }
+
+                //Load manifest and extract package Identity and all included apps IDs
+                Log.Raw("Parsing manifest", targ);
                 var xm = XElement.Load(manifest);
                 var ns = xm.GetDefaultNamespace();
 // ReSharper disable PossibleNullReferenceException
@@ -712,27 +725,38 @@ namespace Power8
                                               File = (x.Attribute("Executable") ?? x.Attribute("StartPage")).Value
                                           });
 // ReSharper restore PossibleNullReferenceException
+
+                //The app passed in targ argument should be registered Metro application, otherwise it can't be activated
+                Log.Raw("Defining target app", targ);
                 var app = apps.FirstOrDefault(a => targ.EndsWith(a.File, StringComparison.OrdinalIgnoreCase));
                 if (app == null)
                 {
+                    Log.Raw("Target app wasn't discovered, defaulting to regular shell launch", targ);
                     return false;
                 }
-                appUserModelId = AppUserModelIdProvider.GetAppUserModelId(identity, app.Id);
+
+                //As we know it's ModernUI app, let's try extracting it's AppUMID.
+                Log.Raw("Getting AppUserModelId", targ); 
+                appUserModelId = AppxUserModelIdProvider.GetAppUserModelId(identity, app.Id);
             }
             catch (Exception ex)
             {
                 DispatchCaughtException(ex);
                 return false;
             }
-            if (appUserModelId == null)
-            {
+            if (appUserModelId == null) 
+            {//no Windows registry entries fpund describing the app or it's not activatable
+                Log.Raw("Failed to retrieve AppUserModelId", targ); 
                 return false;
             }
+            Log.Raw("Creating ActivationManager", targ); 
             var muiActivator = (API.IApplicationActivationManager)new API.ApplicationActivationManager();
-            try
+            try //activate = launch; separate try because we need finally here
             {
-                /*var pid = */
+                Log.Raw("Launching AppX for AUMID " + appUserModelId, targ); 
+                /*var pid = */ 
                 muiActivator.ActivateApplication(appUserModelId, string.Empty, API.ACTIVATEOPTIONS.AO_NONE);
+                Log.Raw("Done OK ", targ); 
                 return true;
             }
             catch (Exception ex)
