@@ -103,6 +103,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BitmapSource2VisibilityConverter.cs" />
     <Compile Include="Converters\BoolToGridRowConverter.cs" />
+    <Compile Include="DataProviders\AppUserModelIdProvider.cs" />
     <Compile Include="DataProviders\MfuList.cs" />
     <Compile Include="Helpers\Analytics.cs" />
     <Compile Include="Helpers\Log.cs" />
