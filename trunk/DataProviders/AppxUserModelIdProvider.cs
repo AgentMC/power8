@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Win32;
+using Power8.Helpers;
 
 namespace Power8.DataProviders
 {
@@ -12,9 +13,16 @@ namespace Power8.DataProviders
     {
         private class AppxPackage
         {
-            public string Identity;
+            public string Identity, Token, Architecture;
             public Version Version;
             public AppxServer[] Servers;
+            public override string ToString()
+            {
+                return string.Format("[{0}][{1}][{2}][{3}]: {4}", Identity, Version, Architecture, Token,
+                                     string.Join(", ",
+                                                 Servers.Select(s =>
+                                                     string.Format("<{0}: {1}>", s.AppUserModelId, string.Join(", ", s.ActivatableClasses)))));
+            }
         }
         private class AppxServer
         {
@@ -33,16 +41,25 @@ namespace Power8.DataProviders
         /// &lt;Application&gt; tag of AppX Manifest</param>
         public static string GetAppUserModelId(string identity, string appId)
         {
+            var logKey = identity + "|" + appId;
             if (!Packages.ContainsKey(identity))
             {
+                Log.Raw("Cache miss", logKey);
                 UpdateCache();
             }
             if (!Packages.ContainsKey(identity)) //still
             {
+                Log.Raw("Double cache miss", logKey);
                 return null;
             }
             var server = Packages[identity].Servers.FirstOrDefault(s => s.ActivatableClasses.Contains(appId));
-            return (server == null) ? null : server.AppUserModelId;
+            if (server == null)
+            {
+                Log.Raw("Cache double-miss on app", logKey);
+                return null;
+            }
+            Log.Raw("Cache hit: " + server.AppUserModelId, logKey);
+            return server.AppUserModelId;
         }
 
         private static void UpdateCache()
@@ -90,10 +107,16 @@ namespace Power8.DataProviders
                     var pack = new AppxPackage                  //Create AppxPackage with generated Servers list
                                {
                                    Identity = data[0],
-                                   Version = new Version(data[1]),
                                    Servers = servers
                                };
+                    if (data.Length >= 4)
+                    {
+                        pack.Version = new Version(data[1]);
+                        pack.Architecture = data[2];
+                        pack.Token = data[data.Length - 1];
+                    }
                     Packages.Add(pack.Identity, pack);          //Add to cache
+                    Log.Raw("Added package to cache: " + pack);
                 }
                 k.Dispose();
             }
