@@ -1294,7 +1294,13 @@ namespace Power8
         /// </summary>
         public static string GetSettingsIndependentDbRoot()
         {
-            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                Log.Raw("Settings-independent DB root created: " + path);
+            }
+            return path;
         }
 
         private static Version _verCache;
