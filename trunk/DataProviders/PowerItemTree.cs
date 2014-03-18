@@ -936,7 +936,9 @@ namespace Power8
         }
 
         /// <summary>
-        /// From the StartMenu, searches for the only item that will Match() the given 'argument'.
+        /// From the StartMenu, searches for the only item that will Match() the given 'argument'
+        /// exactly, that is either Argument will be equal to search query or link's
+        /// target will be equal to it and will not contain any additional arguments.
         /// This is used to quickly find Start Menu element corresponding to some MFU item.
         /// Not thread-safe, not UI-thread-safe, call ONLY from UI thread!
         /// </summary>
@@ -946,6 +948,18 @@ namespace Power8
         {
             var list = new Collection<PowerItem>();
             SearchRootFastSync(argument.ToLowerInvariant(), StartMenuRootItem, list);
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i].IsLink && list[i].ResolvedLink != null)
+                {
+                    string arg;
+                    Util.ResolveLink(GetResolvedArgument(list[i]), out arg);
+                    if (!string.IsNullOrEmpty(arg))
+                    {
+                        list.RemoveAt(i);
+                    }
+                }
+            }
             return list.Count == 1 ? list[0] : null;
         }
 
