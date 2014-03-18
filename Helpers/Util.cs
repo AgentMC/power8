@@ -303,16 +303,27 @@ namespace Power8
         #region Shell items resolution
 
         /// <summary>
+        /// Returns the target and outs an argument of a shell shortcut, using COM component to get data.
+        /// </summary>
+        /// <param name="link">Full path to *.LNK file</param>
+        /// <param name="argument">The arguments to thew target of link</param>
+        public static string ResolveLink(string link, out string argument)
+        {
+            var shLink = new API.ShellLink();
+            ((API.IPersistFile) shLink).Load(link, 0);
+            var res = ResolveLink(((API.IShellLink) shLink));
+            Marshal.FinalReleaseComObject(shLink);
+            argument = res.Item2;
+            return res.Item1;
+        }
+        /// <summary>
         /// Returns the target of a shell shortcut, using COM component to get data.
         /// </summary>
         /// <param name="link">Full path to *.LNK file</param>
         public static string ResolveLink(string link)
         {
-            var shLink = new API.ShellLink();
-            ((API.IPersistFile)shLink).Load(link, 0);
-            var res = ResolveLink(((API.IShellLink) shLink));
-            Marshal.FinalReleaseComObject(shLink);
-            return res.Item1;//The target of Link
+            string dummy;
+            return ResolveLink(link, out dummy);//The target of Link
         }
         /// <summary>
         /// Extracts data from IShellLink instance, in Unicode format. Does NOT automatically 
