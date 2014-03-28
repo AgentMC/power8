@@ -1,6 +1,20 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.4.6 Beta (v.1.4.6.692): 28.03.2014==
+
+  # `[new]` Romanian and Ukrainian translation;
+  # `[new]` Ctrl+Tab sends the selected item's path to the search bar when it or Recent list is in focus;
+  # `[new]` Support for launching `ModernUI` apps when link is available (e.g. `PhotoApp` in Start Menu);
+  # `[removed]` Russian translation from MSI. It will only be available through 7Zip archive;
+  # `[changed]` Fine-tuned the Recent list display so that it doesn't use localized names for links from Start Menu as `FriendlyName` hints in case they contain additional arguments. This e.g. caused MMC.exe to be named "SQL server configuration tool" and CMD.exe to be named "Visual studio command line tool";
+  # `[fixed]` Opposite side of system `ReBar` moving out of view under W7^classic^ in case Configure Start Button is on;
+  # `[fixed]` Fixed launching RAD Studio 2009 - XE3 from Power8. Fix may also influence other problems end-user might experience with other software;
+  # `[fixed]` `Power8` exiting without any other actions after "Download and Update" button in case the update can be discovered but cannot be downloaded;
+  # `[fixed]` Some logging code (doesn't affect end-users);
+  # `[fixed]` Exception preventing reporting Analytics events on 1st launch.
+
+
 ==Version 1.4.5 Beta (v.1.4.5.666): 03.02.2014==
 
   # `[new]` Serbian, Croatian and Czech localization;
