@@ -207,10 +207,12 @@ Power8 enables you to use it with keyboard only.
     * Press *Up* and *Down* to move selection in Recent list or in search results - depending on what is going on at the moment;
     * Press *Enter* to launch item selected in Recent list or Search results. If nothing is selected, Power8 will try to launch the text typed in the Search box as Operating System command;
     * Press *Esc* to clear text entered and display the Recent list. Press *Esc* again to close the main window;
+    * _1.4.6+_ Press *Ctrl+Tab* to put selected item path to the search bar so it can be launched with additional parameters. For links, the path of target is being put;
   * In Recent list or Search results:
     * Press *Enter* to launch selected application of file;
     * Press *Up* and *Down* to navigate through lists. Please note: groups expanders are not accessible by these keys, but you can expand/collapse them by using *X* key;
     * Press *Ctrl+Up*, *Ctrl+Down* in Recent list when "Use custom list" is selected in Settings window, Most Frequently Used page to move selected item up or down;
+    * _1.4.6+_ Press *Ctrl+Tab* to put selected item path to the search bar so it can be launched with additional parameters. For links, the path of target is being put;
     * Press *Right* or *Left* to open Jump-List dropdown;
     * Press *P* in Recent list to pin or unpin item. In Search results you can also press this key to pin/unpin an item in case it originates from the Recent list, however, this change will only affect Recent list layout and not the Search results;
     * Press *X* in Search results to expand or collapse group selected item is in.
