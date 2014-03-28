@@ -18,8 +18,8 @@ The [https://code.google.com/p/power8/downloads/list Downloads] page won't conta
 ||<b>Status</b>||<b>Type</b>||<b>Version</b>||<b>Link</b>||<b>Changelog</b>|| 
 ||Latest||MSI||1.4.6.692||[http://power8.googlecode.com/svn/filez/Power8_v.1.4.6.692.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.4.6_Beta_(v.1.4.6.692):_28.03.2014 Read]||
 ||Latest||7z||1.4.6.692||[http://power8.googlecode.com/svn/filez/Power8_v.1.4.6.692.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.4.6_Beta_(v.1.4.6.692):_28.03.2014 Read]||
-||Pre-Latest||MSI||1.4.5.666||[http://power8.googlecode.com/svn/filez/Power8_v.1.4.5.666.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.5_Beta_(v.1.4.5.666):_03.02.2014 Read]||
-||Pre-Latest||7z||1.4.5.666||[http://power8.googlecode.com/svn/filez/Power8_v.1.4.5.666.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.5_Beta_(v.1.4.5.666):_03.02.2014 Read]||
+||Pre-Latest||MSI||1.4.5.666||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.4.5.666.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.5_Beta_(v.1.4.5.666):_03.02.2014 Read]||
+||Pre-Latest||7z||1.4.5.666||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.4.5.666.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.4.5_Beta_(v.1.4.5.666):_03.02.2014 Read]||
 
 
 = Older versions =
