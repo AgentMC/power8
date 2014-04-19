@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Windows;
@@ -44,6 +43,7 @@ namespace Power8.Helpers
         public static event EventHandler ImageChanged;
         public static event EventHandler ControlPanelByCategoryChanged;
         public static event EventHandler DynamicLayoutChanged;
+        public static event EventHandler PicStretchChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -644,7 +644,7 @@ namespace Power8.Helpers
             get { return Settings.Default.TryFpResetBeforeUiCtors; }
             set
             {
-                if (value == Settings.Default.TryFpResetBeforeUiCtors)
+                if (value == TryFpReset)
                     return;
                 Settings.Default.TryFpResetBeforeUiCtors = value;
                 Settings.Default.Save();
@@ -656,7 +656,7 @@ namespace Power8.Helpers
             get { return Settings.Default.DynamicLayout; }
             set
             {
-                if(value == Settings.Default.DynamicLayout)
+                if(value == DynamicLayout)
                     return;
                 Settings.Default.DynamicLayout = value;
                 Settings.Default.Save();
@@ -669,10 +669,23 @@ namespace Power8.Helpers
             get { return Settings.Default.DoNotFreeLibraries; }
             set
             {
-                if (value == Settings.Default.DoNotFreeLibraries)
+                if (value == DontFreeLibs)
                     return;
                 Settings.Default.DoNotFreeLibraries = value;
                 Settings.Default.Save();
+            }
+        }
+
+        public int PicStretchSelectedIndex
+        {
+            get { return Settings.Default.StretchIndex; }
+            set
+            {
+                if (value == PicStretchSelectedIndex)
+                    return;
+                Settings.Default.StretchIndex = value;
+                Settings.Default.Save();
+                PicStretchChanged(this, null);
             }
         }
 

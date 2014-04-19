@@ -150,6 +150,7 @@ namespace Power8.Views
             
             SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;
             SettingsManager.ImageChanged += SettingsManagerOnImageChanged;
+            SettingsManager.PicStretchChanged += SettingsManagerOnImageStretchChanged;
             SettingsManager.BgrThreadLock.Set();
 
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
@@ -292,6 +293,14 @@ namespace Power8.Views
         private void SettingsManagerOnImageChanged(object sender, EventArgs eventArgs)
         {
             FirePropChanged("StartImage");
+        }
+        /// <summary>
+        /// Invokes PropertyChanged for CustomPicStretch property making UI react on user changing 
+        /// the picture stretching in settings
+        /// </summary>
+        private void SettingsManagerOnImageStretchChanged(object sender, EventArgs eventArgs)
+        {
+            FirePropChanged("CustomPicStretch");
         }
         /// <summary>
         /// Handles DragEnter/DragOver events to provide proper feedback to drag source
@@ -513,6 +522,13 @@ namespace Power8.Views
                 }
                 return _bitmap;
             }
+        }
+        /// <summary>
+        /// Returns Stretch mode for custom user picture
+        /// </summary>
+        public System.Windows.Media.Stretch CustomPicStretch
+        {
+            get { return (System.Windows.Media.Stretch) SettingsManager.Instance.PicStretchSelectedIndex; }
         }
 
         #endregion
