@@ -7,6 +7,8 @@ For all other feature requests, currently not prioritized, please consult [Featu
 
 For already implemented features, see [Changelog] page.
 
+= _Power8 v.1.4.7 Beta_ =
+  * Setting to not to stretch image on the Power8 button;
 
 = _Power8 v.1.5 RTM_ =
 *estimated release date: no estimation, when some of us will have time; currently we'll still work on 1.4.x to make it more stable, usable and reliable*
