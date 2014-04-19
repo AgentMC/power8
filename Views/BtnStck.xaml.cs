@@ -13,6 +13,7 @@ using System.Windows.Input;
 using Power8.Commands;
 using Power8.Helpers;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Power8.Views
 {
@@ -179,35 +180,35 @@ namespace Power8.Views
         /// </summary>
         private void ButtonHibernateClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, false);
+            SetSuspendState(PowerState.Hibernate, sender);
         }
         /// <summary>
         /// Handler of Sleep button. Calls SetSuspendState() to put PC to sleep
         /// </summary>
         private void ButtonSleepClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, false);
+            SetSuspendState(PowerState.Suspend, sender);
         }
         /// <summary>
         /// Handler of Shutdown button. Calls shutdown.exe to turn PC off
         /// </summary>
         private void ButtonShutdownClick(object sender, RoutedEventArgs e)
         {
-            LaunchShForced("-s");
+            LaunchShForced("-s", sender);
         }
         /// <summary>
         /// Handler of Restart button. Calls shutdown.exe to reboot PC
         /// </summary>
         private void ButtonRestartClick(object sender, RoutedEventArgs e)
         {
-            LaunchShForced("-r");
+            LaunchShForced("-r", sender);
         }
         /// <summary>
         /// Handler of Log Off button. Calls shutdown.exe to log current user off
         /// </summary>
         private void ButtonLogOffClick(object sender, RoutedEventArgs e)
         {
-            LaunchShForced("-l");
+            LaunchShForced("-l", sender);
         }
         /// <summary>
         /// Handler of Lock button. Calls LockWorkStation to lock the user session
@@ -577,17 +578,40 @@ namespace Power8.Views
         #endregion
 
         #region Helpers
-        
+
         /// <summary>
-        /// Launches Shutdown.exe with -f key and command passed as argument.
+        /// Launches Shutdown.exe with command passed as argument.
+        /// If corresponding setting set, -f key is added to command.
         /// If command is not "-l", adds "-t 0" as well.
         /// Console window isn't shown.
         /// </summary>
         /// <param name="arg">Shutdown command, like "-s", "-r", "-l".</param>
-        private static void LaunchShForced(string arg)
+        /// <param name="sender">The Button started action</param>
+        private static void LaunchShForced(string arg, object sender)
         {
-            StartConsoleHidden("shutdown.exe", arg + " -f" + (arg == "-l" ? "" : " -t 0"));
+            if (PowerActionConfirmed((ContentControl) sender))
+                StartConsoleHidden("shutdown.exe", arg +
+                                                   (SettingsManager.Instance.ForcePowerActions ? " -f" : "") +
+                                                   (arg == "-l" ? "" : " -t 0"));
         }
+
+        private static void SetSuspendState(PowerState state, object sender)
+        {
+            if (PowerActionConfirmed((ContentControl) sender))
+                System.Windows.Forms.Application.SetSuspendState(state,
+                                                                 SettingsManager.Instance.ForcePowerActions,
+                                                                 false);
+        }
+
+        private static bool PowerActionConfirmed(ContentControl sender)
+        {
+            if (!SettingsManager.Instance.ConfirmPowerActions)
+                return true;
+            return (MessageBox.Show(string.Format(Properties.Resources.Str_ConfirmPowerAction, sender.Content),
+                                    Properties.NoLoc.Stg_AppShortName,
+                                    MessageBoxButton.YesNo) == MessageBoxResult.Yes);
+        }
+
         /// <summary>
         /// Executes command without showing the console window or other windows
         /// </summary>

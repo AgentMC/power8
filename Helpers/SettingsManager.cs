@@ -701,6 +701,31 @@ namespace Power8.Helpers
             }
         }
 
+        public bool ForcePowerActions
+        {
+            get { return Settings.Default.ForcePowerActions; }
+            set
+            {
+                if (value == ForcePowerActions)
+                    return;
+                Settings.Default.ForcePowerActions = value;
+                Settings.Default.Save();
+            }
+        }
+
+        public bool ConfirmPowerActions
+        {
+            get { return Settings.Default.ConfirmPowerActions; }
+            set
+            {
+                if (value == ConfirmPowerActions)
+                    return;
+                Settings.Default.ConfirmPowerActions = value;
+                Settings.Default.Save();
+            }
+        }
+
+
         #endregion
     }
 

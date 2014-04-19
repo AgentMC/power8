@@ -480,4 +480,16 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_StgAutoCorner" xml:space="preserve">
     <value>Show Main window close to mouse after Alt+Z</value>
   </data>
+  <data name="Str_ConfirmPowerAction" xml:space="preserve">
+    <value>{0}? Are you sure?</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>Power operations (shutdown, restart...):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>Force</value>
+  </data>
 </root>

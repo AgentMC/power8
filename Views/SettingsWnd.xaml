@@ -52,6 +52,17 @@
                 <CheckBox x:Name="StgDynamicLayout" IsChecked="{Binding DynamicLayout, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgAutoCorner" IsChecked="{Binding AltZAutoCornerEnabled, Mode=TwoWay}"/>
                 <Separator/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="StgLblPwr" Padding="0,0,5,0" Margin="0,3,0,0"/>
+                    <CheckBox x:Name="StgPwrConfirm" IsChecked="{Binding ConfirmPowerActions, Mode=TwoWay}" Grid.Column="1"/>
+                    <CheckBox x:Name="StgPwrForce" IsChecked="{Binding ForcePowerActions, Mode=TwoWay}" Grid.Column="2" Margin="5,4,0,4"/>
+                </Grid>
+                <Separator/>
                 <Grid HorizontalAlignment="Left" IsEnabled="{Binding ElementName=StgWnd, Path=NotXp}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>

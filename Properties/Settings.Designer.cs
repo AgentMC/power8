@@ -380,5 +380,29 @@ namespace Power8.Properties {
                 this["EnableAutoCorner"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ForcePowerActions {
+            get {
+                return ((bool)(this["ForcePowerActions"]));
+            }
+            set {
+                this["ForcePowerActions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ConfirmPowerActions {
+            get {
+                return ((bool)(this["ConfirmPowerActions"]));
+            }
+            set {
+                this["ConfirmPowerActions"] = value;
+            }
+        }
     }
 }

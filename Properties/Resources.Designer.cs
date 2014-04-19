@@ -516,6 +516,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Power operations (shutdown, restart...):.
+        /// </summary>
+        internal static string CR_StgLblPwr {
+            get {
+                return ResourceManager.GetString("CR_StgLblPwr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;All programs&quot; text (clear to use system defaults):.
         /// </summary>
         internal static string CR_StgLblSetStartText {
@@ -575,6 +584,24 @@ namespace Power8.Properties {
         internal static string CR_StgMfuUseSystem {
             get {
                 return ResourceManager.GetString("CR_StgMfuUseSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        internal static string CR_StgPwrConfirm {
+            get {
+                return ResourceManager.GetString("CR_StgPwrConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Force.
+        /// </summary>
+        internal static string CR_StgPwrForce {
+            get {
+                return ResourceManager.GetString("CR_StgPwrForce", resourceCulture);
             }
         }
         
@@ -911,6 +938,15 @@ namespace Power8.Properties {
         internal static string Str_AllPrograms {
             get {
                 return ResourceManager.GetString("Str_AllPrograms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}? Are you sure?.
+        /// </summary>
+        internal static string Str_ConfirmPowerAction {
+            get {
+                return ResourceManager.GetString("Str_ConfirmPowerAction", resourceCulture);
             }
         }
         
