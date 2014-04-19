@@ -3,7 +3,6 @@
 
 = List of ideas and requests we not committed yet =
   * Start button
-    * Setting to not to stretch image on the Power8 button;
     * Configurable text on Start button;
     * W7^Aero^: hide standard start button
     * W7^Classic^: fill standard start button like it's done on XP. 
