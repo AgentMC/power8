@@ -10,6 +10,7 @@
     <Converters:BitmapSource2VisibilityConverter x:Key="imageDisplay"/>
     <Converters:BoolToGridRowConverter x:Key="uiSwitcher"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    <Converters:TextToBoolConverter x:Key="TextToBoolConverter"/>
     
     <!-- Stuff -->
     
