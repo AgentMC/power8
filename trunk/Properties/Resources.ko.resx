@@ -135,7 +135,7 @@
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
     <value>개체 속성 {1}을(를) 표시하는 동안 오류
-{1}가 발생했습니다</value>
+{0}가 발생했습니다</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
     <value>업데이트를 확인할 수 없습니다.</value>
