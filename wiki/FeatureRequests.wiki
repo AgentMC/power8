@@ -14,7 +14,6 @@
     * Automatically expand menu-button contents on hover (probably configurable, with pause);
   * Interaction
     * Add setting to confirm Power actions;
-    * Setting to disable auto-corner feature by Alt+Z;
   * Theming
     * Configurable Button-Stack background/Theme support;
       * Customized builds with Menu background and Main button pre-configuration.
