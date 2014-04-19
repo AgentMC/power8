@@ -368,5 +368,17 @@ namespace Power8.Properties {
                 this["StretchIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnableAutoCorner {
+            get {
+                return ((bool)(this["EnableAutoCorner"]));
+            }
+            set {
+                this["EnableAutoCorner"] = value;
+            }
+        }
     }
 }

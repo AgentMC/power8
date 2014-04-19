@@ -203,8 +203,10 @@ namespace Power8.Views
             MfuList.UpdateStartMfu();
             BtnStck.Instance.Show();//XP:955ms 0_o
             var screenPoint = new API.POINT();
-            API.GetCursorPos(ref screenPoint);
-            GetSetWndPosition(BtnStck.Instance, screenPoint, sender == Keyboard.PrimaryDevice);
+            API.GetCursorPos(ref screenPoint);              
+            GetSetWndPosition(BtnStck.Instance, screenPoint, 
+                sender == Keyboard.PrimaryDevice && SettingsManager.Instance.AltZAutoCornerEnabled);
+            //  ^^^ means "Command came from KB and Auto-cornering enabled"
         }
         /// <summary>
         /// Shows Run dialog

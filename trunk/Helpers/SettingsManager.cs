@@ -688,6 +688,18 @@ namespace Power8.Helpers
                 PicStretchChanged(this, null);
             }
         }
+        
+        public bool AltZAutoCornerEnabled
+        {
+            get { return Settings.Default.EnableAutoCorner; }
+            set
+            {
+                if (value == AltZAutoCornerEnabled)
+                    return;
+                Settings.Default.EnableAutoCorner = value;
+                Settings.Default.Save();
+            }
+        }
 
         #endregion
     }

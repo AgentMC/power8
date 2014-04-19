@@ -477,4 +477,7 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_StgStrUniform2Fill" xml:space="preserve">
     <value>Uniform-to-fill scaling</value>
   </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>Show Main window close to mouse after Alt+Z</value>
+  </data>
 </root>
