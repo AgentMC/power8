@@ -435,6 +435,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Main window close to mouse after Alt+Z.
+        /// </summary>
+        internal static string CR_StgAutoCorner {
+            get {
+                return ResourceManager.GetString("CR_StgAutoCorner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restart application when fatal error occurs.
         /// </summary>
         internal static string CR_StgAutoRestart {
