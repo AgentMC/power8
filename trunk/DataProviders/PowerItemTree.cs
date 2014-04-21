@@ -461,7 +461,7 @@ namespace Power8
             var isDir = Directory.Exists(e.FullPath);
             var baseAndArg = PathToBaseAndArg(e.FullPath);
             if (baseAndArg.Item2 == null) 
-                return; //Even %startmenu% is changed, here will be "/", so null means error
+                return; //Even %startmenu% is changed, here will be "\", so null means error
 
             var roots = new List<PowerItem> {MyComputerRoot, StartMenuRootItem}; //look only under these + libraries
             foreach (var lib in LibrariesRoot.Items.Where(lib => !lib.AutoExpandIsPending)) //if expanded already
@@ -471,16 +471,19 @@ namespace Power8
             {
 // ReSharper disable PossibleUnintendedReferenceComparison
                 var lbna = baseAndArg;
-                if (SettingsManager.Instance.StartMenuOldStyle && root == StartMenuRootItem)
+                var pathDelta = PathProgramsFolder.Substring(PathRoot.Length);
+                if (root == StartMenuRootItem && SettingsManager.Instance.StartMenuOldStyle &&
+                    baseAndArg.Item2.StartsWith(pathDelta) && 
+                    (baseAndArg.Item2.Length == pathDelta.Length || baseAndArg.Item2[pathDelta.Length] == '\\'))
                 {
-                    lbna = new Tuple<string, string>(
-                        baseAndArg.Item1,
-                        baseAndArg.Item2.Substring(PathProgramsFolder.Length - PathRoot.Length));
+                    var filtered = baseAndArg.Item2.Substring(pathDelta.Length);
+                    lbna = new Tuple<string, string>(baseAndArg.Item1, string.IsNullOrEmpty(filtered) ? @"\\" : filtered);
                 }
-                var item = SearchContainerByArgument(lbna, root,
-                                                     e.ChangeType == WatcherChangeTypes.Created &&
-                                                     root == StartMenuRootItem);
-                //Create intermediate folders only for Start Menu and only in casethe file was created
+                var item =
+                    SearchContainerByArgument(lbna,
+                                              root,
+                                              e.ChangeType == WatcherChangeTypes.Created && root == StartMenuRootItem);
+                //Create intermediate folders only for Start Menu and only in case the file was created
 // ReSharper restore PossibleUnintendedReferenceComparison
                 if (item != null)
                 {
@@ -959,16 +962,16 @@ namespace Power8
                                                 j.Argument.EndsWith(sourceSplitted[i],
                                                                     StringComparison.InvariantCultureIgnoreCase));
                 if (item == null && autoGenerateSubItems && !string.IsNullOrEmpty(baseAndArg.Item1))
-                    // ReSharper disable AccessToModifiedClosure
-                    //TODO: really Eval()? UI in ASI kicked from Send, probably don't need this...
-                    item = Util.Eval(() =>
-                                        AddSubItem(prevItem,
-                                                baseAndArg.Item1,
-                                                baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i],
-                                                true));
-                    // ReSharper restore AccessToModifiedClosure
+                {
+                    item = AddSubItem(prevItem,
+                                      baseAndArg.Item1,
+                                      baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i],
+                                      true);
+                }
                 else if (item == null)
+                {
                     break;
+                }
             }
             return item;
         }
