@@ -24,8 +24,9 @@ namespace Power8
         public const string SEPARATOR_NAME = "----";
 
         private static readonly string 
-            PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu rioot
-            PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu); //All users start menu root
+            PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu root
+            PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu), //All users start menu root
+            PathProgramsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs); //UserPrograms subfolder of StartMenu
 
         //Ignore changed in
         private static readonly string
@@ -468,7 +469,14 @@ namespace Power8
             foreach (var root in roots)
             {
 // ReSharper disable PossibleUnintendedReferenceComparison
-                var item = SearchContainerByArgument(baseAndArg, root,
+                var lbna = baseAndArg;
+                if (SettingsManager.Instance.StartMenuOldStyle && root == StartMenuRootItem)
+                {
+                    lbna = new Tuple<string, string>(
+                        baseAndArg.Item1,
+                        baseAndArg.Item2.Substring(PathProgramsFolder.Length - PathRoot.Length));
+                }
+                var item = SearchContainerByArgument(lbna, root,
                                                      e.ChangeType == WatcherChangeTypes.Created &&
                                                      root == StartMenuRootItem);
                 //Create intermediate folders only for Start Menu and only in casethe file was created
@@ -518,6 +526,12 @@ namespace Power8
             ScanFolderSync(StartMenuRootItem, PathRoot, true);
             ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
             StartMenuRootItem.SortItems();
+            _programsItem = SearchItemByArgument(PathProgramsFolder, true, StartMenuRootItem, true);
+            SettingsManager.StartMenuStyleChanged += SettingsManagerOnStartMenuStyleChanged;
+            if (SettingsManager.Instance.StartMenuOldStyle)
+            {
+                SettingsManagerOnStartMenuStyleChanged(null, null);
+            }
             //Set configurable name. Proxy logic is put into manager, so in case 
             //nothing is configured, null will be returned, which will cause
             //this item to regenerate Friendly name, i.e. re-resolve the resourceId string
@@ -530,6 +544,46 @@ namespace Power8
             Log.Fmt("InitTree - done in {0}", s.ElapsedMilliseconds);
             s.Stop();
 #endif
+        }
+
+        private static PowerItem _programsItem;
+        /// <summary>
+        /// Rebuilds Start menu based on layout setting. If old layout is ON - then 
+        /// no "programs" layer is available - and all items are put under the separator.
+        /// In case it's OFF - then classic XP-style layout is applied, and the "programs"
+        /// layer is included
+        /// </summary>
+        private static void SettingsManagerOnStartMenuStyleChanged(object sender, EventArgs eventArgs)
+        {
+            if (SettingsManager.Instance.StartMenuOldStyle)
+            {
+                StartMenuRootItem.Items.Remove(_programsItem);
+                StartMenuRootItem.Items.Add(new PowerItem { FriendlyName = SEPARATOR_NAME });
+                foreach (var powerItem in _programsItem.Items)
+                {
+                    StartMenuRootItem.Items.Add(powerItem);
+                    powerItem.Parent = StartMenuRootItem;
+                }
+            }
+            else
+            {
+                _programsItem.Items.Clear();
+                for (int i = StartMenuRootItem.Items.Count - 1; i >= 0; i--)
+                {
+                    var item = StartMenuRootItem.Items[i];
+                    StartMenuRootItem.Items.Remove(item);
+                    if (item.FriendlyName != SEPARATOR_NAME)
+                    {
+                        _programsItem.Items.Insert(0, item);
+                        item.Parent = _programsItem;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                StartMenuRootItem.Items.Add(_programsItem);
+            }
         }
 
         /// <summary>
@@ -917,19 +971,28 @@ namespace Power8
             }
             return item;
         }
-        
+
         /// <summary>
         /// From a container's children selects the one that seems to be discribed by passed parameters
         /// </summary>
         /// <param name="argument">Search parameter: child's expected Argument. Case-insensitive.</param>
         /// <param name="isFolder">Search parameter: child's IsFolder value.</param>
         /// <param name="container">The PowerItem to search children from.</param>
+        /// <param name="strictFileName">Flag for FS-items to ensure that really desired object will be found.</param>
         /// <returns></returns>
-        private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container)
+        private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container, bool strictFileName = false)
         {
             if(container.AutoExpandIsPending)
                 return null;
-            var endExpr = Path.GetFileName(argument) ?? argument;
+            var endExpr = Path.GetFileName(argument);
+            if (endExpr == null)
+            {
+                endExpr = argument;
+            }
+            else if (strictFileName && !endExpr.StartsWith(@"\"))
+            {
+                endExpr = @"\" + endExpr;
+            }
             return container.Items.FirstOrDefault(i =>
                     i.IsFolder == isFolder &&
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));

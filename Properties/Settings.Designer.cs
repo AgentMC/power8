@@ -404,5 +404,17 @@ namespace Power8.Properties {
                 this["ConfirmPowerActions"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StartMenu98Style {
+            get {
+                return ((bool)(this["StartMenu98Style"]));
+            }
+            set {
+                this["StartMenu98Style"] = value;
+            }
+        }
     }
 }
