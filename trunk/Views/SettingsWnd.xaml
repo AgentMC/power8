@@ -48,6 +48,7 @@
                     <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
                 </Grid>
                 <CheckBox x:Name="StgAutoSort" IsChecked="{Binding AutoSortTrees, Mode=TwoWay}" />
+                <CheckBox x:Name="StgOldLayout" IsChecked="{Binding StartMenuOldStyle, Mode=TwoWay}" />
                 <CheckBox x:Name="StgAutoRestart" IsChecked="{Binding AutoRestart, Mode=TwoWay}" />
                 <CheckBox x:Name="StgDynamicLayout" IsChecked="{Binding DynamicLayout, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgAutoCorner" IsChecked="{Binding AltZAutoCornerEnabled, Mode=TwoWay}"/>

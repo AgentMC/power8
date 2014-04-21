@@ -588,6 +588,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compact Start Menu (Windows 98-style).
+        /// </summary>
+        internal static string CR_StgOldLayout {
+            get {
+                return ResourceManager.GetString("CR_StgOldLayout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         internal static string CR_StgPwrConfirm {

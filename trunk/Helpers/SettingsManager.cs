@@ -44,6 +44,7 @@ namespace Power8.Helpers
         public static event EventHandler ControlPanelByCategoryChanged;
         public static event EventHandler DynamicLayoutChanged;
         public static event EventHandler PicStretchChanged;
+        public static event EventHandler StartMenuStyleChanged;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -722,6 +723,19 @@ namespace Power8.Helpers
                     return;
                 Settings.Default.ConfirmPowerActions = value;
                 Settings.Default.Save();
+            }
+        }
+
+        public bool StartMenuOldStyle
+        {
+            get { return Settings.Default.StartMenu98Style; }
+            set
+            {
+                if (value == StartMenuOldStyle)
+                    return;
+                Settings.Default.StartMenu98Style = value;
+                Settings.Default.Save();
+                StartMenuStyleChanged(this, null);
             }
         }
 
