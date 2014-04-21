@@ -450,7 +450,8 @@ namespace Power8
 
             //Veryfying file changed not under any of appdata
             var fpLow = e.FullPath.ToLowerInvariant();
-            if(fpLow.StartsWith(IcrAppData) || fpLow.StartsWith(IclAppData) || fpLow.StartsWith(IcTemp))
+            if ((fpLow.StartsWith(IcrAppData) || fpLow.StartsWith(IclAppData) || fpLow.StartsWith(IcTemp))
+                && !fpLow.StartsWith(PathRoot, StringComparison.OrdinalIgnoreCase)) 
                 return;
             Log.Fmt("File {0}: {1}", e.ChangeType, e.FullPath);
             //Ensuring buttonstack is created on Main thread
