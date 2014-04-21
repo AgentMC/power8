@@ -26,7 +26,8 @@ namespace Power8
         private static readonly string 
             PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu root
             PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu), //All users start menu root
-            PathProgramsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs); //UserPrograms subfolder of StartMenu
+            PathProgramsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs), //UserPrograms subfolder of StartMenu
+            PathDelta = PathProgramsFolder.Substring(PathRoot.Length);
 
         //Ignore changed in
         private static readonly string
@@ -471,13 +472,12 @@ namespace Power8
             {
 // ReSharper disable PossibleUnintendedReferenceComparison
                 var lbna = baseAndArg;
-                var pathDelta = PathProgramsFolder.Substring(PathRoot.Length);
                 if (root == StartMenuRootItem && SettingsManager.Instance.StartMenuOldStyle &&
-                    baseAndArg.Item2.StartsWith(pathDelta) && 
-                    (baseAndArg.Item2.Length == pathDelta.Length || baseAndArg.Item2[pathDelta.Length] == '\\'))
+                    baseAndArg.Item2.StartsWith(PathDelta) && 
+                    (baseAndArg.Item2.Length == PathDelta.Length || baseAndArg.Item2[PathDelta.Length] == '\\'))
                 {
-                    var filtered = baseAndArg.Item2.Substring(pathDelta.Length);
-                    lbna = new Tuple<string, string>(baseAndArg.Item1, string.IsNullOrEmpty(filtered) ? @"\\" : filtered);
+                    var filtered = baseAndArg.Item2.Substring(PathDelta.Length);
+                    lbna = new Tuple<string, string>(baseAndArg.Item1, string.IsNullOrEmpty(filtered) ? @"\" : filtered);
                 }
                 var item =
                     SearchContainerByArgument(lbna,
