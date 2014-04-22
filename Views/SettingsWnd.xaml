@@ -44,8 +44,8 @@
                     </Grid.RowDefinitions>
                     <CheckBox x:Name="MWAutoStart" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding AutoStartEnabled, Mode=TwoWay}"/>
                     <CheckBox x:Name="MWCheckForUpdates" Style="{StaticResource RedCheckBoxStyle}" IsChecked="{Binding CheckForUpdatesEnabled, Mode=TwoWay}" Grid.Column="1" Grid.Row="0"/>
-                    <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}" Grid.Row="1" Grid.Column="0"/>
-                    <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
+                    <CheckBox x:Name="MWBlockMetro" IsChecked="{Binding BlockMetroEnabled, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
+                    <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}" Grid.Row="1" Grid.Column="0"/>
                 </Grid>
                 <CheckBox x:Name="StgAutoSort" IsChecked="{Binding AutoSortTrees, Mode=TwoWay}" />
                 <CheckBox x:Name="StgOldLayout" IsChecked="{Binding StartMenuOldStyle, Mode=TwoWay}" />
