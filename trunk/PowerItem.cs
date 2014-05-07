@@ -505,6 +505,12 @@ namespace Power8
         {
             get { return !IsCanBeRemoved && Parent != PowerItemTree.NetworkRoot ; }
         }
+        /// <summary>
+        /// Gets or sets value indicating whether this PowerItem's Items should be visually merged 
+        /// with neighbouring siblings. In practice this is used for Programs item which content
+        /// can be placed directly under AllPrograms insted of going under separate folder.
+        /// </summary>
+        public bool IsMergeableContentHolder { get; set; }
 
 
         #endregion
@@ -662,13 +668,19 @@ namespace Power8
             {
                 powerItem.SortItems();
             }
-            var lf = new List<PowerItem>(_items.Where(i => i.IsFolder));
-            var li = new List<PowerItem>(_items.Where(i => !i.IsFolder));
-            lf.Sort();
-            li.Sort();
+            var folders = new List<PowerItem>();
+            var files = new List<PowerItem>();
+            var merged = new List<PowerItem>();
+            foreach (var item in _items)
+            {
+                (item.IsMergeableContentHolder ? merged : (item.IsFolder ? folders : files)).Add(item);
+            }
             _items.Clear();
-            lf.ForEach(_items.Add);
-            li.ForEach(_items.Add);
+            foreach (var list in new[]{folders, files, merged})
+            {
+                list.Sort();
+                list.ForEach(_items.Add);
+            }
         }
         //Search
         /// <summary>
