@@ -3,7 +3,10 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
  xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
- xmlns:my="clr-namespace:Power8" xmlns:Converters="clr-namespace:Power8.Converters" mc:Ignorable="d">
+ xmlns:my="clr-namespace:Power8" xmlns:Converters="clr-namespace:Power8.Converters"
+    xmlns:helpers="clr-namespace:Power8.Helpers"
+    xmlns:views="clr-namespace:Power8.Views"
+    mc:Ignorable="d">
     <!-- Resource dictionary entries should be defined here. -->
     <Converters:NameToResourceConverter x:Key="localizer"/>
     <Converters:MenuWidthToMarginConverter x:Key="themeApplier" />
@@ -408,7 +411,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Menu}">
-                    <Grid x:Name="grid" Height="Auto" SnapsToDevicePixels="true" Width="Auto">
+                 <Grid x:Name="grid" Height="Auto" SnapsToDevicePixels="true" Width="Auto">
                   <Border BorderBrush="{DynamicResource BlackBrush}" BorderThickness="1" CornerRadius="2">
                       <Grid>
                        <Grid.RowDefinitions>
@@ -477,6 +480,19 @@
         <Setter Property="ContextMenu" Value="{DynamicResource fsMenuItemsContextMenu}"/>
         <Setter Property="Padding" Value="0"/>
         <Style.Triggers>
+			<MultiDataTrigger>
+				<MultiDataTrigger.Conditions>
+                    <Condition Binding="{Binding StartMenuOldStyle, RelativeSource={RelativeSource AncestorType=views:BtnStck}}" Value="True"/>
+					<Condition Binding="{Binding FriendlyName}" Value="Programs"/>
+				</MultiDataTrigger.Conditions>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate>
+							<ItemsPresenter/>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</MultiDataTrigger>
             <DataTrigger Binding="{Binding FriendlyName}" Value="{x:Static my:PowerItemTree.SEPARATOR_NAME}">
                 <Setter Property="Template">
                     <Setter.Value>
