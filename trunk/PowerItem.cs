@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Power8.Helpers;
 using Power8.Properties;
 using System.Linq;
 
@@ -489,14 +490,14 @@ namespace Power8
         /// </summary>
         public bool IsCanBeHidden
         {
-            get { return IsMfuChild && Helpers.SettingsManager.Instance.MfuIsInternal; }
+            get { return IsMfuChild && SettingsManager.Instance.MfuIsInternal; }
         }
         /// <summary>
         /// Returns value indicating that "Remove from custom list" for this item is displayed
         /// </summary>
         public bool IsCanBeRemoved
         {
-            get { return IsMfuChild && Helpers.SettingsManager.Instance.MfuIsCustom; }
+            get { return IsMfuChild && SettingsManager.Instance.MfuIsCustom; }
         }
         /// <summary>
         /// Returns value indicating that "Add to custom list" for this item is displayed
@@ -673,7 +674,11 @@ namespace Power8
             var merged = new List<PowerItem>();
             foreach (var item in _items)
             {
-                (item.IsMergeableContentHolder ? merged : (item.IsFolder ? folders : files)).Add(item);
+                (item.IsMergeableContentHolder && SettingsManager.Instance.StartMenuOldStyle
+                     ? merged
+                     : (item.IsFolder
+                            ? folders
+                            : files)).Add(item);
             }
             _items.Clear();
             foreach (var list in new[]{folders, files, merged})

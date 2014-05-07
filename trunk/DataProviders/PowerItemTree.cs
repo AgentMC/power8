@@ -520,20 +520,22 @@ namespace Power8
 #endif
             ScanFolderSync(StartMenuRootItem, PathRoot, true);
             ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
+#if DEBUG
+            Log.Raw("InitTree - scanned in " + s.ElapsedMilliseconds);
+#endif
             SearchItemByArgument(PathProgramsFolder, true, StartMenuRootItem, true).IsMergeableContentHolder = true;
             StartMenuRootItem.SortItems();
-            
-            
+            SettingsManager.StartMenuStyleChanged += (o, e) => StartMenuRootItem.SortItems();
             //Set configurable name. Proxy logic is put into manager, so in case 
             //nothing is configured, null will be returned, which will cause
             //this item to regenerate Friendly name, i.e. re-resolve the resourceId string
             StartMenuRootItem.FriendlyName = SettingsManager.Instance.StartMenuText;
 #if DEBUG
-            Log.Fmt("InitTree - scanned in {0}", s.ElapsedMilliseconds);
+            Log.Raw("InitTree - sorted in " + s.ElapsedMilliseconds);
 #endif
             Util.Send(() => BtnStck.Instance.InvalidateVisual());
 #if DEBUG
-            Log.Fmt("InitTree - done in {0}", s.ElapsedMilliseconds);
+            Log.Raw("InitTree - done in " + s.ElapsedMilliseconds);
             s.Stop();
 #endif
         }
