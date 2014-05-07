@@ -10,9 +10,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Power8.Commands;
 using Power8.Helpers;
-using Power8.Properties;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
 
@@ -771,22 +769,6 @@ namespace Power8.Views
         public ObservableCollection<PowerItem> MfuItems
         {
             get { return MfuList.StartMfu; }
-        }
-        /// <summary>
-        /// Source for search results
-        /// </summary>
-        public ObservableCollection<PowerItem> SearchData
-        {
-            get { return _searchData; }
-        }
-        //backing field
-        private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
-        /// <summary>
-        /// Bindable command which performs Invoke() on item that might be extracted from source
-        /// </summary>
-        public MenuItemClickCommand ClickCommand
-        {
-            get { return _cmd; }
         }
         //backing field
         private bool _isWindowAtTopOfScreen = true;

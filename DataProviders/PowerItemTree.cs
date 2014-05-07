@@ -26,9 +26,8 @@ namespace Power8
         private static readonly string 
             PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu root
             PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu), //All users start menu root
-            PathProgramsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs), //UserPrograms subfolder of StartMenu
-            PathDelta = PathProgramsFolder.Substring(PathRoot.Length);
-
+            PathProgramsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs); //UserPrograms subfolder of StartMenu
+            
         //Ignore changed in
         private static readonly string
             IcrAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
@@ -471,16 +470,8 @@ namespace Power8
             foreach (var root in roots)
             {
 // ReSharper disable PossibleUnintendedReferenceComparison
-                var lbna = baseAndArg;
-                if (root == StartMenuRootItem && SettingsManager.Instance.StartMenuOldStyle &&
-                    baseAndArg.Item2.StartsWith(PathDelta) && 
-                    (baseAndArg.Item2.Length == PathDelta.Length || baseAndArg.Item2[PathDelta.Length] == '\\'))
-                {
-                    var filtered = baseAndArg.Item2.Substring(PathDelta.Length);
-                    lbna = new Tuple<string, string>(baseAndArg.Item1, string.IsNullOrEmpty(filtered) ? @"\" : filtered);
-                }
                 var item =
-                    SearchContainerByArgument(lbna,
+                    SearchContainerByArgument(baseAndArg,
                                               root,
                                               e.ChangeType == WatcherChangeTypes.Created && root == StartMenuRootItem);
                 //Create intermediate folders only for Start Menu and only in case the file was created
@@ -529,13 +520,10 @@ namespace Power8
 #endif
             ScanFolderSync(StartMenuRootItem, PathRoot, true);
             ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
+            SearchItemByArgument(PathProgramsFolder, true, StartMenuRootItem, true).IsMergeableContentHolder = true;
             StartMenuRootItem.SortItems();
-            _programsItem = SearchItemByArgument(PathProgramsFolder, true, StartMenuRootItem, true);
-            SettingsManager.StartMenuStyleChanged += SettingsManagerOnStartMenuStyleChanged;
-            if (SettingsManager.Instance.StartMenuOldStyle)
-            {
-                SettingsManagerOnStartMenuStyleChanged(null, null);
-            }
+            
+            
             //Set configurable name. Proxy logic is put into manager, so in case 
             //nothing is configured, null will be returned, which will cause
             //this item to regenerate Friendly name, i.e. re-resolve the resourceId string
@@ -549,47 +537,6 @@ namespace Power8
             s.Stop();
 #endif
         }
-
-        private static PowerItem _programsItem;
-        /// <summary>
-        /// Rebuilds Start menu based on layout setting. If old layout is ON - then 
-        /// no "programs" layer is available - and all items are put under the separator.
-        /// In case it's OFF - then classic XP-style layout is applied, and the "programs"
-        /// layer is included
-        /// </summary>
-        private static void SettingsManagerOnStartMenuStyleChanged(object sender, EventArgs eventArgs)
-        {
-            //if (SettingsManager.Instance.StartMenuOldStyle)
-            //{
-            //    StartMenuRootItem.Items.Remove(_programsItem);
-            //    StartMenuRootItem.Items.Add(new PowerItem { FriendlyName = SEPARATOR_NAME });
-            //    foreach (var powerItem in _programsItem.Items)
-            //    {
-            //        StartMenuRootItem.Items.Add(powerItem);
-            //        powerItem.Parent = StartMenuRootItem;
-            //    }
-            //}
-            //else
-            //{
-            //    _programsItem.Items.Clear();
-            //    for (int i = StartMenuRootItem.Items.Count - 1; i >= 0; i--)
-            //    {
-            //        var item = StartMenuRootItem.Items[i];
-            //        StartMenuRootItem.Items.Remove(item);
-            //        if (item.FriendlyName != SEPARATOR_NAME)
-            //        {
-            //            _programsItem.Items.Insert(0, item);
-            //            item.Parent = _programsItem;
-            //        }
-            //        else
-            //        {
-            //            break;
-            //        }
-            //    }
-            //    StartMenuRootItem.Items.Add(_programsItem);
-            //}
-        }
-
         /// <summary>
         /// Initializes an asynchronous scan of some FS folder
         /// </summary>
