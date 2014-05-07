@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Power8.Commands;
 using Power8.Helpers;
+using Power8.Properties;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MessageBox = System.Windows.MessageBox;
 
@@ -100,6 +101,7 @@ namespace Power8.Views
             PowerItemTree.WinSearchThreadStarted += HandleSearch;
             SettingsManager.ControlPanelByCategoryChanged += OnControlPanelByCategoryChanged;
             SettingsManager.DynamicLayoutChanged += (sender, e) => FirePropChanged("IsWindowAtTopOfScreen");
+            SettingsManager.StartMenuStyleChanged += (sender, args) => FirePropChanged("StartMenuOldStyle");
 
             foreach (var mb in GetAllMenuButtons())
                 mb.Item = GetSpecialItems(mb.Name);
@@ -749,6 +751,13 @@ namespace Power8.Views
 
         #region Bindable props
 
+        /// <summary>
+        /// Bindable property that wraps StartMenuOldStyle property from the settings.
+        /// </summary>
+        public bool StartMenuOldStyle
+        {
+            get { return SettingsManager.Instance.StartMenuOldStyle; }
+        }
         /// <summary>
         /// Source for Start Menu
         /// </summary>

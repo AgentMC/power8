@@ -559,35 +559,35 @@ namespace Power8
         /// </summary>
         private static void SettingsManagerOnStartMenuStyleChanged(object sender, EventArgs eventArgs)
         {
-            if (SettingsManager.Instance.StartMenuOldStyle)
-            {
-                StartMenuRootItem.Items.Remove(_programsItem);
-                StartMenuRootItem.Items.Add(new PowerItem { FriendlyName = SEPARATOR_NAME });
-                foreach (var powerItem in _programsItem.Items)
-                {
-                    StartMenuRootItem.Items.Add(powerItem);
-                    powerItem.Parent = StartMenuRootItem;
-                }
-            }
-            else
-            {
-                _programsItem.Items.Clear();
-                for (int i = StartMenuRootItem.Items.Count - 1; i >= 0; i--)
-                {
-                    var item = StartMenuRootItem.Items[i];
-                    StartMenuRootItem.Items.Remove(item);
-                    if (item.FriendlyName != SEPARATOR_NAME)
-                    {
-                        _programsItem.Items.Insert(0, item);
-                        item.Parent = _programsItem;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                StartMenuRootItem.Items.Add(_programsItem);
-            }
+            //if (SettingsManager.Instance.StartMenuOldStyle)
+            //{
+            //    StartMenuRootItem.Items.Remove(_programsItem);
+            //    StartMenuRootItem.Items.Add(new PowerItem { FriendlyName = SEPARATOR_NAME });
+            //    foreach (var powerItem in _programsItem.Items)
+            //    {
+            //        StartMenuRootItem.Items.Add(powerItem);
+            //        powerItem.Parent = StartMenuRootItem;
+            //    }
+            //}
+            //else
+            //{
+            //    _programsItem.Items.Clear();
+            //    for (int i = StartMenuRootItem.Items.Count - 1; i >= 0; i--)
+            //    {
+            //        var item = StartMenuRootItem.Items[i];
+            //        StartMenuRootItem.Items.Remove(item);
+            //        if (item.FriendlyName != SEPARATOR_NAME)
+            //        {
+            //            _programsItem.Items.Insert(0, item);
+            //            item.Parent = _programsItem;
+            //        }
+            //        else
+            //        {
+            //            break;
+            //        }
+            //    }
+            //    StartMenuRootItem.Items.Add(_programsItem);
+            //}
         }
 
         /// <summary>
