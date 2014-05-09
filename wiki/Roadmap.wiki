@@ -24,6 +24,8 @@ For already implemented features, see [Changelog] page.
     * Disable some Power buttons;
     * Auto-add recently installed SW to MFU list;
     * Automatically expand menu-button contents on hover (probably configurable, with pause);
+  * Core
+    * Support for bulk `AddChildItem` to overcome huge timings over System32 folder and alike;
 
 = _Power8 v.2.0 RTM_ =
 *estimated release date: together with HL3 :D*
