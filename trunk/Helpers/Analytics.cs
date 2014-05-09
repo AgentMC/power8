@@ -27,6 +27,16 @@ namespace Power8.Helpers
             });
         }
 
+        public static void PostException(Exception ex, bool isFatal)
+        {
+            var exString = ex.ToString();
+            AnalyticsCallAsync("exception", new Dictionary<string, string>
+            {
+                {"exd", exString.Length <= 150 ? exString : exString.Substring(0, 150)},
+                {"exf", isFatal ? "1" : "0"}
+            });
+        }
+
         public enum Category
         {
             Deploy, Runtime

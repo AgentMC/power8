@@ -588,7 +588,7 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Compact Start Menu (Windows 98-style).
+        ///   Looks up a localized string similar to Compact Start Menu (Windows98-style).
         /// </summary>
         internal static string CR_StgOldLayout {
             get {
