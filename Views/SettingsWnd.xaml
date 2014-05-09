@@ -14,6 +14,7 @@
         </Style>
         <Style TargetType="{x:Type Label}">
             <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Padding" Value="0,3,3,3"/>
         </Style>
         <Style TargetType="{x:Type TabItem}">
             <Setter Property="Header" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
@@ -48,7 +49,6 @@
                     <CheckBox x:Name="StgWatchRemovables" IsChecked="{Binding WatchRemovableDrives, Mode=TwoWay}" Grid.Row="1" Grid.Column="0"/>
                 </Grid>
                 <CheckBox x:Name="StgAutoSort" IsChecked="{Binding AutoSortTrees, Mode=TwoWay}" />
-                <CheckBox x:Name="StgOldLayout" IsChecked="{Binding StartMenuOldStyle, Mode=TwoWay}" />
                 <CheckBox x:Name="StgAutoRestart" IsChecked="{Binding AutoRestart, Mode=TwoWay}" />
                 <CheckBox x:Name="StgDynamicLayout" IsChecked="{Binding DynamicLayout, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgAutoCorner" IsChecked="{Binding AltZAutoCornerEnabled, Mode=TwoWay}"/>
@@ -59,7 +59,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="StgLblPwr" Padding="0,0,5,0" Margin="0,3,0,0"/>
+                    <Label x:Name="StgLblPwr"/>
                     <CheckBox x:Name="StgPwrConfirm" IsChecked="{Binding ConfirmPowerActions, Mode=TwoWay}" Grid.Column="1"/>
                     <CheckBox x:Name="StgPwrForce" IsChecked="{Binding ForcePowerActions, Mode=TwoWay}" Grid.Column="2" Margin="5,4,0,4"/>
                 </Grid>
@@ -70,7 +70,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}"/>
-                    <Label Padding="4" Grid.Column="1">(Windows7+)</Label>
+                    <Label Grid.Column="1" Margin="4,0"> (Windows7+)</Label>
                 </Grid>
                 <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
                     <Grid.ColumnDefinitions>
@@ -126,6 +126,7 @@
                 <Separator/>
                 <Label x:Name="StgLblSetStartText"/>
                 <TextBox Text="{Binding StartMenuText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <CheckBox x:Name="StgOldLayout" IsChecked="{Binding StartMenuOldStyle, Mode=TwoWay}" />
                 <Separator/>
                 <CheckBox x:Name="StgSuggestProblems" IsChecked="{Binding ReportBadSettings, Mode=TwoWay}"/>
                 <CheckBox x:Name="StgShowDonateMenuItem" IsChecked="{Binding ShowDonateMenuItem, Mode=TwoWay}"/>

@@ -1332,6 +1332,7 @@ namespace Power8
         public static void DispatchCaughtException(Exception ex)
         {
             Log.Raw(ex.ToString());
+            Analytics.PostException(ex, false);
             MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         /// <summary>
@@ -1345,6 +1346,7 @@ namespace Power8
         {
             var str = ex.ToString();
             Log.Raw(str);
+            Analytics.PostException(ex, true);
             MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
             var reason = NoLoc.Err_UnhandledGeneric + str;
             if(SettingsManager.Instance.AutoRestart)
