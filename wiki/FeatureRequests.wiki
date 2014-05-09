@@ -2,19 +2,7 @@
 #labels Featured
 
 = List of ideas and requests we not committed yet =
-  * Start button
-    * Configurable text on Start button;
-    * W7^Aero^: hide standard start button
-    * W7^Classic^: fill standard start button like it's done on XP. 
-  * Button-Stack in general
-    * Disable some Power buttons;
-    * Auto-add recently installed SW to MFU list;
-    * Automatically expand menu-button contents on hover (probably configurable, with pause);
-  * Theming
-    * Configurable Button-Stack background/Theme support;
-      * Customized builds with Menu background and Main button pre-configuration.
-  * Miscellaneous
-      * TBD: Context menu (configurable) for computer list, specific items for each computer item;
+  * TBD: Context menu (configurable) for computer list, specific items for each computer item;
 
 = List of ideas and requests we won't ever implement =
   * Skip metro shell;
