@@ -6,8 +6,6 @@
     * Configurable text on Start button;
     * W7^Aero^: hide standard start button
     * W7^Classic^: fill standard start button like it's done on XP. 
-  * Start menu
-    * Fill Start menu the way it is done for Win98, e.g. with separator,  without additional Programs level;
   * Button-Stack in general
     * Disable some Power buttons;
     * Auto-add recently installed SW to MFU list;
