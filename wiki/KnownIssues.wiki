@@ -24,6 +24,7 @@ To do: convert to issues tab.
   #  7/8: seems sometimes something bad happens in unmanaged code, and heap corruption occurs in CLR. No STR yet, must investigate. Not reproduced for half a year
 ===Low===
   #  8/7^Classic^/XP^Classic^: Menu-button's MTLH is repainted improperly on hover 
+  #  In case there's common Start menu shortcut X and then the same X is created as user's one and then user's X is renamed to Y - then there will be only Y present in tree
   #  7/8: Menu item loses selection when context menu is shown
   #  7/8?: Cannot display properties of a Computer object
   #  XP: buttons are 3px lower than menu-buttons
