@@ -605,11 +605,8 @@ namespace Power8.Views
 
         private static bool PowerActionConfirmed(ContentControl sender)
         {
-            if (!SettingsManager.Instance.ConfirmPowerActions)
-                return true;
-            return (MessageBox.Show(string.Format(Properties.Resources.Str_ConfirmPowerAction, sender.Content),
-                                    Properties.NoLoc.Stg_AppShortName,
-                                    MessageBoxButton.YesNo) == MessageBoxResult.Yes);
+            return !SettingsManager.Instance.ConfirmPowerActions ||
+                   new ConfirmActionWindow(sender.Content).ShowDialog().GetValueOrDefault();
         }
 
         /// <summary>

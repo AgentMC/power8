@@ -480,9 +480,6 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_StgAutoCorner" xml:space="preserve">
     <value>Show Main window close to mouse after Alt+Z</value>
   </data>
-  <data name="Str_ConfirmPowerAction" xml:space="preserve">
-    <value>{0}? Are you sure?</value>
-  </data>
   <data name="CR_StgLblPwr" xml:space="preserve">
     <value>Power operations (shutdown, restart...):</value>
   </data>
@@ -494,5 +491,15 @@ Please launch Explorer for me and restart Power8 process.</value>
   </data>
   <data name="CR_StgOldLayout" xml:space="preserve">
     <value>Compact Start Menu (Windows98-style)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>Proceed</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>Are you sure you want to proceed?</value>
   </data>
 </root>
