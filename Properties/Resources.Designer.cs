@@ -277,6 +277,33 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string CR_CawCancelButton {
+            get {
+                return ResourceManager.GetString("CR_CawCancelButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proceed.
+        /// </summary>
+        internal static string CR_CawConfirmButton {
+            get {
+                return ResourceManager.GetString("CR_CawConfirmButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to proceed?.
+        /// </summary>
+        internal static string CR_CawMessageTextBlock {
+            get {
+                return ResourceManager.GetString("CR_CawMessageTextBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         internal static string CR_CLCleanerBtn {
@@ -947,15 +974,6 @@ namespace Power8.Properties {
         internal static string Str_AllPrograms {
             get {
                 return ResourceManager.GetString("Str_AllPrograms", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {0}? Are you sure?.
-        /// </summary>
-        internal static string Str_ConfirmPowerAction {
-            get {
-                return ResourceManager.GetString("Str_ConfirmPowerAction", resourceCulture);
             }
         }
         
