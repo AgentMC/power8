@@ -29,7 +29,12 @@ namespace Power8.Helpers
 
         public static void PostException(Exception ex, bool isFatal)
         {
-            var exString = ex.ToString();
+            var exString =
+#if DEBUG
+                            "DBG" + ex;
+#else
+                            ex.ToString();
+#endif 
             AnalyticsCallAsync("exception", new Dictionary<string, string>
             {
                 {"exd", exString.Length <= 150 ? exString : exString.Substring(0, 150)},
