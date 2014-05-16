@@ -132,6 +132,9 @@
     </Compile>
     <Compile Include="Converters\PiToTooltipConverter.cs" />
     <Compile Include="DataProviders\DriveManager.cs" />
+    <Compile Include="Views\ConfirmPowerActionWindow.xaml.cs">
+      <DependentUpon>ConfirmPowerActionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Donate.xaml.cs">
       <DependentUpon>Donate.xaml</DependentUpon>
     </Compile>
@@ -174,6 +177,10 @@
     <Page Include="Views\ComputerList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConfirmPowerActionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Donate.xaml">
       <Generator>MSBuild:Compile</Generator>
