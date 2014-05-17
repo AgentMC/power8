@@ -31,22 +31,45 @@
         <Image HorizontalAlignment="Left" x:Name="image1" Stretch="Fill" VerticalAlignment="Top" Source="{Binding Logo, ElementName=MWAbout}" 
                Grid.RowSpan="8" Width="200" Height="200"/>
         <!---->
-        <TextBlock x:Name="ButtonStack" VerticalAlignment="Top" Grid.Column="1" Margin="12,4,0,0"/>
-        <TextBlock Text="{Binding CopyrightContent, ElementName=MWAbout}" VerticalAlignment="Top" Grid.Column="1" Grid.Row="1" Margin="12,4,0,0"/>
+        <TextBlock x:Name="ButtonStack" VerticalAlignment="Top" Grid.Column="1" Grid.Row="0" Margin="12,4,0,0"/>
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="12,0" VerticalAlignment="Top">
+            <TextBlock Padding="0" x:Name="AbUkrPart1" VerticalAlignment="Center" Margin="0,0,2,0"/>
+            <TextBlock x:Name="AbUkrPart2" Margin="0" Padding="2,4" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Foreground="DarkOrange" FontWeight="Bold" >
+                <TextBlock.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Yellow"/>
+                        <GradientStop Color="Yellow" Offset="0.5"/>
+                        <GradientStop Color="Blue" Offset="0.5"/>
+                        <GradientStop Color="Blue" Offset="1"/>
+                    </LinearGradientBrush>
+                </TextBlock.Background>
+            </TextBlock>
+            <Label HorizontalAlignment="Left" x:Name="label5" VerticalAlignment="Top" Padding="0" Margin="10,0" >
+                <Hyperlink NavigateUri="https://www.behance.net/gallery/From-The-Creators-of-Borshch/15795643" Click="Navigate">
+                    <InlineUIContainer>
+                        <TextBlock x:Name="AbUkrPart3" Margin="0" />
+                    </InlineUIContainer>
+                </Hyperlink>
+            </Label>
+        </StackPanel>
         <Grid VerticalAlignment="Top" Grid.Column="1" Grid.Row="2" Margin="12,0,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="AbVersion"/>
             <TextBlock Grid.Column="2" Text="{Binding VersionContent, ElementName=MWAbout}"/>
+            <TextBlock Text="{Binding CopyrightContent, ElementName=MWAbout}" Grid.Column="3" />
         </Grid>
         <TextBlock x:Name="AbLocalization" Grid.Row="3" Grid.Column="1" Margin="12,12,0,0" VerticalAlignment="Bottom"/>
-        <Label Padding="0" Grid.Row="4" Grid.Column="1" Margin="12,0" VerticalContentAlignment="Top" VerticalAlignment="Top">                
-            <Hyperlink x:Name="hlTranslatorURI" NavigateUri="{Binding UriContent, ElementName=MWAbout}"  Click="Navigate"><InlineUIContainer>
-                <TextBlock Text="{Binding NavigateUri, ElementName=hlTranslatorURI}" Margin="0" />
-            </InlineUIContainer></Hyperlink>           
+        <Label Padding="0" Grid.Row="4" Grid.Column="1" Margin="12,0" VerticalContentAlignment="Top" VerticalAlignment="Top">
+            <Hyperlink x:Name="hlTranslatorURI" NavigateUri="{Binding UriContent, ElementName=MWAbout}"  Click="Navigate">
+                <InlineUIContainer>
+                    <TextBlock Text="{Binding NavigateUri, ElementName=hlTranslatorURI}" Margin="0" />
+                </InlineUIContainer>
+            </Hyperlink>
         </Label>
         <!---->
         <Grid Grid.Row="5" Grid.Column="1" Margin="0" VerticalAlignment="Bottom">

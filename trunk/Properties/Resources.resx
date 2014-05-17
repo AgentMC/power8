@@ -502,4 +502,13 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_CawMessageTextBlock" xml:space="preserve">
     <value>Are you sure you want to proceed?</value>
   </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>Made in</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>Ukraine</value>
+  </data>
+  <data name="CR_AbUkrPart3" xml:space="preserve">
+    <value>Learn more...</value>
+  </data>
 </root>
