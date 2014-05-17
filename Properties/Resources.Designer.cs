@@ -79,6 +79,33 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Made in.
+        /// </summary>
+        internal static string CR_AbUkrPart1 {
+            get {
+                return ResourceManager.GetString("CR_AbUkrPart1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ukraine.
+        /// </summary>
+        internal static string CR_AbUkrPart2 {
+            get {
+                return ResourceManager.GetString("CR_AbUkrPart2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn more....
+        /// </summary>
+        internal static string CR_AbUkrPart3 {
+            get {
+                return ResourceManager.GetString("CR_AbUkrPart3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version:.
         /// </summary>
         internal static string CR_AbVersion {
