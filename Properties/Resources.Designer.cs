@@ -79,7 +79,7 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Made in.
+        ///   Looks up a localized string similar to Made in Ukraine.
         /// </summary>
         internal static string CR_AbUkrPart1 {
             get {
@@ -88,20 +88,11 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ukraine.
+        ///   Looks up a localized string similar to Learn more....
         /// </summary>
         internal static string CR_AbUkrPart2 {
             get {
                 return ResourceManager.GetString("CR_AbUkrPart2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Learn more....
-        /// </summary>
-        internal static string CR_AbUkrPart3 {
-            get {
-                return ResourceManager.GetString("CR_AbUkrPart3", resourceCulture);
             }
         }
         
