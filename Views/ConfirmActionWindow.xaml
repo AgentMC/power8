@@ -14,6 +14,7 @@
     MinHeight="130" Icon="/Power8;component/Images/Power8Logo_Red48x48.ico">
 
     <Grid x:Name="LayoutRoot" Margin="10">
+        
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto" />
@@ -22,20 +23,48 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        
         <Grid.Resources>
-            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Localized}">
+            <Style TargetType="{x:Type Button}" 
+                   BasedOn="{StaticResource Localized}">
                 <Setter Property="Padding" Value="3"/>
             </Style>
         </Grid.Resources>
-        <TextBlock Foreground="#FF1DA2EE" FontSize="48" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,-5,14,0" FontFamily="Lucida Sans" >?</TextBlock>
-        <TextBlock x:Name="CawMessageTextBlock" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top"
+        
+        <Image x:Name="QuestionIcon" 
+               Width="32" 
+               Height="32" />
+        
+        <TextBlock x:Name="CawMessageTextBlock" 
+                   HorizontalAlignment="Left" 
+                   TextWrapping="Wrap" 
+                   VerticalAlignment="Center"
+                   Margin="10,0,0,0" 
                    Text="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
-                   Grid.Column="1" Grid.Row="0"/>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
-            <Button x:Name="CawConfirmButton" MinWidth="75" FontWeight="Bold"
-                    HorizontalContentAlignment="Center" IsDefault="True" Click="ConfirmButtonClick" />
-            <Button x:Name="CawCancelButton" MinWidth="75" HorizontalContentAlignment="Center"
-                    IsCancel="True" Margin="10,0,0,0" Click="CancelButtonClick" />
+                   Grid.Column="1" 
+                   Grid.Row="0"/>
+        
+        <StackPanel HorizontalAlignment="Right" 
+                    VerticalAlignment="Top" 
+                    Grid.Row="1" 
+                    Grid.Column="0" 
+                    Grid.ColumnSpan="2" 
+                    Orientation="Horizontal">
+            
+            <Button x:Name="CawConfirmButton" 
+                    MinWidth="75" 
+                    FontWeight="Bold"
+                    HorizontalContentAlignment="Center" 
+                    IsDefault="True" 
+                    Click="ConfirmButtonClick"/>
+            
+            <Button x:Name="CawCancelButton" 
+                    MinWidth="75" 
+                    HorizontalContentAlignment="Center"
+                    IsCancel="True" 
+                    Margin="10,0,0,0" 
+                    Click="CancelButtonClick" />
+            
         </StackPanel>
     </Grid>
 </Window>
