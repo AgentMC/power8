@@ -467,4 +467,50 @@ Power8 может помочь вам с этим справиться.
     <value>Менять местами меню Пуск и строку поиска когда это убыстряет к ним доступ</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
+  <data name="CR_StgLblStretch" xml:space="preserve">
+    <value>Stretch image:</value>
+  </data>
+  <data name="CR_StgStrFill" xml:space="preserve">
+    <value>Fill whole button</value>
+  </data>
+  <data name="CR_StgStrNone" xml:space="preserve">
+    <value>Do not stretch</value>
+  </data>
+  <data name="CR_StgStrUniform" xml:space="preserve">
+    <value>Uniform scaling</value>
+  </data>
+  <data name="CR_StgStrUniform2Fill" xml:space="preserve">
+    <value>Uniform-to-fill scaling</value>
+  </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>Show Main window close to mouse after Alt+Z</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>Power operations (shutdown, restart...):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>Force</value>
+  </data>
+  <data name="CR_StgOldLayout" xml:space="preserve">
+    <value>Compact Start Menu (Windows98-style)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>Proceed</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>Are you sure you want to proceed?</value>
+  </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>Made in Ukraine</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>Learn more...</value>
+  </data>
 </root>
