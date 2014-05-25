@@ -1,10 +1,6 @@
-﻿using System.Drawing;
-using System.Reflection;
+﻿using System;
+using System.Drawing;
 using System.Windows;
-using System.Windows.Forms;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Power8.Properties;
 
 namespace Power8.Views
@@ -18,23 +14,18 @@ namespace Power8.Views
         {
             InitializeComponent();
 
-            QuestionIcon.Source = GetQuestionIconSource();
+            QuestionIcon.Source =
+                ImageManager.GetImageContainerForIconSync("Question", SystemIcons.Question.Handle).LargeBitmap;
             Title = NoLoc.Stg_AppShortName;
             CawConfirmButton.Content = action;
         }
 
-        private static BitmapSource GetQuestionIconSource()
-        {
-            var icon = SystemIcons.Question;
-            var bs = Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            return bs;
-        }
 
         public ConfirmActionWindow(string confirmMessage, string confirmButtonText, string cancelButtonText)
             : this(confirmButtonText)
         {
             CawCancelButton.Content =  cancelButtonText;
-            CawMessageTextBlock.Text = string.Format(confirmMessage);
+            CawMessageTextBlock.Text = confirmMessage;
         }
 
         private void ConfirmButtonClick(object sender, RoutedEventArgs e)
@@ -47,6 +38,13 @@ namespace Power8.Views
         {
             DialogResult = false;
             Close();
+        }
+
+        private void ConfirmWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            var ceil = Math.Ceiling(LayoutRoot.RowDefinitions[0].ActualHeight);
+            ceil += ceil%2; //getting first even number more than ActualHeight of Row
+            LayoutRoot.RowDefinitions[0].MinHeight = ceil;
         }
     }
 }

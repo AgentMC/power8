@@ -8,7 +8,7 @@
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}">
             <Setter Property="Text" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
-            <Setter  Property="Margin" Value="0,4"/>
+            <Setter Property="Margin" Value="0,4"/>
         </Style>
     </Window.Resources>
     <Window.Title>
