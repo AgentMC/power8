@@ -11,13 +11,14 @@
     SnapsToDevicePixels="True"
     SizeToContent="WidthAndHeight"
     MinWidth="300"
-    MinHeight="130" Icon="/Power8;component/Images/Power8Logo_Red48x48.ico">
+    MinHeight="130" Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" 
+    Loaded="ConfirmWindow_Loaded">
 
     <Grid x:Name="LayoutRoot" Margin="10">
         
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
