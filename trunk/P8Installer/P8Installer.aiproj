@@ -14,7 +14,7 @@
     <AssemblyName>P8Installer</AssemblyName>
     <Name>P8Installer</Name>
     <RootNamespace>P8Installer</RootNamespace>
-    <AiComPath>C:\Program Files (x86)\Caphyon\Advanced Installer 11.1\bin\x86\AdvancedInstaller.com</AiComPath>
+    <AiComPath>C:\Program Files (x86)\Caphyon\Advanced Installer 11.2.1\bin\x86\AdvancedInstaller.com</AiComPath>
     <AdvinstCmdLine>-buildslist DefaultBuild</AdvinstCmdLine>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'All' ">
