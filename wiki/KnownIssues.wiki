@@ -26,6 +26,7 @@ To do: convert to issues tab.
   #  8/7^Classic^/XP^Classic^: Menu-button's MTLH is repainted improperly on hover 
   #  In case there's common Start menu shortcut X and then the same X is created as user's one and then user's X is renamed to Y - then there will be only Y present in tree
   #  7/8: Menu item loses selection when context menu is shown
+  #  When Classic Start Menu option is on, layout manager may scroll long menu when it is not reqired;
   #  7/8?: Cannot display properties of a Computer object
   #  XP: buttons are 3px lower than menu-buttons
   #  Unneeded right margin in menu items
