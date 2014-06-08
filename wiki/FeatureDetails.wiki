@@ -34,6 +34,8 @@ When you press Alt+Z, Power8 determines the location of the Mouse cursor and sho
 
 Pressing Alt+Z again will close the window.
 
+Starting from 1.5 the behavior of the feature may change depending on configuration. See [https://code.google.com/p/power8/w/edit.do#1.5:_New_settings_on_General_tab below].
+
 == Menu buttons ==
 
 https://power8.googlecode.com/svn/wiki/Power8_401_6_MenuBtns.png
@@ -175,6 +177,14 @@ http://power8.googlecode.com/svn/wiki/Power8_413_0_ExApSeBar.png
 https://power8.googlecode.com/svn/wiki/Power8_401_10_NotifyMark.png
   * Show Donate menu item - allows you to hide "Donate" menu item which appears in Main button context menu in case you don't want to support the developers team;
 
+===1.5: New settings on General tab===
+
+As of 1.5, several new settings were added to General tab:
+  * Show Main window close to Mouse after Alt+Z: when corresponding key combination is pressed and this setting is switched on, the Main window will be displayed not near the mouse pointer as it was before but in the corner occupied by Power8 button;
+  * Confirm and/or Force power actions. By default (and previously) when user presses power button - Shutdown, Sleep, etc. - this action invoked in Forced mode and without any confirmation, immediately. New settings allow user to alternate this behavior;
+  * Stretch Image parameter of Configure Start Button block: when image is set you may select one of the four layout options for image. It is simpler to experiment with setting than to describe intended result here so it's up to you to try;
+  * Compact menu style...: displays contents of Programs folder right under start menu item, just like it was done in Windows 98.
+
 ===1.2-1.3: Menu-buttons, web search engines and most frequently used list===
 
 http://power8.googlecode.com/svn/wiki/Power8New03.png
@@ -194,7 +204,7 @@ Custom MFU list is empty by default. To add data there, right-click whatever fil
 
 3rd way to build the launch list is to use Power8 internal data it collects e.g. to show Jump Lists on Windows XP, etc. You can find this data under `%localappdata%\Power8_Team\` in file named "Launchdata.csv".
 
-= 1.4 Keyboard navigation =
+== 1.4 Keyboard navigation ==
 Power8 enables you to use it with keyboard only.
   * Use *Alt+Z* to open main window;
   * Use *double Alt+Z* to focus main button. Then you can press menu key on windows keyboard to activate context menu. If it doesn't work, this means system thinks you pressed Alt key and not Alt+Z combination. Press *Esc* key couple of times to exit Alt mode;
