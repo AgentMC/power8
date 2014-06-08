@@ -7,13 +7,6 @@ For all other feature requests, currently not prioritized, please consult [Featu
 
 For already implemented features, see [Changelog] page.
 
-= _Power8 v.1.5 RTM_ =
-*estimated release date: soon...*
-  * Setting to not to stretch image on the Power8 button;
-  * Setting to disable auto-corner feature by Alt+Z;
-  * Add setting to confirm Power actions  and to force them;
-  * Fill Start menu the way it is done for Win98, e.g. with separator,  without additional Programs level;
-
 = _Power8 v.1.6 RTM_ =
 *estimated release date: summer 2014*
   * Start button
