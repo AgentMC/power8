@@ -25,3 +25,10 @@ To activate and use the hack:
  # Open Power8.exe.config file in Power8 installation directory with notepad;
  # Find setting `DoNotFreeLibraries` and set it's `Value` to `True` (by default it's `False`);
  # Save file and (re)start Power8.
+
+If this doesn't help:
+
+ # Close Power8;
+ # Using system run dialog (Win+R key combination), open `%localappdata%\Power8_Team` folder;
+ # Remove all subfolders from this folder. *NOTE: this will reset all your settings*;
+ # Start Power8;
