@@ -1,6 +1,19 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.5.0 RTM (v.1.5.0.744): 08.06.2014==
+
+  # `[new]` Korean localization;
+  # `[new]` Setting for stretching image on Main button in different ways;
+  # `[new]` Setting to disable auto-corner feature (when setting is on, Main window aka Button-stack is always shown near Main button when Alt+Z is pressed);
+  # `[new]` Settings to enable/disable confirmation and forcing of Power actions (shutdown, restart...);
+  # `[new]` Setting to display Start Menu in more compact way;
+  # `[new]` Now also unhandled exceptions are sent to Google Analytics;
+  # `[new]` Added information to About dialog on the originating country of Power8;
+  # `[removed]` Ukrainian translation. We need someone with UK Windows MUI running it on daily basis. Otherwise quality of translation will suffer;
+  # `[changed]` Returned Russian translation to the MSI. The integrity of layout is more important than filthy souls of some Russian people;
+  # `[fixed]` New items weren't put under Start Menu when they're originated from the User's start menu under Win8;
+
 ==Version 1.4.6 Beta (v.1.4.6.692): 28.03.2014==
 
   # `[new]` Romanian and Ukrainian translation;
