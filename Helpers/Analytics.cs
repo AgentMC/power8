@@ -21,8 +21,8 @@ namespace Power8.Helpers
             AnalyticsCallAsync("event", new Dictionary<string, string>
             {
                 {"ec", category.ToString()},
-                {"ea", action},
-                {"el", label},
+                {"ea", Cut(action, 500)},
+                {"el", Cut(label, 500)},
                 {"ev", value.HasValue ? value.ToString() : null}
             });
         }
@@ -31,20 +31,28 @@ namespace Power8.Helpers
         {
             var exString =
 #if DEBUG
-                            "DBG" + ex;
-#else
-                            ex.ToString();
+                            "DBG" + 
 #endif 
+                            ex.GetType().Name;
+
             AnalyticsCallAsync("exception", new Dictionary<string, string>
             {
-                {"exd", exString.Length <= 150 ? exString : exString.Substring(0, 150)},
+                {"exd", Cut(exString, 150)},
                 {"exf", isFatal ? "1" : "0"}
             });
+
+            var exString2 = ex.ToString();
+            PostEvent(Category.Error, Cut(exString, 500), Cut(exString2, 500), null);
+        }
+
+        private static string Cut(String original, int maxLength)
+        {
+            return original.Length > maxLength ? original.Substring(0, maxLength) : original;
         }
 
         public enum Category
         {
-            Deploy, Runtime
+            Deploy, Runtime, Error
         }
 
         private static void AnalyticsCallAsync(string hitType, Dictionary<string, string> args)
