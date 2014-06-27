@@ -978,6 +978,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts. Continue restarting Power8?.
+        /// </summary>
+        internal static string Err_StartupCrashDetected {
+            get {
+                return ResourceManager.GetString("Err_StartupCrashDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Windows (R) Vista (R) is not intended to be used with Power8. Please use normal operating system..
         /// </summary>
         internal static string Err_VistaDetected {
