@@ -100,6 +100,7 @@ namespace Power8.Helpers
                 data["an"] = _appName;
                 data["av"] = _appVer;
                 data["t"] = hitType;
+                data["ul"] = Thread.CurrentThread.CurrentUICulture.Name;
                 if (1 == Interlocked.CompareExchange(ref _sessionStarting, 0, 1))
                 {
                     data["sc"] = "start";

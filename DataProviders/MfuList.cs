@@ -125,7 +125,7 @@ namespace Power8
                                                 Cmd = ls[1],
                                                 LaunchCount = int.Parse(ls[2]),
                                                 LastLaunchTimeStamp =
-                                                    DateTime.ParseExact(ls[3], "yyyyMMddHHmmss", CultureInfo.CurrentCulture)
+                                                    DateTime.ParseExact(ls[3], "yyyyMMddHHmmss", CultureInfo.InvariantCulture)
                                             });
                     }
                 }
