@@ -215,7 +215,7 @@ namespace Power8.Views
         /// </summary>
         private void ButtonLockClick(object sender, RoutedEventArgs e)
         {
-            StartConsoleHidden(@"C:\WINDOWS\system32\rundll32.exe", "user32.dll,LockWorkStation");
+            StartConsoleHidden("rundll32.exe", "user32.dll,LockWorkStation");
         }
         /// <summary>
         /// Handler of ScreenSave button. Sends SC_SREENSAVE to Desktop to start the screensaver
