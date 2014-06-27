@@ -43,7 +43,7 @@ namespace Power8
         /// The list of user exclusionf from MFU in P8 mode
         /// </summary>
         public static readonly ObservableCollection<StringWrapper> ExclList = new ObservableCollection<StringWrapper>();
-        public static readonly int ProcessSessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
+        public static readonly int ProcessSessionId = App.Current.Proc.SessionId;   //Needed to check if new process was created in our session
 
 
         private static readonly List<MfuElement> LastList = new List<MfuElement>(); //The last checked state of MFU data
