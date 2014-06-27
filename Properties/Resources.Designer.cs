@@ -516,6 +516,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;Do not free libraries&quot; icons hack (may require restart).
+        /// </summary>
+        internal static string CR_StgCbCtfl {
+            get {
+                return ResourceManager.GetString("CR_StgCbCtfl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Control Panel with items sorted by category.
         /// </summary>
         internal static string CR_StgCbCtrl {

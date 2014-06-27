@@ -138,7 +138,9 @@
                 <CheckBox x:Name="StgCbComp" IsChecked="{Binding ShowMbComputer, Mode=TwoWay}">Computer</CheckBox>
                 <CheckBox x:Name="StgCbDocs" IsChecked="{Binding ShowMbDocs, Mode=TwoWay}">Documents/Libraries</CheckBox>
                 <CheckBox x:Name="StgCbCpnl" IsChecked="{Binding ShowMbCpl, Mode=TwoWay}">Control Panel</CheckBox>
-                <CheckBox x:Name="StgCbCtrl" IsChecked="{Binding ShowMbCtrlByCat, Mode=TwoWay}" Margin="16,0,0,4"
+                <CheckBox x:Name="StgCbCtrl" IsChecked="{Binding ShowMbCtrlByCat, Mode=TwoWay}" Margin="16,4"
+                          IsEnabled="{Binding ElementName=StgCbCpnl, Path=IsChecked}"/>
+                <CheckBox x:Name="StgCbCtfl" IsChecked="{Binding DontFreeLibs, Mode=TwoWay}" Margin="16,4"
                           IsEnabled="{Binding ElementName=StgCbCpnl, Path=IsChecked}"/>
                 <CheckBox x:Name="StgCbAdmT" IsChecked="{Binding ShowMbAdminTools, Mode=TwoWay}">Administrative tools</CheckBox>
                 <CheckBox x:Name="StgCbNtwk" IsChecked="{Binding ShowMbNet, Mode=TwoWay}">Network</CheckBox>
