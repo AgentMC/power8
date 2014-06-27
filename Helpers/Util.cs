@@ -801,10 +801,13 @@ namespace Power8
                     if (k == null) continue;
                     foreach (var valueName in k.GetValueNames().Where(v => !string.IsNullOrWhiteSpace(v)))
                     {
-                        var value = k.GetValue(valueName).ToString();
-                        if (Environment.GetEnvironmentVariable(valueName) == value || value == null)
+                        var value = k.GetValue(valueName);
+                        if (value == null)
                             continue;
-                        Environment.SetEnvironmentVariable(valueName, value);
+                        var sValue = value.ToString();
+                        if (Environment.GetEnvironmentVariable(valueName) == sValue)
+                            continue;
+                        Environment.SetEnvironmentVariable(valueName, sValue);
                         Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
                     }
                 }
@@ -1357,12 +1360,10 @@ namespace Power8
 
         private static bool CheckStartupException()
         {
-            //TODO: put to resources
-            return BtnStck.IsInstantited || MessageBox.Show("It seems, Power8 crashed on startup. " +
-                                                            "Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts. " +
-                                                            "Continue restarting Power8?",
-                                                            NoLoc.Stg_AppShortName,
-                                                            MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+            return BtnStck.IsInstantited
+                   || MessageBox.Show(Resources.Err_StartupCrashDetected,
+                                      NoLoc.Stg_AppShortName,
+                                      MessageBoxButton.YesNo) == MessageBoxResult.Yes;
         }
 
         /// <summary> Restarts Power8 writing the reason of restarting into EventLog </summary>

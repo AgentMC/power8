@@ -508,4 +508,7 @@ Please launch Explorer for me and restart Power8 process.</value>
   <data name="CR_AbUkrPart2" xml:space="preserve">
     <value>Learn more...</value>
   </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts. Continue restarting Power8?</value>
+  </data>
 </root>
