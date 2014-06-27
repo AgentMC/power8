@@ -1,4 +1,5 @@
-﻿using System.Runtime.ExceptionServices;
+﻿using System.Linq;
+using System.Runtime.ExceptionServices;
 using Power8.Helpers;
 using Power8.Views;
 using System;
@@ -17,7 +18,9 @@ namespace Power8
     /// Bootstrapper for the application
     /// </summary>
     public partial class App
-    {   
+    {
+        public readonly Process Proc = Process.GetCurrentProcess();
+
         /// <summary>
         /// Application initializer. Performs compatibility check, 
         /// starts diagnostics if required, works settings around,
@@ -31,6 +34,12 @@ namespace Power8
                     Power8.Properties.Resources.Err_VistaDetected,
                     Power8.Properties.NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(2); //means: OS not found
+            }
+            //Power8s in our session but with different pid
+            foreach (var p in Process.GetProcessesByName("Power8")
+                                     .Where(p => p.SessionId == Proc.SessionId && p.Id != Proc.Id))
+            {
+                p.Kill();
             }
 
             Util.MainDisp = Dispatcher; //store main thread dispatcher. Widely used in Application.

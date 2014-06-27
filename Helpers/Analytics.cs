@@ -47,6 +47,8 @@ namespace Power8.Helpers
 
         private static string Cut(String original, int maxLength)
         {
+            if (original == null)
+                return null;
             return original.Length > maxLength ? original.Substring(0, maxLength) : original;
         }
 
