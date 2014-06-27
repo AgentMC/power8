@@ -799,10 +799,10 @@ namespace Power8
                 {
                     Log.Fmt("For key={0}, k = {1}", key.Key, (k == null ? "" : "not ") + "null");
                     if (k == null) continue;
-                    foreach (var valueName in k.GetValueNames())
+                    foreach (var valueName in k.GetValueNames().Where(v => !string.IsNullOrWhiteSpace(v)))
                     {
                         var value = k.GetValue(valueName).ToString();
-                        if (Environment.GetEnvironmentVariable(valueName) == value)
+                        if (Environment.GetEnvironmentVariable(valueName) == value || value == null)
                             continue;
                         Environment.SetEnvironmentVariable(valueName, value);
                         Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);

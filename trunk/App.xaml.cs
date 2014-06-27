@@ -1,16 +1,17 @@
 ﻿using System.Linq;
-using System.Runtime.ExceptionServices;
 using Power8.Helpers;
 using Power8.Views;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 #if DEBUG
-using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 #endif
+
 
 namespace Power8
 {
