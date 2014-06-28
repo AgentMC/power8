@@ -12,7 +12,6 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Power8.Helpers;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
 
 namespace Power8.Views
 {

@@ -9,9 +9,6 @@
 //------------------------------------------------------------------------------
 
 namespace Power8.Properties {
-    using System;
-    
-    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -516,7 +513,7 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &quot;Do not free libraries&quot; icons hack (may require restart).
+        ///   Looks up a localized string similar to Fix duplicated icons (may require restart)..
         /// </summary>
         internal static string CR_StgCbCtfl {
             get {
@@ -987,7 +984,7 @@ namespace Power8.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts. Continue restarting Power8?.
+        ///   Looks up a localized string similar to It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?.
         /// </summary>
         internal static string Err_StartupCrashDetected {
             get {
