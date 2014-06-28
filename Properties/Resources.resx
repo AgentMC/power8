@@ -509,9 +509,9 @@ Please launch Explorer for me and restart Power8 process.</value>
     <value>Learn more...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>"Do not free libraries" icons hack (may require restart)</value>
+    <value>Fix duplicated icons (may require restart).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts. Continue restarting Power8?</value>
+    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
   </data>
 </root>

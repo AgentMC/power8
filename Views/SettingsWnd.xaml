@@ -1,4 +1,4 @@
-﻿<Views:DisposableWindow
+﻿<Views:DisposableLinkWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:Views="clr-namespace:Power8.Views" x:Class="Power8.Views.SettingsWnd"
@@ -6,7 +6,7 @@
         Icon="/Power8;component/Images/Power8Logo_Red48x48.ico" SizeToContent="WidthAndHeight" MinWidth="400"
         Title="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"
         Closed="WindowClosed">
-    <Views:DisposableWindow.Resources>
+    <Window.Resources>
         <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource CheckBoxStyle}"/>
         <Style TargetType="{x:Type RadioButton}">
             <Setter Property="Content" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
@@ -30,7 +30,10 @@
             <Setter Property="MaxHeight" Value="600"/>
             <Setter Property="CellStyle" Value="{StaticResource DataGridCellStyle}"/>
         </Style>
-    </Views:DisposableWindow.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Text" Value="{Binding Name, Converter={StaticResource localizer}, Mode=OneWay, RelativeSource={RelativeSource Self}}"/>
+        </Style>
+    </Window.Resources>
     <TabControl>
         <TabItem x:Name="StgTabGeneral">
             <StackPanel Margin="5">
@@ -140,8 +143,17 @@
                 <CheckBox x:Name="StgCbCpnl" IsChecked="{Binding ShowMbCpl, Mode=TwoWay}">Control Panel</CheckBox>
                 <CheckBox x:Name="StgCbCtrl" IsChecked="{Binding ShowMbCtrlByCat, Mode=TwoWay}" Margin="16,4"
                           IsEnabled="{Binding ElementName=StgCbCpnl, Path=IsChecked}"/>
-                <CheckBox x:Name="StgCbCtfl" IsChecked="{Binding DontFreeLibs, Mode=TwoWay}" Margin="16,4"
-                          IsEnabled="{Binding ElementName=StgCbCpnl, Path=IsChecked}"/>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="StgCbCtfl" IsChecked="{Binding DontFreeLibs, Mode=TwoWay}" Margin="16,4"
+                              IsEnabled="{Binding ElementName=StgCbCpnl, Path=IsChecked}"/>
+                    <Label HorizontalContentAlignment="Left" Margin="-12,0,0,0">
+                        <Hyperlink NavigateUri="https://code.google.com/p/power8/wiki/DuplicatedIconsHack" Click="Navigate">
+                            <InlineUIContainer>
+                                <TextBlock x:Name="AbUkrPart2" />
+                            </InlineUIContainer>
+                        </Hyperlink>
+                    </Label>
+                </StackPanel>
                 <CheckBox x:Name="StgCbAdmT" IsChecked="{Binding ShowMbAdminTools, Mode=TwoWay}">Administrative tools</CheckBox>
                 <CheckBox x:Name="StgCbNtwk" IsChecked="{Binding ShowMbNet, Mode=TwoWay}">Network</CheckBox>
             </StackPanel>
@@ -168,4 +180,4 @@
             </StackPanel>
         </TabItem>
     </TabControl>
-</Views:DisposableWindow>
+</Views:DisposableLinkWindow>

@@ -136,6 +136,7 @@
     <Compile Include="Views\ConfirmActionWindow.xaml.cs">
       <DependentUpon>ConfirmActionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\DisposableLinkWindow.cs" />
     <Compile Include="Views\Donate.xaml.cs">
       <DependentUpon>Donate.xaml</DependentUpon>
     </Compile>
