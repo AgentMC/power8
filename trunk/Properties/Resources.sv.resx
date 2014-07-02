@@ -514,9 +514,9 @@ Vill du återställa Utforskaren och starta om Power8?</value>
     <value>Läs mer...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>Fix duplicated icons (may require restart).</value>
+    <value>Fixa dublettikoner (kan kräva omstart).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
+    <value>Power8 verkar ha kraschat vid uppstarten. Inställningen 'Starta om programmet om fel uppstår' är aktiverat, så du kan hamna i en ändlös loop av Power8-omstarter (du kan ändra inställningen medan detta meddelande fortfarande är öppet). Vill du fortsätta starta om Power8?</value>
   </data>
 </root>
