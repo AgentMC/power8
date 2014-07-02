@@ -513,4 +513,10 @@ Power8 может помочь вам с этим справиться.
   <data name="CR_AbUkrPart2" xml:space="preserve">
     <value>Узнать больше...</value>
   </data>
+  <data name="CR_StgCbCtfl" xml:space="preserve">
+    <value>Исправлять дублирующиеся иконки (может потребоваться перезапуск).</value>
+  </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>Похоже, Power8 свалилась при запуске. Настройка Перезапуск-По-Крешу активна в данный момент, так что вы можете столкнуться с бесконечным циклом перезапусков Power8 (можно изменить настройку прямо сейчас, пока это сообщение открыто). Продолжить перезапуск Power8?</value>
+  </data>
 </root>
