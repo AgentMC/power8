@@ -508,9 +508,9 @@ Vă rog relansaţi Explorer în locul meu şi reporniţi procesul Power8.</value
     <value>Aflați mai multe...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>Fix duplicated icons (may require restart).</value>
+    <value>Corectare pictograme duplicat (poate necesita repornire).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
+    <value>Se pare că Power8 s-a blocat la pornire. Setarea Repornire-automată-la-blocare este activată astfel încât va rezulta o buclă infinită de reporniri ale Power8 (puteţi modifică setările cât timp acest mesaj este deschis). Continuaţi cu repornirea Power8?</value>
   </data>
 </root>
