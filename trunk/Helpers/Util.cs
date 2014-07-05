@@ -920,11 +920,18 @@ namespace Power8
                         using (var k = Registry.ClassesRoot.OpenSubKey(key + subkey, false))
                         {
                             if (k != null)
-                                return ((string)k.GetValue(valueName, null));
+                                return ((string) k.GetValue(valueName, null));
                         }
                     }
                 }
+#if DEBUG
+                catch (Exception ex)
+                {
+                    Log.Raw(ex.Message, clsidOrApiShNs);
+                }
+#else
                 catch (Exception){}
+#endif
             }
 // ReSharper restore EmptyGeneralCatchClause
             return null;
