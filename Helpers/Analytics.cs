@@ -29,7 +29,7 @@ namespace Power8.Helpers
 
         public static void PostException(Exception ex, bool isFatal)
         {
-            var exString =
+            var exType =
 #if DEBUG
                             "DBG" + 
 #endif 
@@ -37,12 +37,14 @@ namespace Power8.Helpers
 
             AnalyticsCallAsync("exception", new Dictionary<string, string>
             {
-                {"exd", Cut(exString, 150)},
+                {"exd", Cut(exType, 150)},
                 {"exf", isFatal ? "1" : "0"}
             });
 
-            var exString2 = ex.ToString();
-            PostEvent(Category.Error, Cut(exString, 500), Cut(exString2, 500), null);
+            if (isFatal)
+            {
+                PostEvent(Category.Error, exType, ex.ToString(), null);
+            }
         }
 
         private static string Cut(String original, int maxLength)
