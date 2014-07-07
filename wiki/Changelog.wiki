@@ -1,6 +1,18 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.5.1 Beta (v.1.5.1.766): 07.07.2014==
+
+  # `[new]` Exceptions on start of application are handled differently, allowing user to prevent endless restarting loop;
+  # `[new]` Other instances of Power8 are killed on startup of new one;
+  # `[new]` Added UI checkbox for "Don't free libraries" hack;
+  # `[changed]` Analytics: Extended exceptions logging for crashes;
+  # `[changed]` Analytics: Report current UI language;
+  # `[fixed]` Empty system variables names handling;
+  # `[fixed]` Absolute path used for Rundll32 in Lock command;
+  # `[fixed]` Possibly fixing `FormatException` in `MfuList`.
+
+
 ==Version 1.5.0 RTM (v.1.5.0.744): 08.06.2014==
 
   # `[new]` Korean localization;
