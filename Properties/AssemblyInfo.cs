@@ -49,7 +49,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.5.1.766")]
-[assembly: AssemblyFileVersion("1.5.1.766")]
-//7zuri=http://power8.googlecode.com/svn/filez/Power8_v.1.5.1.766.7z
-//msuri=http://power8.googlecode.com/svn/filez/Power8_v.1.5.1.766.msi
+[assembly: AssemblyVersion("1.5.2.777")]
+[assembly: AssemblyFileVersion("1.5.2.777")]
+//7zuri=http://power8.googlecode.com/svn/filez/Power8_v.1.5.2.777.7z
+//msuri=http://power8.googlecode.com/svn/filez/Power8_v.1.5.2.777.msi
