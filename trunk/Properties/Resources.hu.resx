@@ -508,9 +508,9 @@ Indítsa el nekem az Intézőt és indítsa újra a Power8 folyamatot.</value>
     <value>Több információ...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>Fix duplicated icons (may require restart).</value>
+    <value>Duplikált ikonok kijavítása (újraindítást igényelhet).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
+    <value>Úgy tűnik a Power8 az indításkor összeomlott. Az automatikus újraindítás összeomlás esetén végtelen ciklusba kerülhetsz a Power8 újraindításokkal (megváltoztathatod a beállításokat, amíg ez az üzenet látható). Folytatod a Power8 újraindítását?</value>
   </data>
 </root>

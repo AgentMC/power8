@@ -744,7 +744,7 @@ namespace Power8
         /// is not such char itself, or else if it is number or UPPERCASE.
         /// </summary>
         /// <param name="s">String for analysis to be added to the camels string</param>
-        /// <param name="sBuilder">The stringBuilder used to build Cames string </param>
+        /// <param name="sBuilder">The StringBuilder used to build Camels string </param>
         private static void FillCamels(string s, StringBuilder sBuilder)
         {
             bool lastDelim = false;
