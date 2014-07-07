@@ -463,55 +463,55 @@ Storno: přeskočit tuto aktualizaci a už na ni neupozorňovat.</value>
     <value>Výsledky hledání</value>
   </data>
   <data name="CR_StgLblStretch" xml:space="preserve">
-    <value>Stretch image:</value>
+    <value>Přizpůsobit obrázek:</value>
   </data>
   <data name="CR_StgStrFill" xml:space="preserve">
-    <value>Fill whole button</value>
+    <value>Vyplnit celé tlačítko</value>
   </data>
   <data name="CR_StgStrNone" xml:space="preserve">
-    <value>Do not stretch</value>
+    <value>Nepřizpůsobovat</value>
   </data>
   <data name="CR_StgStrUniform" xml:space="preserve">
-    <value>Uniform scaling</value>
+    <value>Rovnoměrně</value>
   </data>
   <data name="CR_StgStrUniform2Fill" xml:space="preserve">
-    <value>Uniform-to-fill scaling</value>
+    <value>Rovnoměrné vyplnění</value>
   </data>
   <data name="CR_StgAutoCorner" xml:space="preserve">
-    <value>Show Main window close to mouse after Alt+Z</value>
+    <value>Zobrazit hlavní okno poblíž kurzoru myši po stisku Alt+Z</value>
   </data>
   <data name="CR_StgLblPwr" xml:space="preserve">
-    <value>Power operations (shutdown, restart...):</value>
+    <value>Napájení (vypnutí, restart...):</value>
   </data>
   <data name="CR_StgPwrConfirm" xml:space="preserve">
-    <value>Confirm</value>
+    <value>Potvrzení</value>
   </data>
   <data name="CR_StgPwrForce" xml:space="preserve">
-    <value>Force</value>
+    <value>Přinutit</value>
   </data>
   <data name="CR_StgOldLayout" xml:space="preserve">
-    <value>Compact Start Menu (Windows98-style)</value>
+    <value>Kompaktní Start Menu (jako Windows98)</value>
   </data>
   <data name="CR_CawCancelButton" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Storno</value>
   </data>
   <data name="CR_CawConfirmButton" xml:space="preserve">
-    <value>Proceed</value>
+    <value>Pokračovat</value>
     <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
   </data>
   <data name="CR_CawMessageTextBlock" xml:space="preserve">
-    <value>Are you sure you want to proceed?</value>
+    <value>Opravdu chcete pokračovat?</value>
   </data>
   <data name="CR_AbUkrPart1" xml:space="preserve">
     <value>Made in Ukraine</value>
   </data>
   <data name="CR_AbUkrPart2" xml:space="preserve">
-    <value>Learn more...</value>
+    <value>Zjistit více...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>Fix duplicated icons (may require restart).</value>
+    <value>Opravit zdvojené ikony (nutný restart).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
+    <value>Zdá se, že POWER8 havaroval. Auto-restart po havárii programu je povolen, pokud je třeba přerušit opakované restarty POWER8 (smyčku), můžete nyní změnit nastavení. Chcete pokračovat v restartu POWER8?</value>
   </data>
 </root>
