@@ -508,9 +508,9 @@ Windows 익스플로러를 복원하고 Power8을 다시 시작하시겠습니�
     <value>자세한 내용...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>Fix duplicated icons (may require restart).</value>
+    <value>중복 아이콘 수정 (재시작 필요).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
+    <value>Power8의 충돌이 발생된 것 같습니다. Power8 재시작의 무한 반복을 끝낼 수 있도록 "충돌 시 자동 재시작" 설정을 사용하십시오 (이 메시지가 표시되는 동안 설정을 변경할 수 있습니다). Power8을 다시 시작하시겠습니까?</value>
   </data>
 </root>
