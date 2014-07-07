@@ -10,16 +10,16 @@ This page is how to get *latest* version of Power8.
 
 = Details =
 
-==The latest version available is 1.4.6. See links below.==
+==The latest version available is 1.5.1. See links below.==
 
-The [https://code.google.com/p/power8/downloads/list Downloads] page won't contain all latest releases now. Last one available _there_ is 1.4.4. Instead, you should use links from within this page, which will always point to latest build, and a previous one.
+The [https://code.google.com/p/power8/downloads/list Downloads] page won't contain all latest releases now. Last one available _there_ is 1.4.4. Instead, *you should use links from within this page*, which will always point to latest build, and a previous one.
 
 = Links =
 ||<b>Status</b>||<b>Type</b>||<b>Version</b>||<b>Link</b>||<b>Changelog</b>|| 
-||Latest||MSI||1.5.0.744||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.0.744.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.0_RTM_(v.1.5.0.744):_08.06.2014 Read]||
-||Latest||7z||1.5.0.744||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.0.744.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.0_RTM_(v.1.5.0.744):_08.06.2014 Read]||
-||Pre-Latest||MSI||1.4.6.692||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.4.6.692.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.4.6_Beta_(v.1.4.6.692):_28.03.2014 Read]||
-||Pre-Latest||7z||1.4.6.692||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.4.6.692.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.4.6_Beta_(v.1.4.6.692):_28.03.2014 Read]||
+||Latest||MSI||1.5.1.766||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.1.766.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
+||Latest||7z||1.5.1.766||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.1.766.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
+||Pre-Latest||MSI||1.5.0.744||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.0.744.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.0_RTM_(v.1.5.0.744):_08.06.2014 Read]||
+||Pre-Latest||7z||1.5.0.744||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.0.744.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.0_RTM_(v.1.5.0.744):_08.06.2014 Read]||
 
 = Sources = 
 The 7zipped source of the latest version is available [http://power8.googlecode.com/svn/filez/Power8_src.7z here].
@@ -40,7 +40,8 @@ Unfortunately, the downloads feature was deprecated and we have to use other way
 The requests (so-called "events") contain only "ping" itself and bear no other user information. Data we receive is:
   * The event itself - Deploy or Startup in our case;
   * Country of user launching Power8 - calculated by Google automatically based on IP. Power8 doesn't collect this information;
-  * Power8 version & OS version - sent by Power8. Only pure version string (e.g. Windows NT 6.3.x.x) is sent, no other information is shared.
+  * Power8 version & OS version - sent by Power8. Only pure version string (e.g. Windows NT 6.3.x.x) is sent, no other information is shared;
+  * Language chosen by the system to present the Power8 UI to you. It may not be user language or some system setting, but rather most appropriate locale selected based on system interface UI. 
 This is safe because:
   * We do not send any user-, computer-, domain- or network-specific information;
   * We send data over encrypted connection (https);
@@ -49,4 +50,6 @@ This is safe because:
   * You can simply view data being sent by installing network scanner like Fiddler and use it to see the request Power8 sends on startup.
 
 = Exceptions tracing =
-Starting from 1.5.0 we also send all _unhandled_ exceptions to Google analytics which should help us to identify and fix problems. An unhandled exception is the error which Power8 is not expecting, so after it occurs, Power8 will crash. Right before such crashes we send data to Google Analytics. The data usually includes no user-specific information and contains barely the description of what happened, where in the program it happened and why it happened.
+Starting from 1.5.0 we also send all exceptions to Google analytics which should help us to identify and fix problems. For example, release 1.5.1 already contains couple of fixes for most "popular" errors. 
+
+For errors detected by Power8, we send only it type for statistics. For _unhandled_ exceptions we also send the error message and the stack trace. An unhandled exception is the error which Power8 is not expecting, so after it occurs, Power8 will crash. Right before such crashes we send data to Google Analytics. The data usually includes no user-specific information and contains barely the description of what happened, where in the program it happened and why it happened. However in the next release we plan to provide the checkbox to disable this extended information reporting. 
