@@ -34,7 +34,7 @@ namespace Power8.Helpers
                             "DBG" + 
 #endif 
                             ex.GetType().Name;
-
+            
             AnalyticsCallAsync("exception", new Dictionary<string, string>
             {
                 {"exd", Cut(exType, 150)},
@@ -70,14 +70,17 @@ namespace Power8.Helpers
             {
                 try
                 {
-                    var result = _web.PostAnalyticsHit(hitType, args);
-                    Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)).Replace('\0', ' '));
+                    lock (_web)
+                    {
+                        var result = _web.PostAnalyticsHit(hitType, args);
+                        Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)).Replace('\0', ' '));
+                    }
                 }
                 catch (Exception ex)
                 {
                     Log.Raw(ex.ToString());
                 }
-            }, "Google Analytics call");
+            }, "Google Analytics call for " + hitType);
         }
 
         private class AnalyticsClient : WebClient
