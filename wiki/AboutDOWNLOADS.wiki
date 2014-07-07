@@ -10,16 +10,16 @@ This page is how to get *latest* version of Power8.
 
 = Details =
 
-==The latest version available is 1.5.1. See links below.==
+==The latest version available is 1.5.2. See links below.==
 
 The [https://code.google.com/p/power8/downloads/list Downloads] page won't contain all latest releases now. Last one available _there_ is 1.4.4. Instead, *you should use links from within this page*, which will always point to latest build, and a previous one.
 
 = Links =
 ||<b>Status</b>||<b>Type</b>||<b>Version</b>||<b>Link</b>||<b>Changelog</b>|| 
-||Latest||MSI||1.5.1.766||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.1.766.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
-||Latest||7z||1.5.1.766||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.1.766.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
-||Pre-Latest||MSI||1.5.0.744||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.0.744.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.0_RTM_(v.1.5.0.744):_08.06.2014 Read]||
-||Pre-Latest||7z||1.5.0.744||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.0.744.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.0_RTM_(v.1.5.0.744):_08.06.2014 Read]||
+||Latest||MSI||1.5.2.777||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.2.777.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.5.2_Beta_Quick-Fix_(v.1.5.2.777):_08.07.2014 Read]||
+||Latest||7z||1.5.2.777||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.2.777.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.5.2_Beta_Quick-Fix_(v.1.5.2.777):_08.07.2014 Read]||
+||Pre-Latest||MSI||1.5.1.766||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.1.766.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
+||Pre-Latest||7z||1.5.1.766||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.1.766.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
 
 = Sources = 
 The 7zipped source of the latest version is available [http://power8.googlecode.com/svn/filez/Power8_src.7z here].
