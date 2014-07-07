@@ -22,6 +22,14 @@ BTW, practical tests unexpectedly show up to 5% *LESS* memory consumption with h
 
 To activate and use the hack:
 
+== Version 1.5.1 and later ==
+
+ # Open Power8 settings dialog and switch to Menu-Buttons tab;
+ # When Control Panel menu-button is checked, the child "Fix duplicated icons..." checkbox becomes enabled;
+ # Check it to activate the hack, uncheck to disable the hack. Since icons are cached by Power8, it may require to restart the application to reload Control Panel icons affected by the hack.
+
+== Version 1.5.0 and older ==
+
  # Open Power8.exe.config file in Power8 installation directory with notepad;
  # Find setting `DoNotFreeLibraries` and set it's `Value` to `True` (by default it's `False`);
  # Save file and (re)start Power8.
