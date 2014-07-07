@@ -1,6 +1,11 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.5.2 Beta^Quick-Fix^ (v.1.5.2.777): 08.07.2014==
+
+  # `[changed]` Updated localizations: HU, KO, CS;
+  # `[fixed]` Fixed concurrent IO preventing proper new style exceptions events reporting.
+
 ==Version 1.5.1 Beta (v.1.5.1.766): 07.07.2014==
 
   # `[new]` Exceptions on start of application are handled differently, allowing user to prevent endless restarting loop;
