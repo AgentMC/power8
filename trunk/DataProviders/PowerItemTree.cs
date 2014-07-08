@@ -847,15 +847,15 @@ namespace Power8
                                 where element != null
                                 select element.InnerText
                         ).ToList();
-            var arr = new string[temp.Count];
-            for (var i = 0; i < temp.Count; i++)
+            for (var i = temp.Count -1; i > -1; i--)
             {
                 if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
-                    arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12)); //Expand known folders
-                else if (!temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
-                    arr[i] = temp[i];
+                    temp[i] = Util.ResolveKnownFolder(temp[i].Substring(12)); //Expand known folders
+                else if (temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
+                    temp.RemoveAt(i);
+                //else temp[i] remains unchanged
             }
-            return arr;
+            return temp.ToArray();
         }
 
         #endregion
