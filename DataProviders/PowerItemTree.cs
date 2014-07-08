@@ -413,25 +413,29 @@ namespace Power8
         //Handles event when a file is renamed under any of drives watched
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.Name)
-                || string.IsNullOrEmpty(e.FullPath)
-                || string.IsNullOrEmpty(e.OldName)
-                || string.IsNullOrEmpty(e.OldFullPath))
+            try
             {
-                Log.Fmt("FileRenamed: Name: {0}, FullPath: {1}, Old: {2}, OldFP: {3}",
-                                    e.Name, e.FullPath, e.OldName, e.OldFullPath);
-                return; //Sometimes this happens
+                if (string.IsNullOrEmpty(e.Name)
+                    || string.IsNullOrEmpty(e.FullPath)
+                    || string.IsNullOrEmpty(e.OldName)
+                    || string.IsNullOrEmpty(e.OldFullPath))
+                {
+                    Log.Fmt("FileRenamed: Name: {0}, FullPath: {1}, Old: {2}, OldFP: {3}",
+                            e.Name, e.FullPath, e.OldName, e.OldFullPath);
+                    return; //Sometimes this happens
+                }
+                FileChanged(sender,
+                            new FileSystemEventArgs(
+                                WatcherChangeTypes.Deleted,
+                                e.OldFullPath.TrimEnd(e.OldName.ToCharArray()),
+                                e.OldName));
+                FileChanged(sender,
+                            new FileSystemEventArgs(
+                                WatcherChangeTypes.Created,
+                                e.FullPath.TrimEnd(e.Name.ToCharArray()),
+                                e.Name));
             }
-            FileChanged(sender,
-                new FileSystemEventArgs(
-                    WatcherChangeTypes.Deleted,
-                    e.OldFullPath.TrimEnd(e.OldName.ToCharArray()),
-                    e.OldName));
-            FileChanged(sender,
-                new FileSystemEventArgs(
-                    WatcherChangeTypes.Created,
-                    e.FullPath.TrimEnd(e.Name.ToCharArray()),
-                    e.Name));
+            catch (PathTooLongException){Log.Raw("PathTooLongException!");}
         }
 
         //Handles event when a file is created, deleted or changed in any other way under any of drives watched
@@ -443,8 +447,8 @@ namespace Power8
                 if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
                     return;
             }
-            catch (Exception) //In case we have multiple change operations caused by links beung updated by installer
-            {
+            catch (Exception) //In case we have multiple change operations caused by links beung updated by installer.
+            {                 //PathTooLongException is handled here as well
                 return;
             }
 
