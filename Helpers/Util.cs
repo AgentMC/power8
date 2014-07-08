@@ -1380,13 +1380,20 @@ namespace Power8
             CreateProcess(Application.ExecutablePath);
             Die(reason);
         }
-        /// <summary> Shuts down the Power8  writing the reason of exiting into EventLog </summary>
+        /// <summary> Shuts down the Power8 writing the reason of exiting into EventLog </summary>
         /// <param name="becauseString">Reason to exit</param>
         public static void Die(string becauseString)
         {
-            EventLog.WriteEntry("Application Error", 
-                                string.Format(NoLoc.Str_FailFastFormat, becauseString),
-                                EventLogEntryType.Error);
+            try
+            {
+                EventLog.WriteEntry("Application Error",
+                                    string.Format(NoLoc.Str_FailFastFormat, becauseString),
+                                    EventLogEntryType.Error);
+            }
+            catch (Exception ex) 
+            {
+                Analytics.PostException(ex, false);
+            } //Turns out there is not always "App error" log...
             Environment.Exit(1);
         }
 
