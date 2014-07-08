@@ -202,7 +202,15 @@ namespace Power8
         // Save data on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
-            _watchDog.Stop();
+            try
+            {
+                _watchDog.Stop();
+                _watchDog.Dispose();
+            }
+            catch (COMException ex)
+            {
+                Log.Raw(ex.Message); //Well... too bad. We shut down anyway...
+            }
 
             Directory.CreateDirectory(DataBaseRoot);
 
