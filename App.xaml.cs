@@ -61,23 +61,23 @@ namespace Power8
             var dbRoot = Util.GetSettingsIndependentDbRoot();
             try
             {
-                var ids = Directory.GetFiles(dbRoot, "*" + CLIENT_ID_EXTENSION);
+                var ids = Directory.GetFiles(dbRoot, "*" + ClientIDExtension);
+                string clientId;
                 if (ids.Length == 0)
                 {
-                    ClientId = Guid.NewGuid().ToString();
-                    File.Create(dbRoot + "\\" + ClientId + CLIENT_ID_EXTENSION);
+                    clientId = Guid.NewGuid().ToString();
+                    File.Create(dbRoot + "\\" + clientId + ClientIDExtension);
                 }
                 else
                 {
-                    ClientId = Path.GetFileNameWithoutExtension(ids[0]);
+                    clientId = Path.GetFileNameWithoutExtension(ids[0]);
                 }
-                Analytics.Init(TRACKID, ClientId, Power8.Properties.NoLoc.Stg_AppShortName,
+                Analytics.Init(TrackID, clientId, Power8.Properties.NoLoc.Stg_AppShortName,
                     Util.GetAppVersion().ToString());
             }
             catch (Exception ex)
             {
                 Log.Raw("Unable to read client ID to init analytics: " + ex);
-                ClientId = null;
             }
 
             //Move settings from previous ver
@@ -106,10 +106,8 @@ namespace Power8
             get { return (App) Application.Current; }
         }
 
-        private const string CLIENT_ID_EXTENSION = ".clientid";
-        public const string TRACKID = "UA-30314159-2";
-
-        public string ClientId { get; private set; }
+        private const string ClientIDExtension = ".clientid";
+        private const string TrackID = "UA-30314159-2";
 
         /// <summary>
         /// Handles Unhandled appdomain exception and calls the code to write that down everywhere.
