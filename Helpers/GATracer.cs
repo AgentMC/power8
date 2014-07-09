@@ -39,12 +39,14 @@ namespace Power8.Helpers
                     if (first)
                         first = false;
                     else
-                        pos += len;//position of PRE-last line
+                        pos += len; //position of PRE-last line
                     len = l.Length; //length of LAST line
                     len += Environment.NewLine.Length;
                 } while (r.Peek() > -1);
             }
-            b.Append(orig.Substring(pos)).Append(_original);
+            if (pos < orig.Length)
+                b.Append(orig.Substring(pos));
+            b.Append(_original);
             return b.ToString();
         }
 
