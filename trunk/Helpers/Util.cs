@@ -1377,7 +1377,19 @@ namespace Power8
         /// <param name="reason">Reason to restart</param>
         public static void Restart(string reason)
         {
-            CreateProcess(Application.ExecutablePath);
+            try
+            {
+                CreateProcess(Application.ExecutablePath);
+            }
+            catch (Win32Exception e)
+            {
+#warning GA Tracer used!!!
+                GATracer.PostTraceData(1, e, new Dictionary<string, string>
+                                             {
+                                                 {"ep", Application.ExecutablePath},
+                                                 {"isIn", File.Exists(Application.ExecutablePath).ToString()}
+                                             });
+            }
             Die(reason);
         }
         /// <summary> Shuts down the Power8 writing the reason of exiting into EventLog </summary>
