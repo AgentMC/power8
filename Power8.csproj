@@ -108,6 +108,7 @@
     <Compile Include="DataProviders\AppxUserModelIdProvider.cs" />
     <Compile Include="DataProviders\MfuList.cs" />
     <Compile Include="Helpers\Analytics.cs" />
+    <Compile Include="Helpers\GATracer.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Properties\NoLoc.Designer.cs">

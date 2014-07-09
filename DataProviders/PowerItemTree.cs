@@ -564,13 +564,14 @@ namespace Power8
         /// <param name="recoursive">True to scan subdirectories.</param>
         private static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
         {
+            //Obtain full fs path to current location
+            var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
             try
-            {   //Obtain full fs path to current location
-                var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
+            {
                 Log.Raw("In: " + curDir, item.ToString());
                 //Parse child directories and recoursively call the ScanFolderSync
                 foreach (var directory in item.IsLibrary ? GetLibraryDirectories(curDir) : Directory.GetDirectories(curDir))
-                {   //Skip hidden directories
+                {//Skip hidden directories
                     if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
                     {
                         Log.Raw("Skipped because item appears to be hidden");
@@ -581,7 +582,7 @@ namespace Power8
                     if (recoursive)
                         ScanFolderSync(subitem, basePath, true);
                 }
-                if (item.IsLibrary) //Since Libraries are actually files, but were already parsed as folders, we shan't continue...
+                if (item.IsLibrary)//Since Libraries are actually files, but were already parsed as folders, we shan't continue...
                     return;
                 //Proceed with files
                 var resources = new Dictionary<string, string>();
@@ -596,10 +597,10 @@ namespace Power8
                             if (str.StartsWith("IconFile=") || str.StartsWith("IconResource="))
                             {
                                 Util.Post(() =>
-                                              {
-                                                item.NonCachedIcon = true;
-                                                item.Icon = null;
-                                              });
+                                {
+                                    item.NonCachedIcon = true;
+                                    item.Icon = null;
+                                });
                             }
                             if (str.StartsWith("LocalizedResourceName="))
                             {
@@ -608,7 +609,7 @@ namespace Power8
                         }
                         while ((str = reader.ReadLine()) != null && str.Contains("="))
                         {
-                            var pair = str.Split(new[] { '=' }, 2);
+                            var pair = str.Split(new[] {'='}, 2);
                             resources.Add(pair[0], pair[1]);
                         }
                     }
@@ -621,16 +622,30 @@ namespace Power8
 
                     var fn = Path.GetFileName(file);
                     var fileIsLib = (Path.GetExtension(file) ?? "")
-                                         .Equals(".library-ms", StringComparison.InvariantCultureIgnoreCase);
+                        .Equals(".library-ms", StringComparison.InvariantCultureIgnoreCase);
                     AddSubItem(item, basePath, file, fileIsLib,
-                                fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
-                                fileIsLib);
+                               fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
+                               fileIsLib);
                 }
             }
             catch (UnauthorizedAccessException)
-            { Log.Raw("UnauthorizedAccessException"); }//Don't care if user is not allowed to access fileor directory or it's contents
+            {Log.Raw("UnauthorizedAccessException");} //Don't care if user is not allowed to access fileor directory or it's contents
             catch (IOException)
-            { Log.Raw("IOException"); }//Don't care as well if file was deleted on-the-fly, watcher will notify list
+            {Log.Raw("IOException");} //Don't care as well if file was deleted on-the-fly, watcher will notify list
+            catch (ArgumentException e)
+            {
+#warning GA Tracer used!
+                GATracer.PostTraceData(0, e, new Dictionary<string, string>
+                                             {
+                                                 {"curdir", curDir},
+                                                 {
+                                                     "wrong", Path.GetInvalidPathChars()
+                                                                  .Union(Path.GetInvalidFileNameChars())
+                                                                  .Any(curDir.Contains)
+                                                                  .ToString()
+                                                 }
+                                             });
+            }
             finally
             {  //Explicitly set marker showing that enumeration operations may occur on Items from this moment
                 item.AutoExpandIsPending = false;
