@@ -138,6 +138,7 @@ begin:
                 Thread.Sleep(5000);
                 goto begin; //just don't want unneeded code nesting here, anyway IL will be same.
             }
+            DriveNames.ForEach(StopWatcher);
         }
 
         /// <summary>
@@ -155,7 +156,7 @@ begin:
         {
             begin:
 
-            while (FsQueue.Count > 0)
+            while (FsQueue.Count > 0 && !Util.MainDisp.HasShutdownStarted)
             {
                 FileSystemEventArgs e;
                 if (FsQueue.TryDequeue(out e))
