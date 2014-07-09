@@ -494,7 +494,8 @@ namespace Power8.Views
                             idx = 0;
                         dataGrid.SelectedIndex = idx;
                     }
-                    dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                    if (dataGrid.SelectedItem != null) //when in search view and no hits/in clear custom list
+                        dataGrid.ScrollIntoView(dataGrid.SelectedItem);
                     break;
                 case Key.P:
                     if (pi != null && pi.IsMfuChild)
