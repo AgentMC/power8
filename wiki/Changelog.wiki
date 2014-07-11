@@ -1,6 +1,21 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.5.3 Beta (v.1.5.3.796): 11.07.2014==
+...After all the preparations the bugs destruction actually begins! According to Google Analytics, 75% to 95% of errors you may encounter is fixed in this release. Next the work will be continued on hardening the application and making it even more stable. Items marked as "`fixed-GA`" were reported automatically through Google Analytics and automated exception reporting subsystem!
+
+  # `[changed]` Speed up exit of Power8.;
+  # `[fixed]` Rare impossibility to exit when another application is being installed in the system;
+  # `[fixed]` `SecurityException` when there's no default "Application Error" log in the system;
+  # `[fixed-GA]` Various `COMException`s occurring when Power8 is exiting;
+  # `[fixed-GA]` `Win32Exception` occurring when Power8 tries to restart. The application won't crash anymore but additional tracing is now in place to fix the root of problem as well;
+  # `[fixed-GA]` `ArgumentNullException` occurring in `Power8.PowerItemTree.ScanFolderSync` when a Windows library is detected with itemnot preprocedd by system yet;
+  # `[fixed-GA]` `ArgumentNullException` occurring in `DataGrid.ScrollIntoView` when pressing Up or Down keys in search results view when no results are found;
+  # `[fixed-GA]` `InvalidOperationException` occurring in `MfuList` sometimes. At least I hope it's fixed because it wasn't clear how the issue happens;
+  # `[fixed-GA]` `PathTooLongException` occurring in `Power8.PowerItemTree.FileRenamed` under undetermined circumstances;
+  # `[fixed-GA]` `ApplicationException` occurring in Drive Manager when a .Net `FileSystemWatcher`-incompatible drive exists in the system;
+  # `[fixed-GA]` `ArgumentException` occurring in various places under `Power8.PowerItemTree.ScanFolderSync` and related probably to drives with .Net-incompatible filesystem attached to PC. The application won't crash anymore but additional tracing is now in place to fix the root of problem as well;
+
 ==Version 1.5.2 Beta^Quick-Fix^ (v.1.5.2.777): 08.07.2014==
 
   # `[changed]` Updated localizations: HU, KO, CS;
