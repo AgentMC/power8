@@ -14,7 +14,9 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using Microsoft.Win32;
+using Power8.DataProviders;
 using Power8.Helpers;
 using Power8.Properties;
 using Power8.Views;
@@ -301,16 +303,27 @@ namespace Power8
         #region Shell items resolution
 
         /// <summary>
+        /// Returns the target and outs an argument of a shell shortcut, using COM component to get data.
+        /// </summary>
+        /// <param name="link">Full path to *.LNK file</param>
+        /// <param name="argument">The arguments to thew target of link</param>
+        public static string ResolveLink(string link, out string argument)
+        {
+            var shLink = new API.ShellLink();
+            ((API.IPersistFile) shLink).Load(link, 0);
+            var res = ResolveLink(((API.IShellLink) shLink));
+            Marshal.FinalReleaseComObject(shLink);
+            argument = res.Item2;
+            return res.Item1;
+        }
+        /// <summary>
         /// Returns the target of a shell shortcut, using COM component to get data.
         /// </summary>
         /// <param name="link">Full path to *.LNK file</param>
         public static string ResolveLink(string link)
         {
-            var shLink = new API.ShellLink();
-            ((API.IPersistFile)shLink).Load(link, 0);
-            var res = ResolveLink(((API.IShellLink) shLink));
-            Marshal.FinalReleaseComObject(shLink);
-            return res.Item1;//The target of Link
+            string dummy;
+            return ResolveLink(link, out dummy);//The target of Link
         }
         /// <summary>
         /// Extracts data from IShellLink instance, in Unicode format. Does NOT automatically 
@@ -660,6 +673,11 @@ namespace Power8
             //update variables
             UpdateEnvironment();
 
+            if (OsIs.EightOrMore && TryLaunchMetroApp(command ?? startInfo.FileName))
+            {//check if the app is Metro-style one and launch it correspondingly.
+                return;
+            }
+            
             //run
             if (command != null)
             {
@@ -674,26 +692,127 @@ namespace Power8
             }
         }
         /// <summary>
+        /// This method tries launching ModernUI application using it's exe, htm or link to one as a source.
+        /// It automatically resolves it's identity, AppId and finally queries AppUserModelId to activate one.
+        /// If any data is unavailable the launch doesn't occur.  
+        /// </summary>
+        /// <param name="targ">Path to exe, htm or lnk file pointing to exe or htm</param>
+        /// <returns>True if OS ActivationManager reported that app was launched successfully, 
+        /// false if any required information was not found or ActivationManager failed.</returns>
+        public static bool TryLaunchMetroApp(string targ)
+        {
+            string appUserModelId;
+            try
+            {
+// ReSharper disable AssignNullToNotNullAttribute
+                //First, try locating the manifest that contains identity and ID
+                Log.Raw("Searching for manifest", targ);
+                var manifest = Path.Combine(Path.GetDirectoryName(targ), "AppxManifest.xml");
+                if (!File.Exists(manifest) && targ.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
+                {
+                    targ = ResolveLinkSafe(targ);
+                    manifest = Path.Combine(Path.GetDirectoryName(targ), "AppxManifest.xml");
+                }
+// ReSharper restore AssignNullToNotNullAttribute
+                if (!File.Exists(manifest))
+                {
+                    Log.Raw("No manifest found!", targ);
+                    return false;
+                }
+
+                //Load manifest and extract package Identity and all included apps IDs
+                Log.Raw("Parsing manifest", targ);
+                var xm = XElement.Load(manifest);
+                var ns = xm.GetDefaultNamespace();
+// ReSharper disable PossibleNullReferenceException
+                var identity = xm.Element(ns + "Identity")
+                                 .Attribute("Name")
+                                 .Value;
+                var apps = xm.Element(ns + "Applications")
+                             .Elements(ns + "Application")
+                             .Select(x => new
+                                          {
+                                              Id = x.Attribute("Id").Value,
+                                              File = (x.Attribute("Executable") ?? x.Attribute("StartPage")).Value
+                                          });
+// ReSharper restore PossibleNullReferenceException
+
+                //The app passed in targ argument should be registered Metro application, otherwise it can't be activated
+                Log.Raw("Defining target app", targ);
+                var app = apps.FirstOrDefault(a => targ.EndsWith(a.File, StringComparison.OrdinalIgnoreCase));
+                if (app == null)
+                {
+                    Log.Raw("Target app wasn't discovered, defaulting to regular shell launch", targ);
+                    return false;
+                }
+
+                //As we know it's ModernUI app, let's try extracting it's AppUMID.
+                Log.Raw("Getting AppUserModelId", targ); 
+                appUserModelId = AppxUserModelIdProvider.GetAppUserModelId(identity, app.Id);
+            }
+            catch (Exception ex)
+            {
+                DispatchCaughtException(ex);
+                return false;
+            }
+            if (appUserModelId == null) 
+            {//no Windows registry entries fpund describing the app or it's not activatable
+                Log.Raw("Failed to retrieve AppUserModelId", targ); 
+                return false;
+            }
+            Log.Raw("Creating ActivationManager", targ); 
+            var muiActivator = (API.IApplicationActivationManager)new API.ApplicationActivationManager();
+            try //activate = launch; separate try because we need finally here
+            {
+                Log.Raw("Launching AppX for AUMID " + appUserModelId, targ); 
+                /*var pid = */ 
+                muiActivator.ActivateApplication(appUserModelId, string.Empty, API.ACTIVATEOPTIONS.AO_NONE);
+                Log.Raw("Done OK ", targ); 
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DispatchCaughtException(ex);
+                return false;
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(muiActivator);
+            }
+        }
+
+        /// <summary>
         /// Updates environment variables from those stored by Explorer in registry, so Power8 has same environment 
         /// variables as Explorer does. Call this method before direct or indirect creation of new child processes.
         /// </summary>
         public static void UpdateEnvironment()
         {
-            using (var k = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\Session Manager\Environment"))
+            var keys = new[]
             {
-                Log.Raw("Starting process, k = " + (k == null ? "" : "not ") + "null");
-                if (k != null)
+                new {Key = Registry.LocalMachine, Path = @"SYSTEM\CurrentControlSet\Control\Session Manager\"},
+                new {Key = Registry.CurrentUser, Path = string.Empty}
+            };
+            Log.Raw("Starting process");
+            foreach (var key in keys)
+            {
+                using (var k = key.Key.OpenSubKey(key.Path + "Environment"))
                 {
-                    foreach (var valueName in k.GetValueNames())
+                    Log.Fmt("For key={0}, k = {1}", key.Key, (k == null ? "" : "not ") + "null");
+                    if (k == null) continue;
+                    foreach (var valueName in k.GetValueNames().Where(v => !string.IsNullOrWhiteSpace(v)))
                     {
-                        var value = k.GetValue(valueName).ToString();
-                        if (Environment.GetEnvironmentVariable(valueName) == value) 
+                        var value = k.GetValue(valueName);
+                        if (value == null)
                             continue;
-                        Environment.SetEnvironmentVariable(valueName, value);
+                        var sValue = value.ToString();
+                        if (Environment.GetEnvironmentVariable(valueName) == sValue)
+                            continue;
+                        Environment.SetEnvironmentVariable(valueName, sValue);
                         Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
                     }
                 }
             }
+            Log.Raw("Done");
         }
         
         #endregion
@@ -798,15 +917,21 @@ namespace Power8
                     var key = GetRegistryContainer(clsidOrApiShNs);
                     if (key != null)
                     {
-                        using (var k = Microsoft.Win32.Registry.ClassesRoot
-                                .OpenSubKey(key + subkey, false))
+                        using (var k = Registry.ClassesRoot.OpenSubKey(key + subkey, false))
                         {
                             if (k != null)
-                                return ((string)k.GetValue(valueName, null));
+                                return ((string) k.GetValue(valueName, null));
                         }
                     }
                 }
+#if DEBUG
+                catch (Exception ex)
+                {
+                    Log.Raw(ex.Message, clsidOrApiShNs);
+                }
+#else
                 catch (Exception){}
+#endif
             }
 // ReSharper restore EmptyGeneralCatchClause
             return null;
@@ -830,8 +955,7 @@ namespace Power8
                 return "CLSID\\" + NameSpaceToGuidWithBraces(pathClsidGuidOrApishnamespace);
             }
             //file
-            using (var k = Microsoft.Win32.Registry.ClassesRoot
-                .OpenSubKey(pathClsidGuidOrApishnamespace.Substring(i), false))
+            using (var k = Registry.ClassesRoot.OpenSubKey(pathClsidGuidOrApishnamespace.Substring(i), false))
             {//"hkcr\.doc\@" => "Word.document"
                 return (k != null)
                            ? ((string) k.GetValue(String.Empty, null))
@@ -907,7 +1031,7 @@ namespace Power8
         /// ResId = @%ProgramFiles%\Windows Defender\EppManifest.dll,-1000 (genaral case)
         /// or like @C:\data\a.dll,-2000#embedding8
         /// or      @B:\wakawaka\foo.dlx
-        /// or      @%windir%\msm.dll,8 => 8 is index, not id TODO: handle indices well.
+        /// or      @%windir%\msm.dll,8 => 8 is index, not id 
         /// Note that when Resource string doesn't start with @ it is verbatim string and this 
         /// method shan't be called. However no error will occur, you'll only get the 
         /// Tuple &lt;ResourceId,IntPtr.Zero,0xFFFFFFFF&gt;.
@@ -1191,7 +1315,13 @@ namespace Power8
         /// </summary>
         public static string GetSettingsIndependentDbRoot()
         {
-            return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\Power8_Team\\";
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+                Log.Raw("Settings-independent DB root created: " + path);
+            }
+            return path;
         }
 
         private static Version _verCache;
@@ -1212,6 +1342,7 @@ namespace Power8
         public static void DispatchCaughtException(Exception ex)
         {
             Log.Raw(ex.ToString());
+            Analytics.PostException(ex, false);
             MessageBox.Show(ex.Message, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         /// <summary>
@@ -1225,27 +1356,56 @@ namespace Power8
         {
             var str = ex.ToString();
             Log.Raw(str);
+            Analytics.PostException(ex, true);
             MessageBox.Show(str, NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
             var reason = NoLoc.Err_UnhandledGeneric + str;
-            if(SettingsManager.Instance.AutoRestart)
+            if(SettingsManager.Instance.AutoRestart && CheckStartupException())
                 Restart(reason);
             else
                 Die(reason);
         }
+
+        private static bool CheckStartupException()
+        {
+            return BtnStck.IsInstantited
+                   || MessageBox.Show(Resources.Err_StartupCrashDetected,
+                                      NoLoc.Stg_AppShortName,
+                                      MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+        }
+
         /// <summary> Restarts Power8 writing the reason of restarting into EventLog </summary>
         /// <param name="reason">Reason to restart</param>
         public static void Restart(string reason)
         {
-            CreateProcess(Application.ExecutablePath);
+            try
+            {
+                CreateProcess(Application.ExecutablePath);
+            }
+            catch (Win32Exception e)
+            {
+#warning GA Tracer used!!!
+                GATracer.PostTraceData(1, e, new Dictionary<string, string>
+                                             {
+                                                 {"ep", Application.ExecutablePath},
+                                                 {"isIn", File.Exists(Application.ExecutablePath).ToString()}
+                                             });
+            }
             Die(reason);
         }
-        /// <summary> Shuts down the Power8  writing the reason of exiting into EventLog </summary>
+        /// <summary> Shuts down the Power8 writing the reason of exiting into EventLog </summary>
         /// <param name="becauseString">Reason to exit</param>
         public static void Die(string becauseString)
         {
-            EventLog.WriteEntry("Application Error", 
-                                string.Format(NoLoc.Str_FailFastFormat, becauseString),
-                                EventLogEntryType.Error);
+            try
+            {
+                EventLog.WriteEntry("Application Error",
+                                    string.Format(NoLoc.Str_FailFastFormat, becauseString),
+                                    EventLogEntryType.Error);
+            }
+            catch (Exception ex) 
+            {
+                Analytics.PostException(ex, false);
+            } //Turns out there is not always "App error" log...
             Environment.Exit(1);
         }
 

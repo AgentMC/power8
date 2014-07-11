@@ -43,7 +43,7 @@ namespace Power8
         /// The list of user exclusionf from MFU in P8 mode
         /// </summary>
         public static readonly ObservableCollection<StringWrapper> ExclList = new ObservableCollection<StringWrapper>();
-        public static readonly int ProcessSessionId = Process.GetCurrentProcess().SessionId;  //Needed to check if new process was created in our session
+        public static readonly int ProcessSessionId = App.Current.Proc.SessionId;   //Needed to check if new process was created in our session
 
 
         private static readonly List<MfuElement> LastList = new List<MfuElement>(); //The last checked state of MFU data
@@ -64,8 +64,9 @@ namespace Power8
 
         //Registry pathes
         private const string
-            USERASSISTKEY = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count",
-            PLD_SPLITTER = "<:;:>";
+            Userassistkey = @"Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{0}\Count",
+            PldSplitter = "<:;:>", 
+            LastLaunchFormat = "yyyyMMddHHmmss";
 
         static class Guids
         {
@@ -116,16 +117,22 @@ namespace Power8
                         var l = f.ReadLine();
                         if (string.IsNullOrEmpty(l)) 
                             continue;
-                        var ls = l.Split(new[]{PLD_SPLITTER}, 4, StringSplitOptions.None);
+                        var ls = l.Split(new[]{PldSplitter}, 4, StringSplitOptions.None);
                         if(ls.Length != 4)
+                            continue;
+                        int launchCount;
+                        if (!int.TryParse(ls[2], out launchCount))
+                            continue;
+                        DateTime lastLaunch;
+                        if (!DateTime.TryParseExact(ls[3], LastLaunchFormat, CultureInfo.InvariantCulture,
+                                                    DateTimeStyles.None, out lastLaunch))
                             continue;
                         P8JlImpl.Add(new MfuElement
                                             {
                                                 Arg = ls[0].Replace('/', '\\'),
                                                 Cmd = ls[1],
-                                                LaunchCount = int.Parse(ls[2]),
-                                                LastLaunchTimeStamp =
-                                                    DateTime.ParseExact(ls[3], "yyyyMMddHHmmss", CultureInfo.CurrentCulture)
+                                                LaunchCount = launchCount,
+                                                LastLaunchTimeStamp = lastLaunch
                                             });
                     }
                 }
@@ -195,7 +202,15 @@ namespace Power8
         // Save data on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
-            _watchDog.Stop();
+            try
+            {
+                _watchDog.Stop();
+                _watchDog.Dispose();
+            }
+            catch (COMException ex)
+            {
+                Log.Raw(ex.Message); //Well... too bad. We shut down anyway...
+            }
 
             Directory.CreateDirectory(DataBaseRoot);
 
@@ -208,8 +223,8 @@ namespace Power8
                                 mfuElement.Arg,
                                 mfuElement.Cmd,
                                 mfuElement.LaunchCount,
-                                mfuElement.LastLaunchTimeStamp.ToString("yyyyMMddHHmmss"),
-                                PLD_SPLITTER);
+                                mfuElement.LastLaunchTimeStamp.ToString(LastLaunchFormat, CultureInfo.InvariantCulture),
+                                PldSplitter);
                 }
             }
 
@@ -384,16 +399,16 @@ namespace Power8
             int dataWidthExpected, fileTimeOffset, launchCountCorrection; //key parameters
             if (Util.OsIs.XPOrLess)
             {
-                ks1 = string.Format(USERASSISTKEY, Guids.XP_1);
-                ks2 = string.Format(USERASSISTKEY, Guids.XP_2);
+                ks1 = string.Format(Userassistkey, Guids.XP_1);
+                ks2 = string.Format(Userassistkey, Guids.XP_2);
                 dataWidthExpected = 16;
                 fileTimeOffset = 8;
                 launchCountCorrection = 5;
             }
             else
             {
-                ks1 = string.Format(USERASSISTKEY, Guids.W7_1);
-                ks2 = string.Format(USERASSISTKEY, Guids.W7_2);
+                ks1 = string.Format(Userassistkey, Guids.W7_1);
+                ks2 = string.Format(Userassistkey, Guids.W7_2);
                 dataWidthExpected = 72;
                 fileTimeOffset = 60;
                 launchCountCorrection = 0;

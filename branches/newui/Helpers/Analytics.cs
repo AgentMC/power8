@@ -21,15 +21,42 @@ namespace Power8.Helpers
             AnalyticsCallAsync("event", new Dictionary<string, string>
             {
                 {"ec", category.ToString()},
-                {"ea", action},
-                {"el", label},
+                {"ea", Cut(action, 500)},
+                {"el", Cut(label, 500)},
                 {"ev", value.HasValue ? value.ToString() : null}
             });
         }
 
+        public static void PostException(Exception ex, bool isFatal)
+        {
+            var exType =
+#if DEBUG
+                            "DBG" + 
+#endif 
+                            ex.GetType().Name;
+            
+            AnalyticsCallAsync("exception", new Dictionary<string, string>
+            {
+                {"exd", Cut(exType, 150)},
+                {"exf", isFatal ? "1" : "0"}
+            });
+
+            if (isFatal)
+            {
+                PostEvent(Category.Error, exType, ex.ToString(), null);
+            }
+        }
+
+        private static string Cut(String original, int maxLength)
+        {
+            if (original == null)
+                return null;
+            return original.Length > maxLength ? original.Substring(0, maxLength) : original;
+        }
+
         public enum Category
         {
-            Deploy, Runtime
+            Deploy, Runtime, Error
         }
 
         private static void AnalyticsCallAsync(string hitType, Dictionary<string, string> args)
@@ -43,14 +70,17 @@ namespace Power8.Helpers
             {
                 try
                 {
-                    var result = _web.PostAnalyticsHit(hitType, args);
-                    Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)).Replace('\0', ' '));
+                    lock (_web)
+                    {
+                        var result = _web.PostAnalyticsHit(hitType, args);
+                        Log.Fmt("Code: {0}, data: {1}", _web.ResponseCode, new string(Encoding.Default.GetChars(result)).Replace('\0', ' '));
+                    }
                 }
                 catch (Exception ex)
                 {
                     Log.Raw(ex.ToString());
                 }
-            }, "Google Analytics call");
+            }, "Google Analytics call for " + hitType);
         }
 
         private class AnalyticsClient : WebClient
@@ -75,6 +105,7 @@ namespace Power8.Helpers
                 data["an"] = _appName;
                 data["av"] = _appVer;
                 data["t"] = hitType;
+                data["ul"] = Thread.CurrentThread.CurrentUICulture.Name;
                 if (1 == Interlocked.CompareExchange(ref _sessionStarting, 0, 1))
                 {
                     data["sc"] = "start";

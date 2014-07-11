@@ -127,17 +127,18 @@ namespace Power8.Views
         void WcDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
             Util.Send(() => IsEnabled = true); //Enable the UI. Since we're in some non-main thread, do this from main one.
-            if (e.Cancelled) //i.e. the download wasn't successful:
+            if (e.Cancelled || e.Error != null) //i.e. the download wasn't successful:
             {
-                MessageBox.Show(Properties.Resources.Err_DownloadCancelled + (e.Error != null ? "\r\n" + e.Error.Message : ""),
-                                NoLoc.Stg_AppShortName, 
-                                MessageBoxButton.OK, 
-                                MessageBoxImage.Error);
+                MessageBox.Show(
+                    Properties.Resources.Err_DownloadCancelled + (e.Error != null ? "\r\n" + e.Error.Message : ""),
+                    NoLoc.Stg_AppShortName,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
             else //the download succeeded
             {
                 ((Action) e.UserState)(); //Invoke the passed action
-                Util.Send(Close);         //Close the window from main thread
+                Util.Send(Close); //Close the window from main thread
             }
         }
         /// <summary>

@@ -467,4 +467,56 @@ Vill du återställa Utforskaren och starta om Power8?</value>
     <value>Byt plats på programmenyn och sökfältet för bättre användbarhet</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
+  <data name="CR_StgLblStretch" xml:space="preserve">
+    <value>Sträck ut bilden:</value>
+  </data>
+  <data name="CR_StgStrFill" xml:space="preserve">
+    <value>Fyll hela knappen</value>
+  </data>
+  <data name="CR_StgStrNone" xml:space="preserve">
+    <value>Sträck inte ut</value>
+  </data>
+  <data name="CR_StgStrUniform" xml:space="preserve">
+    <value>Enhetlig skalning</value>
+  </data>
+  <data name="CR_StgStrUniform2Fill" xml:space="preserve">
+    <value>Enhetlig skalning för att fylla</value>
+  </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>Visa huvudfönstret vid muspekaren med Alt+Z</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>Avstängningsmeny (Stäng av, Starta om...):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>Bekräfta</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>Tvinga</value>
+  </data>
+  <data name="CR_StgOldLayout" xml:space="preserve">
+    <value>Kompakt startmenuy (Windows98-stil)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>Fortsätt</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>Vill du verkligen fortsätta?</value>
+  </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>Made in Ukraine</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>Läs mer...</value>
+  </data>
+  <data name="CR_StgCbCtfl" xml:space="preserve">
+    <value>Fixa dublettikoner (kan kräva omstart).</value>
+  </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>Power8 verkar ha kraschat vid uppstarten. Inställningen 'Starta om programmet om fel uppstår' är aktiverat, så du kan hamna i en ändlös loop av Power8-omstarter (du kan ändra inställningen medan detta meddelande fortfarande är öppet). Vill du fortsätta starta om Power8?</value>
+  </data>
 </root>

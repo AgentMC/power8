@@ -117,406 +117,400 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CR_AppOpenCommonFolder" xml:space="preserve">
-    <value>Открыть общую для всех папку</value>
-  </data>
-  <data name="CR_AppOpenContainer" xml:space="preserve">
-    <value>Открыть расположение</value>
-  </data>
-  <data name="CR_AppOpenFolder" xml:space="preserve">
-    <value>Открыть</value>
-  </data>
-  <data name="CR_AppOpenTargetContainer" xml:space="preserve">
-    <value>Открыть расположение целевого файла</value>
-  </data>
-  <data name="CR_AppRun" xml:space="preserve">
-    <value>Запустить</value>
-  </data>
-  <data name="CR_AppRunAs" xml:space="preserve">
-    <value>Запустить от имени Администратора</value>
-  </data>
-  <data name="CR_AppShowProperties" xml:space="preserve">
-    <value>Свойства</value>
-  </data>
-  <data name="CR_AppShowTargetProperties" xml:space="preserve">
-    <value>Свойства целевого файла</value>
-  </data>
-  <data name="CR_ButtonHibernate" xml:space="preserve">
-    <value>Спящий режим</value>
-  </data>
-  <data name="CR_ButtonLock" xml:space="preserve">
-    <value>Блокировка ПК</value>
-  </data>
-  <data name="CR_ButtonLogOff" xml:space="preserve">
-    <value>Выход из системы</value>
-  </data>
-  <data name="CR_ButtonRestart" xml:space="preserve">
-    <value>Перезагрузка</value>
-  </data>
-  <data name="CR_ButtonRun" xml:space="preserve">
-    <value>Выполнить...</value>
-  </data>
-  <data name="CR_ButtonScreensave" xml:space="preserve">
-    <value>Запуск заставки</value>
-  </data>
-  <data name="CR_ButtonShutdown" xml:space="preserve">
-    <value>Выключение ПК</value>
-  </data>
-  <data name="CR_ButtonSleep" xml:space="preserve">
-    <value>Ждущий режим</value>
-  </data>
-  <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - заменитель меню Пуск для Windows XP, 7 и 8</value>
-    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
-  </data>
-  <data name="CR_CLCleanerBtn" xml:space="preserve">
-    <value>Очистить</value>
-  </data>
-  <data name="CR_CLWindow" xml:space="preserve">
-    <value>Список компьютеров</value>
-  </data>
-  <data name="CR_GroupItemsText" xml:space="preserve">
-    <value> элемент(а,ов)</value>
-    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
-  </data>
-  <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Запускаться при старте</value>
-  </data>
-  <data name="CR_MWBlockMetro" xml:space="preserve">
-    <value>Блокировать функции Metro</value>
-  </data>
-  <data name="CR_MWCheckForUpdates" xml:space="preserve">
-    <value>Проверять обновления</value>
-  </data>
-  <data name="CR_MWExit" xml:space="preserve">
-    <value>Выход</value>
-  </data>
-  <data name="CR_SearchBox" xml:space="preserve">
-    <value>Искать...</value>
-  </data>
-  <data name="CR_SearchMarker" xml:space="preserve">
-    <value>Поиск...</value>
-    <comment>Gray text indicating Windows search request was sent</comment>
-  </data>
-  <data name="CR_UNdown7z" xml:space="preserve">
-    <value>Скачать 7z</value>
-  </data>
-  <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>Скачать MSI и установить обновление!</value>
-  </data>
-  <data name="CR_UNdownMsi" xml:space="preserve">
-    <value>Скачать MSI</value>
-  </data>
-  <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Открыть веб-сайт проекта</value>
-  </data>
-  <data name="CR_UNIgnore" xml:space="preserve">
-    <value>Не напоминать больше об этом обновлении</value>
-  </data>
-  <data name="CR_UNNewVersion" xml:space="preserve">
-    <value>Новая версия:</value>
-  </data>
-  <data name="CR_UNNextTime" xml:space="preserve">
-    <value>Напомнить в следующий раз</value>
-  </data>
-  <data name="CR_UNOther" xml:space="preserve">
-    <value>Другие возможности:</value>
-  </data>
-  <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
-    <value>Доступно обновление для Power8!</value>
-  </data>
-  <data name="CR_UNwnd" xml:space="preserve">
-    <value>Извещение об обновлении</value>
-  </data>
-  <data name="CR_UNYourVersion" xml:space="preserve">
-    <value>Ваша версия:</value>
-  </data>
-  <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Не могу проверить обновления.</value>
-  </data>
-  <data name="Err_CantGetTooltip" xml:space="preserve">
-    <value>Невозможно получить подсказку для объекта</value>
-  </data>
-  <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
-    <value>Невозможно создать экземпляр класса {0}
-{1}</value>
-  </data>
-  <data name="Err_DownloadCancelled" xml:space="preserve">
-    <value>Загрузка отменена.</value>
-  </data>
-  <data name="Err_GotNoFile" xml:space="preserve">
-    <value>Не найден файл для </value>
-    <comment>Leave trailing space!</comment>
-  </data>
-  <data name="Err_GotNoFolder" xml:space="preserve">
-    <value>Не найдена папка для </value>
-    <comment>Leave trailing space!</comment>
-  </data>
-  <data name="Err_NoPiExtracted" xml:space="preserve">
-    <value>Недоступен элемент данных</value>
-  </data>
-  <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>Во время отображения свойств произошла ошибка {0}.
-{1}</value>
-    <comment>Don't drop the second line</comment>
-  </data>
-  <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>Невозможно запустить указанный объект от имени Администратора. Процесс запущен с обычными правами.
-</value>
-    <comment>Leave trailling paragraph symbol</comment>
-  </data>
-  <data name="Err_VistaDetected" xml:space="preserve">
-    <value>Windows (R) Vista (R) не предназначена для использования с Power8. Пожалуйста используйте нормальную операционную систему.</value>
-  </data>
-  <data name="Str_AllPrograms" xml:space="preserve">
-    <value>Все программы</value>
-    <comment>Default label instead of "Start menu" extracted automatically. Currently seems useless</comment>
-  </data>
-  <data name="Str_CplElement" xml:space="preserve">
-    <value>Элемент панели управления</value>
-  </data>
-  <data name="Str_Library" xml:space="preserve">
-    <value> (библиотека)</value>
-    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
-  </data>
-  <data name="Str_Pin" xml:space="preserve">
-    <value>Прикрепить элемент</value>
-    <comment>Tooltip over pin icon</comment>
-  </data>
-  <data name="Str_Recent" xml:space="preserve">
-    <value>Недавно запущенные</value>
-    <comment>Name of search category</comment>
-  </data>
-  <data name="Str_SaveDialogDescription" xml:space="preserve">
-    <value>: выберите куда сохранить файл</value>
-  </data>
-  <data name="Str_SaveDialogFilter" xml:space="preserve">
-    <value> - обновление|*</value>
-    <comment>Leave starting space. Full line reads "Power8 update"</comment>
-  </data>
-  <data name="Str_ShowMore" xml:space="preserve">
-    <value>Показать остальные...</value>
-    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
-  </data>
-  <data name="Str_Unpin" xml:space="preserve">
-    <value>Открепить элемент</value>
-    <comment>Tooltip over pin icon</comment>
-  </data>
-  <data name="Str_UpdateAvailable" xml:space="preserve">
-    <value>: доступно обновление!</value>
-  </data>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
 
-Ваша версия: {0}
-Новая версия: {1}
+Versiune curentă: {0}
+Versiune nouă: {1}
 
-Перейти на веб-страницу для обновления?
+Doriţi să accesaţi websiteul şi să actualizaţi?
 
-Да: перейти на веб-страницу и обновиться!
-Нет: напомнить позже.
-Отмена: я пропускаю это обновление, не напоминать больше про эту версию.</value>
+Da: accesaţi websiteul şi actualizaţi!
+Nu: te rog aminteşte-mi mai târziu.
+Anulare: Sar peste această actualizare si nu mai vreau să primesc notificări despre această versiune.</value>
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
+  <data name="Str_UpdateAvailable" xml:space="preserve">
+    <value>: actualizare disponibilă!</value>
+  </data>
+  <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
+    <value>Eroarea {0} a apărut când se încerca afişarea proprietăţilor obiectului
+{1}</value>
+  </data>
+  <data name="Err_CantCheckUpdates" xml:space="preserve">
+    <value>Nu se poate verifica disponibilitatea unei versiuni noi.</value>
+  </data>
+  <data name="Str_AllPrograms" xml:space="preserve">
+    <value>Toate programele</value>
+    <comment>Default label instead of "Start menu". Currently seems useless</comment>
+  </data>
+  <data name="Err_StartAsAdminFailed" xml:space="preserve">
+    <value>Imposibil de rulat obiectul specificat ca administrator. Procesul a fost lansat cu drepturi de utilizator regular.</value>
+  </data>
+  <data name="CR_AppOpenCommonFolder" xml:space="preserve">
+    <value>Deschide folderul Toţi utilizatorii</value>
+  </data>
+  <data name="CR_AppOpenContainer" xml:space="preserve">
+    <value>Deschide locaţie</value>
+  </data>
+  <data name="CR_AppOpenFolder" xml:space="preserve">
+    <value>Deschide</value>
+  </data>
+  <data name="CR_AppOpenTargetContainer" xml:space="preserve">
+    <value>Deschide locaţie destinaţie</value>
+  </data>
+  <data name="CR_AppRun" xml:space="preserve">
+    <value>Execută</value>
+  </data>
+  <data name="CR_AppRunAs" xml:space="preserve">
+    <value>Execută ca administrator</value>
+  </data>
+  <data name="CR_AppShowProperties" xml:space="preserve">
+    <value>Proprietăţi</value>
+  </data>
+  <data name="CR_AppShowTargetProperties" xml:space="preserve">
+    <value>Proprietăţi destinaţie</value>
+  </data>
+  <data name="CR_ButtonHibernate" xml:space="preserve">
+    <value>Hibernare</value>
+  </data>
+  <data name="CR_ButtonLock" xml:space="preserve">
+    <value>Blochează PC</value>
+  </data>
+  <data name="CR_ButtonLogOff" xml:space="preserve">
+    <value>Închide sesiunea</value>
+  </data>
+  <data name="CR_ButtonRestart" xml:space="preserve">
+    <value>Repornire</value>
+  </data>
+  <data name="CR_ButtonRun" xml:space="preserve">
+    <value>Execută ...</value>
+  </data>
+  <data name="CR_ButtonScreensave" xml:space="preserve">
+    <value>Porneşte protector de ecran</value>
+  </data>
+  <data name="CR_ButtonShutdown" xml:space="preserve">
+    <value>Închide</value>
+  </data>
+  <data name="CR_ButtonSleep" xml:space="preserve">
+    <value>Repaus</value>
+  </data>
+  <data name="CR_MWAutoStart" xml:space="preserve">
+    <value>Pornire automată</value>
+  </data>
+  <data name="CR_MWCheckForUpdates" xml:space="preserve">
+    <value>Verifică actualizări</value>
+  </data>
+  <data name="CR_MWExit" xml:space="preserve">
+    <value>Ieşire</value>
+  </data>
+  <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
+    <value>Imposibil de iniţiat clasa {0}
+{1}</value>
+  </data>
+  <data name="Str_ShowMore" xml:space="preserve">
+    <value>Arată mai mult...</value>
+    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
+  </data>
+  <data name="CR_CLCleanerBtn" xml:space="preserve">
+    <value>Goleşte</value>
+  </data>
+  <data name="CR_SearchBox" xml:space="preserve">
+    <value>Caută ...</value>
+  </data>
+  <data name="CR_CLWindow" xml:space="preserve">
+    <value>Listă computere</value>
+  </data>
+  <data name="Err_VistaDetected" xml:space="preserve">
+    <value>Windows (R) Vista (R) nu este destinat a fi utilizat cu Power8. Vă rugăm să folosiţi sistemul de operare normal.</value>
+  </data>
+  <data name="Err_GotNoFolder" xml:space="preserve">
+    <value>Directorul nu a fost găsit pentru </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="Err_GotNoFile" xml:space="preserve">
+    <value>Fişierul nu a fost găsit pentru </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="CR_ButtonStack" xml:space="preserve">
+    <value>Power8 - Înlocuitor al meniului de start pentru Windows XP, Se7en şi 8</value>
+    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
+  </data>
+  <data name="Err_DownloadCancelled" xml:space="preserve">
+    <value>Descărcarea a fost anulată.</value>
+  </data>
+  <data name="Str_SaveDialogDescription" xml:space="preserve">
+    <value>: alegeţi unde să se descarce fişierul</value>
+  </data>
+  <data name="Str_SaveDialogFilter" xml:space="preserve">
+    <value> actualizare|*</value>
+    <comment>Leave starting space</comment>
+  </data>
+  <data name="CR_UNDownAndUp" xml:space="preserve">
+    <value>Descarcă MSI şi actualizează acum!</value>
+  </data>
+  <data name="CR_UNNewVersion" xml:space="preserve">
+    <value>Versiune nouă:</value>
+  </data>
+  <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
+    <value>Este disponibilă o versiune nouă pentru Power8!</value>
+  </data>
+  <data name="CR_UNwnd" xml:space="preserve">
+    <value>Notificare actualizare disponibilă</value>
+  </data>
+  <data name="CR_UNYourVersion" xml:space="preserve">
+    <value>Versiunea instalată:</value>
+  </data>
+  <data name="CR_UNdown7z" xml:space="preserve">
+    <value>Descarcă 7z</value>
+  </data>
+  <data name="CR_UNdownMsi" xml:space="preserve">
+    <value>Descarcă MSI</value>
+  </data>
+  <data name="CR_UNGoWeb" xml:space="preserve">
+    <value>Deschide websiteul proiectului</value>
+  </data>
+  <data name="CR_UNIgnore" xml:space="preserve">
+    <value>Nu-mi reaminţi despre această actualizare</value>
+  </data>
+  <data name="CR_UNNextTime" xml:space="preserve">
+    <value>Aminteşte-mi data viitoare</value>
+  </data>
+  <data name="CR_UNOther" xml:space="preserve">
+    <value>Alte opţiuni:</value>
+  </data>
+  <data name="Err_NoPiExtracted" xml:space="preserve">
+    <value>Niciun element de date disponibil</value>
+  </data>
+  <data name="Err_CantGetTooltip" xml:space="preserve">
+    <value>Imposibil de găsit informaţii pentru obiect</value>
+  </data>
+  <data name="Str_CplElement" xml:space="preserve">
+    <value>Element din panoul de control</value>
+  </data>
   <data name="Str_WindowsSearchResults" xml:space="preserve">
-    <value>Результаты Поиска Windows</value>
-    <comment>Name of search category</comment>
+    <value>Rezultate căutare Windows</value>
+  </data>
+  <data name="CR_SearchMarker" xml:space="preserve">
+    <value>Se caută...</value>
+    <comment>Gray text indicating Windows search request was sent</comment>
+  </data>
+  <data name="Str_Library" xml:space="preserve">
+    <value> (librărie)</value>
+    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
+  </data>
+  <data name="CR_GroupItemsText" xml:space="preserve">
+    <value> Element(e)</value>
+    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
+  </data>
+  <data name="CR_MWBlockMetro" xml:space="preserve">
+    <value>Blocare caracteristici Metro</value>
+  </data>
+  <data name="Str_Recent" xml:space="preserve">
+    <value>Pornite recent</value>
+  </data>
+  <data name="Str_Unpin" xml:space="preserve">
+    <value>Deţintuieşte element</value>
+  </data>
+  <data name="Str_Pin" xml:space="preserve">
+    <value>Ţintuieşte element</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
-    <value>Этот перевод осуществлён Командой Power8</value>
+    <value>Această localizare a fost facută de catre echipa FileCroco.com</value>
     <comment>Put localizer name here!</comment>
   </data>
   <data name="CR_AbVersion" xml:space="preserve">
-    <value>Версия:</value>
+    <value>Versiune:</value>
   </data>
   <data name="CR_MWAbout" xml:space="preserve">
-    <value>О программе...</value>
+    <value>Despre...</value>
     <comment>Label in main btn context menu and in About Window</comment>
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
-    <value />
+    <value>http://www.filecroco.com</value>
+    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org OR mailto:a1@test.com</comment>
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
-    <value>Нет, спасибо.
-Я в курсе, что происходит, и сам как-нибудь справлюсь.</value>
+    <value>Nu, mulţumesc.
+Ştiu ce se întâmplă şi mă ocup personal de rezolvarea problemei.</value>
   </data>
   <data name="CR_RE_Title" xml:space="preserve">
-    <value>Power8 — Windows Explorer ушёл и не вернулся</value>
+    <value>Power8 — Windows Explorer nu funcţioneaza</value>
   </data>
   <data name="CR_RE_TopLabel" xml:space="preserve">
-    <value>Похоже, процесс Windows Explorer'а недоступен.
-Power8 может помочь вам с этим справиться.
+    <value>Se pare că procesul aferent Windows Explorer nu este disponibil.
+Power8 vă poate ajuta să gestionaţi situaţia.
  
-Восстановить Windows Explorer и перезапустить Power8?</value>
+Doriţi să restauraţi Windows Explorer şi să reporniţi Power8?</value>
   </data>
   <data name="CR_RE_YesButton" xml:space="preserve">
-    <value>Да!
-Пожалуйста восстановите Explorer и перезапустите Power8.</value>
+    <value>Da!
+Vă rog relansaţi Explorer în locul meu şi reporniţi procesul Power8.</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
-    <value>Настройки...</value>
+    <value>Setări...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Авто (как у Рабочего стола)</value>
+    <value>Auto (de către Desktop)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
-    <value>Обзор...</value>
+    <value>Explorează...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>Учитывать ориентацию Панели задач</value>
+    <value>Urmează orientarea barei de activitaţi</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
-    <value>Соотношение сторон:</value>
+    <value>Format de afişare:</value>
   </data>
   <data name="CR_StgLblChooseImage" xml:space="preserve">
-    <value>Выберите изображение (дважды щёлкните путь для очистки):</value>
+    <value>Selectare imagine (dublu clic pe cale pentru a o şterge):</value>
   </data>
   <data name="CR_StgSquareStart" xml:space="preserve">
-    <value>Настроить кнопку Пуск</value>
+    <value>Configurare buton Start</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Сообщать о проблемах конфигурации</value>
+    <value>Ţine-mă la curent referitor la problemele de configurare</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>Следить за съёмными носителями</value>
+    <value>Urmărire dispozitive detaşabile</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
-    <value>Настройки Power8</value>
+    <value>Setări Power8</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>: выберите изображение для меню Пуск</value>
+    <value>: alegeţi imaginea pentru Start Menu</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
-    <value>Изображения</value>
+    <value>Imagini</value>
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>Возможно, некоторые настройки стоит изменить для улучшения работы Power8</value>
+    <value>Dacă doriţi să modificaţi anumite setări pentru a imbunătăţi experienţa de utilizare Power8</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
-    <value>Сортировать меню и списки при создании/изменении файлов и папок</value>
+    <value>Sortare automată a meniurilor si listelor când un fişier sau folder este adăugat sau redenumit</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>Текст на меню "Программы" (если пусто — берётся из системы):</value>
+    <value>Text "Toate programele" (goleşte pentru a utliza valorile standard ale sistemului):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
-    <value>Общие</value>
+    <value>General</value>
     <comment>"General" tab in settings window</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
-    <value>Меню-кнопки</value>
+    <value>Butoane meniu</value>
   </data>
   <data name="CR_StgTabWSE" xml:space="preserve">
-    <value>Поисковые веб-движки</value>
+    <value>Motoare de căutare web</value>
   </data>
   <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
-    <value>Показывать меню-кнопки:</value>
+    <value>Arată butoane meniu:</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>Буква</value>
+    <value>Tastă</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
-    <value>Строка запроса</value>
+    <value>Şir de interogare</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
-    <value>Перезапускать Power8 при возникновении фатальных ошибок</value>
+    <value>Reporniţii aplicaţia atunci cind apare o eroare fatală</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Посетите сайт WebMoney чтобы поддержать разработку Power8</value>
+    <value>Vizitaţi WebMoney pentru a face o donaţie pentru echipa Power8</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Скрыть этот объект</value>
+    <value>Ascunde acest element</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Наиболее часто используемые</value>
+    <value>Utilizat cel mai frecvent</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Прятать объекты, содержащие строки:</value>
+    <value>Ascunde elementele care conţin şirurile:</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Использовать персональный список (настраиваемый)</value>
+    <value>Utilizare listă customizată (configurabilă de către utilizator)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Использовать собственные данные Power8</value>
+    <value>Utilizare informaţii interne Power8</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Использовать системные данные (UserAssist) при построении списка</value>
+    <value>Utilizare informaţii sistem (UserAssist) pentru a construi lista</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Убрать из персонального списка</value>
+    <value>Elimină din lista customizată de pornire</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Добавить в персональный список</value>
+    <value>Adaugă in lista customizată de pornire</value>
   </data>
   <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Показывать Жертвенный пункт меню</value>
+    <value>Arată elementul Donaţie în menu</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Пожертвовать на нужды команды разработчиков...</value>
+    <value>Donaţie către echipa Power8 ...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Сменить пользователя</value>
+    <value>Comută utilizator</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Открывать Панель управления с видом по категориям</value>
+    <value>Arată Panoul de Control cu elementele sortate după categorie</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Менять местами меню Пуск и строку поиска когда это убыстряет к ним доступ</value>
+    <value>Înlocuieşte meniul Toate programele şi Bara de căutare pentru o mai bună experienţă de utilizare</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
   <data name="CR_StgLblStretch" xml:space="preserve">
-    <value>Растягивать изображение:</value>
+    <value>Intindere imagine;</value>
   </data>
   <data name="CR_StgStrFill" xml:space="preserve">
-    <value>Заполнить всю кнопку</value>
+    <value>Umple întreg butonul</value>
   </data>
   <data name="CR_StgStrNone" xml:space="preserve">
-    <value>Оригинальный размер</value>
+    <value>Nu întinde</value>
   </data>
   <data name="CR_StgStrUniform" xml:space="preserve">
-    <value>Сохранять соотношение сторон</value>
+    <value>Scalare uniformă</value>
   </data>
   <data name="CR_StgStrUniform2Fill" xml:space="preserve">
-    <value>Сохранять соотношение и заполнять</value>
+    <value>Scalare umplere uniformă</value>
   </data>
   <data name="CR_StgAutoCorner" xml:space="preserve">
-    <value>Показывать основное окно рядом с мышью после Alt+Z</value>
+    <value>Arată fereasrtra principala lânga maus după Alt+Z</value>
   </data>
   <data name="CR_StgLblPwr" xml:space="preserve">
-    <value>Операции с питанием (выключить, сон...):</value>
+    <value>Operațiuni (închidere, repornire...):</value>
   </data>
   <data name="CR_StgPwrConfirm" xml:space="preserve">
-    <value>Подтверждать</value>
+    <value>Confirmare</value>
   </data>
   <data name="CR_StgPwrForce" xml:space="preserve">
-    <value>Форсировать</value>
+    <value>Forţare</value>
   </data>
   <data name="CR_StgOldLayout" xml:space="preserve">
-    <value>Компактный Пуск (как в Windows98)</value>
+    <value>Meniu Start compact (Windows98)</value>
   </data>
   <data name="CR_CawCancelButton" xml:space="preserve">
-    <value>Отмена</value>
+    <value>Anulare</value>
   </data>
   <data name="CR_CawConfirmButton" xml:space="preserve">
-    <value>Продолжить</value>
+    <value>Continuă</value>
     <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
   </data>
   <data name="CR_CawMessageTextBlock" xml:space="preserve">
-    <value>Вы уверены, что хотите продолжить?</value>
+    <value>Sigur doriți să continuați?</value>
   </data>
   <data name="CR_AbUkrPart1" xml:space="preserve">
-    <value>Создано в Украине</value>
+    <value>Fabricat în Ucraina</value>
   </data>
   <data name="CR_AbUkrPart2" xml:space="preserve">
-    <value>Узнать больше...</value>
+    <value>Aflați mai multe...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>Исправлять дублирующиеся иконки (может потребоваться перезапуск).</value>
+    <value>Corectare pictograme duplicat (poate necesita repornire).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>Похоже, Power8 свалилась при запуске. Настройка Перезапуск-По-Крешу активна в данный момент, так что вы можете столкнуться с бесконечным циклом перезапусков Power8 (можно изменить настройку прямо сейчас, пока это сообщение открыто). Продолжить перезапуск Power8?</value>
+    <value>Se pare că Power8 s-a blocat la pornire. Setarea Repornire-automată-la-blocare este activată astfel încât va rezulta o buclă infinită de reporniri ale Power8 (puteţi modifică setările cât timp acest mesaj este deschis). Continuaţi cu repornirea Power8?</value>
   </data>
 </root>

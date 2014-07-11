@@ -234,7 +234,7 @@ Peruuta: ohitan tämän päivityksen, älä huomauta enää tästä versiosta.</
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - Vaihtoehto Käynnistä-valikolle Windows XP:lle, 7:lle ja 8:lle.</value>
+    <value>Power8 - vaihtoehto Käynnistä-valikolle Windows XP:ssä, 7:ssa ja 8:ssa.</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
@@ -358,7 +358,7 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
     <value>Selaa...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>Seuraa tehtäväpalin suuntausta</value>
+    <value>Seuraa tehtäväpalkin suuntausta</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
     <value>Kuvasuhde:</value>
@@ -461,5 +461,57 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
     <value>Vaihda "Kaikki ohjelmat" -luettelon ja hakupalkin järjestystä käytettävyyden parantamiseksi</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+  </data>
+  <data name="CR_StgLblStretch" xml:space="preserve">
+    <value>Venytä kuva:</value>
+  </data>
+  <data name="CR_StgStrFill" xml:space="preserve">
+    <value>Täytä koko painike</value>
+  </data>
+  <data name="CR_StgStrNone" xml:space="preserve">
+    <value>Älä venytä</value>
+  </data>
+  <data name="CR_StgStrUniform" xml:space="preserve">
+    <value>Yhtenäinen skaalaus</value>
+  </data>
+  <data name="CR_StgStrUniform2Fill" xml:space="preserve">
+    <value>Yhtenäinen maksimiskaalaus</value>
+  </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>Näytä pääikkuna hiiren lähellä painamalla Alt+Z</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>Virtatoiminnot (sammuta, käynnistä uudelleen...):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>Vahvista</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>Pakota</value>
+  </data>
+  <data name="CR_StgOldLayout" xml:space="preserve">
+    <value>Tiivis Käynnistä-valikko (Windows 98 -tyyli)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>Peruuta</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>Jatka</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>Haluatko varmasti jatkaa?</value>
+  </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>Tehty Ukrainassa</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>Opi lisää...</value>
+  </data>
+  <data name="CR_StgCbCtfl" xml:space="preserve">
+    <value>Korjaa kahdennetut kuvakkeet (saattaa vaatia uudelleenkäynnistyksen).</value>
+  </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>Näyttää siltä, että Power8 kaatui käynnistyksessä. Käynnistä sovellus uudelleen kohtalokkaan virheen tapahduttua -asetus on päällä, joten saatat joutua ikuiseen Power8:n käynnistyssilmukkaan (voit muuttaa asetusta tämän ilmoituksen ollessa vielä avoimena). Jatka Power8:n uudelleenkäynnistystä?</value>
   </data>
 </root>

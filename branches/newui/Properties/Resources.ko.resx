@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -120,397 +120,397 @@
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
 
-Versiyonunuz: {0}
-Yeni Versiyon: {1}
+현재 버전: {0}
+새로운 버전: {1}
 
-Web sitesine gitmek ve güncellemek ister misiniz?
+웹 사이트로 이동하여 업데이트하시겠습니까?
 
-Evet: şimdi web sitesine git ve güncelle!
-Hayır: lütfen daha sonra tekrar hatırlat.
-İptal: Bu güncellemeyi atla ve ilgili güncellemeyi bi daha hatırlatma.</value>
+예: 웹 사이트로 이동 및 지금 업데이트!
+아니요: 나중에 알림.
+취소: 업데이트를 무시하고 알림을 받지 않습니다.</value>
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
-    <value>: güncelleme var!</value>
+    <value>: 업데이트 사용 가능!</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>{1} nesnesinin özellikleri gösterilirken {0} hatası oluştu</value>
+    <value>개체 속성 {1}을(를) 표시하는 동안 오류
+{0}가 발생했습니다</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>Güncellemeler kontrol edilemedi.</value>
+    <value>업데이트를 확인할 수 없습니다.</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
-    <value>Tüm Programlar</value>
+    <value>모든 프로그램</value>
     <comment>Default label instead of "Start menu". Currently seems useless</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>Geçerli nesne yönetici olarak başlatılamadı. Geçerli kullanıcı haklarıyla çalıştırıldı.
-</value>
+    <value>관리자 권한으로 지정된 개체를 시작할 수 없습니다. 일반 사용자 권한으로 시작되는 프로세스입니다.</value>
   </data>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
-    <value>Tüm Kullanıcılar Klasörünü Aç</value>
+    <value>모든 사용자 폴더 열기</value>
   </data>
   <data name="CR_AppOpenContainer" xml:space="preserve">
-    <value>Konum Aç</value>
+    <value>위치 열기</value>
   </data>
   <data name="CR_AppOpenFolder" xml:space="preserve">
-    <value>Aç</value>
+    <value>열기</value>
   </data>
   <data name="CR_AppOpenTargetContainer" xml:space="preserve">
-    <value>Hedef Konumu Aç</value>
+    <value>대상 위치 열기</value>
   </data>
   <data name="CR_AppRun" xml:space="preserve">
-    <value>Çalıştır</value>
+    <value>실행</value>
   </data>
   <data name="CR_AppRunAs" xml:space="preserve">
-    <value>Yönetici Olarak Çalıştır</value>
+    <value>관리자 권한으로 실행</value>
   </data>
   <data name="CR_AppShowProperties" xml:space="preserve">
-    <value>Özellikler</value>
+    <value>속성</value>
   </data>
   <data name="CR_AppShowTargetProperties" xml:space="preserve">
-    <value>Hedef Özellikleri</value>
+    <value>대상 속성</value>
   </data>
   <data name="CR_ButtonHibernate" xml:space="preserve">
-    <value>Hazırda Beklet</value>
+    <value>최대 절전 모드</value>
   </data>
   <data name="CR_ButtonLock" xml:space="preserve">
-    <value>Kilitle</value>
+    <value>PC 잠금</value>
   </data>
   <data name="CR_ButtonLogOff" xml:space="preserve">
-    <value>Oturumu Kapat</value>
+    <value>로그 오프</value>
   </data>
   <data name="CR_ButtonRestart" xml:space="preserve">
-    <value>Yeniden Başlat</value>
+    <value>다시 시작</value>
   </data>
   <data name="CR_ButtonRun" xml:space="preserve">
-    <value>Çalıştır...</value>
+    <value>실행...</value>
   </data>
   <data name="CR_ButtonScreensave" xml:space="preserve">
-    <value>Ekran Koruyucuyu Başlat</value>
+    <value>화면 보호기 시작</value>
   </data>
   <data name="CR_ButtonShutdown" xml:space="preserve">
-    <value>Bilgisayarı Kapat</value>
+    <value>컴퓨터 끄기</value>
   </data>
   <data name="CR_ButtonSleep" xml:space="preserve">
-    <value>Uykuya Al</value>
+    <value>절전 모드</value>
   </data>
   <data name="CR_MWAutoStart" xml:space="preserve">
-    <value>Otomatik başlat</value>
+    <value>자동 시작</value>
   </data>
   <data name="CR_MWCheckForUpdates" xml:space="preserve">
-    <value>Güncellemeleri kontrol et</value>
+    <value>업데이트 확인</value>
   </data>
   <data name="CR_MWExit" xml:space="preserve">
-    <value>Çıkış</value>
+    <value>끝내기</value>
   </data>
   <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
-    <value>{0} sınıfı
-{1} sınıfını temsil edemedi.</value>
+    <value>클래스 {0}을(를) 인스턴스할 수 없음
+{1}</value>
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
-    <value>Dahasını göster...</value>
+    <value>더 보기...</value>
     <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
   </data>
   <data name="CR_CLCleanerBtn" xml:space="preserve">
-    <value>Temizle</value>
+    <value>지우기</value>
   </data>
   <data name="CR_SearchBox" xml:space="preserve">
-    <value>Ara...</value>
+    <value>검색...</value>
   </data>
   <data name="CR_CLWindow" xml:space="preserve">
-    <value>Bilgisayar listesi</value>
+    <value>컴퓨터 목록</value>
   </data>
   <data name="Err_VistaDetected" xml:space="preserve">
-    <value>Windows (R) Vista (R) sürümü Power8 için tasarlanmamış. Lütfen işletim sistemi varsayılanını kullanın.</value>
+    <value>Windows (R) Vista (R)에서 Power8을 사용할 수 없습니다. 일반 운영 체제에서 사용하십시오.</value>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
-    <value>Klasör bulunamadı: </value>
+    <value>다음 디렉터리를 찾을 수 없음: </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="Err_GotNoFile" xml:space="preserve">
-    <value>Dosya bulunamadı: </value>
+    <value>다음 파일을 찾을 수 없음: </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - Windows XP, Se7en and 8 için menü değiştirici</value>
+    <value>Power8 - Windows XP, Se7en 및 8의 시작 메뉴 대용</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
-    <value>İndirme iptal edildi.</value>
+    <value>다운로드가 취소되었습니다.</value>
   </data>
   <data name="Str_SaveDialogDescription" xml:space="preserve">
-    <value>: dosyanın nereye indirileceğini seçin</value>
+    <value>: 파일 다운로드 위치 선택</value>
   </data>
   <data name="Str_SaveDialogFilter" xml:space="preserve">
-    <value> güncel|*</value>
+    <value> 업데이트|*</value>
     <comment>Leave starting space</comment>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>Şimdi MSI'yı indir ve güncelle!</value>
+    <value>MSI 다운로드 및 지금 업데이트!</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
-    <value>Yeni versiyon:</value>
+    <value>새로운 버전:</value>
   </data>
   <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
-    <value>Bi Power8 güncellemesi mevcut!</value>
+    <value>Power8의 업데이트 사용 가능!</value>
   </data>
   <data name="CR_UNwnd" xml:space="preserve">
-    <value>Güncelleme bildirisi</value>
+    <value>업데이트 알림</value>
   </data>
   <data name="CR_UNYourVersion" xml:space="preserve">
-    <value>Versiyonunuz:</value>
+    <value>현재 버전:</value>
   </data>
   <data name="CR_UNdown7z" xml:space="preserve">
-    <value>7z indir</value>
+    <value>7z 다운로드</value>
   </data>
   <data name="CR_UNdownMsi" xml:space="preserve">
-    <value>MSI indir</value>
+    <value>MSI 다운로드</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>Proje web sayfasını aç</value>
+    <value>프로젝트 웹 사이트 열기</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
-    <value>Bu güncellemeyi tekrar hatırlatma</value>
+    <value>이 업데이트에 대해 알리지 않기</value>
   </data>
   <data name="CR_UNNextTime" xml:space="preserve">
-    <value>Daha sonra hatırlat</value>
+    <value>나중에 알림</value>
   </data>
   <data name="CR_UNOther" xml:space="preserve">
-    <value>Other options:</value>
+    <value>기타 옵션:</value>
   </data>
   <data name="Err_NoPiExtracted" xml:space="preserve">
-    <value>Kullanılabilir veri kümesi yok</value>
+    <value>사용 가능한 데이터 요소 없음</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
-    <value>Nesne için ipucu bilgisi yok</value>
+    <value>개체에 대한 도구 설명을 가져올 수 없음</value>
   </data>
   <data name="Str_CplElement" xml:space="preserve">
-    <value>Kontrol paneli</value>
+    <value>제어판 요소</value>
   </data>
   <data name="Str_WindowsSearchResults" xml:space="preserve">
-    <value>Windows Arama Sonuçları</value>
+    <value>Windows 검색 결과</value>
   </data>
   <data name="CR_SearchMarker" xml:space="preserve">
-    <value>Aranıyor...</value>
+    <value>검색 중...</value>
     <comment>Gray text indicating Windows search request was sent</comment>
   </data>
   <data name="Str_Library" xml:space="preserve">
-    <value> (kütüphane)</value>
+    <value> (라이브러리)</value>
     <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
   </data>
   <data name="CR_GroupItemsText" xml:space="preserve">
-    <value> Öğe(ler)</value>
+    <value> 항목</value>
     <comment>Label in the group of search results in the grid (keep starting space!)</comment>
   </data>
   <data name="CR_MWBlockMetro" xml:space="preserve">
-    <value>Metro özelliklerini engelle</value>
+    <value>매트로 기능 차단</value>
   </data>
   <data name="Str_Recent" xml:space="preserve">
-    <value>Henüz başlatıldı</value>
+    <value>최근 시작 항목</value>
   </data>
   <data name="Str_Unpin" xml:space="preserve">
-    <value>Öğeyi çıkar</value>
+    <value>항목 고정 해제</value>
   </data>
   <data name="Str_Pin" xml:space="preserve">
-    <value>Öğeri iğnele</value>
+    <value>항목 고정</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
-    <value>Çeviri -Veysi Ertekin- tarafından yapıldı</value>
-    <comment>Put localizer name here!</comment>
+    <value>This localization is done by pCsOrI</value>
+    <comment></comment>
   </data>
   <data name="CR_AbVersion" xml:space="preserve">
-    <value>Versiyon:</value>
+    <value>버전:</value>
   </data>
   <data name="CR_MWAbout" xml:space="preserve">
-    <value>Hakkında</value>
+    <value>정보...</value>
     <comment>Label in main btn context menu and in About Window</comment>
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
-    <value>http://gplus.to/veysiertekin</value>
-    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
+    <value>mailto:pCsOrI@gmail.com</value>
+    <comment></comment>
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
-    <value>Hayır, teşekkürler.
-Ne olduğunu biliyorum ve problemi kendim halladeceğim.</value>
+    <value>감사합니다.
+문제 발생 원인을 알고 있으며 스스로 해결합니다.</value>
   </data>
   <data name="CR_RE_Title" xml:space="preserve">
-    <value>Power8 — Windows Explorer kapandı</value>
+    <value>Power8 — Windows 익스플로러가 다운되었습니다</value>
   </data>
   <data name="CR_RE_TopLabel" xml:space="preserve">
-    <value>Görülüyor ki Windows Explorer süreci artık yok.
-Power8 bunu sorunu çözmenize yardımcı olabilir.
+    <value>Windows 익스플로러를 사용할 수 없습니다.
+Power8이 도와드립니다.
  
-Windows Explorer'ı geri yüklemek ve Power8'i tekrar başlatmak ister misiniz?</value>
+Windows 익스플로러를 복원하고 Power8을 다시 시작하시겠습니까?</value>
   </data>
   <data name="CR_RE_YesButton" xml:space="preserve">
-    <value>Evet!
-Explorer'ı benim için geri yükle ve Power8'ı tekrar başlat.</value>
+    <value>예!
+익스플로러를 실행하고 Power8 프로세스를 다시 시작하십시오.</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
-    <value>Ayarlar...</value>
+    <value>설정...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Otomatik (Masaüstü ile)</value>
+    <value>자동 (데스크톱)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
-    <value>Göz at...</value>
+    <value>찾아보기...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>Görev çubuğu yönelimini takip et</value>
+    <value>다음 작업 표시줄 방향</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
-    <value>Görüştü Oranı:</value>
+    <value>가로 세로 비율:</value>
   </data>
   <data name="CR_StgLblChooseImage" xml:space="preserve">
-    <value>Resim seç (temizlemek için çift tıklayın):</value>
+    <value>이미지 선택 (경로를 더블 클릭하여 취소):</value>
   </data>
   <data name="CR_StgSquareStart" xml:space="preserve">
-    <value>Başlat simgesini düzenleyin</value>
+    <value>시작 단추 구성</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>Ayarlarla ilgili konularda beni bilgilendir</value>
+    <value>구성 문제 알림</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>Çıkarılabilir aygıtları izle</value>
+    <value>이동식 드라이브 표시</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
-    <value>Power8 ayarları</value>
+    <value>Power8 설정</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>: Başlat Menüsü simgesini seçiniz</value>
+    <value>: 시작 메뉴 그림 선택</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
-    <value>Resimler</value>
+    <value>이미지</value>
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>Belki Power8 deneyiminizi arttırmak için bazı ayarları değiştirmek isteyebilirsiniz</value>
+    <value>Power8 경험을 향상하기 위해 몇 가지 설정을 변경하실 수 있습니다</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
-    <value>Dosya ve klasör eklendiğinde veya yeniden adlandırıldığında menü ve listeleri otomatik sırala</value>
+    <value>파일 또는 폴더를 추가하거나 변경하는 경우, 메뉴 및 목록을 자동 정렬</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>"Tüm Programlar" yazısı (sistem varsayılanını kullanmak için bu alanı temizleyin):</value>
+    <value>"모든 프로그램" 텍스트 (시스템 기본값을 사용하려면 지우기):</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
-    <value>Genel</value>
+    <value>일반</value>
     <comment>"General" tab in settings window</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
-    <value>Menü-butonları</value>
+    <value>메뉴 단추</value>
   </data>
   <data name="CR_StgTabWSE" xml:space="preserve">
-    <value>Arama motorları</value>
+    <value>웹 검색 엔진</value>
   </data>
   <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
-    <value>Menü-butonlarını göster:</value>
+    <value>메뉴 단추 표시:</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>Kısayol</value>
+    <value>키</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
-    <value>Sorgu dizesi</value>
+    <value>쿼리 문자열</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
-    <value>Ölümcül hata oluştuğunda uygulamayı yeniden başlat</value>
+    <value>치명적인 오류가 발생하면 응용 프로그램 다시 시작</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>Power8'i destek için WebMoney sitesini ziyaret edin</value>
+    <value>Power8 team에 기부를 위해 WebMoney 사이트 방문</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>Bu öğeyi gizle</value>
+    <value>이 항목 숨기기</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>Çokça kullanılanlar</value>
+    <value>자주 사용</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>Yazıyı içerenleri gizle</value>
+    <value>다음 문자열을 포함하는 항목 숨기기:</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>Kişisel ayarları kullan (kullanıcı değiştirebilir)</value>
+    <value>사용자 지정 목록 사용 (사용자 구성 가능)</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>Power8'in kendi verisini kullan</value>
+    <value>Power8 내부 데이터 사용</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Listeyi oluşturmak için sistem verisini kullan (KullanıcıAsistanı)</value>
+    <value>시스템 데이터 (사용자 지원)를 사용하여 목록 작성</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>Kişisel çalıştırma listesinden sil</value>
+    <value>사용자 지정 실행 목록에서 제거</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>Kişisel çalıştırma listesine ekle</value>
+    <value>사용자 지정 목록에 추가</value>
   </data>
   <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>"Bağışla" menü öğesini göster</value>
+    <value>기부 메뉴 항목 표시</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Power8 Ekibine Bağışta Bulun...</value>
+    <value>Power8 Team 후원...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Kullanıcı Değiştir</value>
+    <value>사용자 전환</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Kontrol Panelini kategoriye göre sıralanmış olarak göster</value>
+    <value>범주별로 정렬된 항목으로 제어판 표시</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Bütün programlarım menüsünü ve arama kutucuğunu daha iyi kullanışlılık için birbiriyle değiştir</value>
+    <value>더 나은 가용성을 위해 검색 표시줄과 모든 프로그램 메뉴 교환</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
   <data name="CR_StgLblStretch" xml:space="preserve">
-    <value>Stretch image:</value>
+    <value>이미지 늘이기:</value>
   </data>
   <data name="CR_StgStrFill" xml:space="preserve">
-    <value>Fill whole button</value>
+    <value>전체 단추 채우기</value>
   </data>
   <data name="CR_StgStrNone" xml:space="preserve">
-    <value>Do not stretch</value>
+    <value>늘이지 않기</value>
   </data>
   <data name="CR_StgStrUniform" xml:space="preserve">
-    <value>Uniform scaling</value>
+    <value>균일한 크기 조정</value>
   </data>
   <data name="CR_StgStrUniform2Fill" xml:space="preserve">
-    <value>Uniform-to-fill scaling</value>
+    <value>균일한 채우기 크기 조정</value>
   </data>
   <data name="CR_StgAutoCorner" xml:space="preserve">
-    <value>Show Main window close to mouse after Alt+Z</value>
+    <value>마우스로 메인 창 닫기 표시 Alt+Z</value>
   </data>
   <data name="CR_StgLblPwr" xml:space="preserve">
-    <value>Power operations (shutdown, restart...):</value>
+    <value>전원 작업 (컴퓨터 끄기, 다시 시작...):</value>
   </data>
   <data name="CR_StgPwrConfirm" xml:space="preserve">
-    <value>Confirm</value>
+    <value>확인</value>
   </data>
   <data name="CR_StgPwrForce" xml:space="preserve">
-    <value>Force</value>
+    <value>강제</value>
   </data>
   <data name="CR_StgOldLayout" xml:space="preserve">
-    <value>Compact Start Menu (Windows98-style)</value>
+    <value>작은 시작 메뉴 (Windows98-스타일)</value>
   </data>
   <data name="CR_CawCancelButton" xml:space="preserve">
-    <value>Cancel</value>
+    <value>취소</value>
   </data>
   <data name="CR_CawConfirmButton" xml:space="preserve">
-    <value>Proceed</value>
-    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+    <value>진행</value>
+    <comment>확인 대화상자의 단추 제목입니다. 이 줄은 실제로 보이지 않고 (실제 동작 이름이 표시) 디자인에만 사용됩니다.</comment>
   </data>
   <data name="CR_CawMessageTextBlock" xml:space="preserve">
-    <value>Are you sure you want to proceed?</value>
+    <value>진행하시겠습니까?</value>
   </data>
   <data name="CR_AbUkrPart1" xml:space="preserve">
-    <value>Made in Ukraine</value>
+    <value>우크라이나 제작</value>
   </data>
   <data name="CR_AbUkrPart2" xml:space="preserve">
-    <value>Learn more...</value>
+    <value>자세한 내용...</value>
   </data>
   <data name="CR_StgCbCtfl" xml:space="preserve">
-    <value>Fix duplicated icons (may require restart).</value>
+    <value>중복 아이콘 수정 (재시작 필요).</value>
   </data>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
-    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
+    <value>Power8의 충돌이 발생된 것 같습니다. Power8 재시작의 무한 반복을 끝낼 수 있도록 "충돌 시 자동 재시작" 설정을 사용하십시오 (이 메시지가 표시되는 동안 설정을 변경할 수 있습니다). Power8을 다시 시작하시겠습니까?</value>
   </data>
 </root>

@@ -462,4 +462,56 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
     <value>Mover menu de Todos os programas e Barra de pesquisa para melhor usabilidade</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
   </data>
+  <data name="CR_StgLblStretch" xml:space="preserve">
+    <value>Esticar imagem:</value>
+  </data>
+  <data name="CR_StgStrFill" xml:space="preserve">
+    <value>Preencher botão por completo</value>
+  </data>
+  <data name="CR_StgStrNone" xml:space="preserve">
+    <value>Não esticar</value>
+  </data>
+  <data name="CR_StgStrUniform" xml:space="preserve">
+    <value>Ajuste uniforme</value>
+  </data>
+  <data name="CR_StgStrUniform2Fill" xml:space="preserve">
+    <value>Ajuste uniforme e preencher</value>
+  </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>Exibir janela principal próxima ao mouse após Alt+Z</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>Operações de energia (desligar, reiniciar...):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>Forçar</value>
+  </data>
+  <data name="CR_StgOldLayout" xml:space="preserve">
+    <value>Menu Iniciar Compacto (estilo Windows 98)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>Prosseguir</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>Você tem certeza que deseja prosseguir?</value>
+  </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>Feito na Ucrânia</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>Saiba mais...</value>
+  </data>
+  <data name="CR_StgCbCtfl" xml:space="preserve">
+    <value>Corrigir ícones duplicados (pode exigir que reinicie).</value>
+  </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>Power8 sofreu um problema durante sua inicialização. A opção de reiniciar automaticamente após interrupção está ativada, logo o Power8 pode entrar em uma cadeia infinita de reinicializações (você pode alterar esta opção enquanto esta mensagem estiver aberta). Continuar tentando reiniciar o Power8?</value>
+  </data>
 </root>
