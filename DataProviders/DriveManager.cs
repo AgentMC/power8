@@ -207,14 +207,23 @@ begin:
         /// <param name="w">FileSystemWatcher to start.</param>
         private static void StartWatcher(FileSystemWatcher w)
         {
+            Exception e = null;
             try
             {
                 w.EnableRaisingEvents = true;
             }
-            catch (IOException ex)
+            catch (IOException ex) //drive unavailable
+            {
+                e = ex;
+            }
+            catch (ApplicationException ex) //drive is incompatible
+            {
+                e = ex;
+            }
+            if (e != null) //something bad happened
             {
                 var dName = w.Path;
-                Debug.WriteLine("DriveManager: cannot inistantiate watcher for {0}, reason:\r\n{1}", dName, ex.Message);
+                Debug.WriteLine("DriveManager: cannot inistantiate watcher for {0}, reason:\r\n{1}", dName, e.Message);
                 BlackList.Add(dName);
                 StopWatcher(dName);
             }
