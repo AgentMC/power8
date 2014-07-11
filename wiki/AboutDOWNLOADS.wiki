@@ -10,16 +10,16 @@ This page is how to get *latest* version of Power8.
 
 = Details =
 
-==The latest version available is 1.5.2. See links below.==
+==The latest version available is 1.5.3. See links below.==
 
 The [https://code.google.com/p/power8/downloads/list Downloads] page won't contain all latest releases now. Last one available _there_ is 1.4.4. Instead, *you should use links from within this page*, which will always point to latest build, and a previous one.
 
 = Links =
 ||<b>Status</b>||<b>Type</b>||<b>Version</b>||<b>Link</b>||<b>Changelog</b>|| 
-||Latest||MSI||1.5.2.777||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.2.777.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.5.2_Beta_Quick-Fix_(v.1.5.2.777):_08.07.2014 Read]||
-||Latest||7z||1.5.2.777||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.2.777.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.5.2_Beta_Quick-Fix_(v.1.5.2.777):_08.07.2014 Read]||
-||Pre-Latest||MSI||1.5.1.766||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.1.766.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
-||Pre-Latest||7z||1.5.1.766||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.1.766.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.1_Beta_(v.1.5.1.766):_07.07.2014 Read]||
+||Latest||MSI||1.5.3.796||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.3.796.msi Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.3_Beta_(v.1.5.3.796):_11.07.2014 Read]||
+||Latest||7z||1.5.3.796||[http://power8.googlecode.com/svn/filez/Power8_v.1.5.3.796.7z Download]||[https://code.google.com/p/power8/wiki/Changelog#Version_1.5.3_Beta_(v.1.5.3.796):_11.07.2014 Read]||
+||Pre-Latest||MSI||1.5.1.777||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.2.777.msi Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.5.2_Beta_Quick-Fix_(v.1.5.2.777):_08.07.2014 Read]||
+||Pre-Latest||7z||1.5.1.777||[http://power8.googlecode.com/svn/filez/Old/Power8_v.1.5.2.777.7z Download]||[http://code.google.com/p/power8/wiki/Changelog#Version_1.5.2_Beta_Quick-Fix_(v.1.5.2.777):_08.07.2014 Read]||
 
 = Sources = 
 The 7zipped source of the latest version is available [http://power8.googlecode.com/svn/filez/Power8_src.7z here].
@@ -50,6 +50,6 @@ This is safe because:
   * You can simply view data being sent by installing network scanner like Fiddler and use it to see the request Power8 sends on startup.
 
 = Exceptions tracing =
-Starting from 1.5.0 we also send all exceptions to Google analytics which should help us to identify and fix problems. For example, release 1.5.1 already contains couple of fixes for most "popular" errors. 
+Starting from 1.5.0 we also send all exceptions to Google Analytics which should help us to identify and fix problems. For example, release 1.5.1 already contains couple of fixes for most "popular" errors. 1.5.3 introduced the 75+% bugs demolition and new auto-tracing technology for complicated cases. Overall, you should experience much LESS crashes starting from 1.5.3.
 
-For errors detected by Power8, we send only it type for statistics. For _unhandled_ exceptions we also send the error message and the stack trace. An unhandled exception is the error which Power8 is not expecting, so after it occurs, Power8 will crash. Right before such crashes we send data to Google Analytics. The data usually includes no user-specific information and contains barely the description of what happened, where in the program it happened and why it happened. However in the next release we plan to provide the checkbox to disable this extended information reporting. 
+For errors detected by Power8, we send only it type for statistics. For _unhandled_ exceptions we also send the error message and the stack trace. An unhandled exception is the error which Power8 is not expecting, so after it occurs, Power8 will crash. Right before such crashes we send data to Google Analytics. The data usually includes no user-specific information and contains barely the description of what happened, where in the program it happened and why it happened. However in the next releases we plan to provide the checkbox to disable this extended information reporting. 
