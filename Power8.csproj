@@ -55,6 +55,7 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <OutputPath>bin\Release\</OutputPath>
@@ -103,8 +104,11 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BitmapSource2VisibilityConverter.cs" />
     <Compile Include="Converters\BoolToGridRowConverter.cs" />
+    <Compile Include="Converters\TextToBoolConverter.cs" />
+    <Compile Include="DataProviders\AppxUserModelIdProvider.cs" />
     <Compile Include="DataProviders\MfuList.cs" />
     <Compile Include="Helpers\Analytics.cs" />
+    <Compile Include="Helpers\GATracer.cs" />
     <Compile Include="Helpers\Log.cs" />
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Properties\NoLoc.Designer.cs">
@@ -130,6 +134,10 @@
     </Compile>
     <Compile Include="Converters\PiToTooltipConverter.cs" />
     <Compile Include="DataProviders\DriveManager.cs" />
+    <Compile Include="Views\ConfirmActionWindow.xaml.cs">
+      <DependentUpon>ConfirmActionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DisposableLinkWindow.cs" />
     <Compile Include="Views\Donate.xaml.cs">
       <DependentUpon>Donate.xaml</DependentUpon>
     </Compile>
@@ -172,6 +180,10 @@
     <Page Include="Views\ComputerList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConfirmActionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Donate.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -253,6 +265,7 @@
     <EmbeddedResource Include="Properties\Resources.it.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ko.resx" />
     <EmbeddedResource Include="Properties\Resources.nl.resx" />
     <EmbeddedResource Include="Properties\Resources.pt.resx">
       <SubType>Designer</SubType>
@@ -262,6 +275,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ro.resx" />
     <EmbeddedResource Include="Properties\Resources.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.ru.Designer.cs</LastGenOutput>

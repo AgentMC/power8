@@ -183,6 +183,7 @@ namespace Power8
             public const string IdCExplorerBrowser = "71f96385-ddd6-48d3-a0c1-ae06e8b055fb";
             public const string IdCShellWindows = "9BA05972-F6A8-11CF-A442-00A0C90A8F39";
             public const string IdCApplicationDocumentLists = "86bec222-30f2-47e0-9f25-60d11cd75c28";
+            public const string IdCApplicationActivationManager = "45BA127D-10A8-46EA-8AB7-56EA9078943C";
             //ServiceID
             public const string IdSTopLevelBrowser = "4C96BE40-915C-11CF-99D3-00AA004AE837";
             //InterfaceID
@@ -199,6 +200,7 @@ namespace Power8
             public const string IdIShellWindows = "85CB6900-4D95-11CF-960C-0080C7F4EE85";
             public const string IdIServiceProvider = "6d5140c1-7436-11ce-8034-00aa006009fa";
             public const string IdIExplorerBrowser = "dfd3b6b5-c10c-4be9-85f6-a66969f402f6";
+            public const string IdIApplicationActivationManager = "2e941141-7f97-4756-ba1d-9decde894a3d";
         }
 
         public static class Lib
@@ -837,7 +839,7 @@ namespace Power8
         }
 
         [DllImport(Lib.OLE)]
-        internal static extern int PropVariantClear(PROPVARIANT pvar);
+        public static extern int PropVariantClear(PROPVARIANT pvar);
 
         [ComImport, Guid(Sys.IdIPropertyStore), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IPropertyStore
@@ -875,7 +877,7 @@ namespace Power8
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid(Sys.IdIObjectArray)]
         [ComImport]
-        internal interface IObjectArray
+        public interface IObjectArray
         {
             uint GetCount();
 
@@ -910,7 +912,7 @@ namespace Power8
             int Compare(IShellItem psi, SICHINT hint);
         }
 
-        internal enum ADLT
+        public enum ADLT
         {
             RECENT,
             FREQUENT,
@@ -919,7 +921,7 @@ namespace Power8
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [Guid(Sys.IdIApplicationDocumentLists)]
         [ComImport]
-        internal interface IApplicationDocumentLists
+        public interface IApplicationDocumentLists
         {
             void SetAppID([MarshalAs(UnmanagedType.LPWStr)] string pszAppID);
 
@@ -1509,6 +1511,40 @@ namespace Power8
             void GetCurrentView([In] ref Guid riid, [Out] out IntPtr ppv);
         }
 
+        [Flags]
+        public enum ACTIVATEOPTIONS : uint
+        {
+            AO_NONE = 0,
+            AO_DESIGNMODE = 0x1,
+            AO_NOERRORUI = 0x2,
+            AO_NOSPLASHSCREEN = 0x4
+        }
+
+        [ComImport, ClassInterface(ClassInterfaceType.None)]
+        [Guid(Sys.IdCApplicationActivationManager)]
+        public class ApplicationActivationManager { }
+
+        [ComImport, Guid(Sys.IdIApplicationActivationManager)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IApplicationActivationManager
+        {   
+            uint ActivateApplication(
+                [In, MarshalAs(UnmanagedType.LPWStr)] string appUserModelId,
+                [In, MarshalAs(UnmanagedType.LPWStr)] string arguments,
+                [In] ACTIVATEOPTIONS options);
+
+            void ActivateForFile(
+                [In, MarshalAs(UnmanagedType.LPWStr)] string appUserModelId,
+                [In] /*IShellItemArray **/ IObjectArray itemArray,
+                [In, MarshalAs(UnmanagedType.LPWStr)] string verb,
+                [Out] out uint dwPid);
+
+            void ActivateForProtocol(
+                [In, MarshalAs(UnmanagedType.LPWStr)] string appUserModelId,
+                [In] /*IShellItemArray **/ IObjectArray itemArray,
+                [Out] out uint dwPid);
+
+        }
 
         //CPLs ====================================================================================
         public delegate int CplAppletProc (IntPtr hwndCpl, CplMsg msg, IntPtr lParam1, IntPtr lParam2);

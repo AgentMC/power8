@@ -1,15 +1,17 @@
-﻿using System.Runtime.ExceptionServices;
+﻿using System.Linq;
 using Power8.Helpers;
 using Power8.Views;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 #if DEBUG
-using System.Diagnostics;
+using System.Runtime.ExceptionServices;
 #endif
+
 
 namespace Power8
 {
@@ -17,7 +19,9 @@ namespace Power8
     /// Bootstrapper for the application
     /// </summary>
     public partial class App
-    {   
+    {
+        public readonly Process Proc = Process.GetCurrentProcess();
+
         /// <summary>
         /// Application initializer. Performs compatibility check, 
         /// starts diagnostics if required, works settings around,
@@ -31,6 +35,12 @@ namespace Power8
                     Power8.Properties.Resources.Err_VistaDetected,
                     Power8.Properties.NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(2); //means: OS not found
+            }
+            //Power8s in our session but with different pid
+            foreach (var p in Process.GetProcessesByName("Power8")
+                                     .Where(p => p.SessionId == Proc.SessionId && p.Id != Proc.Id))
+            {
+                p.Kill();
             }
 
             Util.MainDisp = Dispatcher; //store main thread dispatcher. Widely used in Application.
@@ -51,23 +61,23 @@ namespace Power8
             var dbRoot = Util.GetSettingsIndependentDbRoot();
             try
             {
-                var ids = Directory.GetFiles(dbRoot, "*" + CLIENT_ID_EXTENSION);
+                var ids = Directory.GetFiles(dbRoot, "*" + ClientIDExtension);
+                string clientId;
                 if (ids.Length == 0)
                 {
-                    ClientId = Guid.NewGuid().ToString();
-                    File.Create(dbRoot + "\\" + ClientId + CLIENT_ID_EXTENSION);
+                    clientId = Guid.NewGuid().ToString();
+                    File.Create(dbRoot + "\\" + clientId + ClientIDExtension);
                 }
                 else
                 {
-                    ClientId = Path.GetFileNameWithoutExtension(ids[0]);
+                    clientId = Path.GetFileNameWithoutExtension(ids[0]);
                 }
-                Analytics.Init(TRACKID, ClientId, Power8.Properties.NoLoc.Stg_AppShortName,
+                Analytics.Init(TrackID, clientId, Power8.Properties.NoLoc.Stg_AppShortName,
                     Util.GetAppVersion().ToString());
             }
             catch (Exception ex)
             {
                 Log.Raw("Unable to read client ID to init analytics: " + ex);
-                ClientId = null;
             }
 
             //Move settings from previous ver
@@ -96,10 +106,8 @@ namespace Power8
             get { return (App) Application.Current; }
         }
 
-        private const string CLIENT_ID_EXTENSION = ".clientid";
-        public const string TRACKID = "UA-30314159-2";
-
-        public string ClientId { get; private set; }
+        private const string ClientIDExtension = ".clientid";
+        private const string TrackID = "UA-30314159-2";
 
         /// <summary>
         /// Handles Unhandled appdomain exception and calls the code to write that down everywhere.

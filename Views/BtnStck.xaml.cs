@@ -10,7 +10,6 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Power8.Commands;
 using Power8.Helpers;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -99,6 +98,7 @@ namespace Power8.Views
             PowerItemTree.WinSearchThreadStarted += HandleSearch;
             SettingsManager.ControlPanelByCategoryChanged += OnControlPanelByCategoryChanged;
             SettingsManager.DynamicLayoutChanged += (sender, e) => FirePropChanged("IsWindowAtTopOfScreen");
+            SettingsManager.StartMenuStyleChanged += (sender, args) => FirePropChanged("StartMenuOldStyle");
 
             foreach (var mb in GetAllMenuButtons())
                 mb.Item = GetSpecialItems(mb.Name);
@@ -179,42 +179,42 @@ namespace Power8.Views
         /// </summary>
         private void ButtonHibernateClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, false);
+            SetSuspendState(PowerState.Hibernate, sender);
         }
         /// <summary>
         /// Handler of Sleep button. Calls SetSuspendState() to put PC to sleep
         /// </summary>
         private void ButtonSleepClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, false);
+            SetSuspendState(PowerState.Suspend, sender);
         }
         /// <summary>
         /// Handler of Shutdown button. Calls shutdown.exe to turn PC off
         /// </summary>
         private void ButtonShutdownClick(object sender, RoutedEventArgs e)
         {
-            LaunchShForced("-s");
+            LaunchShForced("-s", sender);
         }
         /// <summary>
         /// Handler of Restart button. Calls shutdown.exe to reboot PC
         /// </summary>
         private void ButtonRestartClick(object sender, RoutedEventArgs e)
         {
-            LaunchShForced("-r");
+            LaunchShForced("-r", sender);
         }
         /// <summary>
         /// Handler of Log Off button. Calls shutdown.exe to log current user off
         /// </summary>
         private void ButtonLogOffClick(object sender, RoutedEventArgs e)
         {
-            LaunchShForced("-l");
+            LaunchShForced("-l", sender);
         }
         /// <summary>
         /// Handler of Lock button. Calls LockWorkStation to lock the user session
         /// </summary>
         private void ButtonLockClick(object sender, RoutedEventArgs e)
         {
-            StartConsoleHidden(@"C:\WINDOWS\system32\rundll32.exe", "user32.dll,LockWorkStation");
+            StartConsoleHidden("rundll32.exe", "user32.dll,LockWorkStation");
         }
         /// <summary>
         /// Handler of ScreenSave button. Sends SC_SREENSAVE to Desktop to start the screensaver
@@ -325,7 +325,6 @@ namespace Power8.Views
             if (expander != null)                   //Expander was found?
                 expander.IsExpanded ^= true;        //expand it and set the selection
         }
-
         /// <summary>
         /// Tries to retrieve expander control for data grid in search state.
         /// See <code>ExpandGroup</code> method for details on parameters
@@ -399,6 +398,13 @@ namespace Power8.Views
                     else
                         SearchBox.Text = string.Empty;
                     return;
+                case Key.Tab: //CTRL+Tab >> put path to item to search bar
+                    if ((System.Windows.Forms.Control.ModifierKeys & Keys.Control) > 0)
+                    {
+                        DataGridPreviewKeyDown(sender, e);
+                        return;
+                    }
+                    break;
             }
             e.Handled = false;
         }
@@ -430,11 +436,22 @@ namespace Power8.Views
                     }
                     break;
                 case Key.Tab:
-                    e.Handled = true;
-                    if (Keyboard.IsKeyDown(Key.LeftShift))
-                        AllItemsMenuRoot.Focus();
-                    else
+                    e.Handled = true; //todo: check why CTRL is tested differently in other places
+                    if (pi != null && (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)))
+                    {//CTRL+Tab >> put path to item to search bar
+                        var t = "\"" + PowerItemTree.GetResolvedTarget(pi) + "\" ";
+                        SearchBox.Text = t;
                         SearchBox.Focus();
+                        SearchBox.CaretIndex = t.Length;
+                    }
+                    else if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift))
+                    {
+                        AllItemsMenuRoot.Focus(); //SHIFT+Tab >> focus backwards
+                    }
+                    else
+                    {
+                        SearchBox.Focus(); //Tab >> focus forwards
+                    }
                     break;
                 case Key.Up:
                 case Key.Down:
@@ -477,7 +494,8 @@ namespace Power8.Views
                             idx = 0;
                         dataGrid.SelectedIndex = idx;
                     }
-                    dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                    if (dataGrid.SelectedItem != null) //when in search view and no hits/in clear custom list
+                        dataGrid.ScrollIntoView(dataGrid.SelectedItem);
                     break;
                 case Key.P:
                     if (pi != null && pi.IsMfuChild)
@@ -560,17 +578,37 @@ namespace Power8.Views
         #endregion
 
         #region Helpers
-        
+
         /// <summary>
-        /// Launches Shutdown.exe with -f key and command passed as argument.
+        /// Launches Shutdown.exe with command passed as argument.
+        /// If corresponding setting set, -f key is added to command.
         /// If command is not "-l", adds "-t 0" as well.
         /// Console window isn't shown.
         /// </summary>
         /// <param name="arg">Shutdown command, like "-s", "-r", "-l".</param>
-        private static void LaunchShForced(string arg)
+        /// <param name="sender">The Button started action</param>
+        private static void LaunchShForced(string arg, object sender)
         {
-            StartConsoleHidden("shutdown.exe", arg + " -f" + (arg == "-l" ? "" : " -t 0"));
+            if (PowerActionConfirmed((ContentControl) sender))
+                StartConsoleHidden("shutdown.exe", arg +
+                                                   (SettingsManager.Instance.ForcePowerActions ? " -f" : "") +
+                                                   (arg == "-l" ? "" : " -t 0"));
         }
+
+        private static void SetSuspendState(PowerState state, object sender)
+        {
+            if (PowerActionConfirmed((ContentControl) sender))
+                System.Windows.Forms.Application.SetSuspendState(state,
+                                                                 SettingsManager.Instance.ForcePowerActions,
+                                                                 false);
+        }
+
+        private static bool PowerActionConfirmed(ContentControl sender)
+        {
+            return !SettingsManager.Instance.ConfirmPowerActions ||
+                   new ConfirmActionWindow(sender.Content).ShowDialog().GetValueOrDefault();
+        }
+
         /// <summary>
         /// Executes command without showing the console window or other windows
         /// </summary>
@@ -709,6 +747,13 @@ namespace Power8.Views
         #region Bindable props
 
         /// <summary>
+        /// Bindable property that wraps StartMenuOldStyle property from the settings.
+        /// </summary>
+        public bool StartMenuOldStyle
+        {
+            get { return SettingsManager.Instance.StartMenuOldStyle; }
+        }
+        /// <summary>
         /// Source for Start Menu
         /// </summary>
         public ObservableCollection<PowerItem> Items
@@ -721,22 +766,6 @@ namespace Power8.Views
         public ObservableCollection<PowerItem> MfuItems
         {
             get { return MfuList.StartMfu; }
-        }
-        /// <summary>
-        /// Source for search results
-        /// </summary>
-        public ObservableCollection<PowerItem> SearchData
-        {
-            get { return _searchData; }
-        }
-        //backing field
-        private readonly MenuItemClickCommand _cmd = new MenuItemClickCommand();
-        /// <summary>
-        /// Bindable command which performs Invoke() on item that might be extracted from source
-        /// </summary>
-        public MenuItemClickCommand ClickCommand
-        {
-            get { return _cmd; }
         }
         //backing field
         private bool _isWindowAtTopOfScreen = true;

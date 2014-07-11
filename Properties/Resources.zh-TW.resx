@@ -119,50 +119,52 @@
   </resheader>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
-你的版本：{0}
-新版本：{1}
 
-你想上網並更新嗎？
+您的版本： {0}
+新版本： {1}
 
-是：現在上網並更新！
-否：之後提醒我。
-取消：跳過這次更新，不要再提醒我此版本更新。</value>
+您想去網站更新嗎？
+
+是的：馬上去網站更新！
+不：請稍後提醒我。
+取消：跳過本次更新，不要再提醒我這個版本。</value>
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
-    <value>：有可用的更新！</value>
+    <value>：更新可用！</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>嘗試顯示物件屬性{1}時發生錯誤{0}
-</value>
+    <value>錯誤 {0} 發生當嘗試顯示物件屬性
+{1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
-    <value>無法檢查更新。</value>
+    <value>不能檢查更新。</value>
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>所有程式</value>
     <comment>Default label instead of "Start menu". Currently seems useless</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
-    <value>無法以系統管理身分啟動物件。程序以一般使用者權限啟動。</value>
+    <value>不能以管理員身份運行指定物件。進程以普通使用者許可權啟動。
+</value>
   </data>
   <data name="CR_AppOpenCommonFolder" xml:space="preserve">
-    <value>開啟所有使用者檔案夾</value>
+    <value>打開所有用戶資料夾</value>
   </data>
   <data name="CR_AppOpenContainer" xml:space="preserve">
-    <value>開啟位置</value>
+    <value>打開位置</value>
   </data>
   <data name="CR_AppOpenFolder" xml:space="preserve">
-    <value>開啟</value>
+    <value>打開</value>
   </data>
   <data name="CR_AppOpenTargetContainer" xml:space="preserve">
-    <value>開啟目標位置</value>
+    <value>打開目標位置</value>
   </data>
   <data name="CR_AppRun" xml:space="preserve">
-    <value>執行</value>
+    <value>運行</value>
   </data>
   <data name="CR_AppRunAs" xml:space="preserve">
-    <value>以系統管理員身分執行</value>
+    <value>以管理員身份運行</value>
   </data>
   <data name="CR_AppShowProperties" xml:space="preserve">
     <value>屬性</value>
@@ -171,22 +173,22 @@
     <value>目標屬性</value>
   </data>
   <data name="CR_ButtonHibernate" xml:space="preserve">
-    <value>睡眠</value>
+    <value>休眠</value>
   </data>
   <data name="CR_ButtonLock" xml:space="preserve">
     <value>鎖定</value>
   </data>
   <data name="CR_ButtonLogOff" xml:space="preserve">
-    <value>登出</value>
+    <value>註銷</value>
   </data>
   <data name="CR_ButtonRestart" xml:space="preserve">
-    <value>重新啟動</value>
+    <value>重啟</value>
   </data>
   <data name="CR_ButtonRun" xml:space="preserve">
-    <value>執行</value>
+    <value>運行...</value>
   </data>
   <data name="CR_ButtonScreensave" xml:space="preserve">
-    <value>啟動螢幕保護程式</value>
+    <value>啟動屏保</value>
   </data>
   <data name="CR_ButtonShutdown" xml:space="preserve">
     <value>關機</value>
@@ -201,76 +203,76 @@
     <value>檢查更新</value>
   </data>
   <data name="CR_MWExit" xml:space="preserve">
-    <value>離開</value>
+    <value>退出</value>
   </data>
   <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
-    <value>無法初始類別 {0}
+    <value>不能引用類 {0}
 {1}</value>
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
-    <value>顯示更多</value>
+    <value>顯示更多...</value>
     <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
   </data>
   <data name="CR_CLCleanerBtn" xml:space="preserve">
     <value>清除</value>
   </data>
   <data name="CR_SearchBox" xml:space="preserve">
-    <value>搜尋</value>
+    <value>搜索...</value>
   </data>
   <data name="CR_CLWindow" xml:space="preserve">
     <value>電腦列表</value>
   </data>
   <data name="Err_VistaDetected" xml:space="preserve">
-    <value>Power8並非設計給Windows (R) Vista (R)使用。請使用標準作業系統。</value>
+    <value>Windows (R) Vista (R)不推薦使用Power8。請使用正常的作業系統。</value>
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
-    <value>資料夾未找到 </value>
+    <value>目錄未找到 </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="Err_GotNoFile" xml:space="preserve">
-    <value>檔案未找到 </value>
+    <value>文件未找到 </value>
     <comment>Leave trailing space!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
-    <value>Power8 - 開始鈕替換軟體，相容於 Windows XP, Se7en and 8</value>
+    <value>Power8 - Windows XP、Se7en和8的開始按鈕替代者</value>
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
-    <value>下載已取消。</value>
+    <value>下載被取消了。</value>
   </data>
   <data name="Str_SaveDialogDescription" xml:space="preserve">
-    <value>：選擇何處下載檔案</value>
+    <value>：選擇下載檔案的位置</value>
   </data>
   <data name="Str_SaveDialogFilter" xml:space="preserve">
     <value> 更新|*</value>
     <comment>Leave starting space</comment>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
-    <value>下載MSI檔案並更新！</value>
+    <value>下載MSI馬上更新！</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
     <value>新版本：</value>
   </data>
   <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
-    <value>Power8有新的版本了！</value>
+    <value>一個Power8的更新可用！</value>
   </data>
   <data name="CR_UNwnd" xml:space="preserve">
     <value>更新通知</value>
   </data>
   <data name="CR_UNYourVersion" xml:space="preserve">
-    <value>你的版本</value>
+    <value>您的版本：</value>
   </data>
   <data name="CR_UNdown7z" xml:space="preserve">
-    <value>下載 7z 檔案</value>
+    <value>下載7z</value>
   </data>
   <data name="CR_UNdownMsi" xml:space="preserve">
-    <value>下載 MSI 檔案</value>
+    <value>下載MSI</value>
   </data>
   <data name="CR_UNGoWeb" xml:space="preserve">
-    <value>開啟專案網站</value>
+    <value>打開項目網站</value>
   </data>
   <data name="CR_UNIgnore" xml:space="preserve">
-    <value>不要再告訴我這個更新</value>
+    <value>不要再提醒我這個更新</value>
   </data>
   <data name="CR_UNNextTime" xml:space="preserve">
     <value>下次提醒我</value>
@@ -279,135 +281,135 @@
     <value>其他選項：</value>
   </data>
   <data name="Err_NoPiExtracted" xml:space="preserve">
-    <value>無可用的資料項目</value>
+    <value>沒有可用的資料元素</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
-    <value>無法取得物件的工具提示</value>
+    <value>無法獲得此物件的工具提示</value>
   </data>
   <data name="Str_CplElement" xml:space="preserve">
-    <value>控制台項目</value>
+    <value>控制台元素</value>
   </data>
   <data name="Str_WindowsSearchResults" xml:space="preserve">
-    <value>Windows Search 結果</value>
+    <value>Windows搜索結果</value>
   </data>
   <data name="CR_SearchMarker" xml:space="preserve">
-    <value>搜尋</value>
+    <value>搜索...</value>
     <comment>Gray text indicating Windows search request was sent</comment>
   </data>
   <data name="Str_Library" xml:space="preserve">
-    <value> (函式庫)</value>
+    <value> （庫）</value>
     <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
   </data>
   <data name="CR_GroupItemsText" xml:space="preserve">
-    <value> 項目</value>
+    <value> 項</value>
     <comment>Label in the group of search results in the grid (keep starting space!)</comment>
   </data>
   <data name="CR_MWBlockMetro" xml:space="preserve">
-    <value>阻擋 Metro 功能</value>
+    <value>遮罩Metro功能</value>
   </data>
   <data name="Str_Recent" xml:space="preserve">
-    <value>最近啟動</value>
+    <value>最近開始</value>
   </data>
   <data name="Str_Unpin" xml:space="preserve">
-    <value>取消釘選項目</value>
+    <value>取消固定項</value>
   </data>
   <data name="Str_Pin" xml:space="preserve">
-    <value>釘選項目</value>
+    <value>固定項</value>
   </data>
   <data name="CR_AbLocalization" xml:space="preserve">
-    <value>David Wang 翻譯</value>
+    <value>此當地語系化由王笑宇完成</value>
     <comment>Put localizer name here!</comment>
   </data>
   <data name="CR_AbVersion" xml:space="preserve">
     <value>版本：</value>
   </data>
   <data name="CR_MWAbout" xml:space="preserve">
-    <value>關於</value>
+    <value>關於...</value>
     <comment>Label in main btn context menu and in About Window</comment>
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
-    <value>mailto:ufjl1785@gmail.com</value>
+    <value>http://kvmxen.com</value>
     <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org; mailto:a1@test.com</comment>
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
-    <value>不，謝謝.
-我知道會發生問題並且自行處理。</value>
+    <value>不，謝謝。
+我知道怎麼回事可以自己解決。</value>
   </data>
   <data name="CR_RE_Title" xml:space="preserve">
-    <value>Power8 — Windows Explorer 已死</value>
+    <value>Power8 — Windows資源管理器崩潰了</value>
   </data>
   <data name="CR_RE_TopLabel" xml:space="preserve">
-    <value>看起來 Windows Explorer 程序不存在。
-Power8 可以幫您處理這個問題。
+    <value>看起來Windows資源管理器進程不可用。
+Power8可以幫您解決。
  
-您想恢復 Windows Explorer 並且重新啟動Power8嗎？</value>
+您想恢復Windows資源管理器並重啟Power8嗎？</value>
   </data>
   <data name="CR_RE_YesButton" xml:space="preserve">
-    <value>是！
-請為我開啟Explorer並且重新啟動Power8。</value>
+    <value>是的！
+請為我啟動資源管理器並重啟Power8進程。</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
-    <value>設定</value>
+    <value>設置...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>自動 (由桌面決定)</value>
+    <value>自動（通過桌面）</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
-    <value>瀏覽</value>
+    <value>流覽...</value>
   </data>
   <data name="CR_StgInvertAr" xml:space="preserve">
-    <value>跟隨工作列的方向</value>
+    <value>遵循工作列取向</value>
   </data>
   <data name="CR_StgLblAr" xml:space="preserve">
-    <value>長寬比：</value>
+    <value>縱橫比：</value>
   </data>
   <data name="CR_StgLblChooseImage" xml:space="preserve">
-    <value>選擇影像 (雙擊路徑可以清除)：</value>
+    <value>選擇圖片（按兩下路徑以清除）：</value>
   </data>
   <data name="CR_StgSquareStart" xml:space="preserve">
-    <value>設定開始鈕</value>
+    <value>配置開始按鈕</value>
   </data>
   <data name="CR_StgSuggestProblems" xml:space="preserve">
-    <value>有設定的問題時提醒我</value>
+    <value>通知我有關配置問題</value>
   </data>
   <data name="CR_StgWatchRemovables" xml:space="preserve">
-    <value>監看卸除式磁碟</value>
+    <value>查看可移動驅動器</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
-    <value>Power8 設定</value>
+    <value>Power8設置</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>：選擇開始鈕的圖片</value>
+    <value>：選擇開始功能表圖片</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
-    <value>影像檔案</value>
+    <value>圖片</value>
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>你可能希望改變某些設定來加強您的 Power8 體驗</value>
+    <value>您可能想修改一些設置來增強Power8體驗</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
-    <value>當檔案或是資料夾加入或更名時自動排序選單與列表</value>
+    <value>當添加或重命名檔或資料夾時自動排列功能表和清單</value>
   </data>
   <data name="CR_StgLblSetStartText" xml:space="preserve">
-    <value>「所有程式」的替代文字 (欄位為空白時使用系統預設)：</value>
+    <value>“所有程式”文本（清空以使用系統預設）：</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
     <value>一般</value>
     <comment>"General" tab in settings window</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
-    <value>選單按鈕</value>
+    <value>功能表按鈕</value>
   </data>
   <data name="CR_StgTabWSE" xml:space="preserve">
     <value>網頁搜尋引擎</value>
   </data>
   <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
-    <value>顯示選單按鈕</value>
+    <value>顯示功能表按鈕：</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>按鍵</value>
+    <value>鍵</value>
     <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
@@ -415,49 +417,101 @@ Power8 可以幫您處理這個問題。
     <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
-    <value>當嚴重錯誤發生時重新啟動程式</value>
+    <value>當致命錯誤發生時重啟程式</value>
   </data>
   <data name="CR_AbDonate" xml:space="preserve">
-    <value>開啟 WebMoney 網站捐款給 Power8 團隊</value>
+    <value>訪問網上銀行捐贈Power8團隊</value>
   </data>
   <data name="CR_AppExcludeFromMfu" xml:space="preserve">
-    <value>隱藏此項目</value>
+    <value>隱藏此項</value>
   </data>
   <data name="CR_StgTabMfu" xml:space="preserve">
-    <value>常用程式</value>
+    <value>最經常使用的</value>
   </data>
   <data name="CR_StgMfuColExcl" xml:space="preserve">
-    <value>隱藏包含下列字串的項目：</value>
+    <value>隱藏專案包含字串：</value>
   </data>
   <data name="CR_StgMfuUseCustom" xml:space="preserve">
-    <value>使用自訂清單 (使用者自行設定)</value>
+    <value>使用自訂清單（使用者可配置）</value>
   </data>
   <data name="CR_StgMfuUseP8JL" xml:space="preserve">
-    <value>使用Power8內部資料</value>
+    <value>使用Power8內置資料</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>使用系統資料 (UserAssist) 來建立清單</value>
+    <value>使用系統資料（使用者説明）建立列表</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
-    <value>從自訂清單中移除</value>
+    <value>從自訂啟動列表移除</value>
   </data>
   <data name="CR_AppIncludeToCustom" xml:space="preserve">
-    <value>加入自訂清單</value>
+    <value>添加到自訂啟動列表</value>
   </data>
   <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
-    <value>Show Donate menu item</value>
+    <value>顯示捐贈功能表項目</value>
   </data>
   <data name="CR_MWDonate" xml:space="preserve">
-    <value>Donate Power8 Team...</value>
+    <value>捐贈Power8團隊...</value>
   </data>
   <data name="CR_ButtonSwitchUser" xml:space="preserve">
-    <value>Switch User</value>
+    <value>切換用戶</value>
   </data>
   <data name="CR_StgCbCtrl" xml:space="preserve">
-    <value>Show Control Panel with items sorted by category</value>
+    <value>顯示專案按類別排列的控制台</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
-    <value>Exchange All programs menu and Search bar for better usability</value>
+    <value>交換所有程式功能表和搜索欄以提高易用性</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+  </data>
+  <data name="CR_StgLblStretch" xml:space="preserve">
+    <value>拉伸圖片:</value>
+  </data>
+  <data name="CR_StgStrFill" xml:space="preserve">
+    <value>填充整個按鈕</value>
+  </data>
+  <data name="CR_StgStrNone" xml:space="preserve">
+    <value>不要拉伸</value>
+  </data>
+  <data name="CR_StgStrUniform" xml:space="preserve">
+    <value>均勻縮放</value>
+  </data>
+  <data name="CR_StgStrUniform2Fill" xml:space="preserve">
+    <value>均勻填充縮放</value>
+  </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>按Alt+Z後在滑鼠處顯示主視窗</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>電源操作(關機, 重啟...):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>強制</value>
+  </data>
+  <data name="CR_StgOldLayout" xml:space="preserve">
+    <value>小型開始菜單(Windows98風格)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>繼續</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>你確定你想繼續嗎?</value>
+  </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>烏克蘭製造</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>瞭解更多...</value>
+  </data>
+  <data name="CR_StgCbCtfl" xml:space="preserve">
+    <value>Fix duplicated icons (may require restart).</value>
+  </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
   </data>
 </root>

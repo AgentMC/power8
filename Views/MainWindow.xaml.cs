@@ -150,6 +150,7 @@ namespace Power8.Views
             
             SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;
             SettingsManager.ImageChanged += SettingsManagerOnImageChanged;
+            SettingsManager.PicStretchChanged += SettingsManagerOnImageStretchChanged;
             SettingsManager.BgrThreadLock.Set();
 
             API.RegisterHotKey(this.GetHandle(), 0, API.fsModifiers.MOD_ALT, Keys.Z);
@@ -202,8 +203,10 @@ namespace Power8.Views
             MfuList.UpdateStartMfu();
             BtnStck.Instance.Show();//XP:955ms 0_o
             var screenPoint = new API.POINT();
-            API.GetCursorPos(ref screenPoint);
-            GetSetWndPosition(BtnStck.Instance, screenPoint, sender == Keyboard.PrimaryDevice);
+            API.GetCursorPos(ref screenPoint);              
+            GetSetWndPosition(BtnStck.Instance, screenPoint, 
+                sender == Keyboard.PrimaryDevice && SettingsManager.Instance.AltZAutoCornerEnabled);
+            //  ^^^ means "Command came from KB and Auto-cornering enabled"
         }
         /// <summary>
         /// Shows Run dialog
@@ -292,6 +295,14 @@ namespace Power8.Views
         private void SettingsManagerOnImageChanged(object sender, EventArgs eventArgs)
         {
             FirePropChanged("StartImage");
+        }
+        /// <summary>
+        /// Invokes PropertyChanged for CustomPicStretch property making UI react on user changing 
+        /// the picture stretching in settings
+        /// </summary>
+        private void SettingsManagerOnImageStretchChanged(object sender, EventArgs eventArgs)
+        {
+            FirePropChanged("CustomPicStretch");
         }
         /// <summary>
         /// Handles DragEnter/DragOver events to provide proper feedback to drag source
@@ -514,6 +525,13 @@ namespace Power8.Views
                 return _bitmap;
             }
         }
+        /// <summary>
+        /// Returns Stretch mode for custom user picture
+        /// </summary>
+        public System.Windows.Media.Stretch CustomPicStretch
+        {
+            get { return (System.Windows.Media.Stretch) SettingsManager.Instance.PicStretchSelectedIndex; }
+        }
 
         #endregion
 
@@ -610,12 +628,10 @@ namespace Power8.Views
             API.GetWindowRect(_midPanel, out r); //absolute coord of rebar
             API.GetWindowRect(_taskBar, out r2); //absolute coord of taskbar
             if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
-            {//This if doesn't work on exit since it is called only for Win8 on exit
+            {//This doesn't work on exit since it is called only for Win8 on exit
                 //Have no idea why, but there's some kind of automatic margin applied in classic style
-                if (taskBarVertical)
-                    r2.Left += 4;
-                else
-                    r2.Top += 4;
+                r2.Left += 4;
+                r2.Top += 4;
             }
             r.Top -= r2.Top; //getting relative coordinates...
             r.Left -= r2.Left;

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Str_UpdateAvailableFormat" xml:space="preserve">
     <value>
@@ -134,7 +134,7 @@
     <value>: доступно је ажурирање</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
-    <value>Дошло је до грешке {0} при приказивању објекта „Својства“
+    <value>У току приказивања својства дошло је до грешке {0}.
 {1}</value>
   </data>
   <data name="Err_CantCheckUpdates" xml:space="preserve">
@@ -205,7 +205,7 @@
     <value>Изађи</value>
   </data>
   <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
-    <value>Не могу да предочим класу {0}
+    <value>Не могу да креирам примерак класе {0}
 {1}</value>
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
@@ -237,7 +237,7 @@
     <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
-    <value>Преузимање је завршено.</value>
+    <value>Преузимање је отказано.</value>
   </data>
   <data name="Str_SaveDialogDescription" xml:space="preserve">
     <value>: избор одредишта датотеке</value>
@@ -250,8 +250,8 @@
     <value>Преузми MSI и одмах ажурирај</value>
   </data>
   <data name="CR_UNNewVersion" xml:space="preserve">
-    
-  <value>Нова верзија:</value></data>
+    <value>Нова верзија:</value>
+  </data>
   <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
     <value>Доступно је ажурирање за Power8!</value>
   </data>
@@ -280,7 +280,7 @@
     <value>Друге опције:</value>
   </data>
   <data name="Err_NoPiExtracted" xml:space="preserve">
-    <value>Није пронађен ниједан елемент</value>
+    <value>Недоступан елемент података</value>
   </data>
   <data name="Err_CantGetTooltip" xml:space="preserve">
     <value>Не могу да добијем опис објекта</value>
@@ -351,7 +351,7 @@ Power8 вам може помоћи да то решите.
     <value>Поставке…</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
-    <value>Аутоматски (из радне површине)</value>
+    <value>Аутоматски (као на радној површини)</value>
   </data>
   <data name="CR_StgBrowseBtn" xml:space="preserve">
     <value>Потражи…</value>
@@ -375,7 +375,7 @@ Power8 вам може помоћи да то решите.
     <value>Надгледај преносиве јединице</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
-    <value>Поставке програма Power8</value>
+    <value>Поставке Power8-а</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
@@ -386,7 +386,7 @@ Power8 вам може помоћи да то решите.
     <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
-    <value>Можете да прилагодите поставке својим потребама.</value>
+    <value>Поставке можете прилагодити својим потребама.</value>
   </data>
   <data name="CR_StgAutoSort" xml:space="preserve">
     <value>Сортирај меније и спискове при ажурирању система датотека</value>
@@ -437,7 +437,7 @@ Power8 вам може помоћи да то решите.
     <value>Унутрашњи подаци Power8-а</value>
   </data>
   <data name="CR_StgMfuUseSystem" xml:space="preserve">
-    <value>Системски подаци</value>
+    <value>Подаци система</value>
   </data>
   <data name="CR_AppExcludeFromCustom" xml:space="preserve">
     <value>Уклони са прилагођеног списка за покретање</value>
@@ -460,5 +460,57 @@ Power8 вам може помоћи да то решите.
   <data name="CR_StgDynamicLayout" xml:space="preserve">
     <value>Замени места менија са програмима и траке за претрагу</value>
     <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+  </data>
+  <data name="CR_StgLblStretch" xml:space="preserve">
+    <value>Растезање слике:</value>
+  </data>
+  <data name="CR_StgStrFill" xml:space="preserve">
+    <value>Попуни цело дугме</value>
+  </data>
+  <data name="CR_StgStrNone" xml:space="preserve">
+    <value>Оригинална размера</value>
+  </data>
+  <data name="CR_StgStrUniform" xml:space="preserve">
+    <value>Задржи пропорције</value>
+  </data>
+  <data name="CR_StgStrUniform2Fill" xml:space="preserve">
+    <value>Задржи пропорције и попуни</value>
+  </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>Прикажи главни прозор близу миша након Alt+Z</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>Операције напајања (искључивање, поновно покретање итд.):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>Потврди</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>Наметни</value>
+  </data>
+  <data name="CR_StgOldLayout" xml:space="preserve">
+    <value>Сажети мени „Старт“ (као у Windows 98)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>Откажи</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>Настави</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>Заиста желите да наставите?</value>
+  </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>Створено у Украјини</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>Сазнајте више…</value>
+  </data>
+  <data name="CR_StgCbCtfl" xml:space="preserve">
+    <value>Исправите дуплиране иконе (можда буде потребно поновно покретање).</value>
+  </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>Изгледа да је дошло до пада Power8-а при покретању. Омогућено је аутоматско поновно покретање при паду, па може доћи до бесконачног понављања ове операције. Поставке можете променити док је ова порука још отворена. Наставити са поновним покретањем Power8-а?</value>
   </data>
 </root>

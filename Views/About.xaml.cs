@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Documents;
-using System.Diagnostics;
 
 namespace Power8.Views
 {
@@ -69,13 +67,6 @@ namespace Power8.Views
             }
         }
 
-        /// <summary>
-        /// Handles clicks on the Hyperlinks in this window
-        /// </summary>
-        private void Navigate(object sender, RoutedEventArgs e)
-        {
-            Util.CreateProcess(((Hyperlink) sender).NavigateUri.AbsoluteUri);
-        }
         /// <summary>
         /// Handles OK button click
         /// </summary>

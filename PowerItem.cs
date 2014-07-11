@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Power8.Helpers;
 using Power8.Properties;
 using System.Linq;
 
@@ -489,14 +490,14 @@ namespace Power8
         /// </summary>
         public bool IsCanBeHidden
         {
-            get { return IsMfuChild && Helpers.SettingsManager.Instance.MfuIsInternal; }
+            get { return IsMfuChild && SettingsManager.Instance.MfuIsInternal; }
         }
         /// <summary>
         /// Returns value indicating that "Remove from custom list" for this item is displayed
         /// </summary>
         public bool IsCanBeRemoved
         {
-            get { return IsMfuChild && Helpers.SettingsManager.Instance.MfuIsCustom; }
+            get { return IsMfuChild && SettingsManager.Instance.MfuIsCustom; }
         }
         /// <summary>
         /// Returns value indicating that "Add to custom list" for this item is displayed
@@ -505,6 +506,12 @@ namespace Power8
         {
             get { return !IsCanBeRemoved && Parent != PowerItemTree.NetworkRoot ; }
         }
+        /// <summary>
+        /// Gets or sets value indicating whether this PowerItem's Items should be visually merged 
+        /// with neighbouring siblings. In practice this is used for Programs item which content
+        /// can be placed directly under AllPrograms insted of going under separate folder.
+        /// </summary>
+        public bool IsMergeableContentHolder { get; set; }
 
 
         #endregion
@@ -662,13 +669,23 @@ namespace Power8
             {
                 powerItem.SortItems();
             }
-            var lf = new List<PowerItem>(_items.Where(i => i.IsFolder));
-            var li = new List<PowerItem>(_items.Where(i => !i.IsFolder));
-            lf.Sort();
-            li.Sort();
+            var folders = new List<PowerItem>();
+            var files = new List<PowerItem>();
+            var merged = new List<PowerItem>();
+            foreach (var item in _items)
+            {
+                (item.IsMergeableContentHolder && SettingsManager.Instance.StartMenuOldStyle
+                     ? merged
+                     : (item.IsFolder
+                            ? folders
+                            : files)).Add(item);
+            }
             _items.Clear();
-            lf.ForEach(_items.Add);
-            li.ForEach(_items.Add);
+            foreach (var list in new[]{folders, files, merged})
+            {
+                list.Sort();
+                list.ForEach(_items.Add);
+            }
         }
         //Search
         /// <summary>
@@ -727,7 +744,7 @@ namespace Power8
         /// is not such char itself, or else if it is number or UPPERCASE.
         /// </summary>
         /// <param name="s">String for analysis to be added to the camels string</param>
-        /// <param name="sBuilder">The stringBuilder used to build Cames string </param>
+        /// <param name="sBuilder">The StringBuilder used to build Camels string </param>
         private static void FillCamels(string s, StringBuilder sBuilder)
         {
             bool lastDelim = false;

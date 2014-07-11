@@ -24,9 +24,10 @@ namespace Power8
         public const string SEPARATOR_NAME = "----";
 
         private static readonly string 
-            PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu rioot
-            PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu); //All users start menu root
-
+            PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu root
+            PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu), //All users start menu root
+            PathProgramsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs); //UserPrograms subfolder of StartMenu
+            
         //Ignore changed in
         private static readonly string
             IcrAppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).ToLowerInvariant(),
@@ -412,25 +413,29 @@ namespace Power8
         //Handles event when a file is renamed under any of drives watched
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.Name)
-                || string.IsNullOrEmpty(e.FullPath)
-                || string.IsNullOrEmpty(e.OldName)
-                || string.IsNullOrEmpty(e.OldFullPath))
+            try
             {
-                Log.Fmt("FileRenamed: Name: {0}, FullPath: {1}, Old: {2}, OldFP: {3}",
-                                    e.Name, e.FullPath, e.OldName, e.OldFullPath);
-                return; //Sometimes this happens
+                if (string.IsNullOrEmpty(e.Name)
+                    || string.IsNullOrEmpty(e.FullPath)
+                    || string.IsNullOrEmpty(e.OldName)
+                    || string.IsNullOrEmpty(e.OldFullPath))
+                {
+                    Log.Fmt("FileRenamed: Name: {0}, FullPath: {1}, Old: {2}, OldFP: {3}",
+                            e.Name, e.FullPath, e.OldName, e.OldFullPath);
+                    return; //Sometimes this happens
+                }
+                FileChanged(sender,
+                            new FileSystemEventArgs(
+                                WatcherChangeTypes.Deleted,
+                                e.OldFullPath.TrimEnd(e.OldName.ToCharArray()),
+                                e.OldName));
+                FileChanged(sender,
+                            new FileSystemEventArgs(
+                                WatcherChangeTypes.Created,
+                                e.FullPath.TrimEnd(e.Name.ToCharArray()),
+                                e.Name));
             }
-            FileChanged(sender,
-                new FileSystemEventArgs(
-                    WatcherChangeTypes.Deleted,
-                    e.OldFullPath.TrimEnd(e.OldName.ToCharArray()),
-                    e.OldName));
-            FileChanged(sender,
-                new FileSystemEventArgs(
-                    WatcherChangeTypes.Created,
-                    e.FullPath.TrimEnd(e.Name.ToCharArray()),
-                    e.Name));
+            catch (PathTooLongException){Log.Raw("PathTooLongException!");}
         }
 
         //Handles event when a file is created, deleted or changed in any other way under any of drives watched
@@ -442,14 +447,15 @@ namespace Power8
                 if (e.ChangeType != WatcherChangeTypes.Deleted && File.GetAttributes(e.FullPath).HasFlag(FileAttributes.Hidden))
                     return;
             }
-            catch (Exception) //In case we have multiple change operations caused by links beung updated by installer
-            {
+            catch (Exception) //In case we have multiple change operations caused by links beung updated by installer.
+            {                 //PathTooLongException is handled here as well
                 return;
             }
 
             //Veryfying file changed not under any of appdata
             var fpLow = e.FullPath.ToLowerInvariant();
-            if(fpLow.StartsWith(IcrAppData) || fpLow.StartsWith(IclAppData) || fpLow.StartsWith(IcTemp))
+            if ((fpLow.StartsWith(IcrAppData) || fpLow.StartsWith(IclAppData) || fpLow.StartsWith(IcTemp))
+                && !fpLow.StartsWith(PathRoot, StringComparison.OrdinalIgnoreCase)) 
                 return;
             Log.Fmt("File {0}: {1}", e.ChangeType, e.FullPath);
             //Ensuring buttonstack is created on Main thread
@@ -459,7 +465,7 @@ namespace Power8
             var isDir = Directory.Exists(e.FullPath);
             var baseAndArg = PathToBaseAndArg(e.FullPath);
             if (baseAndArg.Item2 == null) 
-                return; //Even %startmenu% is changed, here will be "/", so null means error
+                return; //Even %startmenu% is changed, here will be "\", so null means error
 
             var roots = new List<PowerItem> {MyComputerRoot, StartMenuRootItem}; //look only under these + libraries
             foreach (var lib in LibrariesRoot.Items.Where(lib => !lib.AutoExpandIsPending)) //if expanded already
@@ -468,10 +474,11 @@ namespace Power8
             foreach (var root in roots)
             {
 // ReSharper disable PossibleUnintendedReferenceComparison
-                var item = SearchContainerByArgument(baseAndArg, root,
-                                                     e.ChangeType == WatcherChangeTypes.Created &&
-                                                     root == StartMenuRootItem);
-                //Create intermediate folders only for Start Menu and only in casethe file was created
+                var item =
+                    SearchContainerByArgument(baseAndArg,
+                                              root,
+                                              e.ChangeType == WatcherChangeTypes.Created && root == StartMenuRootItem);
+                //Create intermediate folders only for Start Menu and only in case the file was created
 // ReSharper restore PossibleUnintendedReferenceComparison
                 if (item != null)
                 {
@@ -517,21 +524,25 @@ namespace Power8
 #endif
             ScanFolderSync(StartMenuRootItem, PathRoot, true);
             ScanFolderSync(StartMenuRootItem, PathCommonRoot, true);
+#if DEBUG
+            Log.Raw("InitTree - scanned in " + s.ElapsedMilliseconds);
+#endif
+            SearchItemByArgument(PathProgramsFolder, true, StartMenuRootItem, true).IsMergeableContentHolder = true;
             StartMenuRootItem.SortItems();
+            SettingsManager.StartMenuStyleChanged += (o, e) => StartMenuRootItem.SortItems();
             //Set configurable name. Proxy logic is put into manager, so in case 
             //nothing is configured, null will be returned, which will cause
             //this item to regenerate Friendly name, i.e. re-resolve the resourceId string
             StartMenuRootItem.FriendlyName = SettingsManager.Instance.StartMenuText;
 #if DEBUG
-            Log.Fmt("InitTree - scanned in {0}", s.ElapsedMilliseconds);
+            Log.Raw("InitTree - sorted in " + s.ElapsedMilliseconds);
 #endif
             Util.Send(() => BtnStck.Instance.InvalidateVisual());
 #if DEBUG
-            Log.Fmt("InitTree - done in {0}", s.ElapsedMilliseconds);
+            Log.Raw("InitTree - done in " + s.ElapsedMilliseconds);
             s.Stop();
 #endif
         }
-
         /// <summary>
         /// Initializes an asynchronous scan of some FS folder
         /// </summary>
@@ -553,13 +564,14 @@ namespace Power8
         /// <param name="recoursive">True to scan subdirectories.</param>
         private static void ScanFolderSync(PowerItem item, string basePath, bool recoursive)
         {
+            //Obtain full fs path to current location
+            var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
             try
-            {   //Obtain full fs path to current location
-                var curDir = basePath + (item.Argument ?? Util.ResolveSpecialFolder(item.SpecialFolderId));
+            {
                 Log.Raw("In: " + curDir, item.ToString());
                 //Parse child directories and recoursively call the ScanFolderSync
                 foreach (var directory in item.IsLibrary ? GetLibraryDirectories(curDir) : Directory.GetDirectories(curDir))
-                {   //Skip hidden directories
+                {//Skip hidden directories
                     if ((File.GetAttributes(directory).HasFlag(FileAttributes.Hidden)))
                     {
                         Log.Raw("Skipped because item appears to be hidden");
@@ -570,7 +582,7 @@ namespace Power8
                     if (recoursive)
                         ScanFolderSync(subitem, basePath, true);
                 }
-                if (item.IsLibrary) //Since Libraries are actually files, but were already parsed as folders, we shan't continue...
+                if (item.IsLibrary)//Since Libraries are actually files, but were already parsed as folders, we shan't continue...
                     return;
                 //Proceed with files
                 var resources = new Dictionary<string, string>();
@@ -585,10 +597,10 @@ namespace Power8
                             if (str.StartsWith("IconFile=") || str.StartsWith("IconResource="))
                             {
                                 Util.Post(() =>
-                                              {
-                                                item.NonCachedIcon = true;
-                                                item.Icon = null;
-                                              });
+                                {
+                                    item.NonCachedIcon = true;
+                                    item.Icon = null;
+                                });
                             }
                             if (str.StartsWith("LocalizedResourceName="))
                             {
@@ -597,7 +609,7 @@ namespace Power8
                         }
                         while ((str = reader.ReadLine()) != null && str.Contains("="))
                         {
-                            var pair = str.Split(new[] { '=' }, 2);
+                            var pair = str.Split(new[] {'='}, 2);
                             resources.Add(pair[0], pair[1]);
                         }
                     }
@@ -610,16 +622,30 @@ namespace Power8
 
                     var fn = Path.GetFileName(file);
                     var fileIsLib = (Path.GetExtension(file) ?? "")
-                                         .Equals(".library-ms", StringComparison.InvariantCultureIgnoreCase);
+                        .Equals(".library-ms", StringComparison.InvariantCultureIgnoreCase);
                     AddSubItem(item, basePath, file, fileIsLib,
-                                fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
-                                fileIsLib);
+                               fn != null && resources.ContainsKey(fn) ? resources[fn] : null,
+                               fileIsLib);
                 }
             }
             catch (UnauthorizedAccessException)
-            { Log.Raw("UnauthorizedAccessException"); }//Don't care if user is not allowed to access fileor directory or it's contents
+            {Log.Raw("UnauthorizedAccessException");} //Don't care if user is not allowed to access fileor directory or it's contents
             catch (IOException)
-            { Log.Raw("IOException"); }//Don't care as well if file was deleted on-the-fly, watcher will notify list
+            {Log.Raw("IOException");} //Don't care as well if file was deleted on-the-fly, watcher will notify list
+            catch (ArgumentException e)
+            {
+#warning GA Tracer used!
+                GATracer.PostTraceData(0, e, new Dictionary<string, string>
+                                             {
+                                                 {"curdir", curDir},
+                                                 {
+                                                     "wrong", Path.GetInvalidPathChars()
+                                                                  .Union(Path.GetInvalidFileNameChars())
+                                                                  .Any(curDir.Contains)
+                                                                  .ToString()
+                                                 }
+                                             });
+            }
             finally
             {  //Explicitly set marker showing that enumeration operations may occur on Items from this moment
                 item.AutoExpandIsPending = false;
@@ -777,6 +803,16 @@ namespace Power8
             var psi = ResolveItem(item);
             return item.IsFolder ? psi.Arguments : psi.FileName;
         }
+        /// <summary>Safely converts PowerItem to a string representation of it's final target.
+        /// Functionally equivalent to <code>GetResolvedArgument()</code> except that for links
+        /// it returns actual link target. </summary>
+        /// <param name="item">The PowerItem to convert</param>
+        /// <returns>For Power Items that reference a link, returns link's target.
+        /// See <see cref="GetResolvedArgument"/> for other options.</returns>
+        public static string GetResolvedTarget(PowerItem item)
+        {
+            return item.IsLink ? item.ResolvedLink : GetResolvedArgument(item);
+        }
 
         /// <summary>
         /// Breaks full path into predicate base (one of User Start Menu and Common Start Menu) and the trailling stuff
@@ -826,15 +862,15 @@ namespace Power8
                                 where element != null
                                 select element.InnerText
                         ).ToList();
-            var arr = new string[temp.Count];
-            for (var i = 0; i < temp.Count; i++)
+            for (var i = temp.Count -1; i > -1; i--)
             {
                 if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
-                    arr[i] = Util.ResolveKnownFolder(temp[i].Substring(12)); //Expand known folders
-                else if (!temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
-                    arr[i] = temp[i];
+                    temp[i] = Util.ResolveKnownFolder(temp[i].Substring(12)); //Expand known folders
+                else if (temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
+                    temp.RemoveAt(i);
+                //else temp[i] remains unchanged
             }
-            return arr;
+            return temp.ToArray();
         }
 
         #endregion
@@ -894,39 +930,50 @@ namespace Power8
                                                 j.Argument.EndsWith(sourceSplitted[i],
                                                                     StringComparison.InvariantCultureIgnoreCase));
                 if (item == null && autoGenerateSubItems && !string.IsNullOrEmpty(baseAndArg.Item1))
-                    // ReSharper disable AccessToModifiedClosure
-                    //TODO: really Eval()? UI in ASI kicked from Send, probably don't need this...
-                    item = Util.Eval(() =>
-                                        AddSubItem(prevItem,
-                                                baseAndArg.Item1,
-                                                baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i],
-                                                true));
-                    // ReSharper restore AccessToModifiedClosure
+                {
+                    item = AddSubItem(prevItem,
+                                      baseAndArg.Item1,
+                                      baseAndArg.Item1 + prevItem.Argument + "\\" + sourceSplitted[i],
+                                      true);
+                }
                 else if (item == null)
+                {
                     break;
+                }
             }
             return item;
         }
-        
+
         /// <summary>
         /// From a container's children selects the one that seems to be discribed by passed parameters
         /// </summary>
         /// <param name="argument">Search parameter: child's expected Argument. Case-insensitive.</param>
         /// <param name="isFolder">Search parameter: child's IsFolder value.</param>
         /// <param name="container">The PowerItem to search children from.</param>
+        /// <param name="strictFileName">Flag for FS-items to ensure that really desired object will be found.</param>
         /// <returns></returns>
-        private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container)
+        private static PowerItem SearchItemByArgument(string argument, bool isFolder, PowerItem container, bool strictFileName = false)
         {
             if(container.AutoExpandIsPending)
                 return null;
-            var endExpr = Path.GetFileName(argument) ?? argument;
+            var endExpr = Path.GetFileName(argument);
+            if (endExpr == null)
+            {
+                endExpr = argument;
+            }
+            else if (strictFileName && !endExpr.StartsWith(@"\"))
+            {
+                endExpr = @"\" + endExpr;
+            }
             return container.Items.FirstOrDefault(i =>
                     i.IsFolder == isFolder &&
                     i.Argument.EndsWith(endExpr, StringComparison.InvariantCultureIgnoreCase));
         }
 
         /// <summary>
-        /// From the StartMenu, searches for the only item that will Match() the given 'argument'.
+        /// From the StartMenu, searches for the only item that will Match() the given 'argument'
+        /// exactly, that is either Argument will be equal to search query or link's
+        /// target will be equal to it and will not contain any additional arguments.
         /// This is used to quickly find Start Menu element corresponding to some MFU item.
         /// Not thread-safe, not UI-thread-safe, call ONLY from UI thread!
         /// </summary>
@@ -936,6 +983,18 @@ namespace Power8
         {
             var list = new Collection<PowerItem>();
             SearchRootFastSync(argument.ToLowerInvariant(), StartMenuRootItem, list);
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i].IsLink && list[i].ResolvedLink != null)
+                {
+                    string arg;
+                    Util.ResolveLink(GetResolvedArgument(list[i]), out arg);
+                    if (!string.IsNullOrEmpty(arg))
+                    {
+                        list.RemoveAt(i);
+                    }
+                }
+            }
             return list.Count == 1 ? list[0] : null;
         }
 
