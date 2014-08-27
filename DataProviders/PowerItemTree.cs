@@ -859,16 +859,21 @@ namespace Power8
                             let xmlElement = node["simpleLocation"]
                             where xmlElement != null
                                 let element = xmlElement["url"]
-                                where element != null
+                                where element != null 
+                                where !string.IsNullOrWhiteSpace(element.InnerText)
                                 select element.InnerText
                         ).ToList();
-            for (var i = temp.Count -1; i > -1; i--)
+            for (var i = temp.Count - 1; i > -1; i--)
             {
                 if (temp[i].StartsWith("knownfolder:", StringComparison.InvariantCultureIgnoreCase))
+                {
                     temp[i] = Util.ResolveKnownFolder(temp[i].Substring(12)); //Expand known folders
-                else if (temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase)) //Uninitialized library
+                }
+                if (string.IsNullOrWhiteSpace(temp[i]) /*ResolveKnownFolder failed*/ || 
+                    temp[i].StartsWith("shell:", StringComparison.InvariantCultureIgnoreCase) /*Uninitialized library*/)
+                {
                     temp.RemoveAt(i);
-                //else temp[i] remains unchanged
+                }
             }
             return temp.ToArray();
         }
