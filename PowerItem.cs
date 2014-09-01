@@ -378,7 +378,7 @@ namespace Power8
         /// <summary>
         /// Returns l-cased cached target of the link for this instance if it is Link;
         /// returns null otherwise. This method is called from TryExtractFriendlyNameAsync,
-        /// so standard double-check-lock is inside.
+        /// so standard double-check-lock is inside. Returns Empty string if something failed.
         /// </summary>
         public string ResolvedLink
         {
@@ -390,10 +390,15 @@ namespace Power8
                     {
                         if(_resolvedLink == null)
                         {
-                            _resolvedLink = (
-                                                Util.ResolveLinkSafe(PowerItemTree.ResolveItem(this).FileName)
-                                                ?? string.Empty
-                                            ).ToLowerInvariant();
+                            string fn = null;
+                            try
+                            {
+                                fn = PowerItemTree.ResolveItem(this).FileName;
+                            }
+                            catch (IOException){} //file not found
+                            if (fn != null)
+                                _resolvedLink = Util.ResolveLinkSafe(fn);
+                            _resolvedLink = _resolvedLink != null ? _resolvedLink.ToLowerInvariant() : string.Empty;
                         }
                     }
                 }
