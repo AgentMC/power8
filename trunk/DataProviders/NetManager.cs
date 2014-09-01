@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Management;
 using System.Net;
 #if !DEBUG
@@ -6,6 +7,7 @@ using System.DirectoryServices;
 using System.Linq;
 using System;
 #endif
+using Power8.Helpers;
 
 namespace Power8
 {
@@ -33,8 +35,23 @@ namespace Power8
             {
                 if (_wg == null)
                 {
-                    foreach (var obj in new ManagementObjectSearcher("select Domain from Win32_ComputerSystem").Get())
-                        _wg = obj.GetPropertyValue("Domain").ToString();//only 1 item available
+                    try
+                    {
+                        using (var m = new ManagementObjectSearcher("select Domain from Win32_ComputerSystem"))
+                        using (var e = m.Get().GetEnumerator())
+                        {
+                            if (e.MoveNext())
+                                _wg = e.Current.GetPropertyValue("Domain").ToString();
+                        }
+                    }
+                    catch (Exception ex){Log.Raw(ex.Message);}
+                    finally
+                    {
+                        if (string.IsNullOrWhiteSpace(_wg)) //modern
+                            _wg = Environment.GetEnvironmentVariable("USERDOMAIN");
+                        if (string.IsNullOrWhiteSpace(_wg)) //old
+                            _wg = Environment.GetEnvironmentVariable("COMPUTERNAME");
+                    }
                 }
                 return _wg;
             }
