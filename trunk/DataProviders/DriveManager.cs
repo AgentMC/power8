@@ -276,7 +276,18 @@ begin:
                     _drives = DriveInfo.GetDrives();
                 drv = _drives.FirstOrDefault(d => d.Name == driveName);
             }
-            return (drv != null) ? drv.VolumeLabel : string.Empty;
+            if (drv == null)
+            {
+                return string.Empty;
+            }
+            try
+            {
+                return drv.VolumeLabel;
+            }
+            catch
+            {
+                return string.Empty;
+            }
         }
 
         /// <summary>
