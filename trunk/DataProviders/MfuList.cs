@@ -189,12 +189,25 @@ namespace Power8
             //Create COM object on main thread to prevent unexpected problems with stopping
             Util.Post(() =>
                           {
-                              //React on new processes creation
-                              _watchDog =
-                                  new ManagementEventWatcher(
-                                      "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
-                              _watchDog.EventArrived += WatchDogOnEventArrived;
-                              _watchDog.Start();
+                              try
+                              {
+	                              //React on new processes creation
+                                  _watchDog =
+                                      new ManagementEventWatcher(
+                                          "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
+                                  _watchDog.EventArrived += WatchDogOnEventArrived;
+                                  _watchDog.Start();
+                              }
+                              catch (COMException ex)
+                              {
+                                  Log.Raw(ex.Message); //Well... too bad. If so, just will ignore all events.
+                                  _watchDog = null;
+                              }
+                              catch (ManagementException ex)
+                              {
+                                  Log.Raw(ex.Message); 
+                                  _watchDog = null;
+                              }
                           });
 
         }
@@ -204,13 +217,15 @@ namespace Power8
         {
             try
             {
-                _watchDog.Stop();
-                _watchDog.Dispose();
+                if (_watchDog != null)
+                {
+                    _watchDog.Stop();
+                    _watchDog.Dispose();
+                }
             }
-            catch (COMException ex)
-            {
-                Log.Raw(ex.Message); //Well... too bad. We shut down anyway...
-            }
+            catch (COMException ex){Log.Raw(ex.Message);} //Well... too bad. We shut down anyway...
+            catch (ManagementException ex) { Log.Raw(ex.Message); } 
+            
 
             Directory.CreateDirectory(DataBaseRoot);
 
@@ -828,6 +843,10 @@ namespace Power8
                             {
                                 item = null;
                             }
+                        }
+                        catch (COMException) //happened for one user...
+                        {
+                            item = null;
                         }
                         if (item == null)
                             continue;
