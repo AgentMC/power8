@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
+using Microsoft.Win32.SafeHandles;
 using Power8.Helpers;
 using Power8.Views;
 
@@ -15,7 +17,7 @@ namespace Power8
     /// </summary>
     public static class DriveManager
     {
-        private static readonly List<FileSystemWatcher> Watchers = new List<FileSystemWatcher>();
+        private static readonly List<RemovableFileSystemWatcher> Watchers = new List<RemovableFileSystemWatcher>();
         private static readonly List<string> DriveNames = new List<string>();
         private static readonly List<string> BlackList = new List<string>();
         private static readonly ConcurrentQueue<FileSystemEventArgs> FsQueue = new ConcurrentQueue<FileSystemEventArgs>();
@@ -23,7 +25,8 @@ namespace Power8
         private static FileSystemEventHandler _fileChanged;
         private static RenamedEventHandler _fileRenamed;
         private static PowerItem _drivesRoot;
-
+        private static IntPtr _reportingHandle;
+        
         /// <summary>
         /// This is used to cache last queried list of drives, to redce time to call GetDriveLabel()
         /// </summary>
@@ -43,6 +46,11 @@ namespace Power8
             SettingsManager.WatchRemovablesChanged += SettingsManagerOnWatchRemovablesChanged;
             Util.ForkStart(Worker, "DriveWatchThread");
             Util.ForkStart(FsWorker, "File system events dequeuer");
+        }
+
+        public static void SetReporter(IntPtr hWnd)
+        {
+            _reportingHandle = hWnd;
         }
 
         /// <summary>
@@ -93,10 +101,10 @@ begin:
                     {
                         if (IsDriveValid(driveInfo))
                         {
-                            FileSystemWatcher w;
+                            RemovableFileSystemWatcher w;
                             try
                             {
-                                w = new FileSystemWatcher(dName);
+                                w = new RemovableFileSystemWatcher(dName, _reportingHandle);
                             }
                             catch (ArgumentException ex)
                             {
@@ -200,12 +208,12 @@ begin:
         }
 
         /// <summary>
-        /// Tries to start running the prepared FileSystemWatcher.
+        /// Tries to start running the prepared RFileSystemWatcher.
         /// If this fails, blacklists the drive and calls StopWatcher,
         /// which cleans up everything related to this drive.
         /// </summary>
-        /// <param name="w">FileSystemWatcher to start.</param>
-        private static void StartWatcher(FileSystemWatcher w)
+        /// <param name="w">RFileSystemWatcher to start.</param>
+        private static void StartWatcher(RemovableFileSystemWatcher w)
         {
             Exception e = null;
             try
@@ -300,5 +308,138 @@ begin:
             return String.Format("{0} - {1}", driveName, GetDriveLabel(driveName));
         }
 
+        public static bool HandleDeviceNotification(IntPtr wParam, IntPtr lParam)
+        {
+            lock (DriveNames)
+            {
+                return Watchers.Any(watcher => watcher.ProcessDeviceNotification(wParam, lParam));
+            }
+        }
+    }
+
+    class RemovableFileSystemWatcher : FileSystemWatcher
+    {
+        private readonly IntPtr _reporter;
+        public RemovableFileSystemWatcher(string path, IntPtr reportingHwnd) : base(path)
+        {
+            _reporter = reportingHwnd;
+        }
+
+        new public bool EnableRaisingEvents
+        {
+            get { return base.EnableRaisingEvents; }
+            set
+            {
+                Log.Raw("Value passed: " + value);
+                base.EnableRaisingEvents = value;
+                if (value) Lock();
+                else Unlock();
+            }
+        }
+
+        private IntPtr _hNotification = IntPtr.Zero;
+        private FileStream _hDrive;
+
+        private void Unlock()
+        {
+            if (_hNotification != IntPtr.Zero)
+            {
+                API.UnregisterDeviceNotification(_hNotification);
+                _hNotification = IntPtr.Zero;
+            }
+            if (_hDrive != null)
+            {
+                _hDrive.Dispose();
+                _hDrive = null;
+            }
+            Log.Raw("Unlocked " + Path);
+        }
+
+        private void Lock()
+        {
+            var file = API.CreateFile(string.Format(@"\\.\{0}:", Path[0]),
+                                      FileAccess.Read,
+                                      FileShare.ReadWrite,
+                                      IntPtr.Zero,
+                                      FileMode.Open,
+                                      0,
+                                      IntPtr.Zero);
+            if (file == IntPtr.Zero || file.ToInt32() == -1)
+            {
+                return; //might be real fixed drive
+            }
+
+            _hDrive = new FileStream(new SafeFileHandle(file, true), FileAccess.Read);
+            var msg = new API.DEV_BROADCAST_HANDLE { dbch_handle = file };
+
+            _hNotification = API.RegisterDeviceNotification(_reporter, msg, API.RDNFlags.DEVICE_NOTIFY_WINDOW_HANDLE);
+            if (_hNotification == IntPtr.Zero || _hNotification.ToInt32() == -1)
+            {
+                Unlock(); //this drive appears to be non-notifiable
+            }
+            Log.Raw("Locked " + Path);
+        }
+
+        public bool ProcessDeviceNotification(IntPtr wParam, IntPtr lParam)
+        {
+            var code = (API.DeviceChangeMessages) wParam;
+
+            switch (code)
+            {
+                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVE:
+                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVEFAILED:
+                case API.DeviceChangeMessages.DBT_CUSTOMEVENT:
+                    return Process(code, lParam);
+                default:
+                    return true;
+            }
+        }
+
+        private bool Process(API.DeviceChangeMessages wParam, IntPtr lParam)
+        {
+            var o = new API.DEV_BROADCAST_HANDLE();
+            if (lParam != IntPtr.Zero) Marshal.PtrToStructure(lParam, o);
+
+            if (o.dbch_hdevnotify != _hNotification)
+            {
+                return false;
+            }
+
+            Log.Fmt("Device event {0}, custom event guid {1}", wParam, o.dbch_eventguid);
+
+            switch (wParam)
+            {
+                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVE:
+                    EnableRaisingEvents = false;
+                    break;
+                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVEFAILED:
+                    EnableRaisingEvents = true;
+                    break;
+                case API.DeviceChangeMessages.DBT_CUSTOMEVENT:
+                    if (API.DevEvent.Queryable.Contains(o.dbch_eventguid))
+                    {
+                        EnableRaisingEvents = false;
+                    }
+                    else if (API.DevEvent.Failed.Contains(o.dbch_eventguid))
+                    {
+                        EnableRaisingEvents = true;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Log.Raw("Dispose called");
+            try
+            {
+                Unlock();
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
+        }
     }
 }

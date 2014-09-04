@@ -133,7 +133,9 @@
       <DependentUpon>ComputerList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\PiToTooltipConverter.cs" />
-    <Compile Include="DataProviders\DriveManager.cs" />
+    <Compile Include="DataProviders\DriveManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Views\ConfirmActionWindow.xaml.cs">
       <DependentUpon>ConfirmActionWindow.xaml</DependentUpon>
     </Compile>
