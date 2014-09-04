@@ -32,6 +32,10 @@ namespace Power8.Views
             {
                 if (_instance == null)
                 {
+                    //Wait for MainWindow in case InitTree thread executed faster than it appeared
+                    //This is needed because it's Main window who proceses system drive notifications
+                    //So we need it's handle which is available when it's initialized
+                    SettingsManager.BgrThreadLock.WaitOne();
                     _instance = new BtnStck();
                     var h = Instanciated;
                     if (h != null)
@@ -118,7 +122,7 @@ namespace Power8.Views
         private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             handled = false;
-            if (msg == (uint)API.WM.NCHITTEST)
+            if (msg == (int)API.WM.NCHITTEST)
             {
                 handled = true;
                 var htLocation = API.DefWindowProc(hwnd, msg, wParam, lParam);

@@ -106,6 +106,10 @@ namespace Power8.Views
                     ShowButtonStack(Keyboard.PrimaryDevice, null);
                 }
             }
+            if (msg == (int)API.WM.DEVICECHANGE && (handled = DriveManager.HandleDeviceNotification(wParam, lParam)))
+            {
+                return new IntPtr(1);
+            }
             return IntPtr.Zero;
         }
 // ReSharper restore RedundantAssignment
@@ -147,6 +151,8 @@ namespace Power8.Views
             Top = 0;
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
             Util.ForkStart(WatchDesktopBtn, "ShowDesktop button watcher");
+
+            DriveManager.SetReporter(this.GetHandle());
             
             SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;
             SettingsManager.ImageChanged += SettingsManagerOnImageChanged;

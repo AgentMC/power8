@@ -1,14 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Interop;
 
 namespace Power8
 {
+    // ReSharper disable InconsistentNaming
     public static class API
     {
-        // ReSharper disable InconsistentNaming
         #region Identifiers
 
         public static class WndIds
@@ -212,10 +213,22 @@ namespace Power8
             public const string OLE = "ole32.dll";
         }
 
+        public static class DevEvent
+        {
+            public static readonly Guid GUID_IO_MEDIA_EJECT_REQUEST = new Guid("d07433d1-a98e-11d2-917a-00a0c9068ff3");
+            public static readonly Guid GUID_IO_VOLUME_DISMOUNT = new Guid("d16a55e8-1059-11d2-8ffd-00a0c9a06d32");
+            public static readonly Guid GUID_IO_VOLUME_DISMOUNT_FAILED = new Guid("e3c5b178-105d-11d2-8ffd-00a0c9a06d32");
+            public static readonly Guid GUID_IO_VOLUME_LOCK = new Guid("50708874-c9af-11d1-8fef-00a0c9a06d32");
+            public static readonly Guid GUID_IO_VOLUME_LOCK_FAILED = new Guid("ae2eed10-0ba8-11d2-8ffb-00a0c9a06d32");
+            public static readonly Guid GUID_IO_VOLUME_UNLOCK = new Guid("9a8c3d68-d0cb-11d1-8fef-00a0c9a06d32");
+            public static Guid[] Queryable = {GUID_IO_MEDIA_EJECT_REQUEST, GUID_IO_VOLUME_DISMOUNT, GUID_IO_VOLUME_LOCK};
+            public static Guid[] Failed = {GUID_IO_VOLUME_DISMOUNT_FAILED, GUID_IO_VOLUME_LOCK_FAILED};
+        }
+        
         #endregion
 
+        #region Windows positioning
 
-        //Windows positioning=====================================================================================
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
@@ -249,9 +262,11 @@ namespace Power8
         [DllImport(Lib.USER, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetCursorPos(ref POINT lpPoint);
+        
+        #endregion
 
+        #region Utility User32 functions and data, needed in different places
 
-        //Utility User32 functions and data, needed in different places============================
         public enum WM : uint
         {
             //excerpt
@@ -297,10 +312,12 @@ namespace Power8
             XBUTTONDBLCLK = 0x020D,
             MOUSEHWHEEL = 0x020E,
 
+            DEVICECHANGE = 0x219,
+
             DWMCOMPOSITIONCHANGED = 0x031E,
             DWMNCRENDERINGCHANGED = 0x031F,
             DWMCOLORIZATIONCOLORCHANGED = 0x0320,
-            DWMWINDOWMAXIMIZEDCHANGE = 0x0321
+            DWMWINDOWMAXIMIZEDCHANGE = 0x0321,
         }
 
         public enum SC
@@ -372,8 +389,10 @@ namespace Power8
         [DllImport(Lib.USER)]
         public static extern bool ShowWindow(IntPtr hWnd, SWCommands nCmdShow);
 
+        #endregion
 
-        //Aero Glass===============================================================================
+        #region Aero Glass
+
         [StructLayout(LayoutKind.Sequential)]
         public class Margins
         {
@@ -401,8 +420,10 @@ namespace Power8
         [DllImport(Lib.DWMAPI, PreserveSig = false)]
         public static extern bool DwmIsCompositionEnabled();
 
+        #endregion
 
-        //Getting icons============================================================================
+        #region Getting icons
+
         [StructLayout(LayoutKind.Sequential, Pack = 1, CharSet = CharSet.Unicode)]
         public struct ShfileinfoW
         {
@@ -525,8 +546,9 @@ namespace Power8
         [DllImport(Lib.SHELL, EntryPoint = "ExtractIconW", CharSet = CharSet.Unicode)]
         public static extern IntPtr ExtractIcon(IntPtr hInst, string lpszExeFileName, uint nIconIndex);
 
+        #endregion
 
-        //Invoking specific verbs (show properties)================================================
+        #region Invoking specific verbs (show properties)
         [StructLayout(LayoutKind.Sequential)]
         public class ShellExecuteInfo
         {
@@ -597,8 +619,9 @@ namespace Power8
         [DllImport(Lib.SHELL, CharSet = CharSet.Auto, SetLastError = true, ExactSpelling = false)]
         public static extern bool ShellExecuteEx(ShellExecuteInfo info);
 
+        #endregion
 
-        //Resolving links==========================================================================
+        #region Resolving links
         [Flags]
         public enum SLGP_FLAGS
         {
@@ -751,8 +774,9 @@ namespace Power8
         [ComImport, ClassInterface(ClassInterfaceType.None), Guid(Sys.IdCShellLink)]
         public class ShellLink{}
 
+        #endregion
 
-        //Jump lists===============================================================================
+        #region Jump lists
         [StructLayout(LayoutKind.Sequential, Pack = 4)]
         public struct PKEY
         {
@@ -939,8 +963,9 @@ namespace Power8
         public static extern uint SHGetIDListFromObject([MarshalAs(UnmanagedType.IUnknown)] object iUnknown,
                                                         out IntPtr ppidl);
 
+        #endregion
 
-        //Loading native resources=================================================================
+        #region Loading native resources
         [Flags]
         public enum LLF : uint
         {
@@ -973,8 +998,9 @@ namespace Power8
         [DllImport(Lib.USER, CharSet = CharSet.Unicode, EntryPoint = "LoadIconW")]
         public static extern IntPtr LoadIcon(IntPtr hInstance, uint zeroHiWordIdLoWord);
 
+        #endregion
 
-        //HotKey===================================================================================
+        #region HotKey
         [DllImport(Lib.USER)]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, fsModifiers fsModifiers,
                                                  System.Windows.Forms.Keys vk);
@@ -988,8 +1014,9 @@ namespace Power8
             MOD_WIN = 8,
         }
 
+        #endregion
 
-        //Undocumented API========================================================================
+        #region Undocumented API
         [Flags]
         public enum RFF
         {
@@ -1030,8 +1057,9 @@ namespace Power8
 
         public delegate void FpReset(); //_fpreset from msvcr*.dll 
 
+        #endregion
 
-        //Shell namespaces, known folders, etc=====================================================
+        #region Shell namespaces, known folders, etc
         public enum KFF : uint
         {
             NO_APPCONTAINER_REDIRECTION = 0x00010000,
@@ -1546,7 +1574,10 @@ namespace Power8
 
         }
 
-        //CPLs ====================================================================================
+        #endregion
+
+        #region CPLs 
+
         public delegate int CplAppletProc (IntPtr hwndCpl, CplMsg msg, IntPtr lParam1, IntPtr lParam2);
 
         public enum CplMsg : uint
@@ -1679,6 +1710,81 @@ namespace Power8
             public string szHelpFile; /* path to help file to use */
         }
 
-// ReSharper restore InconsistentNaming
+        #endregion
+
+        #region Devices
+
+        public enum DBCHDeviceType
+        {
+            DBT_DEVTYP_DEVICEINTERFACE = 0x5,
+            DBT_DEVTYP_HANDLE = 0x6,
+            DBT_DEVTYP_OEM = 0x0,
+            DBT_DEVTYP_PORT = 0x3,
+            DBT_DEVTYP_VOLUME = 0x2
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class DEV_BROADCAST_HDR
+        {
+            public Int32 dbch_size;
+            public DBCHDeviceType dbch_devicetype;
+            public Int32 dbch_reserved;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public class DEV_BROADCAST_HANDLE : DEV_BROADCAST_HDR
+        {
+            public IntPtr dbch_handle;
+            public IntPtr dbch_hdevnotify;
+            public Guid dbch_eventguid = new Guid();
+            public Int32 dbch_nameoffset = 0;
+            public Byte dbch_data = 0;
+
+            public DEV_BROADCAST_HANDLE()
+            {
+                dbch_size = Marshal.SizeOf(this);
+                dbch_devicetype = DBCHDeviceType.DBT_DEVTYP_HANDLE;
+            }
+        }
+
+        public enum DeviceChangeMessages
+        {
+            DBT_CONFIGCHANGECANCELED = 0x19,
+            DBT_CONFIGCHANGED = 0x18,
+            DBT_CUSTOMEVENT = 0x8006,
+            DBT_DEVICEARRIVAL = 0x8000,
+            DBT_DEVICEQUERYREMOVE = 0x8001,
+            DBT_DEVICEQUERYREMOVEFAILED = 0x8002,
+            DBT_DEVICEREMOVECOMPLETE = 0x8004,
+            DBT_DEVICEREMOVEPENDING = 0x8003,
+            DBT_DEVICETYPESPECIFIC = 0x8005,
+            DBT_DEVNODES_CHANGED = 0x7,
+            DBT_QUERYCHANGECONFIG = 0x17,
+            DBT_USERDEFINED = 0xFFFF,
+        }
+
+        [Flags]
+        public enum RDNFlags
+        {
+            DEVICE_NOTIFY_WINDOW_HANDLE = 0,
+            DEVICE_NOTIFY_SERVICE_HANDLE = 1,
+            DEVICE_NOTIFY_ALL_INTERFACE_CLASSES = 4
+        }
+
+        [DllImport(Lib.USER, CharSet = CharSet.Unicode, SetLastError = true)]
+        public static extern IntPtr RegisterDeviceNotification(IntPtr recipient, DEV_BROADCAST_HANDLE lpDevBroadcastHdr, RDNFlags flags);
+        [DllImport(Lib.USER, SetLastError = true)]
+        public static extern IntPtr UnregisterDeviceNotification(IntPtr hNotification);
+        [DllImport(Lib.KERNEL, CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr CreateFile(
+             [MarshalAs(UnmanagedType.LPTStr)] string filename,
+             [MarshalAs(UnmanagedType.U4)] FileAccess access,
+             [MarshalAs(UnmanagedType.U4)] FileShare share,
+             IntPtr securityAttributes, // optional SECURITY_ATTRIBUTES struct or IntPtr.Zero
+             [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition,
+             [MarshalAs(UnmanagedType.U4)] FileAttributes flagsAndAttributes,
+             IntPtr templateFile);
+
+        #endregion
     }
 }
