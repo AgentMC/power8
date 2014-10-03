@@ -2,6 +2,7 @@
 #labels Featured
 
 = List of ideas and requests we not committed yet =
+  * Investigate possibility of overriding more than one Start buttons on Win8+/multimon setup;
   * TBD: Context menu (configurable) for computer list, specific items for each computer item;
 
 = List of ideas and requests we won't ever implement =
