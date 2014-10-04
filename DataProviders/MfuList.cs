@@ -219,6 +219,7 @@ namespace Power8
             {
                 if (_watchDog != null)
                 {
+                    _watchDog.EventArrived -= WatchDogOnEventArrived;
                     _watchDog.Stop();
                     _watchDog.Dispose();
                 }
