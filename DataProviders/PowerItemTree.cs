@@ -23,6 +23,8 @@ namespace Power8
         //....Items.Add(New PowerItem{FriendlyName=SEPARATOR_NAME}) ==> adds the separator item, visualized in menus only.
         public const string SEPARATOR_NAME = "----";
 
+        private static readonly AutoResetEvent QSearchResetEvent = new AutoResetEvent(true); 
+
         private static readonly string 
             PathRoot = Environment.GetFolderPath(Environment.SpecialFolder.StartMenu), //User start menu root
             PathCommonRoot = Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu), //All users start menu root
@@ -482,6 +484,7 @@ namespace Power8
 // ReSharper restore PossibleUnintendedReferenceComparison
                 if (item != null)
                 {
+                    QSearchResetEvent.WaitOne();
                     Util.Send(() =>
                     {
                         switch (e.ChangeType)
@@ -506,6 +509,7 @@ namespace Power8
                                 break;
                         }
                     });
+                    QSearchResetEvent.Set();
                 }
             }
         }
@@ -987,7 +991,9 @@ namespace Power8
         public static PowerItem SearchStartMenuItemSyncFast(string argument)
         {
             var list = new Collection<PowerItem>();
+            QSearchResetEvent.WaitOne();
             SearchRootFastSync(argument.ToLowerInvariant(), StartMenuRootItem, list);
+            QSearchResetEvent.Set();
             for (int i = list.Count - 1; i >= 0; i--)
             {
                 if (list[i].IsLink && list[i].ResolvedLink != null)
