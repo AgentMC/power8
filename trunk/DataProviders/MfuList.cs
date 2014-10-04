@@ -360,48 +360,50 @@ namespace Power8
                            : SettingsManager.Instance.MfuIsInternal
                                  ? GetMfuFromP8JL()
                                  : GetMfuFromCustomData();
-
-            if (list.SequenceEqual(LastList)) //Exit if list  not changed comparing to the last one
-                return;
-            
-            //Copy to the last list
-            LastList.Clear();
-            list.ForEach(m => LastList.Add(m.Clone()));
-
-            lock (StartMfu) //Update the Start MFU
+            lock (LastList)
             {
-                //Steps 2.1 - 2.4
-                list.ApplyFiltersAndSort();
+                if (list.SequenceEqual(LastList)) //Exit if list  not changed comparing to the last one
+                    return;
 
-                //Step 2.6: limit single/zero-used to 20 items
-                for (int i = 0, j = 0; i < list.Count; i++)
+                //Copy to the last list
+                LastList.Clear();
+                list.ForEach(m => LastList.Add(m.Clone()));
+
+                lock (StartMfu) //Update the Start MFU
                 {
-                    if (list[i].LaunchCount<2 && ++j > 20)
+                    //Steps 2.1 - 2.4
+                    list.ApplyFiltersAndSort();
+
+                    //Step 2.6: limit single/zero-used to 20 items
+                    for (int i = 0, j = 0; i < list.Count; i++)
                     {
-                        list.RemoveRange(i, list.Count - i);
-                        break;
+                        if (list[i].LaunchCount < 2 && ++j > 20)
+                        {
+                            list.RemoveRange(i, list.Count - i);
+                            break;
+                        }
                     }
+
+
+                    //Step 3: update collection
+                    Util.Send(() =>
+                    {
+                        _startMfu.Clear();
+                        foreach (var mfuElement in list)
+                        {
+                            var elem = mfuElement;
+                            _startMfu.Add(new PowerItem
+                            {
+                                Argument = elem.Arg,
+                                Parent = MfuSearchRoot,
+                                AllowAsyncFriendlyName = true, //Friendly Name isn't distinctive for MFU
+                                IsPinned = elem.LaunchCount >= 2000, //hack yeah!
+                                IsFolder = SettingsManager.Instance.MfuIsCustom
+                                           && Directory.Exists(elem.Arg)
+                            });
+                        }
+                    });
                 }
-
-
-                //Step 3: update collection
-                Util.Send(() =>
-                              {
-                                  _startMfu.Clear();
-                                  foreach (var mfuElement in list)
-                                  {
-                                      var elem = mfuElement;
-                                      _startMfu.Add(new PowerItem
-                                        {
-                                            Argument = elem.Arg,
-                                            Parent = MfuSearchRoot,
-                                            AllowAsyncFriendlyName = true, //Friendly Name isn't distinctive for MFU
-                                            IsPinned = elem.LaunchCount >= 2000, //hack yeah!
-                                            IsFolder = SettingsManager.Instance.MfuIsCustom 
-                                                        && Directory.Exists(elem.Arg)
-                                        });
-                                  }
-                              });
             }
         }
 
@@ -578,16 +580,19 @@ namespace Power8
             //else means state of item may changed but already reflected in pin list
             if (!update) 
                 return;
-            //Calculate the new index
-            var temp = new List<MfuElement>();
-            LastList.ForEach(m => temp.Add(m.Clone()));
-            temp.ApplyFiltersAndSort();
-            //Destination index. When moving data from LastList to StartMFU, it is truncated to contain
-            //only 20 items with launchCount==0. So it is possible that when you unpin an element,
-            //it's calculated position in scope of LastList will be more that StartMFU contains.
-            //This is the fix for the problem.
-            var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
-            StartMfu.Move(StartMfu.IndexOf(item), tIdx);
+            lock (LastList)
+            {
+                //Calculate the new index
+                var temp = new List<MfuElement>();
+                LastList.ForEach(m => temp.Add(m.Clone()));
+                temp.ApplyFiltersAndSort();
+                //Destination index. When moving data from LastList to StartMFU, it is truncated to contain
+                //only 20 items with launchCount==0. So it is possible that when you unpin an element,
+                //it's calculated position in scope of LastList will be more that StartMFU contains.
+                //This is the fix for the problem.
+                var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
+                StartMfu.Move(StartMfu.IndexOf(item), tIdx);
+            }
         }
         /// <summary>
         /// Adds an exclusion that hides MFU items that fall under it.
@@ -622,19 +627,22 @@ namespace Power8
 
         public static int MoveCustomListItem(PowerItem which, PowerItem where)
         {
-            //1. Change order in UserList 
-            var argFrom = PowerItemTree.GetResolvedArgument(which);
-            var argTo = PowerItemTree.GetResolvedArgument(@where);
-            int idxFrom = UserList.IndexOf(argFrom);
-            int idxTo = UserList.IndexOf(argTo);
-            UserList.RemoveAt(idxFrom);
-            UserList.Insert(idxTo + idxFrom > idxTo ? 1 : 0, argFrom);
-            //2. Update LastList
-            LastList.Clear();
-            GetMfuFromCustomData().ForEach(m => LastList.Add(m.Clone()));
-            //3. Change order in MfuList - with respect to pinning
-            StartMfu.Move(StartMfu.IndexOf(which), StartMfu.IndexOf(where));
-            return StartMfu.IndexOf(which);
+            lock (LastList)
+            {
+                //1. Change order in UserList 
+                var argFrom = PowerItemTree.GetResolvedArgument(which);
+                var argTo = PowerItemTree.GetResolvedArgument(@where);
+                int idxFrom = UserList.IndexOf(argFrom);
+                int idxTo = UserList.IndexOf(argTo);
+                UserList.RemoveAt(idxFrom);
+                UserList.Insert(idxTo + idxFrom > idxTo ? 1 : 0, argFrom);
+                //2. Update LastList
+                LastList.Clear();
+                GetMfuFromCustomData().ForEach(m => LastList.Add(m.Clone()));
+                //3. Change order in MfuList - with respect to pinning
+                StartMfu.Move(StartMfu.IndexOf(which), StartMfu.IndexOf(where));
+                return StartMfu.IndexOf(which);
+            }
         }
 
 
