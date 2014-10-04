@@ -110,6 +110,9 @@
     <Compile Include="Helpers\Analytics.cs" />
     <Compile Include="Helpers\GATracer.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Helpers\RemovableFileSystemWatcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\SettingsManager.cs" />
     <Compile Include="Properties\NoLoc.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -133,9 +136,7 @@
       <DependentUpon>ComputerList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\PiToTooltipConverter.cs" />
-    <Compile Include="DataProviders\DriveManager.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="DataProviders\DriveManager.cs" />
     <Compile Include="Views\ConfirmActionWindow.xaml.cs">
       <DependentUpon>ConfirmActionWindow.xaml</DependentUpon>
     </Compile>
