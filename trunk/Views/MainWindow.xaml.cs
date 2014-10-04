@@ -108,7 +108,8 @@ namespace Power8.Views
             }
             if (msg == (int)API.WM.DEVICECHANGE && (handled = DriveManager.HandleDeviceNotification(wParam, lParam)))
             {
-                return new IntPtr(1);
+                return new IntPtr(1); //MSDN: return true to allow request. We never deny, we just react on this.
+                //WinUser.h: #define BROADCAST_QUERY_DENY         0x424D5144  // Return this value to deny a query.
             }
             return IntPtr.Zero;
         }
@@ -152,6 +153,7 @@ namespace Power8.Views
             API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
             Util.ForkStart(WatchDesktopBtn, "ShowDesktop button watcher");
 
+            //Register as a HWND that will be used as device notification processor proxy by DriveManager
             DriveManager.SetReporter(this.GetHandle());
             
             SettingsManager.WarnMayHaveChanged += SettingsManagerOnWarnMayHaveChanged;

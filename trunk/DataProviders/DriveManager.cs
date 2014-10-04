@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
-using Microsoft.Win32.SafeHandles;
 using Power8.Helpers;
 using Power8.Views;
 
@@ -48,6 +46,12 @@ namespace Power8
             Util.ForkStart(FsWorker, "File system events dequeuer");
         }
 
+        /// <summary>
+        /// Registers handle passed as the device notofication message processor proxy.
+        /// It is expected that proxy has custom WndProc that forwards WM_DEVICECHANGE to 
+        /// the HandleDeviceNotification() method below.
+        /// </summary>
+        /// <param name="hWnd">HWND of thrproxy window</param>
         public static void SetReporter(IntPtr hWnd)
         {
             _reportingHandle = hWnd;
@@ -74,7 +78,7 @@ namespace Power8
         /// <summary>
         /// The background thread that watches the drives in the system, querying them every 5 seconds
         /// </summary>
-        private static void Worker ()
+        private static void Worker()
         {
 begin:
             lock (DriveNames) //To ensure no InvalidOperationException occurs in GetDriveLabel()
@@ -308,137 +312,25 @@ begin:
             return String.Format("{0} - {1}", driveName, GetDriveLabel(driveName));
         }
 
+        /// <summary>
+        /// Callback to be called by the WndProc of the proxy window that registered itself
+        /// previously by using SetReporter() method, when it receives the WM_DEVICECHANGE event 
+        /// </summary>
+        /// <param name="wParam">wParam of the original system message, as a matter of fact - it is a UINT,
+        /// a value from DeviceChangeMessages enumeration (see API.cs)</param>
+        /// <param name="lParam">lParam of the original system message, theoretically, a pointer to 
+        /// something inheriting from DEV_BROADCAST_HDR, in fact, one to DEV_BROADCAST_HANDLE because that's 
+        /// what we subscribe to</param>
+        /// <returns>Boolean indicating whether the DriveManager in general handled the request.
+        /// Keep in mind, this value is just indicator of whether to broadcast message further, so
+        /// true is returned even in case where DM's internals technically didn't handle the request,
+        /// or even if there is no thechnical possibility to do it, however, further broadcasting is
+        /// senseless. See <see cref="RemovableFileSystemWatcher"/> for details</returns>
         public static bool HandleDeviceNotification(IntPtr wParam, IntPtr lParam)
         {
             lock (DriveNames)
             {
                 return Watchers.Any(watcher => watcher.ProcessDeviceNotification(wParam, lParam));
-            }
-        }
-    }
-
-    class RemovableFileSystemWatcher : FileSystemWatcher
-    {
-        private readonly IntPtr _reporter;
-        public RemovableFileSystemWatcher(string path, IntPtr reportingHwnd) : base(path)
-        {
-            _reporter = reportingHwnd;
-        }
-
-        new public bool EnableRaisingEvents
-        {
-            get { return base.EnableRaisingEvents; }
-            set
-            {
-                Log.Raw("Value passed: " + value);
-                base.EnableRaisingEvents = value;
-                if (value) Lock();
-                else Unlock();
-            }
-        }
-
-        private IntPtr _hNotification = IntPtr.Zero;
-        private FileStream _hDrive;
-
-        private void Unlock()
-        {
-            if (_hNotification != IntPtr.Zero)
-            {
-                API.UnregisterDeviceNotification(_hNotification);
-                _hNotification = IntPtr.Zero;
-            }
-            if (_hDrive != null)
-            {
-                _hDrive.Dispose();
-                _hDrive = null;
-            }
-            Log.Raw("Unlocked " + Path);
-        }
-
-        private void Lock()
-        {
-            var file = API.CreateFile(string.Format(@"\\.\{0}:", Path[0]),
-                                      FileAccess.Read,
-                                      FileShare.ReadWrite,
-                                      IntPtr.Zero,
-                                      FileMode.Open,
-                                      0,
-                                      IntPtr.Zero);
-            if (file == IntPtr.Zero || file.ToInt32() == -1)
-            {
-                return; //might be real fixed drive
-            }
-
-            _hDrive = new FileStream(new SafeFileHandle(file, true), FileAccess.Read);
-            var msg = new API.DEV_BROADCAST_HANDLE { dbch_handle = file };
-
-            _hNotification = API.RegisterDeviceNotification(_reporter, msg, API.RDNFlags.DEVICE_NOTIFY_WINDOW_HANDLE);
-            if (_hNotification == IntPtr.Zero || _hNotification.ToInt32() == -1)
-            {
-                Unlock(); //this drive appears to be non-notifiable
-            }
-            Log.Raw("Locked " + Path);
-        }
-
-        public bool ProcessDeviceNotification(IntPtr wParam, IntPtr lParam)
-        {
-            var code = (API.DeviceChangeMessages) wParam;
-
-            switch (code)
-            {
-                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVE:
-                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVEFAILED:
-                case API.DeviceChangeMessages.DBT_CUSTOMEVENT:
-                    return Process(code, lParam);
-                default:
-                    return true;
-            }
-        }
-
-        private bool Process(API.DeviceChangeMessages wParam, IntPtr lParam)
-        {
-            var o = new API.DEV_BROADCAST_HANDLE();
-            if (lParam != IntPtr.Zero) Marshal.PtrToStructure(lParam, o);
-
-            if (o.dbch_hdevnotify != _hNotification)
-            {
-                return false;
-            }
-
-            Log.Fmt("Device event {0}, custom event guid {1}", wParam, o.dbch_eventguid);
-
-            switch (wParam)
-            {
-                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVE:
-                    EnableRaisingEvents = false;
-                    break;
-                case API.DeviceChangeMessages.DBT_DEVICEQUERYREMOVEFAILED:
-                    EnableRaisingEvents = true;
-                    break;
-                case API.DeviceChangeMessages.DBT_CUSTOMEVENT:
-                    if (API.DevEvent.Queryable.Contains(o.dbch_eventguid))
-                    {
-                        EnableRaisingEvents = false;
-                    }
-                    else if (API.DevEvent.Failed.Contains(o.dbch_eventguid))
-                    {
-                        EnableRaisingEvents = true;
-                    }
-                    break;
-            }
-            return true;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Log.Raw("Dispose called");
-            try
-            {
-                Unlock();
-            }
-            finally
-            {
-                base.Dispose(disposing);
             }
         }
     }
