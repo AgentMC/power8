@@ -20,10 +20,13 @@ namespace Power8.Views
             Util.FpReset();
             InitializeComponent();
             DataContext = SettingsManager.Instance;
-            if(!Util.OsIs.EightOrMore)
+            if(!Util.OsIs.EightFamily)
                 MWBlockMetro.Visibility = Visibility.Collapsed;
             if (!Util.OsIs.SevenOrMore)
-                StgCbCtrl.IsEnabled = false;
+                StgCbCtrl.IsEnabled = false; //No Category view for CPL for XP; overrides binding.
+            //The following is needed to protect users migrating 8==>10. They won't be able to change 
+            //the setting, and in case we don't clear it - the button will be malformed.
+            if (Util.OsIs.TresholdOrMore) SettingsManager.Instance.SquareStartButton = false;
             //System-wide localization
             StgCbAdmT.Content = PowerItemTree.AdminToolsRoot.FriendlyName;
             StgCbComp.Content = PowerItemTree.MyComputerRoot.FriendlyName;
@@ -70,11 +73,11 @@ namespace Power8.Views
 
         /// <summary>
         /// Bindable propertyto disable the "Configure start button" checkbox.
-        /// It is disabled on XP or below.
+        /// It is disabled on XP or below + on W10 for now.
         /// </summary>
         public static bool NotXp
         {
-            get { return Util.OsIs.SevenOrMore; }
+            get { return Util.OsIs.SevenOrMore && !Util.OsIs.TresholdOrMore; }
         }
     }
 }
