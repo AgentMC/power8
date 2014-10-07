@@ -997,6 +997,43 @@ namespace Power8
 
         [DllImport(Lib.USER, CharSet = CharSet.Unicode, EntryPoint = "LoadIconW")]
         public static extern IntPtr LoadIcon(IntPtr hInstance, uint zeroHiWordIdLoWord);
+        
+        [Flags]
+        public enum ErrMode
+        {
+            /// <summary>Display all error dialog boxes.</summary>
+            SystemDefault=0,
+            /// <summary>
+            /// The system does not display the critical-error-handler message box. 
+            /// Instead, the system sends the error to the calling process.
+            /// Best practice is that all applications call the process-wide SetErrorMode 
+            /// function with a parameter of SEM_FAILCRITICALERRORS at startup. 
+            /// This is to prevent error mode dialogs from hanging the application.
+            /// </summary>
+            FailCriticalErrors = 1,
+            /// <summary>
+            /// The system automatically fixes memory alignment faults and makes them invisible 
+            /// to the application. It does this for the calling process and any descendant processes. 
+            /// This feature is only supported by certain processor architectures.
+            /// </summary>
+            NoAlignmentFaultExcept = 4,
+            /// <summary>The system does not display the Windows Error Reporting dialog. </summary>
+            NoGPFaultErrorBox = 2,
+            /// <summary>
+            /// The system does not display a message box when it fails to find a file. Instead, 
+            /// the error is returned to the calling process.
+            /// </summary>
+            NoOpenFileErrorBox = 0x8000
+        }
+
+        [DllImport(Lib.KERNEL)]
+        [return: MarshalAs(UnmanagedType.U4)]
+        public static extern ErrMode SetErrorMode([MarshalAs(UnmanagedType.U4)] ErrMode uMode);
+
+        [DllImport(Lib.KERNEL)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetThreadErrorMode([MarshalAs(UnmanagedType.U4)] ErrMode uMode,
+                                                     [MarshalAs(UnmanagedType.U4), Out] out ErrMode uOldMode);
 
         #endregion
 

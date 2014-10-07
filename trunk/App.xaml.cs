@@ -36,6 +36,9 @@ namespace Power8
                     Power8.Properties.NoLoc.Stg_AppShortName, MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(2); //means: OS not found
             }
+            //Global error mode setter - in 1st place to fix nasty startup error on Win10x86
+            API.SetErrorMode(API.ErrMode.FailCriticalErrors);
+            
             //Power8s in our session but with different pid
             foreach (var p in Process.GetProcessesByName("Power8")
                                      .Where(p => p.SessionId == Proc.SessionId && p.Id != Proc.Id))

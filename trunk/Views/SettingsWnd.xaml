@@ -73,7 +73,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <CheckBox x:Name="StgSquareStart" IsChecked="{Binding SquareStartButton, Mode=TwoWay}"/>
-                    <Label Grid.Column="1" Margin="4,0"> (Windows7+)</Label>
+                    <Label Grid.Column="1" Margin="4,0">(Windows7, 8.x)</Label>
                 </Grid>
                 <Grid Margin="16,0,0,8" IsEnabled="{Binding IsChecked, ElementName=StgSquareStart}">
                     <Grid.ColumnDefinitions>
