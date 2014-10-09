@@ -1,6 +1,20 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.5.4 Beta (v.1.5.4.816): 09.10.2014==
+This is again bug fixing release (around 60% of automatically reported bugs is fixed), plus couple of important things happened.
+
+  # `[new]` Windows 10 support, initial version;
+  # `[changed]` Enhanced Windows libraries parsing, should solve certain `ArgumentException`s;
+  # `[fixed]` Fixed Power8 preventing removable drives to be safe-removed. Works for all technically removable drives types. Took 2 years but finally it's done;
+  # `[fixed-GA]` Handle `COMException`s and `ManagementException`s occurring on startup of event watcher;
+  # `[fixed-GA]` Handle `COMException`s and `ManagementException`s occurring in `NetManager`;
+  # `[fixed-GA]` Handle `IOException` occurring in `DriveManager` when network drive is not available any more;
+  # `[fixed-GA]` Handle `IOException` in `ResolveLink` when the lnk file is not found;
+  # `[fixed-GA]` Fixed rare `InvalidOperationException` occurred when event on `WatchDog` arrives after the watchdog is stopped actually;
+  # `[fixed-GA]` Fixed `InvalidOperationException` in `MfuList.UpdateStartMfuSync():348`;
+  # `[fixed-GA]` Added lightweight synchronization between `SearcStartMenuSyncFast` and filesystems watchers actions. Solves rare `InvalidOperationException`.
+
 ==Version 1.5.3 Beta (v.1.5.3.796): 11.07.2014==
 ...After all the preparations the bugs destruction actually begins! According to Google Analytics, 75% to 95% of errors you may encounter is fixed in this release. Next the work will be continued on hardening the application and making it even more stable. Items marked as "`fixed-GA`" were reported automatically through Google Analytics and automated exception reporting subsystem!
 
@@ -14,7 +28,7 @@
   # `[fixed-GA]` `InvalidOperationException` occurring in `MfuList` sometimes. At least I hope it's fixed because it wasn't clear how the issue happens;
   # `[fixed-GA]` `PathTooLongException` occurring in `Power8.PowerItemTree.FileRenamed` under undetermined circumstances;
   # `[fixed-GA]` `ApplicationException` occurring in Drive Manager when a .Net `FileSystemWatcher`-incompatible drive exists in the system;
-  # `[fixed-GA]` `ArgumentException` occurring in various places under `Power8.PowerItemTree.ScanFolderSync` and related probably to drives with .Net-incompatible filesystem attached to PC. The application won't crash anymore but additional tracing is now in place to fix the root of problem as well;
+  # `[fixed-GA]` `ArgumentException` occurring in various places under `Power8.PowerItemTree.ScanFolderSync` and related probably to drives with .Net-incompatible filesystem attached to PC. The application won't crash anymore but additional tracing is now in place to fix the root of problem as well.
 
 ==Version 1.5.2 Beta^Quick-Fix^ (v.1.5.2.777): 08.07.2014==
 
