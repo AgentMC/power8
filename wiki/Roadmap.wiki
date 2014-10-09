@@ -8,7 +8,7 @@ For all other feature requests, currently not prioritized, please consult [Featu
 For already implemented features, see [Changelog] page.
 
 = _Power8 v.1.6 RTM_ =
-*estimated release date: summer 2014*
+*estimated release date: summer 2015*
   * Start button
     * Configurable text on Start button;
     * W7^Aero^: hide standard start button
