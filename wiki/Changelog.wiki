@@ -1,7 +1,7 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
-==Version 1.5.4 Beta (v.1.5.4.816): 09.10.2014==
+==Version 1.5.4 Beta (v.1.5.4.817): 09.10.2014==
 This is again bug fixing release (around 60% of automatically reported bugs is fixed), plus couple of important things happened.
 
   # `[new]` Windows 10 support, initial version;
