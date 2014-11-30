@@ -87,7 +87,14 @@ namespace Power8
             var std = Power8.Properties.Settings.Default;
             if (!std.FirstRunDone)
             {
-                std.Upgrade();
+                try
+                {
+                    std.Upgrade();
+                }
+                catch (Exception ex)
+                {
+                    Log.Raw("Unable to upgrade settings: " + ex);
+                }
                 std.Save();//FirstRunDone is updated later in Main Window code
                 Analytics.PostEvent(Analytics.Category.Deploy, std.FirstRunDone ? "Update" : "Fresh", null, 1);
             }
