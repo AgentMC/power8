@@ -191,7 +191,7 @@ namespace Power8
                           {
                               try
                               {
-	                              //React on new processes creation
+                                  //React on new processes creation
                                   _watchDog =
                                       new ManagementEventWatcher(
                                           "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
@@ -838,22 +838,25 @@ namespace Power8
                     for (uint i = 0; i < list.GetCount(); i++)
                     {
                         object item;
-                        try //we don't know what is inside - so let's use exceptions from IDispatch
+                        try
                         {
-                            item = list.GetAt(i, ref riidShellItem);
-                        }
-                        catch (InvalidCastException)
-                        {
-                            try
+                            try //we don't know what is inside - so let's use exceptions from IDispatch
                             {
-                                item = list.GetAt(i, ref riidShellLink);
+                                item = list.GetAt(i, ref riidShellItem);
                             }
                             catch (InvalidCastException)
                             {
-                                item = null;
+                                try
+                                {
+                                    item = list.GetAt(i, ref riidShellLink);
+                                }
+                                catch (InvalidCastException)
+                                {
+                                    item = null;
+                                }
                             }
                         }
-                        catch (COMException) //happened for one user...
+                        catch (COMException) //happened for some users...
                         {
                             item = null;
                         }
