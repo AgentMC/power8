@@ -52,7 +52,7 @@ namespace Power8
         private static readonly List<String> UserList = new List<string>();         //The Custom MFU list 
         private static readonly string[] MsFilter;                                  //M$'s filer of file names that shan't be watched
 
-        private static ManagementEventWatcher _watchDog;                             //Notifies when a process is created in system
+        private static ManagementEventWatcher _watchDog;                            //Notifies when a process is created in system
 
         //Files with data
         private static readonly string DataBaseRoot = Util.GetSettingsIndependentDbRoot();
@@ -128,12 +128,12 @@ namespace Power8
                                                     DateTimeStyles.None, out lastLaunch))
                             continue;
                         P8JlImpl.Add(new MfuElement
-                                            {
-                                                Arg = ls[0].Replace('/', '\\'),
-                                                Cmd = ls[1],
-                                                LaunchCount = launchCount,
-                                                LastLaunchTimeStamp = lastLaunch
-                                            });
+                        {
+                            Arg = ls[0].Replace('/', '\\'),
+                            Cmd = ls[1],
+                            LaunchCount = launchCount,
+                            LastLaunchTimeStamp = lastLaunch
+                        });
                     }
                 }
             }
@@ -188,27 +188,26 @@ namespace Power8
 
             //Create COM object on main thread to prevent unexpected problems with stopping
             Util.Post(() =>
-                          {
-                              try
-                              {
-                                  //React on new processes creation
-                                  _watchDog =
-                                      new ManagementEventWatcher(
-                                          "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
-                                  _watchDog.EventArrived += WatchDogOnEventArrived;
-                                  _watchDog.Start();
-                              }
-                              catch (COMException ex)
-                              {
-                                  Log.Raw(ex.Message); //Well... too bad. If so, just will ignore all events.
-                                  _watchDog = null;
-                              }
-                              catch (ManagementException ex)
-                              {
-                                  Log.Raw(ex.Message); 
-                                  _watchDog = null;
-                              }
-                          });
+            {
+                var failHandler = new Action<Exception>(e =>
+                {
+                    Log.Raw("Can't create watch dog: " + e.Message);
+                    _watchDog = null;
+                });
+                try
+                {
+                    //React on new processes creation
+                    _watchDog =
+                        new ManagementEventWatcher(
+                            "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
+                    _watchDog.EventArrived += WatchDogOnEventArrived;
+                    _watchDog.Start();
+                }
+                //Well... too bad. If so, just will ignore all events in case we can't create watcher.
+                catch (COMException ex) { failHandler(ex); }
+                catch (ManagementException ex) { failHandler(ex); }
+                catch (UnauthorizedAccessException ex) { failHandler(ex); }
+            });
 
         }
         
