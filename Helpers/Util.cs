@@ -1121,7 +1121,7 @@ namespace Power8
                 if (File.Exists(command))
                     return new Tuple<string, string>(command, string.Empty);
 
-                if (command[1] == ' ')//web search?
+                if (command.Length > 1 && command[1] == ' ')//web search?
                 {
                     var prefix = SettingsManager.Instance.WebSearchProviders.FirstOrDefault(sp => sp.Key == command[0]);
                     if (prefix != null) //the given key was present in dictionary
