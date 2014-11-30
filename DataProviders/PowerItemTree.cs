@@ -415,6 +415,7 @@ namespace Power8
         //Handles event when a file is renamed under any of drives watched
         private static void FileRenamed(object sender, RenamedEventArgs e)
         {
+            string deletedPath, deletedName, createdPath, createdName;
             try
             {
                 if (string.IsNullOrEmpty(e.Name)
@@ -426,18 +427,17 @@ namespace Power8
                             e.Name, e.FullPath, e.OldName, e.OldFullPath);
                     return; //Sometimes this happens
                 }
-                FileChanged(sender,
-                            new FileSystemEventArgs(
-                                WatcherChangeTypes.Deleted,
-                                e.OldFullPath.TrimEnd(e.OldName.ToCharArray()),
-                                e.OldName));
-                FileChanged(sender,
-                            new FileSystemEventArgs(
-                                WatcherChangeTypes.Created,
-                                e.FullPath.TrimEnd(e.Name.ToCharArray()),
-                                e.Name));
+                deletedPath = Path.GetDirectoryName(e.OldFullPath);
+                deletedName = Path.GetFileName(e.OldFullPath);
+                createdName = Path.GetFileName(e.FullPath);
+                createdPath = Path.GetDirectoryName(e.FullPath);
+                if(deletedPath == null || deletedName == null || createdPath == null || createdName == null)
+                    return;
             }
-            catch (PathTooLongException){Log.Raw("PathTooLongException!");}
+            catch (PathTooLongException) { Log.Raw("PathTooLongException!"); return; }
+            catch (ArgumentException) { Log.Raw("ArgumentException!"); return; }
+            FileChanged(sender, new FileSystemEventArgs(WatcherChangeTypes.Deleted, deletedPath, deletedName));
+            FileChanged(sender, new FileSystemEventArgs(WatcherChangeTypes.Created, createdPath, createdName));
         }
 
         //Handles event when a file is created, deleted or changed in any other way under any of drives watched
