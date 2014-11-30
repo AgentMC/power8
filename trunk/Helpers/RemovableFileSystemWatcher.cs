@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
 
 namespace Power8.Helpers
 {
@@ -41,8 +40,7 @@ namespace Power8.Helpers
             }
         }
 
-        private IntPtr _hNotification = IntPtr.Zero;
-        private FileStream _hDrive;
+        private IntPtr _hNotification = IntPtr.Zero, _hDrive = IntPtr.Zero;
 
         private void Unlock()
         {
@@ -51,10 +49,10 @@ namespace Power8.Helpers
                 API.UnregisterDeviceNotification(_hNotification);
                 _hNotification = IntPtr.Zero;
             }
-            if (_hDrive != null)
+            if (_hDrive != IntPtr.Zero)
             {
-                _hDrive.Dispose();
-                _hDrive = null;
+                API.CloseHandle(_hDrive);
+                _hDrive = IntPtr.Zero;
             }
             Log.Raw("Unlocked " + Path);
         }
@@ -74,10 +72,11 @@ namespace Power8.Helpers
                 return; //might be real fixed drive
             }
 
-            _hDrive = new FileStream(new SafeFileHandle(file, true), FileAccess.Read);
-            var msg = new API.DEV_BROADCAST_HANDLE { dbch_handle = file };
+            _hDrive = file;
 
+            var msg = new API.DEV_BROADCAST_HANDLE { dbch_handle = file };
             _hNotification = API.RegisterDeviceNotification(_reporter, msg, API.RDNFlags.DEVICE_NOTIFY_WINDOW_HANDLE);
+            
             if (_hNotification == IntPtr.Zero || _hNotification.ToInt32() == -1)
             {
                 Log.Raw("Cannot lock " + Path);
