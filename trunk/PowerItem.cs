@@ -189,7 +189,17 @@ namespace Power8
                 }
                 else
                 { //we can provide at least temporary text
-                    var path = IsLink || IsLibrary ? Path.GetFileNameWithoutExtension(Argument) : Path.GetFileName(Argument);
+                    string path;
+                    try
+                    {
+                        path = (IsLink || IsLibrary)
+                            ? Path.GetFileNameWithoutExtension(Argument)
+                            : Path.GetFileName(Argument);
+                    }
+                    catch (ArgumentException)
+                    {
+                        path = null;
+                    }
                     if (string.IsNullOrEmpty(path)) //and if this fails...
                     {
                         if ((Argument.Length > 1 && Argument[Argument.Length - 1] == ':')
