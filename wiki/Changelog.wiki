@@ -1,6 +1,20 @@
 #summary History of Power8 development/changelog.
 #labels Featured
 
+==Version 1.5.5 Beta (v.1.5.5.838): 01.12.2014==
+...continue fixing (around 76% of automatically reported crashes is fixed).
+
+  # `[changed]` Removed duplicated using in `NetManager`;
+  # `[changed]` Corrected internal file rename handling a bit; 
+  # `[fixed-GA]` Fixed argument exception occurring when `FileStream` is trying to wrap around non-overlapped drive handle;
+  # `[fixed-GA]` Catch `ComException` in `MfuList.GetJumpList()` better;
+  # `[fixed-GA]` Probably fixed `InvalidOperationException` "This visual is not connected to presentation source";
+  # `[fixed-GA]` Fixing `IndexOutOfRangeException` in `CommandToFilenameAndArgs()`;
+  # `[fixed-GA]` Catching exceptions (`ArgumentNullException`) when upgrading previous settings;
+  # `[fixed-GA]` Handling `ArgumentException` in `FriendlyName` getter;
+  # `[fixed-GA]` Catch `UnauthorizedAccessException` as one more reason to not to be able to create a process watchdog;
+  # `[fixed-GA]` Fixed `ArgumentException` in processing of file rename operation.
+
 ==Version 1.5.4 Beta (v.1.5.4.817): 09.10.2014==
 This is again bug fixing release (around 60% of automatically reported bugs is fixed), plus couple of important things happened.
 
