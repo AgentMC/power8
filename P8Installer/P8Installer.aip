@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="8.2" version="11.4.1" Modules="simple" RootPath="." Language="en" Id="{138AB2B1-F2FB-4756-B782-8253EA7FBBE5}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="8.2" version="11.6.3" Modules="simple" RootPath="." Language="en" Id="{138AB2B1-F2FB-4756-B782-8253EA7FBBE5}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiValidationComponent">
     <ROW Table="File" Column="Sequence" MinValue="1" MaxValue="2147483647" Description="Sequence with respect to the media images; order must track cabinet order." Options="0" ColumnType="3" ColumnIndex="7" ColumnSize="4" MsiKey="File#Sequence"/>
     <ROW Table="Media" Column="LastSequence" MinValue="0" MaxValue="2147483647" Description="File sequence number for the last file for this media." Options="0" ColumnType="3" ColumnIndex="1" ColumnSize="4" MsiKey="Media#LastSequence"/>
@@ -19,10 +19,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="Manufacturer" Value="Power8 team" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{00E59736-3052-4A42-8AF0-AC8D8BE9D335} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{FC3E2A5E-AAC7-4471-8C64-46F9ECFF28C3} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Power8" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="1.5.4.817" Type="32"/>
+    <ROW Property="ProductVersion" Value="1.5.5.838" Type="32"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{7962d988-6f9a-4949-bf14-3444d80b29e5}"/>

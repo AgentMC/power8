@@ -14,7 +14,7 @@
     <AssemblyName>P8Installer</AssemblyName>
     <Name>P8Installer</Name>
     <RootNamespace>P8Installer</RootNamespace>
-    <AiComPath>C:\Program Files (x86)\Caphyon\Advanced Installer 11.4.1\bin\x86\AdvancedInstaller.com</AiComPath>
+    <AiComPath>C:\Program Files (x86)\Caphyon\Advanced Installer 11.6.3\bin\x86\AdvancedInstaller.com</AiComPath>
     <AdvinstCmdLine>-buildslist DefaultBuild</AdvinstCmdLine>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'All' ">
@@ -33,7 +33,7 @@
       <Name>Power8</Name>
       <Project>{010d2da1-c477-4cfe-8171-eee326e29fa0}</Project>
       <Private>True</Private>
-      <OutputsToImport>PrimaryOutput</OutputsToImport>
+      <OutputsToImport>PrimaryOutput;Built</OutputsToImport>
     </ProjectReference>
   </ItemGroup>
   <Target Name="Build">
