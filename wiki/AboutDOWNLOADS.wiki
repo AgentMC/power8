@@ -54,3 +54,13 @@ This is safe because:
 Starting from 1.5.0 we also send all exceptions to Google Analytics which should help us to identify and fix problems. For example, release 1.5.1 already contains couple of fixes for most "popular" errors. 1.5.3 introduced the 75+% bugs demolition and new auto-tracing technology for complicated cases. Overall, you should experience much LESS crashes starting from 1.5.3.
 
 For errors detected by Power8, we send only it type for statistics. For _unhandled_ exceptions we also send the error message and the stack trace. An unhandled exception is the error which Power8 is not expecting, so after it occurs, Power8 will crash. Right before such crashes we send data to Google Analytics. The data usually includes no user-specific information and contains barely the description of what happened, where in the program it happened and why it happened. However in the next releases we plan to provide the checkbox to disable this extended information reporting. 
+
+As for now, below you can find the chart on how this helped to improve the Power8 stability during last several months.
+
+https://power8.googlecode.com/svn/wiki/P8Stable.png
+
+Here you can find 2 rows:
+  * <font color="#5B9BD5">*Deployment stability*</font> is calculated as (total number of launches-total number of crashes)/(total number of launches) during 3 days. It demonstrates whether the release has critical bugs, and if not - how many percent of Power8 starts were finished successfully. 3 days are there because according to statistics this is the term where most of active users (30% of all users) are updated. After 3 days there are more updates of course, but the number per day drops significantly and so stops being representative.
+  * <font color="#ED7D31">*Runtime stability*</font> is little bit different. It is calculated as (total number of users-users that met crash)/(total number of users) during 30 days. Power8 is a complicated application and interacts with the operating system on different levels and by different means. And while the deployment stability above mostly shows Power8 stability itself, this row shows the "real life" behavior where there are more than just the application itself. Also 30 days gives us 10 times more probability to get rare errors. That's why it has lower stability factor. 
+
+You may notice that there's no 1.5.1 version shown. This is so because it contained critical reporting bug and was active for about 24 hours. Also, you can see a stability drop in 1.5.4. This is caused by a nasty bug introduced in this version which affected some amount of users having specific removable drives attached. 
