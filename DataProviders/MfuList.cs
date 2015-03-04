@@ -816,7 +816,15 @@ namespace Power8
 
                 //Getting the required list
                 var ret = new Collection<string>();
-                var listProvider = (API.IApplicationDocumentLists)new API.ApplicationDocumentLists();
+                API.IApplicationDocumentLists listProvider;
+                try
+                {
+                    listProvider = (API.IApplicationDocumentLists) new API.ApplicationDocumentLists();
+                }
+                catch (InvalidCastException)
+                {
+                    return null;
+                }
                 listProvider.SetAppID(pv2.GetValue());
                 var riidObjectArray = new Guid(API.Sys.IdIObjectArray);
                 API.IObjectArray list;
