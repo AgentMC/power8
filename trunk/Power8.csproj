@@ -104,6 +104,7 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BitmapSource2VisibilityConverter.cs" />
     <Compile Include="Converters\BoolToGridRowConverter.cs" />
+    <Compile Include="Converters\Stretch2BoolConverter.cs" />
     <Compile Include="Converters\TextToBoolConverter.cs" />
     <Compile Include="DataProviders\AppxUserModelIdProvider.cs" />
     <Compile Include="DataProviders\MfuList.cs" />
