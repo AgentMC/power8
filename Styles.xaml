@@ -14,6 +14,7 @@
     <Converters:BoolToGridRowConverter x:Key="uiSwitcher"/>
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     <Converters:TextToBoolConverter x:Key="TextToBoolConverter"/>
+    <Converters:Stretch2BoolConverter x:Key="Stretch2BoolConverter"/>
     
     <!-- Stuff -->
     
