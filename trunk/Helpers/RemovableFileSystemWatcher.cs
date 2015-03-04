@@ -41,6 +41,7 @@ namespace Power8.Helpers
         }
 
         private IntPtr _hNotification = IntPtr.Zero, _hDrive = IntPtr.Zero;
+        private static readonly IntPtr InvalidHandle = new IntPtr(-1);
 
         private void Unlock()
         {
@@ -66,7 +67,7 @@ namespace Power8.Helpers
                                       FileMode.Open,
                                       0,
                                       IntPtr.Zero);
-            if (file == IntPtr.Zero || file.ToInt32() == -1)
+            if (file == IntPtr.Zero || file == InvalidHandle)
             {
                 Log.Raw("Cannot CreateFile " + Path);
                 return; //might be real fixed drive
@@ -77,7 +78,7 @@ namespace Power8.Helpers
             var msg = new API.DEV_BROADCAST_HANDLE { dbch_handle = file };
             _hNotification = API.RegisterDeviceNotification(_reporter, msg, API.RDNFlags.DEVICE_NOTIFY_WINDOW_HANDLE);
             
-            if (_hNotification == IntPtr.Zero || _hNotification.ToInt32() == -1)
+            if (_hNotification == IntPtr.Zero || _hNotification == InvalidHandle)
             {
                 Log.Raw("Cannot lock " + Path);
                 Unlock(); //this drive appears to be non-notifiable
