@@ -1812,10 +1812,107 @@ namespace Power8
         public static extern IntPtr RegisterDeviceNotification(IntPtr recipient, DEV_BROADCAST_HANDLE lpDevBroadcastHdr, RDNFlags flags);
         [DllImport(Lib.USER, SetLastError = true)]
         public static extern IntPtr UnregisterDeviceNotification(IntPtr hNotification);
+
+
+
+        [Flags]
+        public enum FileAccessRights : uint
+        {
+            /// <summary>	For a directory, the right to create a file in the directory.	</summary>
+            FILE_ADD_FILE = 2,
+
+            /// <summary>	For a directory, the right to create a subdirectory.	</summary>
+            FILE_ADD_SUBDIRECTORY = 4,
+
+            /// <summary>	All possible access rights for a file.	</summary>
+            FILE_ALL_ACCESS = 511,
+
+            /// <summary>	For a file object, the right to append data to the file. (For local files, write operations will not overwrite existing data if this flag is specified without FILE_WRITE_DATA.) For a directory object, the right to create a subdirectory (FILE_ADD_SUBDIRECTORY).	</summary>
+            FILE_APPEND_DATA = 4,
+
+            /// <summary>	For a named pipe, the right to create a pipe.	</summary>
+            FILE_CREATE_PIPE_INSTANCE = 4,
+
+            /// <summary>	For a directory, the right to delete a directory and all the files it contains, including read-only files.	</summary>
+            FILE_DELETE_CHILD = 64,
+
+            /// <summary>	For a native code file, the right to execute the file. This access right given to scripts may cause the script to be executable, depending on the script interpreter.	</summary>
+            FILE_EXECUTE = 32,
+
+            /// <summary>	For a directory, the right to list the contents of the directory.	</summary>
+            FILE_LIST_DIRECTORY = 1,
+
+            /// <summary>	The right to read file attributes.	</summary>
+            FILE_READ_ATTRIBUTES = 128,
+
+            /// <summary>	For a file object, the right to read the corresponding file data. For a directory object, the right to read the corresponding directory data.	</summary>
+            FILE_READ_DATA = 1,
+
+            /// <summary>	The right to read extended file attributes.	</summary>
+            FILE_READ_EA = 8,
+
+            /// <summary>	For a directory, the right to traverse the directory. By default, users are assigned the BYPASS_TRAVERSE_CHECKING privilege, which ignores the FILE_TRAVERSE access right. See the remarks in File Security and Access Rights for more information.	</summary>
+            FILE_TRAVERSE = 32,
+
+            /// <summary>	The right to write file attributes.	</summary>
+            FILE_WRITE_ATTRIBUTES = 256,
+
+            /// <summary>	For a file object, the right to write data to the file. For a directory object, the right to create a file in the directory (FILE_ADD_FILE).	</summary>
+            FILE_WRITE_DATA = 2,
+
+            /// <summary>	The right to write extended file attributes.	</summary>
+            FILE_WRITE_EA = 16,
+
+
+            /// <summary>	The right to delete the object.	</summary>
+            DELETE = 0x00010000,
+
+            /// <summary>	The right to read the information in the object's security descriptor, not including the information in the system access control list (SACL).	</summary>
+            READ_CONTROL = 0x00020000,
+
+            /// <summary>	The right to modify the discretionary access control list (DACL) in the object's security descriptor.	</summary>
+            WRITE_DAC = 0x00040000,
+
+            /// <summary>	The right to change the owner in the object's security descriptor.	</summary>
+            WRITE_OWNER = 0x00080000,
+
+            /// <summary>	The right to use the object for synchronization. This enables a thread to wait until the object is in the signaled state. Some object types do not support this access right.	</summary>
+            SYNCHRONIZE = 0x00100000,
+
+
+            /// <summary>	Combines DELETE, READ_CONTROL, WRITE_DAC, WRITE_OWNER, and SYNCHRONIZE access.	</summary>
+            STANDARD_RIGHTS_ALL = 0x001F0000,
+
+            /// <summary>	Currently defined to equal READ_CONTROL.	</summary>
+            STANDARD_RIGHTS_EXECUTE = READ_CONTROL,
+
+            /// <summary>	Currently defined to equal READ_CONTROL.	</summary>
+            STANDARD_RIGHTS_READ = READ_CONTROL,
+
+            /// <summary>	Combines DELETE, READ_CONTROL, WRITE_DAC, and WRITE_OWNER access.	</summary>
+            STANDARD_RIGHTS_REQUIRED = 0x000F0000,
+
+            /// <summary>	Currently defined to equal READ_CONTROL.	</summary>
+            STANDARD_RIGHTS_WRITE = READ_CONTROL,
+
+
+            /// <summary>	All possible access rights	</summary>
+            GENERIC_ALL = 0x10000000,
+
+            /// <summary>	Execute access	</summary>
+            GENERIC_EXECUTE = 0x20000000,
+
+            /// <summary>	Read access	</summary>
+            GENERIC_READ = 0x40000000,
+
+            /// <summary>	Write access	</summary>
+            GENERIC_WRITE = 0x80000000
+        }
+
         [DllImport(Lib.KERNEL, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern IntPtr CreateFile(
              [MarshalAs(UnmanagedType.LPTStr)] string filename,
-             [MarshalAs(UnmanagedType.U4)] FileAccess access,
+             [MarshalAs(UnmanagedType.U4)] FileAccessRights access,
              [MarshalAs(UnmanagedType.U4)] FileShare share,
              IntPtr securityAttributes, // optional SECURITY_ATTRIBUTES struct or IntPtr.Zero
              [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition,
