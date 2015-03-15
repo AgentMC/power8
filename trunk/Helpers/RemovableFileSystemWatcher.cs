@@ -61,7 +61,7 @@ namespace Power8.Helpers
         private void Lock()
         {
             var file = API.CreateFile(string.Format(@"\\.\{0}:", Path[0]),
-                                      FileAccess.Read,
+                                      API.FileAccessRights.GENERIC_READ,
                                       FileShare.ReadWrite,
                                       IntPtr.Zero,
                                       FileMode.Open,
