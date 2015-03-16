@@ -65,7 +65,7 @@ namespace Power8.Helpers
                                       FileShare.ReadWrite,
                                       IntPtr.Zero,
                                       FileMode.Open,
-                                      0,
+                                      API.CreateFileOptions.FILE_OPTIONS_NOT_SET, 
                                       IntPtr.Zero);
             if (file == IntPtr.Zero || file == InvalidHandle)
             {
