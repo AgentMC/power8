@@ -10,7 +10,7 @@ This page is how to get *latest* version of Power8.
 
 = Details =
 
-==The latest version available is 1.5.4. See links below.==
+==The latest version available is 1.5.5. See links below.==
 
 The [https://code.google.com/p/power8/downloads/list Downloads] page won't contain all latest releases now. Last one available _there_ is 1.4.4. Instead, *you should use links from within this page*, which will always point to latest build, and a previous one.
 
