@@ -37,6 +37,7 @@ namespace Power8.Views
         private PlacementMode _placement = PlacementMode.MousePoint; //used for context menu
         private BitmapSource _bitmap; //picture on the Main Button
         private string _lastSource;   //file path of _bitmap
+        private bool _setParent;
 
         #region Window (de)init 
 
@@ -151,7 +152,7 @@ namespace Power8.Views
 
             Left = 0;
             Top = 0;
-            API.SetParent(this.MakeGlassWpfWindow(), _taskBar);
+            SetParent(this.MakeGlassWpfWindow());
             Util.ForkStart(WatchDesktopBtn, "ShowDesktop button watcher");
 
             //Register as a HWND that will be used as device notification processor proxy by DriveManager
@@ -448,7 +449,9 @@ namespace Power8.Views
                 if (Util.OsIs.EightFamily || (SettingsManager.Instance.SquareStartButton && Util.OsIs.SevenOrMore))
                     MoveReBar(taskBarVertical, (int) (curHeight*SystemScale), (int) (curWidth*SystemScale));
 
-                Thread.Sleep(100);
+                Thread.Sleep(100*(_setParent ? 1 : 2));
+                if (!_setParent)
+                    Util.Send(() => SetParent(this.GetHandle()));
             }
             //restoring taskbar on exit
             if (Util.OsIs.EightFamily && API.GetWindowRect(_showDesktopBtn, out r))
@@ -661,6 +664,15 @@ namespace Power8.Views
                 int delta = (curWidth - 4) - r.Left;
                 API.MoveWindow(_midPanel, r.Left + delta, r.Top, r.Right - r.Left - delta, r.Bottom - r.Top, true);
             }
+        }
+
+        /// <summary>
+        /// Sets the TaskBar as Parent for handle passed.
+        /// </summary>
+        /// <param name="handle">HWND of a window.</param>
+        private void SetParent(IntPtr handle)
+        {
+            _setParent = API.SetParent(handle, _taskBar) != IntPtr.Zero;
         }
 
         #endregion
