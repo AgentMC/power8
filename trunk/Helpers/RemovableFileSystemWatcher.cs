@@ -99,7 +99,7 @@ namespace Power8.Helpers
         /// <returns>Logical value, indicating whether this instance should be the last one
         /// that processes the message. True may be returned because the message itself doesn't  
         /// satisfy the requirements of a class, or because this instance is identified itself  
-        /// against the message and performed targeted processing. False means that themessage  
+        /// against the message and performed targeted processing. False means that the message  
         /// should be also passed for processing to some other instance of this class within the 
         /// application.</returns>
         public bool ProcessDeviceNotification(IntPtr wParam, IntPtr lParam)

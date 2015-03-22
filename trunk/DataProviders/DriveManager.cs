@@ -275,12 +275,32 @@ begin:
         }
 
         /// <summary>
-        /// Thread-safely returns drive label for drive name
+        /// Thread-safely returns drive label for drive name. It tries to use shell API to retrieve UI label of
+        /// drive because this is the only [proper] option for network mapped drives. Upon fail returns the 
+        /// drive volume label. This works for local labels, but will apparently show mess for network mappings.
         /// </summary>
         /// <param name="driveName">Drive name in format "C:\"</param>
-        /// <returns>Drive label if any, empty string otherwise. This doesn't return OS-set descriptions like "system", "pagefile", etc.</returns>
+        /// <returns>Drive label if any, empty string otherwise. This doesn't return OS-set descriptions like 
+        /// "system", "pagefile", etc.</returns>
         public static string GetDriveLabel(string driveName)
         {
+            IntPtr pidl;
+            API.SFGAO dummy;
+            string name;
+            if (API.SHParseDisplayName(driveName, IntPtr.Zero, out pidl, API.SFGAO.NULL, out dummy) == 0
+                && API.SHGetNameFromIDList(pidl, API.SIGDN.PARENTRELATIVEEDITING, out name) == 0
+                && name != null)
+            {
+                return name;
+            }
+
+            /*var info = new API.ShfileinfoW();
+            var zeroFails = API.SHGetFileInfo(driveName, 0, ref info, (uint) Marshal.SizeOf(info), API.Shgfi.DISPLAYNAME);
+            if (zeroFails != IntPtr.Zero)
+            {
+                return info.szDisplayName;
+            }*/
+
             DriveInfo drv;
             lock (DriveNames)
             {
@@ -303,10 +323,11 @@ begin:
         }
 
         /// <summary>
-        /// Thread-safely returns formatted label for drive PowerItem
+        /// Thread-safely returns formatted label for drive PowerItem.
         /// </summary>
         /// <param name="driveName">Drive name in format "C:\"</param>
-        /// <returns>Drive label if any, empty string otherwise. This doesn't return OS-set descriptions like "system", "pagefile", etc.</returns>
+        /// <returns>Pair of "driveName - driveLabel" to be displayed on UI. This does NOT comply with 
+        /// Explorer settings such as "Show full path" and "Hide drive name".</returns>
         public static string GetFormattedDriveLabel(string driveName)
         {
             return String.Format("{0} - {1}", driveName, GetDriveLabel(driveName));

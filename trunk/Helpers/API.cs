@@ -1143,8 +1143,25 @@ namespace Power8
             PARENTRELATIVE = 0x80080001
         }
 
+        /// <summary>
+        /// Use this overload to get <B>temporary</B> information. Always call 
+        /// <code>Marshal.FreeCoTaskMem()</code> passing ppszName after you finished
+        /// working with this temporary information. See MSDN for details on function.
+        /// </summary>
+        /// <returns>HRESULT (0 is OK) specifying result of operation.</returns>
         [DllImport(Lib.SHELL, CharSet = CharSet.Unicode)]
         public static extern uint SHGetNameFromIDList(IntPtr pidl, SIGDN sigdnName, ref IntPtr ppszName);
+        
+        /// <summary>
+        /// Use this overload to get <B>app lifetime valid</B> information. The memory allocated by COM
+        /// during this call will be automatically released upon application shutdown. There's 
+        /// no guarantee that Garbage collector will be able to clean up the string returned by out 
+        /// parameter. See MSDN for details on function.
+        /// </summary>
+        /// <returns>HRESULT (0 is OK) specifying result of operation.</returns>
+
+        [DllImport(Lib.SHELL, CharSet = CharSet.Unicode)]
+        public static extern uint SHGetNameFromIDList(IntPtr pidl, SIGDN sigdnName, out String ppszName);
 
         [DllImport(Lib.SHELL, CharSet = CharSet.Unicode,
         EntryPoint = "SHGetPathFromIDListW", PreserveSig = true)]
