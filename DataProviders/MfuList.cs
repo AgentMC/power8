@@ -875,8 +875,8 @@ namespace Power8
                             IntPtr ppIdl;
                             API.SHGetIDListFromObject(item, out ppIdl);
                             if (ppIdl != IntPtr.Zero)
-                            {
-                                var pwstr = IntPtr.Zero;
+                            {//Garbage collector must be able to clean the string after next refresh of
+                                var pwstr = IntPtr.Zero; //MfuList - so using the overload for temp allocations
                                 API.SHGetNameFromIDList(ppIdl, API.SIGDN.FILESYSPATH, ref pwstr);
                                 if (pwstr != IntPtr.Zero)
                                 {
