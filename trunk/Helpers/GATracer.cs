@@ -50,9 +50,16 @@ namespace Power8.Helpers
             return b.ToString();
         }
 
-        public static void PostTraceData(int id, Exception original, Dictionary<string, string> traceData)
+        public static void PostTraceData(Trace id, Exception original, Dictionary<string, string> traceData)
         {
-            Analytics.PostException(new GATracer(id, original, traceData), true);
+            Analytics.PostException(new GATracer((int)id, original, traceData), true);
+        }
+
+        public enum Trace
+        {
+            ArgumentExceptionInScanFolderSync,
+            Win32ExceptionInRestart,
+            Next
         }
     }
 }

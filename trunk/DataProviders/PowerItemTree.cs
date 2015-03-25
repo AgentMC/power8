@@ -636,20 +636,8 @@ namespace Power8
             {Log.Raw("UnauthorizedAccessException");} //Don't care if user is not allowed to access fileor directory or it's contents
             catch (IOException)
             {Log.Raw("IOException");} //Don't care as well if file was deleted on-the-fly, watcher will notify list
-            catch (ArgumentException e)
-            {
-#warning GA Tracer used!
-                GATracer.PostTraceData(0, e, new Dictionary<string, string>
-                                             {
-                                                 {"curdir", curDir},
-                                                 {
-                                                     "wrong", Path.GetInvalidPathChars()
-                                                                  .Union(Path.GetInvalidFileNameChars())
-                                                                  .Any(curDir.Contains)
-                                                                  .ToString()
-                                                 }
-                                             });
-            }
+            catch (ArgumentException)
+            {Log.Raw("ArgumentException");} //This usually happens to removable drives
             finally
             {  //Explicitly set marker showing that enumeration operations may occur on Items from this moment
                 item.AutoExpandIsPending = false;
