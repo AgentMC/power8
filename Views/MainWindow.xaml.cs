@@ -269,7 +269,7 @@ namespace Power8.Views
         /// </summary>
         private void MainBtnLayoutUpdated(object sender, EventArgs e)
         {
-            if (!IsLoaded || !b1.IsLoaded || Util.OsIs.XPOrLess)
+            if (!IsLoaded || !b1.IsLoaded || Util.OsIs.XPOrLess || PresentationSource.FromVisual(b1) == null)
                 return;
             var p = b1.PointToScreen(PlacementPoint);
             if (Util.OsIs.SevenOrBelow && !API.DwmIsCompositionEnabled())
