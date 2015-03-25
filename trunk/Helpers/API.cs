@@ -963,6 +963,13 @@ namespace Power8
         public static extern uint SHGetIDListFromObject([MarshalAs(UnmanagedType.IUnknown)] object iUnknown,
                                                         out IntPtr ppidl);
 
+        [DllImport(Lib.SHELL, PreserveSig = false)]
+        //[return: MarshalAs(UnmanagedType.IUnknown)]
+        public static extern IShellItem SHCreateShellItem(IntPtr idListParent,
+                                                          IShellFolder parentFolder,
+                                                          IntPtr idListItem);
+
+
         #endregion
 
         #region Loading native resources

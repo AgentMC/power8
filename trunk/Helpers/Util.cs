@@ -1416,6 +1416,7 @@ namespace Power8
             static readonly Version Ver = Environment.OSVersion.Version; //it won't change
             //I guess nothing to document here
             public static bool XPOrLess { get { return Ver.Major < 6; } }
+            public static bool XPSp123OrSrv03 { get { return Ver.Major == 5 && Ver.Minor > 0 && (Ver.Minor > 1 || Ver.Revision > 0); } }
             public static bool VistaExact { get { return Ver.Major == 6 && Ver.Minor == 0; } }
             public static bool SevenOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 1); } }
             public static bool SevenOrBelow { get { return Ver.Major < 6 || (Ver.Major == 6 && Ver.Minor <= 1); } }
