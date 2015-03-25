@@ -1383,12 +1383,7 @@ namespace Power8
             }
             catch (Win32Exception e)
             {
-#warning GA Tracer used!!!
-                GATracer.PostTraceData(1, e, new Dictionary<string, string>
-                                             {
-                                                 {"ep", Application.ExecutablePath},
-                                                 {"isIn", File.Exists(Application.ExecutablePath).ToString()}
-                                             });
+                DispatchCaughtException(e);
             }
             Die(reason);
         }

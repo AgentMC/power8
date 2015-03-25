@@ -56,7 +56,7 @@ namespace Power8.Views
         {
             var ofd = new System.Windows.Forms.OpenFileDialog
                           {
-                              Filter = Properties.Resources.Str_PicDialogFilter + @"|*.png;*.gif;*.jpe*;*.tif*",
+                              Filter = Properties.Resources.Str_PicDialogFilter + @"|*.png;*.gif;*.jpg;*.jpe*;*.tif*",
                               Title = Properties.NoLoc.Stg_AppShortName + Properties.Resources.Str_PicDialogDescription
                           };
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
