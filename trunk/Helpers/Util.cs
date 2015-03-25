@@ -460,6 +460,45 @@ namespace Power8
             return path;
         }
 
+        /// <summary>
+        /// Gets Display Name for shell object identified by parsable filesystem path.
+        /// </summary>
+        /// <param name="realPath">The physical path of object identifying  drive (C:\),
+        /// folder (C:\folder\) of a file (C:\folder\file.ext)</param>
+        /// <returns>The disply name of object within Windows Shell. This function does not respect
+        /// the Explorer settings, such as "Hide drive letters" and similar ones.</returns>
+        public static string ResolveDisplayName(string realPath)
+        {
+            IntPtr pidl;
+            API.SFGAO dummy;
+            if (API.SHParseDisplayName(realPath, IntPtr.Zero, out pidl, API.SFGAO.NULL, out dummy) == 0)
+            {
+                if (OsIs.SevenOrMore)
+                {
+                    string name;
+                    if (API.SHGetNameFromIDList(pidl, API.SIGDN.PARENTRELATIVEEDITING, out name) == 0
+                        && name != null)
+                    {
+                        return name;
+                    }
+                }
+                else if (OsIs.XPSp123OrSrv03)
+                {
+                    var item = API.SHCreateShellItem(IntPtr.Zero, null, pidl);
+                    if (item != null)
+                    {
+                        var name = item.GetDisplayName(API.SIGDN.PARENTRELATIVEEDITING);
+                        if (name != null)
+                        {
+                            Marshal.ReleaseComObject(item);
+                            return name;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
         #endregion
 
         #region Shell items visualizing

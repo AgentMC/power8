@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using Power8.Helpers;
 using Power8.Views;
@@ -285,42 +284,11 @@ begin:
         /// "system", "pagefile", etc.</returns>
         public static string GetDriveLabel(string driveName)
         {
-            IntPtr pidl;
-            API.SFGAO dummy;
-            if (API.SHParseDisplayName(driveName, IntPtr.Zero, out pidl, API.SFGAO.NULL, out dummy) == 0)
+            var dn = Util.ResolveDisplayName(driveName);
+            if (dn != null)
             {
-                if (Util.OsIs.SevenOrMore)
-                {
-                    string name;
-                    if (API.SHGetNameFromIDList(pidl, API.SIGDN.PARENTRELATIVEEDITING, out name) == 0
-                        && name != null)
-                    {
-                        return name;
-                    }
-                }
-                else if (Util.OsIs.XPSp123OrSrv03)
-                {
-                    var item = API.SHCreateShellItem(IntPtr.Zero, null, pidl);
-                    if (item != null)
-                    {
-                        var name = item.GetDisplayName(API.SIGDN.PARENTRELATIVEEDITING);
-                        if (name != null)
-                        {
-                            Marshal.ReleaseComObject(item);
-                            return name;
-                        }
-                    }
-                }
-
-                
+                return dn;
             }
-            /*var info = new API.ShfileinfoW();
-            var zeroFails = API.SHGetFileInfo(driveName, 0, ref info, (uint) Marshal.SizeOf(info), API.Shgfi.DISPLAYNAME);
-            if (zeroFails != IntPtr.Zero)
-            {
-                return info.szDisplayName;
-            }*/
-
             DriveInfo drv;
             lock (DriveNames)
             {
