@@ -85,7 +85,7 @@
                 </Hyperlink>
             </Label>
             <Button Content="OK" HorizontalContentAlignment="Center" IsDefault="True" 
-                    Click="ButtonClick" Grid.Column="1" MinWidth="75">
+                    Click="SimpleClose" Grid.Column="1" MinWidth="75">
                     <Button.Style><Style/></Button.Style>
             </Button>
         </Grid>
