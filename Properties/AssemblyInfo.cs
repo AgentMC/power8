@@ -51,5 +51,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.5.5.838")]
 [assembly: AssemblyFileVersion("1.5.5.838")]
-//7zuri=http://power8.googlecode.com/svn/filez/Power8_v.1.5.5.838.7z
-//msuri=http://power8.googlecode.com/svn/filez/Power8_v.1.5.5.838.msi
+//7zuri=https://raw.githubusercontent.com/wiki/AgentMC/power8/Filez/Power8_v.1.5.5.838.7z
+//msuri=https://raw.githubusercontent.com/wiki/AgentMC/power8/Filez/Power8_v.1.5.5.838.msi
