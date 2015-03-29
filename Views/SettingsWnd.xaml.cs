@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Power8.Converters;
 using Power8.Helpers;
 
@@ -78,6 +79,14 @@ namespace Power8.Views
         public static bool NotXp
         {
             get { return Util.OsIs.SevenOrMore && !Util.OsIs.TresholdOrMore; }
+        }
+
+        /// <summary>
+        /// Returns special uri to navigate to Duplicated Icons hack page
+        /// </summary>
+        public Uri IconsHackUri
+        {
+            get { return new Uri(RepoUri, Properties.NoLoc.Stg_DuplicatedIconsHackUri); }
         }
     }
 }

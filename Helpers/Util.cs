@@ -180,19 +180,24 @@ namespace Power8
         }
         /// <summary>
         /// Forks background thread with given name and starts it, but only in case referenced thread 
-        /// doesn't exist or is stopped already
+        /// doesn't exist or is stopped already. If the referenced thread is not started - simply starts it.
+        /// Ignores running threads.
         /// </summary>
         /// <param name="thread">Thread variable which holds or will hold the thread reference</param>
-        /// <param name="pFunc">Thread delegate</param>
-        /// <param name="threadName">Name of newly created thread</param>
+        /// <param name="pFunc">Thread delegate. Not required when <paramref name="thread"/> is already
+        /// created byt not started.</param>
+        /// <param name="threadName">Name of newly created thread.</param>
         public static void BgrThreadInit(ref Thread thread, ThreadStart pFunc, string threadName)
         {
-            if (thread == null || thread.ThreadState == ThreadState.Stopped)
+            if (thread == null || (thread.ThreadState & ThreadState.Stopped) > 0)
             {
                 thread = Fork(pFunc, threadName);
                 thread.IsBackground = true;
             }
-            thread.Start();
+            if ((thread.ThreadState & ThreadState.Unstarted) > 0)
+            {
+                thread.Start();
+            }
         }
 
         #endregion
@@ -852,6 +857,14 @@ namespace Power8
                 }
             }
             Log.Raw("Done");
+        }
+
+        /// <summary>
+        /// Launches a system-default browser opening the Power8 web site
+        /// </summary>
+        public static void OpenPower8WebSite()
+        {
+            CreateProcess(NoLoc.Stg_Power8URI);
         }
         
         #endregion

@@ -80,7 +80,7 @@
             </Grid.ColumnDefinitions>
 
             <Label HorizontalAlignment="Left" x:Name="label4" Padding="0" Margin="12,0">
-                <Hyperlink NavigateUri="http://power8.googlecode.com/" Click="Navigate">
+                <Hyperlink NavigateUri="{Binding RepoUri, ElementName=MWAbout}" Click="Navigate">
                     <InlineUIContainer><TextBlock x:Name="UNGoWeb" Margin="0"/></InlineUIContainer>
                 </Hyperlink>
             </Label>

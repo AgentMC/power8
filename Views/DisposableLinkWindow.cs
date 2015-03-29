@@ -39,5 +39,16 @@ namespace Power8.Views
         {
             Close();
         }
+
+        /// <summary>
+        /// Returns Uri to Rower8 online repo, taking it from NoLoc resource.
+        /// </summary>
+        public Uri RepoUri
+        {
+            get
+            {
+                return new Uri(Properties.NoLoc.Stg_Power8URI);
+            }
+        }
     }
 }

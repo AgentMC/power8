@@ -173,7 +173,7 @@ namespace Power8.Helpers
                                             Settings.Default.Save();
                                             break;
                                         case MessageBoxResult.Yes:
-                                            Util.CreateProcess(NoLoc.Stg_Power8URI);
+                                            Util.OpenPower8WebSite();
                                             break;
                                     }
                                 }

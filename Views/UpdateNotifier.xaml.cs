@@ -117,7 +117,7 @@ namespace Power8.Views
         /// </summary>
         private void GoWebClick(object sender, RoutedEventArgs e)
         {
-            Util.CreateProcess(NoLoc.Stg_Power8URI);
+            Util.OpenPower8WebSite();
             Close();
         }
         //Download helpers------------------------

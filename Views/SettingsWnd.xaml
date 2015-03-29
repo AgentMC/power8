@@ -147,7 +147,7 @@
                     <CheckBox x:Name="StgCbCtfl" IsChecked="{Binding DontFreeLibs, Mode=TwoWay}" Margin="16,4"
                               IsEnabled="{Binding ElementName=StgCbCpnl, Path=IsChecked}"/>
                     <Label HorizontalContentAlignment="Left" Margin="-12,0,0,0">
-                        <Hyperlink NavigateUri="https://code.google.com/p/power8/wiki/DuplicatedIconsHack" Click="Navigate">
+                        <Hyperlink NavigateUri="{Binding ElementName=StgWnd, Path=IconsHackUri}" Click="Navigate">
                             <InlineUIContainer>
                                 <TextBlock x:Name="AbUkrPart2" />
                             </InlineUIContainer>

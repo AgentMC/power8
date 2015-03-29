@@ -133,11 +133,14 @@
     <comment>Default message box title. May not be localized.</comment>
   </data>
   <data name="Stg_AssemblyInfoURI" xml:space="preserve">
-    <value>svn/trunk/Properties/AssemblyInfo.cs</value>
+    <value>raw/master/Properties/AssemblyInfo.cs</value>
     <comment>May not be localized.</comment>
   </data>
+  <data name="Stg_DuplicatedIconsHackUri" xml:space="preserve">
+    <value>wiki/DuplicatedIconsHack</value>
+  </data>
   <data name="Stg_Power8URI" xml:space="preserve">
-    <value>http://power8.googlecode.com/</value>
+    <value>https://github.com/AgentMC/power8/</value>
     <comment>May not be localized.</comment>
   </data>
   <data name="Stg_RegKeyRun" xml:space="preserve">
