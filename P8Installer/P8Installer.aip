@@ -11,11 +11,11 @@
     <ROW Property="ALLUSERS" Value="2"/>
     <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
     <ROW Property="ARPCONTACT" Value="skype: hack-designer | agentmc@mail.ru (Mike Makarov) |  skype: xabalevskii | xabalevskii@gmail.com (Andrey Khabalevskiy)"/>
-    <ROW Property="ARPHELPLINK" Value="http://code.google.com/p/power8/issues/list"/>
+    <ROW Property="ARPHELPLINK" Value="https://github.com/AgentMC/power8/issues"/>
     <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPPRODUCTICON" Value="Power8Logo_Red16x16.exe" Type="8"/>
-    <ROW Property="ARPURLINFOABOUT" Value="http://code.google.com/p/power8/"/>
-    <ROW Property="ARPURLUPDATEINFO" Value="http://code.google.com/p/power8/downloads/list"/>
+    <ROW Property="ARPURLINFOABOUT" Value="https://github.com/AgentMC/power8/wiki"/>
+    <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/AgentMC/power8/wiki/AboutDOWNLOADS"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="Manufacturer" Value="Power8 team" ValueLocId="*"/>
@@ -190,7 +190,7 @@
     <ROW Name="SystemFoldermsiexec.exe" SourcePath="&lt;AI_RES&gt;uninstall.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIniFileComponent">
-    <ROW IniFile="URL" FileName="GotoPo~1.url|Go to Power8 website.url" DirProperty="SHORTCUTDIR" Section="InternetShortcut" Key="URL" Value="http://code.google.com/p/power8/" Action="0" Component_="SetupMadeWith"/>
+    <ROW IniFile="URL" FileName="GotoPo~1.url|Go to Power8 website.url" DirProperty="SHORTCUTDIR" Section="InternetShortcut" Key="URL" Value="https://github.com/AgentMC/power8/wiki" Action="0" Component_="SetupMadeWith"/>
     <ROW IniFile="WorkingDirectory" FileName="GotoPo~1.url|Go to Power8 website.url" DirProperty="SHORTCUTDIR" Section="InternetShortcut" Key="WorkingDirectory" Value="[SHORTCUTDIR]" Action="0" Component_="SetupMadeWith"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
