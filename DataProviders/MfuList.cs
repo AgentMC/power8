@@ -874,9 +874,13 @@ namespace Power8
                 API.IObjectArray list;
                 try
                 {
-                    list = (API.IObjectArray)listProvider.GetList(listType, 0, ref riidObjectArray);
+                    list = (API.IObjectArray) listProvider.GetList(listType, 0, ref riidObjectArray);
                 }
                 catch (COMException) //Share violation may occur
+                {
+                    list = null;
+                }
+                catch (ArgumentException) //No idea, but may happen
                 {
                     list = null;
                 }
