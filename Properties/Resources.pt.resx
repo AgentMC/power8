@@ -514,4 +514,7 @@ Por favor execute o Explorador do Windows e reinicie o processo do Power8.</valu
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Power8 sofreu um problema durante sua inicialização. A opção de reiniciar automaticamente após interrupção está ativada, logo o Power8 pode entrar em uma cadeia infinita de reinicializações (você pode alterar esta opção enquanto esta mensagem estiver aberta). Continuar tentando reiniciar o Power8?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

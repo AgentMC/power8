@@ -513,4 +513,7 @@ Windows 익스플로러를 복원하고 Power8을 다시 시작하시겠습니�
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Power8의 충돌이 발생된 것 같습니다. Power8 재시작의 무한 반복을 끝낼 수 있도록 "충돌 시 자동 재시작" 설정을 사용하십시오 (이 메시지가 표시되는 동안 설정을 변경할 수 있습니다). Power8을 다시 시작하시겠습니까?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

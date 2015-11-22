@@ -514,4 +514,7 @@ Power8 يمكن حل هذه المشكلة.
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>It seems, Power8 crashed on startup. Auto-restart-on-crash setting is enabled so you may end up with endless loop of Power8 restarts (you can change settings while this message is still open). Continue restarting Power8?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

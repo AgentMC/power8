@@ -514,4 +514,7 @@ Storno: přeskočit tuto aktualizaci a už na ni neupozorňovat.</value>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Zdá se, že POWER8 havaroval. Auto-restart po havárii programu je povolen, pokud je třeba přerušit opakované restarty POWER8 (smyčku), můžete nyní změnit nastavení. Chcete pokračovat v restartu POWER8?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

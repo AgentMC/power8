@@ -513,4 +513,7 @@ Indítsa el nekem az Intézőt és indítsa újra a Power8 folyamatot.</value>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Úgy tűnik a Power8 az indításkor összeomlott. Az automatikus újraindítás összeomlás esetén végtelen ciklusba kerülhetsz a Power8 újraindításokkal (megváltoztathatod a beállításokat, amíg ez az üzenet látható). Folytatod a Power8 újraindítását?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

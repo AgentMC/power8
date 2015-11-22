@@ -514,4 +514,7 @@ Käynnistä Explorer ja käynnistä Power8-prosessi uudelleen.</value>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Näyttää siltä, että Power8 kaatui käynnistyksessä. Käynnistä sovellus uudelleen kohtalokkaan virheen tapahduttua -asetus on päällä, joten saatat joutua ikuiseen Power8:n käynnistyssilmukkaan (voit muuttaa asetusta tämän ilmoituksen ollessa vielä avoimena). Jatka Power8:n uudelleenkäynnistystä?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

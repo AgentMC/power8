@@ -29,7 +29,7 @@
         <!---->
 		<Image HorizontalAlignment="Left" x:Name="image1" Stretch="Fill" VerticalAlignment="Top" Source="{Binding Logo, ElementName=MWDonate}" 
 			   Grid.RowSpan="5" Width="200" Height="200"/>
-		<TextBlock Margin="12,0,0,5" Grid.Column="1" Grid.Row="0" >Good news everyone. You could donate our team :)</TextBlock>
+		<TextBlock Name="AbDonateTitle" Margin="12,0,0,5" Grid.Column="1" Grid.Row="0" />
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="12,0,0,5">
             <TextBlock VerticalAlignment="Bottom">1)</TextBlock>
             <Label HorizontalAlignment="Left" Padding="3,0" VerticalAlignment="Bottom">

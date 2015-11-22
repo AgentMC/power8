@@ -513,4 +513,7 @@ Power8 вам може помоћи да то решите.
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Изгледа да је дошло до пада Power8-а при покретању. Омогућено је аутоматско поновно покретање при паду, па може доћи до бесконачног понављања ове операције. Поставке можете променити док је ова порука још отворена. Наставити са поновним покретањем Power8-а?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

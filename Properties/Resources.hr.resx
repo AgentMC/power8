@@ -513,4 +513,7 @@ Ponovno pokrenite Explorer zajedno s procesom Power8.</value>
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Čini se da je došlo do pada Power8-a pri pokretanju. Omogućeno je automatsko ponovno pokretanje pri padu, pa može doći do beskonačnog ponavljanja ove operacije. Postavke možete promijeniti dok je ova poruka još otvorena. Nastaviti s ponovnim pokretanjem Power8-a?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>

@@ -513,4 +513,7 @@ Vă rog relansaţi Explorer în locul meu şi reporniţi procesul Power8.</value
   <data name="Err_StartupCrashDetected" xml:space="preserve">
     <value>Se pare că Power8 s-a blocat la pornire. Setarea Repornire-automată-la-blocare este activată astfel încât va rezulta o buclă infinită de reporniri ale Power8 (puteţi modifică setările cât timp acest mesaj este deschis). Continuaţi cu repornirea Power8?</value>
   </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Good news everyone. You could donate our team :)</value>
+  </data>
 </root>
