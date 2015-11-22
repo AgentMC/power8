@@ -8,8 +8,10 @@ using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using Power8.Helpers;
 using Power8.Properties;
+using Power8.Views;
 
 namespace Power8
 {
@@ -209,7 +211,32 @@ namespace Power8
                 catch (UnauthorizedAccessException ex) { failHandler(ex); }
             });
 
+            Util.ForkStart(MfuDataSaveThread, "Mfu data save thread");
         }
+
+        private static readonly ManualResetEvent DataSaveThreadLock = new ManualResetEvent(false);
+        private static DateTime _lastWriteTime;
+        private static bool _writeLaunchList, _writePinList, _writeExclusionsList, _writeUserList;
+        private static void MfuDataSaveThread()
+        {
+            while (!MainWindow.ClosedW && !_mfuShutDown)
+            {
+                if ((DateTime.Now - _lastWriteTime).TotalSeconds > 59 &&
+                    (_writeLaunchList || _writeExclusionsList || _writePinList || _writeUserList))
+                {
+                    _lastWriteTime = DateTime.Now;
+                    if (_writeExclusionsList) SaveExclusionsList();
+                    if (_writeLaunchList) SaveLaunchList();
+                    if (_writePinList) SavePinList();
+                    if (_writeUserList) SaveUserList();
+                }
+
+                Thread.Sleep(200);
+            }
+            DataSaveThreadLock.Set();
+        }
+
+        private static bool _mfuShutDown;
         
         // Save data on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
@@ -224,15 +251,26 @@ namespace Power8
                 }
             }
             catch (COMException ex){Log.Raw(ex.Message);} //Well... too bad. We shut down anyway...
-            catch (ManagementException ex) { Log.Raw(ex.Message); } 
-            
+            catch (ManagementException ex) { Log.Raw(ex.Message); }
 
             Directory.CreateDirectory(DataBaseRoot);
 
-            //Writing Launch list
+            _mfuShutDown = true; //wait while DataSaveThread exits
+            DataSaveThreadLock.WaitOne();
+
+            //Final save of MFU data...
+            SaveLaunchList();
+            SavePinList();
+            SaveExclusionsList();
+            SaveUserList();
+        }
+
+        private static void SaveLaunchList()
+        {
+            _writeLaunchList = false;
             using (var f = new StreamWriter(LaunchDB, false, Encoding.UTF8))
             {
-                foreach (var mfuElement in P8JlImpl)
+                foreach (var mfuElement in P8JlImpl.Where(e => e.IsOk())) //save only valid elements
                 {
                     f.WriteLine("{0}{4}{1}{4}{2}{4}{3}",
                                 mfuElement.Arg,
@@ -242,34 +280,35 @@ namespace Power8
                                 PldSplitter);
                 }
             }
+        }
 
-            //Writing pin list
-            using (var f = new StreamWriter(PinDB, false, Encoding.UTF8))
-            {
-                foreach (var pinned in PinList)
-                {
-                    f.WriteLine(pinned);
-                }
-            }
+        private static void SavePinList()
+        {
+            _writePinList = false;
+            SaveStringList(PinDB, PinList);
+        }
 
-            //Writing exclusions list
-            using (var f = new StreamWriter(UserExclDB, false, Encoding.UTF8))
-            {
-                foreach (var excl in ExclList.Where(ex => !string.IsNullOrWhiteSpace(ex.Value)))
-                {
-                    f.WriteLine(excl.Value);
-                }
-            }
+        private static void SaveExclusionsList()
+        {
+            _writeExclusionsList = false;
+            SaveStringList(UserExclDB, ExclList.Where(ex => !string.IsNullOrWhiteSpace(ex.Value)).Select(excl => excl.Value));
+        }
 
-            //Writing custom mfu list
-            using (var f = new StreamWriter(UserListDB, false, Encoding.UTF8))
+        private static void SaveUserList()
+        {
+            _writeUserList = false;
+            SaveStringList(UserListDB, UserList);
+        }
+
+        private static void SaveStringList(string filePath, IEnumerable<string> items)
+        {
+            using (var f = new StreamWriter(filePath, false, Encoding.UTF8))
             {
-                foreach (var item in UserList)
+                foreach (var item in items)
                 {
                     f.WriteLine(item);
                 }
             }
-
         }
 
         //New process is created in system
@@ -334,6 +373,7 @@ namespace Power8
                         t.LaunchCount += 1;
                         t.LastLaunchTimeStamp = DateTime.Now;
                     }
+                    _writeLaunchList = true;
                 }
                 Log.Fmt("Process Launched: {0} {1}", pair.Item1, pair.Item2);
             }
@@ -579,6 +619,7 @@ namespace Power8
             //else means state of item may changed but already reflected in pin list
             if (!update) 
                 return;
+            _writePinList = true;
             lock (LastList)
             {
                 //Calculate the new index
@@ -602,6 +643,7 @@ namespace Power8
         public static void AddExclusion(PowerItem exclusion)
         {
             ExclList.Add(new StringWrapper {Value = exclusion.Argument.ToLower()});
+            _writeExclusionsList = true;
             UpdateStartMfuSync();
         }
 
@@ -614,6 +656,7 @@ namespace Power8
             if(idx != -1) //Already in list, move to top
                 UserList.RemoveAt(idx);
             UserList.Add(arg); //Including case where item not in list
+            _writeUserList = true;
             if(SettingsManager.Instance.MfuIsCustom && fullPath == null)
                 UpdateStartMfuSync(); //Refresh
         }
@@ -621,6 +664,7 @@ namespace Power8
         public static void RemoveCustom(PowerItem item)
         {
             UserList.Remove(PowerItemTree.GetResolvedArgument(item));
+            _writeUserList = true;
             UpdateStartMfuSync();
         }
 

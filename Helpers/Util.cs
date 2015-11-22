@@ -115,6 +115,7 @@ namespace Power8
         /// <returns>The Thread class instance created, ready to be started</returns>
         public static Thread Fork(ThreadStart method, string name = "P8 forked")
         {
+            Log.Raw("Thread forked: " + name);
             return new Thread(() =>
                                   {
                                       try
