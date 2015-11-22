@@ -20,7 +20,7 @@ namespace Power8.Helpers
         /// </summary>
         /// <param name="path">Root of what to watch. See parent class docs for help 
         /// on this parameter.</param>
-        /// <param name="reportingHwnd">HWND of the window that will e used as reporting
+        /// <param name="reportingHwnd">HWND of the window that will be used as reporting
         /// proxy. See ProcessDeviceNotification() method documentation, and also the 
         /// DriveManager class for more info.</param>
         public RemovableFileSystemWatcher(string path, IntPtr reportingHwnd) : base(path)

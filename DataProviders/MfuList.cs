@@ -480,6 +480,7 @@ namespace Power8
                     list.AddRange(
                         (from valueName in ak.GetValueNames()
                          let data = (byte[])ak.GetValue(valueName)
+                         where data != null && data.Length > 0
                          let fileTime = data.Length == dataWidthExpected ? BitConverter.ToInt64(data, fileTimeOffset) : 0
                          where fileTime != 0 && valueName.Contains("\\")
                          select new MfuElement
