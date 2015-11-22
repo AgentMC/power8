@@ -531,7 +531,20 @@ namespace Power8
 #if DEBUG
             Log.Raw("InitTree - scanned in " + s.ElapsedMilliseconds);
 #endif
-            SearchItemByArgument(PathProgramsFolder, true, StartMenuRootItem, true).IsMergeableContentHolder = true;
+            var programsFolder = SearchItemByArgument(PathProgramsFolder, true, StartMenuRootItem, true);
+            if (programsFolder != null)
+            {
+                programsFolder.IsMergeableContentHolder = true;
+            }
+            else
+            {
+                Util.DispatchCaughtException(
+                    new DirectoryNotFoundException(
+                        string.Format(NoLoc.Err_CantFindProgramsDir,
+                                      PathProgramsFolder,
+                                      NoLoc.Stg_AppShortName,
+                                      PathRoot)));
+            }
             StartMenuRootItem.SortItems();
             SettingsManager.StartMenuStyleChanged += (o, e) => StartMenuRootItem.SortItems();
             //Set configurable name. Proxy logic is put into manager, so in case 

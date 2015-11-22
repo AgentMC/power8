@@ -61,6 +61,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Programs system folder ({0}) cannot be located under StartMenu folder ({2}). {1} may be unstable. .
+        /// </summary>
+        internal static string Err_CantFindProgramsDir {
+            get {
+                return ResourceManager.GetString("Err_CantFindProgramsDir", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type constructor did not return the type object..
         /// </summary>
         internal static string Err_GotNoTypeObject {
