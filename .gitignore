@@ -8,3 +8,4 @@
 /P8Installer/P8Installer-SetupFiles
 /bin/Debug
 /bin/Release
+*.user

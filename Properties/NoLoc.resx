@@ -139,6 +139,9 @@
     <value>raw/master/Properties/AssemblyInfo.cs</value>
     <comment>May not be localized.</comment>
   </data>
+  <data name="Stg_DonateUri" xml:space="preserve">
+    <value>wiki/Donate</value>
+  </data>
   <data name="Stg_DuplicatedIconsHackUri" xml:space="preserve">
     <value>wiki/DuplicatedIconsHack</value>
   </data>

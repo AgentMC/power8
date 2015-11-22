@@ -97,6 +97,7 @@ namespace Power8
                 }
                 std.Save();//FirstRunDone is updated later in Main Window code
                 Analytics.PostEvent(Analytics.Category.Deploy, std.FirstRunDone ? "Update" : "Fresh", null, 1);
+                BtnStck.Instanciated += (o, e) => Util.InstanciateClass(t: typeof (Donate));
             }
 
             //Initialize standard folder icon

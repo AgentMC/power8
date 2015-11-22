@@ -116,6 +116,15 @@ namespace Power8.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to wiki/Donate.
+        /// </summary>
+        internal static string Stg_DonateUri {
+            get {
+                return ResourceManager.GetString("Stg_DonateUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to wiki/DuplicatedIconsHack.
         /// </summary>
         internal static string Stg_DuplicatedIconsHackUri {

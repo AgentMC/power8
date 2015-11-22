@@ -6,6 +6,11 @@ namespace Power8.Views
 {
     public class DisposableLinkWindow: DisposableWindow
     {
+        public DisposableLinkWindow()
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
         /// <summary>
         /// Handles clicks on the Hyperlinks in this window
         /// </summary>

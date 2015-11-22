@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows;
+using Power8.Properties;
 
 namespace Power8.Views
 {
@@ -12,6 +12,11 @@ namespace Power8.Views
         {
             Util.FpReset();
             InitializeComponent();
+        }
+
+        public Uri DonateUri
+        {
+            get { return new Uri(RepoUri, NoLoc.Stg_DonateUri); }
         }
     }
 }
