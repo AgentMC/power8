@@ -23,6 +23,7 @@ namespace Power8
         private static ObservableCollection<PowerItem> _startMfu;
         /// <summary>
         /// Gets the bindable ObservableCollection of MFU items for Start Menu
+        /// Actually this is just .Items of MfuSearchRoot
         /// </summary>
         public static ObservableCollection<PowerItem> StartMfu
         {
@@ -109,81 +110,15 @@ namespace Power8
             col.Add("SETUP64.EXE");
             MsFilter = col.ToArray();
 
-            //Reading launch data
-            if(File.Exists(LaunchDB))
+            //Reading MFU data
+            ReadList(LaunchDB, delegate(string s)
             {
-                using (var f = new StreamReader(LaunchDB, Encoding.UTF8))
-                {
-                    while (!f.EndOfStream)
-                    {
-                        var l = f.ReadLine();
-                        if (string.IsNullOrEmpty(l)) 
-                            continue;
-                        var ls = l.Split(new[]{PldSplitter}, 4, StringSplitOptions.None);
-                        if(ls.Length != 4)
-                            continue;
-                        int launchCount;
-                        if (!int.TryParse(ls[2], out launchCount))
-                            continue;
-                        DateTime lastLaunch;
-                        if (!DateTime.TryParseExact(ls[3], LastLaunchFormat, CultureInfo.InvariantCulture,
-                                                    DateTimeStyles.None, out lastLaunch))
-                            continue;
-                        P8JlImpl.Add(new MfuElement
-                        {
-                            Arg = ls[0].Replace('/', '\\'),
-                            Cmd = ls[1],
-                            LaunchCount = launchCount,
-                            LastLaunchTimeStamp = lastLaunch
-                        });
-                    }
-                }
-            }
-
-            //Reading pin data
-            if (File.Exists(PinDB))
-            {
-                using (var f = new StreamReader(PinDB, Encoding.UTF8))
-                {
-                    while (!f.EndOfStream)
-                    {
-                        var l = f.ReadLine();
-                        if (string.IsNullOrEmpty(l))
-                            continue;
-                        PinList.Add(l);
-                    }
-                }
-            }
-
-            //Reading exclusions
-            if (File.Exists(UserExclDB))
-            {
-                using (var f = new StreamReader(UserExclDB, Encoding.UTF8))
-                {
-                    while (!f.EndOfStream)
-                    {
-                        var l = f.ReadLine();
-                        if (string.IsNullOrEmpty(l))
-                            continue;
-                        ExclList.Add(new StringWrapper {Value = l});
-                    }
-                }
-            }
-
-            //Reading user mfu list
-            if (File.Exists(UserListDB))
-            {
-                using (var f = new StreamReader(UserListDB, Encoding.UTF8))
-                {
-                    while (!f.EndOfStream)
-                    {
-                        var l = f.ReadLine();
-                        if (string.IsNullOrEmpty(l))
-                            continue;
-                        UserList.Add(l);
-                    }
-                }
-            }
+                MfuElement element;
+                if (MfuElement.TryParse(s, out element)) P8JlImpl.Add(element);
+            });
+            ReadList(PinDB, PinList.Add);
+            ReadList(UserExclDB, s => ExclList.Add(new StringWrapper {Value = s}));
+            ReadList(UserListDB, UserList.Add);
 
             //Save all on shutdown
             Util.MainDisp.ShutdownStarted += MainDispOnShutdownStarted;
@@ -211,12 +146,43 @@ namespace Power8
                 catch (UnauthorizedAccessException ex) { failHandler(ex); }
             });
 
-            Util.ForkStart(MfuDataSaveThread, "Mfu data save thread");
+            //Start thread that will periodicaly flush app db files
+            Util.ForkStart(MfuDataSaveThread, "MFU data save thread");
         }
 
+        /// <summary>
+        /// Reads data from textual UTF-8 file, line-by-line and applies processor method to every line.
+        /// Empty lines are ignored.
+        /// </summary>
+        /// <param name="fileName">Full path to file to read</param>
+        /// <param name="lineProcessor">Action that receives the read line and processes it, e.g. adds to some list</param>
+        private static void ReadList(string fileName, Action<string> lineProcessor)
+        {
+            if (File.Exists(fileName))
+            {
+                using (var f = new StreamReader(fileName, Encoding.UTF8))
+                {
+                    while (!f.EndOfStream)
+                    {
+                        var l = f.ReadLine();
+                        if (string.IsNullOrEmpty(l))
+                            continue;
+                        lineProcessor(l);
+                    }
+                }
+            }
+        }
+
+        //prevents race condition between data save thread and shutdown handler
         private static readonly ManualResetEvent DataSaveThreadLock = new ManualResetEvent(false);
         private static DateTime _lastWriteTime;
         private static bool _writeLaunchList, _writePinList, _writeExclusionsList, _writeUserList;
+
+        /// <summary>
+        /// This thread perists while application is running
+        /// No more often than oce a minute it checks if any of MFU db lists need to be stored
+        /// And if that's the case - saves required list(s)
+        /// </summary>
         private static void MfuDataSaveThread()
         {
             while (!MainWindow.ClosedW && !_mfuShutDown)
@@ -238,7 +204,7 @@ namespace Power8
 
         private static bool _mfuShutDown;
         
-        // Save data on close
+        // Save data and cleanup on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
             try
@@ -268,18 +234,8 @@ namespace Power8
         private static void SaveLaunchList()
         {
             _writeLaunchList = false;
-            using (var f = new StreamWriter(LaunchDB, false, Encoding.UTF8))
-            {
-                foreach (var mfuElement in P8JlImpl.Where(e => e.IsOk())) //save only valid elements
-                {
-                    f.WriteLine("{0}{4}{1}{4}{2}{4}{3}",
-                                mfuElement.Arg,
-                                mfuElement.Cmd,
-                                mfuElement.LaunchCount,
-                                mfuElement.LastLaunchTimeStamp.ToString(LastLaunchFormat, CultureInfo.InvariantCulture),
-                                PldSplitter);
-                }
-            }
+            SaveStringList(LaunchDB, P8JlImpl.Where(e => e.IsOk()) //save only valid elements
+                                             .Select(mfuElement => mfuElement.ToString()));
         }
 
         private static void SavePinList()
@@ -1037,6 +993,39 @@ namespace Power8
                 if (!(obj is MfuElement))
                     return false;
                 return GetHashCode() == obj.GetHashCode();
+            }
+
+            public override string ToString()
+            {
+                return string.Format("{0}{4}{1}{4}{2}{4}{3}",
+                                     Arg,
+                                     Cmd,
+                                     LaunchCount,
+                                     LastLaunchTimeStamp.ToString(LastLaunchFormat, CultureInfo.InvariantCulture),
+                                     PldSplitter);
+            }
+
+            public static bool TryParse(string s, out MfuElement result)
+            {
+                result = null;
+                var ls = s.Split(new[] { PldSplitter }, 4, StringSplitOptions.None);
+                if (ls.Length != 4)
+                    return false;
+                int launchCount;
+                if (!int.TryParse(ls[2], out launchCount))
+                    return false;
+                DateTime lastLaunch;
+                if (!DateTime.TryParseExact(ls[3], LastLaunchFormat, CultureInfo.InvariantCulture,
+                                            DateTimeStyles.None, out lastLaunch))
+                    return false;
+                result = new MfuElement
+                {
+                    Arg = ls[0].Replace('/', '\\'),
+                    Cmd = ls[1],
+                    LaunchCount = launchCount,
+                    LastLaunchTimeStamp = lastLaunch
+                };
+                return true;
             }
         }
 
