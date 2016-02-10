@@ -179,8 +179,8 @@ namespace Power8
         private static bool _writeLaunchList, _writePinList, _writeExclusionsList, _writeUserList;
 
         /// <summary>
-        /// This thread perists while application is running
-        /// No more often than oce a minute it checks if any of MFU db lists need to be stored
+        /// This thread persists while application is running
+        /// No more often than once a minute it checks if any of MFU db lists need to be stored
         /// And if that's the case - saves required list(s)
         /// </summary>
         private static void MfuDataSaveThread()
@@ -233,27 +233,40 @@ namespace Power8
 
         private static void SaveLaunchList()
         {
-            _writeLaunchList = false;
-            SaveStringList(LaunchDB, P8JlImpl.Where(e => e.IsOk()) //save only valid elements
-                                             .Select(mfuElement => mfuElement.ToString()));
+            lock (P8JlImpl)
+            {
+                _writeLaunchList = false;
+                SaveStringList(LaunchDB, P8JlImpl.Where(e => e.IsOk()) //save only valid elements
+                                                 .Select(mfuElement => mfuElement.ToString()));
+            }
         }
 
         private static void SavePinList()
         {
-            _writePinList = false;
-            SaveStringList(PinDB, PinList);
+            lock (PinList)
+            {
+                _writePinList = false;
+                SaveStringList(PinDB, PinList);
+            }
         }
 
         private static void SaveExclusionsList()
         {
-            _writeExclusionsList = false;
-            SaveStringList(UserExclDB, ExclList.Where(ex => !string.IsNullOrWhiteSpace(ex.Value)).Select(excl => excl.Value));
+            lock (ExclList)
+            {
+                _writeExclusionsList = false;
+                SaveStringList(UserExclDB, ExclList.Where(ex => !string.IsNullOrWhiteSpace(ex.Value))
+                                                   .Select(excl => excl.Value));
+            }
         }
 
         private static void SaveUserList()
         {
-            _writeUserList = false;
-            SaveStringList(UserListDB, UserList);
+            lock (UserList)
+            {
+                _writeUserList = false;
+                SaveStringList(UserListDB, UserList);
+            }
         }
 
         private static void SaveStringList(string filePath, IEnumerable<string> items)
@@ -465,6 +478,8 @@ namespace Power8
                 foreach (var mfuElement in P8JlImpl.Where(mfu => mfu.IsOk()))
                 {
                     var k = mfuElement.Arg;
+                    //No lock over ExclList required here, since this method is always called from
+                    //UI thread, just like the one that changes the list
                     if (ExclList.Any(ex => !string.IsNullOrWhiteSpace(ex.Value) && k.Contains(ex.Value)))
                         continue;
                     if (list.ContainsKey(k))
@@ -481,6 +496,8 @@ namespace Power8
         /// </summary>
         private static List<MfuElement> GetMfuFromCustomData()
         {
+            //Not locking UserList here because this method is only called from UI thread just like
+            //the one that changes the list
             var res = new List<MfuElement>();
             for (int i = UserList.Count - 1; i >= 0; i--)
             {
@@ -562,33 +579,36 @@ namespace Power8
         /// <param name="item">PowerItem, whose IsPinned property is already set to desired value</param>
         public static void PinUnpin(PowerItem item)
         {
-            bool update = false;
-            if (item.IsPinned && !PinList.Contains(item.Argument))
-            {//Item was pinned
-                PinList.Add(item.Argument);
-                update = true;
-            }
-            else if ((!item.IsPinned) && PinList.Contains(item.Argument))
-            {//Item was unpinned
-                PinList.Remove(item.Argument);
-                update = true;
-            }
-            //else means state of item may changed but already reflected in pin list
-            if (!update) 
-                return;
-            _writePinList = true;
-            lock (LastList)
+            lock (PinList)
             {
-                //Calculate the new index
-                var temp = new List<MfuElement>();
-                LastList.ForEach(m => temp.Add(m.Clone()));
-                temp.ApplyFiltersAndSort();
-                //Destination index. When moving data from LastList to StartMFU, it is truncated to contain
-                //only 20 items with launchCount==0. So it is possible that when you unpin an element,
-                //it's calculated position in scope of LastList will be more that StartMFU contains.
-                //This is the fix for the problem.
-                var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
-                StartMfu.Move(StartMfu.IndexOf(item), tIdx);
+                bool update = false;
+                if (item.IsPinned && !PinList.Contains(item.Argument))
+                {//Item was pinned
+                    PinList.Add(item.Argument);
+                    update = true;
+                }
+                else if ((!item.IsPinned) && PinList.Contains(item.Argument))
+                {//Item was unpinned
+                    PinList.Remove(item.Argument);
+                    update = true;
+                }
+                //else means state of item may changed but already reflected in pin list
+                if (!update)
+                    return;
+                _writePinList = true;
+                lock (LastList)
+                {
+                    //Calculate the new index
+                    var temp = new List<MfuElement>();
+                    LastList.ForEach(m => temp.Add(m.Clone()));
+                    temp.ApplyFiltersAndSort();
+                    //Destination index. When moving data from LastList to StartMFU, it is truncated to contain
+                    //only 20 items with launchCount==0. So it is possible that when you unpin an element,
+                    //it's calculated position in scope of LastList will be more that StartMFU contains.
+                    //This is the fix for the problem.
+                    var tIdx = Math.Min(temp.FindIndex(mfu => mfu.Arg == item.Argument), StartMfu.Count - 1);
+                    StartMfu.Move(StartMfu.IndexOf(item), tIdx);
+                }
             }
         }
         /// <summary>
@@ -599,35 +619,70 @@ namespace Power8
         /// When tested for match, used with ** on both sides</param>
         public static void AddExclusion(PowerItem exclusion)
         {
-            ExclList.Add(new StringWrapper {Value = exclusion.Argument.ToLower()});
-            _writeExclusionsList = true;
-            UpdateStartMfuSync();
+            lock (ExclList)
+            {
+                ExclList.Add(new StringWrapper {Value = exclusion.Argument.ToLower()});
+                _writeExclusionsList = true;
+                UpdateStartMfuSync();
+            }
         }
 
+        /// <summary>
+        /// Adds passed <paramref name="item"/> to Custom Start List.
+        /// When corresponding setting is selected, this custom list overrides 
+        /// the auto-generated MFU list in ButtonStack.
+        /// </summary>
+        /// <param name="item">The PowerItem to add to custom list. Can be null, but then 
+        /// 2nd parameter must be specified.</param>
+        /// <param name="fullPath">Optional. Full path to file or folder to add to list.
+        /// Set 1st parameter to null to use fullPath. When this overload is called,
+        /// the automatic MFU update is not happening. This is used for delayed async 
+        /// MFU refresh, when it shouldn't happen immediately, e.g. when drag-drop
+        /// occurs.</param>
         public static void Add2Custom(PowerItem item, string fullPath = null)
         {
-            var arg = item == null ? fullPath : PowerItemTree.GetResolvedArgument(item);
-            var idx = UserList.IndexOf(arg);
-            if(idx == UserList.Count -1 && UserList.Count > 0) //Already in list and top item
-                return;
-            if(idx != -1) //Already in list, move to top
-                UserList.RemoveAt(idx);
-            UserList.Add(arg); //Including case where item not in list
-            _writeUserList = true;
-            if(SettingsManager.Instance.MfuIsCustom && fullPath == null)
-                UpdateStartMfuSync(); //Refresh
+            lock (UserList)
+            {
+                var arg = item == null ? fullPath : PowerItemTree.GetResolvedArgument(item);
+                var idx = UserList.IndexOf(arg);
+                if(idx == UserList.Count -1 && UserList.Count > 0) //Already in list and top item
+                    return;
+                if(idx != -1) //Already in list, move to top
+                    UserList.RemoveAt(idx);
+                UserList.Add(arg); //Including case where item not in list
+                _writeUserList = true;
+                if(SettingsManager.Instance.MfuIsCustom && fullPath == null)
+                    UpdateStartMfuSync(); //Refresh
+            }
         }
 
+        /// <summary>
+        /// Removes item from user list.
+        /// </summary>
+        /// <param name="item">Item to remove. This method is called from UI, which converts
+        /// the string paths (potentially not mapped to PowerItem originally) to new PowerItems
+        /// when needed, so that's why there is no overload to remove string from the list.</param>
         public static void RemoveCustom(PowerItem item)
         {
-            UserList.Remove(PowerItemTree.GetResolvedArgument(item));
-            _writeUserList = true;
-            UpdateStartMfuSync();
+            lock (UserList)
+            {
+                UserList.Remove(PowerItemTree.GetResolvedArgument(item));
+                _writeUserList = true;
+                UpdateStartMfuSync();
+            }
         }
 
+        /// <summary>
+        /// Moves specified PowerItem to the location previously occupied by another item.
+        /// The destination item doesn't change it's relative position to other items, except if
+        /// one of those is source item. In such a case they are swapped.
+        /// </summary>
+        /// <param name="which">Item to move.</param>
+        /// <param name="where">Item identifying the new location of source item.</param>
+        /// <returns></returns>
         public static int MoveCustomListItem(PowerItem which, PowerItem where)
         {
-            lock (LastList)
+            lock (LastList) lock(UserList)
             {
                 //1. Change order in UserList 
                 var argFrom = PowerItemTree.GetResolvedArgument(which);
@@ -755,6 +810,10 @@ namespace Power8
             }
 
             //Step 2.3.3: apply pinning
+            //the following usage of PinList is not required to be locked away
+            //because the execution here will never happen when we either are in lock of PinList already,
+            //or from _sync method so it will happen on main thread which is the only cause 
+            //for this list to change
             foreach (var mfuElement in list.Where(mfuElement => PinList.Contains(mfuElement.Arg)))
             {
                 mfuElement.LaunchCount += 2000; //simply popping these up
