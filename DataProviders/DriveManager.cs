@@ -80,7 +80,9 @@ namespace Power8
         /// </summary>
         private static void Worker()
         {
+            var drivesAdder = new List<PowerItem>();
 begin:
+            drivesAdder.Clear();
             lock (DriveNames) //To ensure no InvalidOperationException occurs in GetDriveLabel()
             {                 //Also syncs handler above
                 _drives = DriveInfo.GetDrives();
@@ -119,16 +121,15 @@ begin:
                             }
                             DriveNames.Add(dName); //Add drive to collection
                             var fn = GetFormattedDriveLabel(dName); //override deadlock
-                            Util.Send(() => //Add drive to UI
-                                      _drivesRoot.Items.Add(new PowerItem
-                                                                {
-                                                                    Argument = dName,
-                                                                    AutoExpand = true,
-                                                                    IsFolder = true,
-                                                                    Parent = _drivesRoot,
-                                                                    NonCachedIcon = true,
-                                                                    FriendlyName = fn
-                                                                }));
+                            drivesAdder.Add(new PowerItem
+                            {
+                                Argument = dName,
+                                AutoExpand = true,
+                                IsFolder = true,
+                                Parent = _drivesRoot,
+                                NonCachedIcon = true,
+                                FriendlyName = fn
+                            });
                             //Add drive watcher
                             w.Created += PushEvent;
                             w.Deleted += PushEvent;
@@ -142,6 +143,14 @@ begin:
                                 BtnStck.Instanciated += (sender, args) => StartWatcher(w);
                         }
                     }
+                }
+            }
+            lock (_drivesRoot) //Add drive(s) to UI
+            {
+                foreach (var item in drivesAdder)
+                {
+                    var x = item;
+                    Util.Send(() => _drivesRoot.Items.Add(x));
                 }
             }
 
@@ -263,14 +272,20 @@ begin:
                     watcher.Dispose();
                     Watchers.Remove(watcher);
                 }
+                //Remove the name for failed drive from the actual drives list
+                DriveNames.Remove(dName);
+            }
+            //send cannot be in DriveNames lock because it may deadlock with Main thread when it processes
+            //device notifications. However, we still need to synchronize this remove operation over _drivesRoot 
+            //with add operation above
+            lock (_drivesRoot)
+            {
                 Util.Send(() => //remove PowerItem from UI
                 {
                     var item = _drivesRoot.Items.FirstOrDefault(j => j.Argument == dName);
                     if (item != null)
                         _drivesRoot.Items.Remove(item);
                 });
-                //Remove the name for failed drive from the actual drives list
-                DriveNames.Remove(dName);
             }
         }
 
