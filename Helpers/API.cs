@@ -211,6 +211,7 @@ namespace Power8
             public const string SHELL = "shell32.dll";
             public const string KERNEL = "kernel32.dll";
             public const string OLE = "ole32.dll";
+            public const string SHLWAPI = "shlwapi.dll";
         }
 
         public static class DevEvent
@@ -521,6 +522,7 @@ namespace Power8
             COMPUTERSNEARME = 0x003d, // Computers Near Me (computered from Workgroup membership)
             POWER8CLASS = 0x003e, // Power8 internal, unknown to API. Argument == name of P8 class
             POWER8JLITEM = 0x003f, // Power8 internal, unknown to API. Item is a JumpList item for parent
+            POWER8IMMERSIVE = 0x0040, // Power8 internal, unknown to API. Item is an Immersive App reference
             FLAG_CREATE = 0x8000, // combine with CSIDL_ value to force folder creation in SHGetFolderPath()
             FLAG_DONT_VERIFY = 0x4000, // combine with CSIDL_ value to return an unverified folder path
             FLAG_DONT_UNEXPAND = 0x2000, // combine with CSIDL_ value to avoid unexpanding environment variables
@@ -1004,6 +1006,10 @@ namespace Power8
 
         [DllImport(Lib.USER, CharSet = CharSet.Unicode, EntryPoint = "LoadIconW")]
         public static extern IntPtr LoadIcon(IntPtr hInstance, uint zeroHiWordIdLoWord);
+
+        [DllImport(Lib.SHLWAPI, BestFitMapping = false, CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = false, ThrowOnUnmappableChar = true)]
+        public static extern int SHLoadIndirectString(string pszSource, StringBuilder pszOutBuf, int cchOutBuf, IntPtr ppvReserved);
+
         
         [Flags]
         public enum ErrMode

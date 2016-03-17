@@ -805,13 +805,19 @@ namespace Power8
                 Log.Raw("Failed to retrieve AppUserModelId", targ); 
                 return false;
             }
-            Log.Raw("Creating ActivationManager", targ); 
+
+            return TryInvokeAppUserModelId(appUserModelId, targ);
+        }
+
+        public static bool TryInvokeAppUserModelId(string aumid, string targ = null)
+        {
+            Log.Raw("Creating ActivationManager", targ);
             var muiActivator = (API.IApplicationActivationManager)new API.ApplicationActivationManager();
             try //activate = launch; separate try because we need finally here
             {
-                Log.Raw("Launching AppX for AUMID " + appUserModelId, targ); 
-                /*var pid = */ 
-                muiActivator.ActivateApplication(appUserModelId, string.Empty, API.ACTIVATEOPTIONS.AO_NONE);
+                Log.Raw("Launching AppX for AUMID " + aumid, targ);
+                /*var pid = */
+                muiActivator.ActivateApplication(aumid, string.Empty, API.ACTIVATEOPTIONS.AO_NONE);
                 Log.Raw("Done OK ", targ); 
                 return true;
             }
@@ -1120,6 +1126,14 @@ namespace Power8
             Log.Fmt("hModule<={0}, resId<={1}, resDll<={2}", dllHandle, resId, resDll);
             return new Tuple<string, IntPtr, int>(resDll, dllHandle, resId);
         }
+
+        public static string ExtractStringIndirect(string resDescr)
+        {
+            var outBuff = new StringBuilder(1024);
+            API.SHLoadIndirectString(resDescr, outBuff, outBuff.Capacity, IntPtr.Zero);
+            return outBuff.ToString();
+        }
+
 
         #endregion
 

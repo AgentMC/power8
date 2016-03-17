@@ -662,6 +662,7 @@ namespace Power8.Views
                         break;
                     case "NetItems":
                         mcItem = PowerItemTree.NetworkRoot;
+                        var x = PowerItemTree.ImmersiveRoot; //todo!
                         break;
                     default:
                         return null;

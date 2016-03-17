@@ -120,7 +120,7 @@ namespace Power8
                 return container;
             }
         }
-
+        //todo: change description
         /// <summary>
         /// Returns ImageContainer for hIcon provided
         /// </summary>
@@ -134,7 +134,9 @@ namespace Power8
             {
                 if (Cache.ContainsKey(description))
                     return (ImageContainer)Cache[description];
-                var container = new ImageContainer(unmanagedIcon);
+                var container = unmanagedIcon == IntPtr.Zero
+                    ? new ImageContainer(description)
+                    : new ImageContainer(unmanagedIcon);
                 Cache.Add(description, container);
                 return container;
             }
@@ -154,6 +156,7 @@ namespace Power8
             private readonly API.Csidl _id; //SpecialFolderId from source PowerItem, if any
             private ImageSource _smallBitmap, _largeBitmap; 
             private bool _smallExtracted, _largeExtracted;
+            private Brush _background = Brushes.Transparent;
 
             /// <summary>
             /// Gets 16x16 BitmapSource-representation of target icon
@@ -201,7 +204,15 @@ namespace Power8
             public ImageContainer(IntPtr unmanagedIcon)
             {
                 SmallBitmap = ExtractInternal(unmanagedIcon);
-                SmallBitmap.Freeze();
+                LargeBitmap = SmallBitmap;
+            }
+            /// <summary>
+            /// Constructs the instance of ImageContainer for existing image file
+            /// </summary>
+            /// <param name="imagePath">path to image file</param>
+            public ImageContainer(string imagePath)
+            {
+                SmallBitmap = ExtractInternal(imagePath);
                 LargeBitmap = SmallBitmap;
             }
 
@@ -263,6 +274,16 @@ namespace Power8
             }
 
             /// <summary>
+            /// Returns BitmapSource for image file
+            /// </summary>
+            /// <param name="imagePath">path to image file</param>
+            private static BitmapSource ExtractInternal(string imagePath)
+            {
+                var bs = new BitmapImage(new Uri(imagePath));
+                bs.Freeze();
+                return bs;
+            }
+            /// <summary>
             /// Returns HICON of provided size (or of default size if requested one isn't available)
             /// </summary>
             /// <param name="iconType"></param>
@@ -304,6 +325,12 @@ namespace Power8
                 }
                 Log.Fmt("end<<<<<, zf={0}, hi={1}", zeroFails, shinfo.hIcon);
                 return zeroFails == IntPtr.Zero || shinfo.hIcon == IntPtr.Zero ? IntPtr.Zero : shinfo.hIcon;
+            }
+
+            public Brush Background
+            {
+                get { return _background; }
+                set { _background = value; }
             }
         }
     }

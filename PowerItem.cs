@@ -635,6 +635,11 @@ namespace Power8
                     Util.InstanciateClass(Argument);
                     return;
                 }
+                if (SpecialFolderId == API.Csidl.POWER8IMMERSIVE)
+                {
+                    Util.TryInvokeAppUserModelId(Argument);
+                    return;
+                }
             }
             //All the other stuff: FS-resolvable
             var psi = PowerItemTree.ResolveItem(this, IsFolder && verb == API.SEVerbs.RunAsAdmin);

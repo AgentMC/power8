@@ -34,10 +34,12 @@
                 <DataGridTemplateColumn Header="Icon" Width="16" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="Power8:PowerItem" >
-                            <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"
-                                   ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
-                                   ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
-                                   Margin="0,1"/>
+                            <Grid Background="{Binding Icon.Background}" Height="16" Width="16" Margin="0,1">
+                                <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"
+                                       ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
+                                       ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
+                                       Margin="0,1"/>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

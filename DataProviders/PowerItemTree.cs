@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Xml;
+using Power8.DataProviders;
 using Power8.Helpers;
 using Power8.Properties;
 using Power8.Views;
@@ -45,7 +46,8 @@ namespace Power8
                                  _librariesOrMyDocsItem,
                                  _controlPanelRoot,
                                  _myComputerItem,
-                                 _networkRoot;
+                                 _networkRoot,
+                                 _immersiveRoot;
 
         public static readonly EventWaitHandle CplDone = new EventWaitHandle(false, EventResetMode.ManualReset);
 
@@ -405,6 +407,45 @@ namespace Power8
                                   }, "Network Scan Thread");
                 }
                 return _networkRoot;
+            }
+        }
+
+        private static readonly System.Windows.Media.Color ImmersiveIgnore = System.Windows.Media.Color.FromRgb(0xF2, 0xF2, 0xF2);
+        public static PowerItem ImmersiveRoot
+        {
+            get
+            {
+                if (_immersiveRoot == null && Util.OsIs.EightOrMore)
+                {
+                    _immersiveRoot = new PowerItem
+                    {
+                        IsFolder = true,
+                        SpecialFolderId = API.Csidl.STARTMENU,
+                        FriendlyName = "Apps" //TODO!
+                    };
+                    //todo:
+                    //add to UI
+                    //make possible for custom and auto-mfu lists
+                    //add comments to all new methods
+                    foreach (var immersiveApp in ImmersiveAppsProvider.GetApps())
+                    {
+                        if (immersiveApp.Background == ImmersiveIgnore) continue; //todo: maybe substitute items from Start?
+
+                        var appIcon = ImageManager.GetImageContainerForIconSync(immersiveApp.Logo, IntPtr.Zero);
+                        appIcon.Background = immersiveApp.BackgroundBrush;
+                        _immersiveRoot.Items.Add(new PowerItem
+                        {
+                            Parent = _immersiveRoot,
+                            Argument = immersiveApp.AppUserModelID,
+                            SpecialFolderId = API.Csidl.POWER8IMMERSIVE,
+                            FriendlyName = immersiveApp.DisplayName,
+                            IsFolder = false,
+                            Icon = appIcon
+                        });
+
+                    }
+                }
+                return _immersiveRoot;
             }
         }
 
@@ -1031,7 +1072,7 @@ namespace Power8
                 if(!query.Contains("|")) //not filtered, regular search
                 {
                     foreach (var root in new[] { MyComputerRoot, StartMenuRootItem, ControlPanelRoot, 
-                                                 NetworkRoot, LibrariesRoot, MfuList.MfuSearchRoot })
+                                                 NetworkRoot, LibrariesRoot, MfuList.MfuSearchRoot, ImmersiveRoot })
                     {
                         var r = root;
                         Util.ForkPool(() =>
