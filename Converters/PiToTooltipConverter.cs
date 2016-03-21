@@ -27,12 +27,10 @@ namespace Power8.Converters
                 return Resources.Err_CantGetTooltip;
             if (!pi.IsNotPureControlPanelFlowItem)
                 return Resources.Str_CplElement;
-            if( pi.IsSpecialObject)
+            if (pi.IsSpecialObject)
             {
                 var cmd = Util.GetOpenCommandForClass(pi.Argument);
-                if(cmd == null)
-                    return pi.FriendlyName + Resources.Str_Library;
-                return cmd.Item1;
+                return cmd == null ? pi.FriendlyName + GetSuffixForSpecialObject(pi) : cmd.Item1;
             }
             try
             {
@@ -42,6 +40,13 @@ namespace Power8.Converters
             {
                 return Resources.Err_CantGetTooltip;
             }
+        }
+
+        private static string GetSuffixForSpecialObject(PowerItem item)
+        {
+            if (item.IsLibrary) return Resources.Str_Library;
+            if (item.SpecialFolderId == API.Csidl.POWER8IMMERSIVE) return " (" + item.Argument + ")";
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
