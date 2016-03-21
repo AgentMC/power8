@@ -411,6 +411,7 @@ namespace Power8
         }
 
         private static readonly System.Windows.Media.Color ImmersiveIgnore = System.Windows.Media.Color.FromRgb(0xF2, 0xF2, 0xF2);
+        private static readonly string VpnPlugins = Environment.ExpandEnvironmentVariables("%windir%\\vpnplugins\\");       
         public static PowerItem ImmersiveRoot
         {
             get
@@ -424,15 +425,22 @@ namespace Power8
                         FriendlyName = "Apps" //TODO!
                     };
                     //todo:
-                    //add to UI
+                    //fix UI (icons and everything)
                     //make possible for custom and auto-mfu lists
-                    //add comments to all new methods
+                    //add comments to all new methods and properties
+                    //test on W10 and W7
+                    //find out what to do with BrowserChoice background and VS dev apps
                     foreach (var immersiveApp in ImmersiveAppsProvider.GetApps())
                     {
-                        if (immersiveApp.Background == ImmersiveIgnore) continue; //todo: maybe substitute items from Start?
+                        if (immersiveApp.Background == ImmersiveIgnore ||
+                            immersiveApp.ApplicationPath.Contains(VpnPlugins))
+                        {
+                            continue; //todo: maybe substitute items from Start?
+                        }
 
                         var appIcon = ImageManager.GetImageContainerForIconSync(immersiveApp.Logo, IntPtr.Zero);
                         appIcon.Background = immersiveApp.BackgroundBrush;
+                        appIcon.Foreground = immersiveApp.ForegroundBrush;
                         _immersiveRoot.Items.Add(new PowerItem
                         {
                             Parent = _immersiveRoot,

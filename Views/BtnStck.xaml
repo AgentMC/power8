@@ -18,10 +18,35 @@
             <ColumnDefinition Width="300"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
-              ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
-              ItemContainerStyle="{StaticResource MenuItemStyle}" Grid.Row="{Binding ElementName=ButtonStack, 
-              Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}, Mode=OneWay, ConverterParameter=true}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="{Binding ElementName=ButtonStack, 
+                  Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}, Mode=OneWay, ConverterParameter=true}">
+            <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
+                  ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
+                  ItemContainerStyle="{StaticResource MenuItemStyle}" />
+            <Button Name="AppsMenu" Padding="0" Margin="3" Visibility="{Binding ElementName=ButtonStack, Path=IsPseudoStartButtonVisible}" 
+                    Click="ButtonAppsMenuClick">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="7"/>
+                        <RowDefinition Height="2"/>
+                        <RowDefinition Height="7"/>
+                        <RowDefinition Height="5"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="7"/>
+                        <ColumnDefinition Width="2"/>
+                        <ColumnDefinition Width="7"/>
+                        <ColumnDefinition Width="5"/>
+                    </Grid.ColumnDefinitions>
+                    <Rectangle Fill="White" Grid.Column="1" Grid.Row="1"/>
+                    <Rectangle Fill="White" Grid.Column="1" Grid.Row="3"/>
+                    <Rectangle Fill="White" Grid.Column="3" Grid.Row="1"/>
+                    <Rectangle Fill="White" Grid.Column="3" Grid.Row="3"/>
+                </Grid>
+            </Button>
+        </StackPanel>
         <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=MfuItems, Mode=OneWay}" Margin="3" 
                   Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
@@ -29,7 +54,7 @@
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" 
                   AreRowDetailsFrozen="True" CanUserResizeRows="False" SelectionMode="Single"
                   HorizontalScrollBarVisibility="Disabled" IsTabStop="True" PreviewKeyDown="DataGridPreviewKeyDown" 
-                  CellStyle="{StaticResource DataGridCellStyle}" Background="White">
+                  CellStyle="{StaticResource DataGridCellStyle}" Background="White" Grid.Column="0">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Icon" Width="16" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
@@ -123,14 +148,14 @@
                 </GroupStyle>
             </DataGrid.GroupStyle>
         </DataGrid>
-        <TextBox Name="SearchBox" Margin="3" Style="{StaticResource SearchBoxStyle}" 
+        <TextBox Name="SearchBox" Margin="3" Style="{StaticResource SearchBoxStyle}"  Grid.Column="0"
                  TextChanged="SearchBoxTextChanged" PreviewKeyDown="SearchBoxPreviewKeyDown" 
                  Grid.Row="{Binding ElementName=ButtonStack, Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}}"/>
-        <TextBlock Name="SearchMarker" Margin="10,3" HorizontalAlignment="Right" 
+        <TextBlock Name="SearchMarker" Margin="10,3" HorizontalAlignment="Right" Grid.Column="0"
                    VerticalAlignment="Center" Foreground="Gray" Visibility="Hidden"
                    Grid.Row="{Binding ElementName=ButtonStack, Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}}"
                    Text="{Binding Path=Name, RelativeSource={RelativeSource Self}, Mode=OneWay, Converter={StaticResource localizer}}"/>
-        <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0">
+        <StackPanel x:Name="folderButtons" Grid.Column="1" Grid.RowSpan="3" Margin="5,0,0,0" Grid.Row="0">
             <StackPanel x:Name="dataGridHeightMeasure">
                 <Power8:MenuedButton x:Name="MyComputer" Margin="0,3,0,0" Visibility="{Binding ShowMbComputer, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 <Power8:MenuedButton x:Name="Libraries" Margin="0,1,0,0" Visibility="{Binding ShowMbDocs, Converter={StaticResource BooleanToVisibilityConverter}}"/>
@@ -151,5 +176,36 @@
             <Button Click="ButtonScreensaveClick" Name="ButtonScreensave"/>
             <Button Click="ButtonLockClick" Name="ButtonLock" Margin="0,0,0,2"/>
         </StackPanel>
+        <Popup Grid.Row="0" Grid.Column="0" AllowsTransparency="True" PlacementTarget="{Binding ElementName=AppsMenu}" StaysOpen="False" Name="AppsMenuPopup">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding AppsItems, ElementName=ButtonStack}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="Power8:PowerItem">
+                            <Button Background="Transparent" Padding="0" Click="AppButtonClick">
+                                <Button.Style>
+                                    <Style/>
+                                </Button.Style>
+                                <Grid Width="150" Height="50" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Rectangle Fill="{Binding Icon.Background}" Grid.ColumnSpan="2" Opacity="0.85"  />
+                                    <Image Grid.Column="0" Source="{Binding Icon.LargeBitmap}" StretchDirection="DownOnly"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center"
+                                               Foreground="{Binding Icon.Foreground}" TextWrapping="Wrap" Margin="3" 
+                                               Text="{Binding FriendlyName}"/>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Popup>
     </Grid>
 </Window>

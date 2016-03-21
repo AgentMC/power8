@@ -232,11 +232,12 @@ namespace Power8
             }
         }
         /// <summary>
+        /// TODO: change description, rewrite iif below
         /// Returns suggested minimum width for item. 300 for roots, 0 for others.
         /// </summary>
         public Double MinWidth
         {
-            get { return Parent == null ? 300 : 0; }
+            get { return Parent == null ? (Util.OsIs.EightOrMore ? 262 : 300) : 0; }
         }
 
         #endregion
@@ -423,7 +424,8 @@ namespace Power8
         {
             get { return IsLibrary 
                         || (!string.IsNullOrEmpty(Argument) && Argument.StartsWith("::{")) 
-                        || SpecialFolderId == API.Csidl.POWER8CLASS; }
+                        || SpecialFolderId == API.Csidl.POWER8CLASS
+                        || SpecialFolderId == API.Csidl.POWER8IMMERSIVE; }
         }
         /// <summary>
         /// Returns true if this instance points to the file with ".library-ms" extension,

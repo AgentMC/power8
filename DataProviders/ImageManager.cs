@@ -156,7 +156,7 @@ namespace Power8
             private readonly API.Csidl _id; //SpecialFolderId from source PowerItem, if any
             private ImageSource _smallBitmap, _largeBitmap; 
             private bool _smallExtracted, _largeExtracted;
-            private Brush _background = Brushes.Transparent;
+            private Brush _background = Brushes.Transparent, _foreground = Brushes.Black;
 
             /// <summary>
             /// Gets 16x16 BitmapSource-representation of target icon
@@ -331,6 +331,12 @@ namespace Power8
             {
                 get { return _background; }
                 set { _background = value; }
+            }
+
+            public Brush Foreground
+            {
+                get { return _foreground; }
+                set { _foreground = value; }
             }
         }
     }

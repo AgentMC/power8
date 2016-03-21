@@ -765,6 +765,17 @@ namespace Power8.Views
         {
             get { return PowerItemTree.StartMenuRoot; }
         }
+
+        /// <summary>
+        /// Source for Apps Menu
+        /// </summary>
+        public ObservableCollection<PowerItem> AppsItems
+        {
+            get
+            {
+                return PowerItemTree.ImmersiveRoot.Items;
+            }
+        }
         /// <summary>
         /// Source for Recent list
         /// </summary>
@@ -791,6 +802,26 @@ namespace Power8.Views
             }
         }
 
+        //TODO: move this somewhere
+        /// <summary>
+        /// Conditionally hides or shows Pseudo-start button depending on OS
+        /// </summary>
+        public Visibility IsPseudoStartButtonVisible
+        {
+            get { return Util.OsIs.EightOrMore ? Visibility.Visible : Visibility.Collapsed; }
+        }
+
         #endregion
+
+        private void ButtonAppsMenuClick(object sender, RoutedEventArgs e)
+        {
+            AppsMenuPopup.MaxWidth = Screen.FromHandle(this.GetHandle()).Bounds.Width/1.5;
+            AppsMenuPopup.IsOpen = true;
+        }
+
+        private void AppButtonClick(object sender, RoutedEventArgs e)
+        {
+            Util.ExtractRelatedPowerItem(e).Invoke();
+        }
     }
 }
