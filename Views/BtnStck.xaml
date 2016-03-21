@@ -18,7 +18,7 @@
             <ColumnDefinition Width="300"></ColumnDefinition>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="{Binding ElementName=ButtonStack, 
+        <Grid Grid.Row="{Binding ElementName=ButtonStack, 
                   Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}, Mode=OneWay, ConverterParameter=true}">
             <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
                   ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
@@ -46,7 +46,7 @@
                     <Rectangle Fill="White" Grid.Column="3" Grid.Row="3"/>
                 </Grid>
             </Button>
-        </StackPanel>
+        </Grid>
         <DataGrid HeadersVisibility="None" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False"
                   ItemsSource="{Binding ElementName=ButtonStack, Path=MfuItems, Mode=OneWay}" Margin="3" 
                   Height="{Binding ElementName=dataGridHeightMeasure, Mode=OneWay, Path=ActualHeight}" 
