@@ -11,8 +11,15 @@ namespace Power8.DataProviders
 {
     public static class ImmersiveAppsProvider
     {
+        public const string APPXMANIFEST_XML = "AppxManifest.xml";
         //Main entry point
-        public static IEnumerable<ImmersiveApp> GetApps()
+        private static List<ImmersiveApp> _cache; 
+        public static List<ImmersiveApp> GetAppsCache()
+        {
+            return _cache ?? (_cache = new List<ImmersiveApp>(GetApps()));
+        }
+
+        private static IEnumerable<ImmersiveApp> GetApps()
         {
             //Step 1. Getting initial package deployment info: package ids and related deployment paths and display names
             var pathCache = GetDeploymentPathCache();
@@ -28,7 +35,7 @@ namespace Power8.DataProviders
             foreach (var package in serverCache)
             {
                 var pathCacheItem = pathCache[package.Key];
-                var appxManifestPath = Path.Combine(pathCacheItem.RootPath, "AppxManifest.xml");
+                var appxManifestPath = Path.Combine(pathCacheItem.RootPath, APPXMANIFEST_XML);
                 if (!File.Exists(appxManifestPath)) continue;
 
                 string company = null, logoTemplate = null;
@@ -51,6 +58,7 @@ namespace Power8.DataProviders
                                                   return new
                                                   {
                                                       Id = e.Attribute("Id").Value,
+                                                      File = (e.Attribute("Executable") ?? e.Attribute("StartPage")).Value,
                                                       Description = visual.GetValueOrNull("Description"),
                                                       DisplayName = visual.GetValueOrNull("DisplayName"),
                                                       Logos = visual.Attributes()
@@ -82,6 +90,7 @@ namespace Power8.DataProviders
                     yield return new ImmersiveApp
                     {
                         PackageId = package.Key,
+                        File = appDataItem.File,
                         ApplicationName = Util.ExtractStringIndirect(pathCacheItem.DisplayName),
                         ApplicationDisplayName = ExtractStringFromPackageOptional(appDataItem.DisplayName, pathCacheItem.DisplayName),
                         ApplicationCompany = ExtractStringFromPackageOptional(company, pathCacheItem.DisplayName),
@@ -221,7 +230,7 @@ namespace Power8.DataProviders
             return ch1 > 9 ? (ch1 > 41 ? ch1 - 39 : ch1 - 7) : ch1;
         }
         
-        internal static string ExtractStringFromPackageOptional(string resourceKey, string uriTemplate)
+        private static string ExtractStringFromPackageOptional(string resourceKey, string uriTemplate)
         {
             if (resourceKey == null) return null;
             if (resourceKey.StartsWith("ms-resource:"))
@@ -245,7 +254,7 @@ namespace Power8.DataProviders
             return resourceKey;
         }
 
-        public static string GetValueOrNull(this XElement xe, string nullForValueOrAttributeName = null)
+        private static string GetValueOrNull(this XElement xe, string nullForValueOrAttributeName = null)
         {
             if (xe == null) return null;
             if (nullForValueOrAttributeName == null) return xe.Value;

@@ -14,7 +14,6 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
-using System.Xml.Linq;
 using Microsoft.Win32;
 using Power8.DataProviders;
 using Power8.Helpers;
@@ -751,12 +750,15 @@ namespace Power8
             {
 // ReSharper disable AssignNullToNotNullAttribute
                 //First, try locating the manifest that contains identity and ID
+                const string mxml = ImmersiveAppsProvider.APPXMANIFEST_XML;
+                const StringComparison caseless = StringComparison.OrdinalIgnoreCase;
+
                 Log.Raw("Searching for manifest", targ);
-                var manifest = Path.Combine(Path.GetDirectoryName(targ), "AppxManifest.xml");
-                if (!File.Exists(manifest) && targ.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase))
+                var manifest = Path.Combine(Path.GetDirectoryName(targ), mxml);
+                if (!File.Exists(manifest) && targ.EndsWith(".lnk", caseless))
                 {
                     targ = ResolveLinkSafe(targ);
-                    manifest = Path.Combine(Path.GetDirectoryName(targ), "AppxManifest.xml");
+                    manifest = Path.Combine(Path.GetDirectoryName(targ), mxml);
                 }
 // ReSharper restore AssignNullToNotNullAttribute
                 if (!File.Exists(manifest))
@@ -765,43 +767,25 @@ namespace Power8
                     return false;
                 }
 
-                //Load manifest and extract package Identity and all included apps IDs
-                Log.Raw("Parsing manifest", targ);
-                var xm = XElement.Load(manifest);
-                var ns = xm.GetDefaultNamespace();
-// ReSharper disable PossibleNullReferenceException
-                var identity = xm.Element(ns + "Identity")
-                                 .Attribute("Name")
-                                 .Value;
-                var apps = xm.Element(ns + "Applications")
-                             .Elements(ns + "Application")
-                             .Select(x => new
-                                          {
-                                              Id = x.Attribute("Id").Value,
-                                              File = (x.Attribute("Executable") ?? x.Attribute("StartPage")).Value
-                                          });
-// ReSharper restore PossibleNullReferenceException
-
-                //The app passed in targ argument should be registered Metro application, otherwise it can't be activated
-                Log.Raw("Defining target app", targ);
-                var app = apps.FirstOrDefault(a => targ.EndsWith(a.File, StringComparison.OrdinalIgnoreCase));
+                var app = ImmersiveAppsProvider.GetAppsCache()
+                                               .Where(a => Path.Combine(a.ApplicationPath, mxml).Equals(manifest, caseless))
+                                               .SingleOrDefault(a => targ.EndsWith(a.File, caseless));
                 if (app == null)
                 {
                     Log.Raw("Target app wasn't discovered, defaulting to regular shell launch", targ);
                     return false;
                 }
 
-                //As we know it's ModernUI app, let's try extracting it's AppUMID.
-                Log.Raw("Getting AppUserModelId", targ); 
-                appUserModelId = AppxUserModelIdProvider.GetAppUserModelId(identity, app.Id);
+                appUserModelId = app.AppUserModelID;
             }
             catch (Exception ex)
             {
                 DispatchCaughtException(ex);
                 return false;
             }
+
             if (appUserModelId == null) 
-            {//no Windows registry entries fpund describing the app or it's not activatable
+            {//no Windows registry entries found describing the app or it's not activatable
                 Log.Raw("Failed to retrieve AppUserModelId", targ); 
                 return false;
             }

@@ -427,12 +427,11 @@ namespace Power8
 					if (Util.OsIs.EightOrMore)
 					{
 						//todo:
-						//fix UI (icons and everything)
 						//make possible for custom and auto-mfu lists
 						//add comments to all new methods and properties
 						//test on W10 and W7
 						//find out what to do with BrowserChoice background and VS dev apps
-						foreach (var immersiveApp in ImmersiveAppsProvider.GetApps())
+						foreach (var immersiveApp in ImmersiveAppsProvider.GetAppsCache())
 						{
 							if (immersiveApp.Background == ImmersiveIgnore ||
 								immersiveApp.ApplicationPath.Contains(VpnPlugins))

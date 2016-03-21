@@ -106,7 +106,6 @@
     <Compile Include="Converters\BoolToGridRowConverter.cs" />
     <Compile Include="Converters\Stretch2BoolConverter.cs" />
     <Compile Include="Converters\TextToBoolConverter.cs" />
-    <Compile Include="DataProviders\AppxUserModelIdProvider.cs" />
     <Compile Include="DataProviders\ImmersiveApp.cs" />
     <Compile Include="DataProviders\ImmersiveAppsProvider.cs" />
     <Compile Include="DataProviders\MfuList.cs" />

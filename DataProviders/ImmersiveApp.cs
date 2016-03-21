@@ -21,6 +21,7 @@ namespace Power8.DataProviders
         public string PackageId { get; set; }
         //------
         public string ApplicationPath { get; set; }
+        public string File { get; set; }
         //------
         public string Logo
         {
