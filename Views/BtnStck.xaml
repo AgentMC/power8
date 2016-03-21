@@ -20,10 +20,14 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="{Binding ElementName=ButtonStack, 
                   Path=IsWindowAtTopOfScreen, Converter={StaticResource uiSwitcher}, Mode=OneWay, ConverterParameter=true}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
                   ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
                   ItemContainerStyle="{StaticResource MenuItemStyle}" />
-            <Button Name="AppsMenu" Padding="0" Margin="3" Visibility="{Binding ElementName=ButtonStack, Path=IsPseudoStartButtonVisible}" 
+            <Button Grid.Column="1" Name="AppsMenu" Padding="0" Margin="3" Visibility="{Binding ElementName=ButtonStack, Path=IsPseudoStartButtonVisible}" 
                     Click="ButtonAppsMenuClick">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -62,8 +66,8 @@
                             <Grid Background="{Binding Icon.Background}" Height="16" Width="16" Margin="0,1">
                                 <Image Source="{Binding Icon.SmallBitmap}" Height="16" Width="16"
                                        ToolTip="{Binding Converter={StaticResource PiToTooltipConverter1}}"
-                                       ContextMenu="{StaticResource fsMenuItemsContextMenu}" ContextMenuOpening="AllItemsMenuRootContextMenuOpening"
-                                       Margin="0,1"/>
+                                       ContextMenu="{StaticResource fsMenuItemsContextMenu}" 
+                                       ContextMenuOpening="AllItemsMenuRootContextMenuOpening"/>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
