@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Power8.DataProviders;
 using Power8.Helpers;
 using Power8.Properties;
 using System.Linq;
@@ -232,12 +233,14 @@ namespace Power8
             }
         }
         /// <summary>
-        /// TODO: change description, rewrite iif below
-        /// Returns suggested minimum width for item. 300 for roots, 0 for others.
+        /// Used to align start menu and pseudo-immersive start menu on button stack.
+        /// This property is used by style of all menu items but for most cases it's not affecting them.
+        /// It's only affecting "Start menu" item. In case the pseudo-start button should be shown, it's
+        /// width is limited to 262 pixels, otherwise it's 300.
         /// </summary>
         public Double MinWidth
         {
-            get { return Parent == null ? (Util.OsIs.EightOrMore ? 262 : 300) : 0; }
+            get { return Parent == null ? (ImmersiveAppsProvider.Any ? 262 : 300) : 0; }
         }
 
         #endregion

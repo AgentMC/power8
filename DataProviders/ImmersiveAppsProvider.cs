@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows.Media;
 using System.Xml.Linq;
 using Microsoft.Win32;
+using Power8.Helpers;
 
 namespace Power8.DataProviders
 {
@@ -16,17 +17,27 @@ namespace Power8.DataProviders
         private static List<ImmersiveApp> _cache; 
         public static List<ImmersiveApp> GetAppsCache()
         {
-            return _cache ?? (_cache = new List<ImmersiveApp>(GetApps()));
+            if (_cache == null)
+                lock (APPXMANIFEST_XML)
+                    if (_cache == null)
+                        _cache = new List<ImmersiveApp>(GetApps());
+            return _cache;
         }
 
         private static IEnumerable<ImmersiveApp> GetApps()
         {
+            Log.Raw("Begin GetApps. OsIs 8+ = " + Util.OsIs.EightOrMore);
+            //Only for Win8+
+            if (!Util.OsIs.EightOrMore) yield break;
+
             //Step 1. Getting initial package deployment info: package ids and related deployment paths and display names
             var pathCache = GetDeploymentPathCache();
+            if(pathCache == null || pathCache.Count == 0) yield break;
 
             //Step 2. Scanning classes repo for main executables and activatable clsids
             //Each package may have several "entry points" - servers, for now just read them all
             var serverCache = GetExecutableServerCache();
+            if (serverCache == null || serverCache.Count == 0) yield break;
 
             //Step 3. Parse app manifest to get more visual information and corellate deployment and server caches
             XNamespace m1 = XNamespace.Get("http://schemas.microsoft.com/appx/2010/manifest"),
@@ -34,12 +45,14 @@ namespace Power8.DataProviders
 
             foreach (var package in serverCache)
             {
+                Log.Raw("Loading server data", package.Key);
                 var pathCacheItem = pathCache[package.Key];
                 var appxManifestPath = Path.Combine(pathCacheItem.RootPath, APPXMANIFEST_XML);
                 if (!File.Exists(appxManifestPath)) continue;
 
                 string company = null, logoTemplate = null;
 
+                Log.Raw("Processing manifest " + appxManifestPath);
                 var appManifest = XElement.Load(appxManifestPath);
                 var props = appManifest.Element(m1 + "Properties");
                 if (props != null)
@@ -79,6 +92,7 @@ namespace Power8.DataProviders
                 foreach (var appDataItem in appDataItems)
                 {
                     if(appDataItem == null) continue;
+                    Log.Raw("Processing manifest item with ID " + appDataItem.Id);
                     var suffix = appDataItem.Id;
                     var appUserModelId = package.Value
                                                 .Where(s => !s.ServerId.StartsWith("Background"))
@@ -87,6 +101,7 @@ namespace Power8.DataProviders
                                                 .Select(s => s.AppUserModelId)
                                                 .Distinct()
                                                 .Single();
+                    Log.Raw("AppUserModelId identified is " + appUserModelId);
                     yield return new ImmersiveApp
                     {
                         PackageId = package.Key,
@@ -116,22 +131,32 @@ namespace Power8.DataProviders
             var serverCache = new Dictionary<string, List<ServerCacheItem>>();
             using (var mainRepo = Registry.ClassesRoot.OpenSubKey("ActivatableClasses\\Package"))
             {
+                if (mainRepo == null)
+                {
+                    Log.Raw("Repo couldn't be opened.");
+                    return null;
+                }
+                Log.Raw("Repo openeed.");
                 foreach (var packageKey in mainRepo.GetSubKeyNames())
                 {
+                    Log.Raw("Processing", packageKey);
                     using (var subKey = mainRepo.OpenSubKey(packageKey + "\\Server"))
                     {
                         if (subKey == null) continue;
+                        Log.Raw("Processing servers", packageKey);
 
                         var serverList = new List<ServerCacheItem>();
                         serverCache[packageKey] = serverList;
 
                         foreach (var serverKeyName in subKey.GetSubKeyNames())
                         {
+                            Log.Raw("Processing server ", serverKeyName);
                             using (var serverKey = subKey.OpenSubKey(serverKeyName))
                             {
                                 serverList.Add(new ServerCacheItem
                                 {
                                     ServerId = serverKeyName,
+// ReSharper disable once PossibleNullReferenceException
                                     AppUserModelId = (string) serverKey.GetValue("AppUserModelId"),
                                     ExePath = serverKey.GetValue("ExePath").ToString().ToLower()
                                 });
@@ -150,10 +175,18 @@ namespace Power8.DataProviders
             var pathCache = new Dictionary<string, PathCacheItem>();
             using (var packageRepo = Registry.ClassesRoot.OpenSubKey(repoPath))
             {
+                if (packageRepo == null)
+                {
+                    Log.Raw("Repo couldn't be opened.");
+                    return null;
+                }
+                Log.Raw("Repo openeed.");
                 foreach (var keyName in packageRepo.GetSubKeyNames())
                 {
+                    Log.Raw("Processing", keyName);
                     using (var subKey = packageRepo.OpenSubKey(keyName))
                     {
+// ReSharper disable once PossibleNullReferenceException
                         pathCache[(string) subKey.GetValue("PackageID")] = new PathCacheItem
                         {
                             DisplayName = (string) subKey.GetValue("DisplayName"),
@@ -163,6 +196,11 @@ namespace Power8.DataProviders
                 }
             }
             return pathCache;
+        }
+
+        public static bool Any
+        {
+            get { return GetAppsCache().Count > 0; }
         }
 
         //Internal helpers

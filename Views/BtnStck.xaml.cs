@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Power8.DataProviders;
 using Power8.Helpers;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
@@ -802,13 +803,12 @@ namespace Power8.Views
             }
         }
 
-        //TODO: move this somewhere
         /// <summary>
         /// Conditionally hides or shows Pseudo-start button depending on OS
         /// </summary>
         public Visibility IsPseudoStartButtonVisible
         {
-            get { return Util.OsIs.EightOrMore ? Visibility.Visible : Visibility.Collapsed; }
+            get { return ImmersiveAppsProvider.Any ? Visibility.Visible : Visibility.Collapsed; }
         }
 
         #endregion
