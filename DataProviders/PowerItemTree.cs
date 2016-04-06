@@ -1210,11 +1210,14 @@ namespace Power8
 					{
 						lock (destination)
 						{
-							var data = rdr[0].ToString()
-											 .Substring(5)
-											 .TrimStart(new[] { '/' })
-											 .Replace('/', bs); //uri => path
-							if (data.Length > 1 && data[1] != ':') //UNC?
+						    var data = rdr[0].ToString();
+						    if (!string.IsNullOrEmpty(data) && data.StartsWith("file:", StringComparison.OrdinalIgnoreCase))
+						    {
+						        data = data.Substring(5)
+						                   .TrimStart(new[] {'/'})
+						                   .Replace('/', bs); //uri => path
+						    }
+						    if (data.Length > 1 && data[1] != ':') //UNC?
 								data = bs + bs + data;
 							var source = new PowerItem
 											 {
