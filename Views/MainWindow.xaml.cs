@@ -129,7 +129,7 @@ namespace Power8.Views
                 SystemScale *= g.DpiX;
             }
 
-            if (Util.OsIs.SevenOrMore && !Util.OsIs.TresholdOrMore) //7 --> 8.1
+            if (Util.OsIs.SevenOrMore && !Util.OsIs.TenOrMore) //7 --> 8.1
             {
                 _midPanel = API.FindWindowEx(_taskBar, IntPtr.Zero, API.WndIds.TRAY_REBAR_WND_CLASS, null);
                 CheckWnd(_midPanel, API.WndIds.TRAY_REBAR_WND_CLASS);
@@ -145,7 +145,7 @@ namespace Power8.Views
             }
             else //XP, 10
             {
-                var hostClass = Util.OsIs.TresholdOrMore ? API.WndIds.SH_W8_1_START_CLASS : API.WndIds.SH_DSKTP_START_CLASS;
+                var hostClass = Util.OsIs.TenOrMore ? API.WndIds.SH_W8_1_START_CLASS : API.WndIds.SH_DSKTP_START_CLASS;
                 _showDesktopBtn = API.FindWindowEx(_taskBar, IntPtr.Zero, hostClass, null);
                 CheckWnd(_showDesktopBtn, hostClass);
             }

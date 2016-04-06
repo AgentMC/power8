@@ -1476,7 +1476,7 @@ namespace Power8
             public static bool EightBlueOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 3); } } //Win8.1+
             public static bool EightBlueExact { get { return Ver.Major == 6 && Ver.Minor == 3; } } //Win8.1
             public static bool EightFamily { get { return Ver.Major == 6 && (Ver.Minor == 3 || Ver.Minor == 2); } } //Win8.1
-            public static bool TresholdOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 4); } } //Win10+
+            public static bool TenOrMore { get { return Ver.Major > 6 || (Ver.Major == 6 && Ver.Minor >= 4); } } //Win10+
 
         }
 
