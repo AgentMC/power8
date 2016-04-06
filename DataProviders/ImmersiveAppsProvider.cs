@@ -39,14 +39,21 @@ namespace Power8.DataProviders
             var serverCache = GetExecutableServerCache();
             if (serverCache == null || serverCache.Count == 0) yield break;
 
-            //Step 3. Parse app manifest to get more visual information and corellate deployment and server caches
-            XNamespace m1 = XNamespace.Get("http://schemas.microsoft.com/appx/2010/manifest"),
-                       m2 = XNamespace.Get("http://schemas.microsoft.com/appx/2013/manifest");
+			//Step 3. Parse app manifest to get more visual information and corellate deployment and server caches
+			XNamespace m1 = XNamespace.Get("http://schemas.microsoft.com/appx/2010/manifest"),
+					   m2 = XNamespace.Get("http://schemas.microsoft.com/appx/2013/manifest"),
+					   m3 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/foundation/windows10"),
+					   m4 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/uap/windows10");
 
             foreach (var package in serverCache)
             {
+				PathCacheItem pathCacheItem;
+				if(!pathCache.TryGetValue(package.Key, out pathCacheItem))
+				{
+					Log.Raw("Skipping server", package.Key);
+					continue;
+				}
                 Log.Raw("Loading server data", package.Key);
-                var pathCacheItem = pathCache[package.Key];
                 var appxManifestPath = Path.Combine(pathCacheItem.RootPath, APPXMANIFEST_XML);
                 if (!File.Exists(appxManifestPath)) continue;
 
@@ -60,34 +67,36 @@ namespace Power8.DataProviders
                     company = props.Element(m1 + "PublisherDisplayName").GetValueOrNull();
                     logoTemplate = props.Element(m1 + "Logo").GetValueOrNull();
                 }
-// ReSharper disable once PossibleNullReferenceException
-                var appDataItems = appManifest.Element(m1 + "Applications")
-                                              .Elements()
-                                              .Select(e =>
-                                              {
-                                                  var visual = e.Element(m1 + "VisualElements") ??
-                                                               e.Element(m2 + "VisualElements");
-                                                  if (visual == null) return null;
-                                                  return new
-                                                  {
-                                                      Id = e.Attribute("Id").Value,
-                                                      File = (e.Attribute("Executable") ?? e.Attribute("StartPage")).Value,
-                                                      Description = visual.GetValueOrNull("Description"),
-                                                      DisplayName = visual.GetValueOrNull("DisplayName"),
-                                                      Logos = visual.Attributes()
-                                                                    .Where(a => a.Name.LocalName.Contains("Logo"))
-                                                                    .Select(a => new
-                                                                    {
-                                                                        Name = a.Name.LocalName,
-                                                                        RelativePath = a.Value
-                                                                    }),
-                                                      //BackgroundColor="#000000" ForegroundText="light" 
-                                                      ForegroundText = visual.GetValueOrNull("ForegroundText")
-                                                                             .ToLower()
-                                                                             .Equals("light") ? Colors.White : Colors.Black,
-                                                      BackgroundColor = ParseColor(visual.GetValueOrNull("BackgroundColor"))
-                                                  };
-                                              });
+				// ReSharper disable once PossibleNullReferenceException
+				var appDataItems = (appManifest.Element(m1 + "Applications") ?? appManifest.Element(m3 + "Applications"))
+											  .Elements()
+											  .Select(e =>
+											  {
+												  var visual = e.Element(m1 + "VisualElements") ??
+															   e.Element(m2 + "VisualElements") ??
+															   e.Element(m3 + "VisualElements") ??
+															   e.Element(m4 + "VisualElements");
+												  if (visual == null) return null;
+												  return new
+												  {
+													  Id = e.Attribute("Id").Value,
+													  File = (e.Attribute("Executable") ?? e.Attribute("StartPage")).Value,
+													  Description = visual.GetValueOrNull("Description"),
+													  DisplayName = visual.GetValueOrNull("DisplayName"),
+													  Logos = visual.Attributes()
+																	.Where(a => a.Name.LocalName.Contains("Logo"))
+																	.Select(a => new
+																	{
+																		Name = a.Name.LocalName,
+																		RelativePath = a.Value
+																	}),
+													  //BackgroundColor="#000000" ForegroundText="light" 
+													  ForegroundText = (visual.GetValueOrNull("ForegroundText")?? string.Empty)
+																			 .ToLower()
+																			 .Equals("light") ? Colors.White : Colors.Black,
+													  BackgroundColor = ParseColor(visual.GetValueOrNull("BackgroundColor"))
+												  };
+											  });
 
                 foreach (var appDataItem in appDataItems)
                 {
