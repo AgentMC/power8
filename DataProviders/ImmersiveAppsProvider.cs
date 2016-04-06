@@ -31,89 +31,107 @@ namespace Power8.DataProviders
             if (!Util.OsIs.EightOrMore) yield break;
 
             //Step 1. Getting initial package deployment info: package ids and related deployment paths and display names
-            var pathCache = GetDeploymentPathCache();
+            //This may include non-activateable or non-existing packages
+            var pathCache = GetAppPackages();
             if(pathCache == null || pathCache.Count == 0) yield break;
 
-            //Step 2. Scanning classes repo for main executables and activatable clsids
-            //Each package may have several "entry points" - servers, for now just read them all
-            var serverCache = GetExecutableServerCache();
-            if (serverCache == null || serverCache.Count == 0) yield break;
+            //Step 2. Scanning activateable classes repo to filter activatable package IDs
+            var serverCache = GetExecutablePackages();
+            if (serverCache == null || serverCache.Length == 0) yield break;
 
-			//Step 3. Parse app manifest to get more visual information and corellate deployment and server caches
-			XNamespace m1 = XNamespace.Get("http://schemas.microsoft.com/appx/2010/manifest"),
-					   m2 = XNamespace.Get("http://schemas.microsoft.com/appx/2013/manifest"),
+            //Step 3. Corellating package IDs to App families. We need this info because AppUserModelId is
+            //(only for immersive apps) "<FamilyId>!<AppId>". As a side note, we will get App IDs further.
+            var families = GetAppFamilies();
+            if (families == null || families.Count == 0) yield break;
+
+			//Step 4. Parse app manifest to get more visual information and corellate deployment and server caches,
+			//and (the most important!) get the AppIds from which we'll construct the AppUserModelIds
+			XNamespace m1 = XNamespace.Get("http://schemas.microsoft.com/appx/2010/manifest"), //W8 old
+					   m2 = XNamespace.Get("http://schemas.microsoft.com/appx/2013/manifest"), //W8 new
 					   m3 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/foundation/windows10"),
-					   m4 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/uap/windows10");
+					   m4 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/uap/windows10"),
+					   m0;
 
-            foreach (var package in serverCache)
+			foreach (var package in serverCache)// for all the activateable classes
             {
 				PathCacheItem pathCacheItem;
-				if(!pathCache.TryGetValue(package.Key, out pathCacheItem))
+				if(!pathCache.TryGetValue(package, out pathCacheItem))
 				{
-					Log.Raw("Skipping server", package.Key);
+					Log.Raw("Skipping activateable package (reason: path cache miss)", package);
 					continue;
 				}
-                Log.Raw("Loading server data", package.Key);
+
+				string family;
+				if(!families.TryGetValue(package, out family))
+				{
+					Log.Raw("Skipping activateable package (reason: family cache miss)", package);
+					continue;
+				}
+
+                Log.Raw("Loading package data", package);
                 var appxManifestPath = Path.Combine(pathCacheItem.RootPath, APPXMANIFEST_XML);
-                if (!File.Exists(appxManifestPath)) continue;
+                if (!File.Exists(appxManifestPath))
+                {
+                    Log.Raw("Appx Manifest not found", appxManifestPath);
+                    continue;
+                }
 
                 string company = null, logoTemplate = null;
 
                 Log.Raw("Processing manifest " + appxManifestPath);
                 var appManifest = XElement.Load(appxManifestPath);
-                var props = appManifest.Element(m1 + "Properties");
+				m0 = appManifest.Name.Namespace;
+				var props = appManifest.Element(m0 + "Properties");
                 if (props != null)
                 {
-                    company = props.Element(m1 + "PublisherDisplayName").GetValueOrNull();
-                    logoTemplate = props.Element(m1 + "Logo").GetValueOrNull();
+                    company = props.Element(m0 + "PublisherDisplayName").GetValueOrNull();
+                    logoTemplate = props.Element(m0 + "Logo").GetValueOrNull();
                 }
 				// ReSharper disable once PossibleNullReferenceException
-				var appDataItems = (appManifest.Element(m1 + "Applications") ?? appManifest.Element(m3 + "Applications"))
+                var appDataItems = appManifest.Element(m0 + "Applications")
 											  .Elements()
 											  .Select(e =>
-											  {
+                                              {
 												  var visual = e.Element(m1 + "VisualElements") ??
 															   e.Element(m2 + "VisualElements") ??
-															   e.Element(m3 + "VisualElements") ??
-															   e.Element(m4 + "VisualElements");
+															   e.Element(m3 + "VisualElements")??
+											                   e.Element(m4 + "VisualElements");
 												  if (visual == null) return null;
+												  var executable = e.Attribute("Executable") ?? e.Attribute("StartPage");
+                                                  if (executable == null) return null;
 												  return new
-												  {
-													  Id = e.Attribute("Id").Value,
-													  File = (e.Attribute("Executable") ?? e.Attribute("StartPage")).Value,
-													  Description = visual.GetValueOrNull("Description"),
-													  DisplayName = visual.GetValueOrNull("DisplayName"),
-													  Logos = visual.Attributes()
-																	.Where(a => a.Name.LocalName.Contains("Logo"))
-																	.Select(a => new
-																	{
-																		Name = a.Name.LocalName,
-																		RelativePath = a.Value
-																	}),
-													  //BackgroundColor="#000000" ForegroundText="light" 
-													  ForegroundText = (visual.GetValueOrNull("ForegroundText")?? string.Empty)
-																			 .ToLower()
-																			 .Equals("light") ? Colors.White : Colors.Black,
-													  BackgroundColor = ParseColor(visual.GetValueOrNull("BackgroundColor"))
-												  };
-											  });
+                                                  {
+                                                      Id = e.Attribute("Id").Value,
+                                                      File = executable.Value,
+                                                      Description = visual.GetValueOrNull("Description"),
+                                                      DisplayName = visual.GetValueOrNull("DisplayName"),
+                                                      Logos = visual.Attributes()
+                                                                    .Where(a => a.Name.LocalName.Contains("Logo"))
+                                                                    .Select(a => new
+                                                                    {
+                                                                        Name = a.Name.LocalName,
+                                                                        RelativePath = a.Value
+                                                                    }),
+                                                      //BackgroundColor="#000000" ForegroundText="light" 
+                                                      ForegroundText = ParseColorBoolean(visual.GetValueOrNull("ForegroundText")),
+                                                      BackgroundColor = ParseColor(visual.GetValueOrNull("BackgroundColor"))
+                                                  };
+                                              });
 
                 foreach (var appDataItem in appDataItems)
                 {
                     if(appDataItem == null) continue;
-                    Log.Raw("Processing manifest item with ID " + appDataItem.Id);
-                    var suffix = appDataItem.Id;
-                    var appUserModelId = package.Value
-                                                .Where(s => !s.ServerId.StartsWith("Background"))
-                                                .Where(s => !s.ExePath.Contains("\\background"))
-                                                .Where(s => s.AppUserModelId.EndsWith("!" + suffix))
-                                                .Select(s => s.AppUserModelId)
-                                                .Distinct()
-                                                .Single();
-                    Log.Raw("AppUserModelId identified is " + appUserModelId);
+                    if (appDataItem.Id.Equals("Designer.App", StringComparison.OrdinalIgnoreCase))
+                    {
+                        Log.Raw("Skipping VisualStudio designer-generated app");
+                        continue;
+                    }
+                    Log.Raw("Processing application with ID " + appDataItem.Id);
+                    var appUserModelId = string.Format("{0}!{1}", family, appDataItem.Id);
+                    Log.Raw("AppUserModelId constructed is " + appUserModelId);
                     yield return new ImmersiveApp
                     {
-                        PackageId = package.Key,
+                        PackageId = package,
                         File = appDataItem.File,
                         ApplicationName = Util.ExtractStringIndirect(pathCacheItem.DisplayName),
                         ApplicationDisplayName = ExtractStringFromPackageOptional(appDataItem.DisplayName, pathCacheItem.DisplayName),
@@ -129,15 +147,79 @@ namespace Power8.DataProviders
                                                                          l.RelativePath,
                                                                          pathCacheItem.DisplayName,
                                                                          pathCacheItem.RootPath,
-                                                                         package.Key))
+                                                                         package))
                     };
                 }
             }
         }
 
-        private static Dictionary<string, List<ServerCacheItem>> GetExecutableServerCache()
+        public static bool Any
         {
-            var serverCache = new Dictionary<string, List<ServerCacheItem>>();
+            get { return GetAppsCache().Count > 0; }
+        }
+
+        public static Dictionary<string, string> GetAppFamilies()
+        {
+            const string repoPath =
+                "Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Repository\\Families";
+            var families = new Dictionary<string, string>();
+            using (var familiesListKey = Registry.ClassesRoot.OpenSubKey(repoPath))
+            {
+                if (familiesListKey == null)
+                {
+                    Log.Raw("Repo couldn't be opened.");
+                    return null;
+                }
+                Log.Raw("Repo openeed.");
+                foreach (var family in familiesListKey.GetSubKeyNames())
+                {
+                    Log.Raw("Processing", family);
+                    using (var familyKey = familiesListKey.OpenSubKey(family))
+                    {
+                        // ReSharper disable once PossibleNullReferenceException
+                        foreach (var app in familyKey.GetSubKeyNames())
+                        {
+                            families[app] = family;
+                        }
+                    }
+                }
+            }
+            return families;
+        }
+
+        private static Dictionary<string, PathCacheItem> GetAppPackages()
+        {
+            const string repoPath =
+                "Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Repository\\Packages";
+            var pathCache = new Dictionary<string, PathCacheItem>();
+            using (var packageRepoKey = Registry.ClassesRoot.OpenSubKey(repoPath))
+            {
+                if (packageRepoKey == null)
+                {
+                    Log.Raw("Repo couldn't be opened.");
+                    return null;
+                }
+                Log.Raw("Repo openeed.");
+                foreach (var package in packageRepoKey.GetSubKeyNames())
+                {
+                    Log.Raw("Processing", package);
+                    using (var packageKey = packageRepoKey.OpenSubKey(package))
+                    {
+// ReSharper disable once PossibleNullReferenceException
+                        pathCache[package] = new PathCacheItem
+                        {
+                            DisplayName = (string) packageKey.GetValue("DisplayName"),
+                            RootPath = (string) packageKey.GetValue("PackageRootFolder")
+                        };
+
+                    }
+                }
+            }
+            return pathCache;
+        }
+
+        private static string[] GetExecutablePackages()
+        {
             using (var mainRepo = Registry.ClassesRoot.OpenSubKey("ActivatableClasses\\Package"))
             {
                 if (mainRepo == null)
@@ -146,70 +228,8 @@ namespace Power8.DataProviders
                     return null;
                 }
                 Log.Raw("Repo openeed.");
-                foreach (var packageKey in mainRepo.GetSubKeyNames())
-                {
-                    Log.Raw("Processing", packageKey);
-                    using (var subKey = mainRepo.OpenSubKey(packageKey + "\\Server"))
-                    {
-                        if (subKey == null) continue;
-                        Log.Raw("Processing servers", packageKey);
-
-                        var serverList = new List<ServerCacheItem>();
-                        serverCache[packageKey] = serverList;
-
-                        foreach (var serverKeyName in subKey.GetSubKeyNames())
-                        {
-                            Log.Raw("Processing server ", serverKeyName);
-                            using (var serverKey = subKey.OpenSubKey(serverKeyName))
-                            {
-                                serverList.Add(new ServerCacheItem
-                                {
-                                    ServerId = serverKeyName,
-// ReSharper disable once PossibleNullReferenceException
-                                    AppUserModelId = (string) serverKey.GetValue("AppUserModelId"),
-                                    ExePath = serverKey.GetValue("ExePath").ToString().ToLower()
-                                });
-                            }
-                        }
-                    }
-                }
+                return mainRepo.GetSubKeyNames();
             }
-            return serverCache;
-        }
-
-        private static Dictionary<string, PathCacheItem> GetDeploymentPathCache()
-        {
-            const string repoPath =
-                "Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Repository\\Packages";
-            var pathCache = new Dictionary<string, PathCacheItem>();
-            using (var packageRepo = Registry.ClassesRoot.OpenSubKey(repoPath))
-            {
-                if (packageRepo == null)
-                {
-                    Log.Raw("Repo couldn't be opened.");
-                    return null;
-                }
-                Log.Raw("Repo openeed.");
-                foreach (var keyName in packageRepo.GetSubKeyNames())
-                {
-                    Log.Raw("Processing", keyName);
-                    using (var subKey = packageRepo.OpenSubKey(keyName))
-                    {
-// ReSharper disable once PossibleNullReferenceException
-                        pathCache[(string) subKey.GetValue("PackageID")] = new PathCacheItem
-                        {
-                            DisplayName = (string) subKey.GetValue("DisplayName"),
-                            RootPath = (string) subKey.GetValue("PackageRootFolder")
-                        };
-                    }
-                }
-            }
-            return pathCache;
-        }
-
-        public static bool Any
-        {
-            get { return GetAppsCache().Count > 0; }
         }
 
         //Internal helpers
@@ -242,7 +262,8 @@ namespace Power8.DataProviders
             if (lastslash == -1 && logoTemplate != null)//just filename - overwritelogo
             {
                 var templateLastSlash = logoTemplate.LastIndexOf('\\');
-                var actual = ExtractStringFromPackageOptional(prefix + logoTemplate.Substring(0, templateLastSlash).Replace('\\', '/') + '/' + logoResourcePath, uriTemplate);
+				var intermediate = templateLastSlash == -1 ? string.Empty : (logoTemplate.Substring(0, templateLastSlash).Replace('\\', '/') + '/');
+				var actual = ExtractStringFromPackageOptional(prefix + intermediate + logoResourcePath, uriTemplate);
                 return string.IsNullOrEmpty(actual) ? fallback : actual;
 
             }
@@ -264,6 +285,18 @@ namespace Power8.DataProviders
             }
             const BindingFlags flags = BindingFlags.IgnoreCase | BindingFlags.Static | BindingFlags.Public;
             return (Color)typeof(Colors).GetProperty(value, flags).GetValue(null, null);
+        }
+
+        private static Color ParseColorBoolean(string value)
+        {
+            if (value != null)
+            {
+                if (value.Equals("light", StringComparison.OrdinalIgnoreCase))
+                    return Colors.White;
+                if (value.Equals("dark", StringComparison.OrdinalIgnoreCase))
+                    return Colors.Black;
+            }
+            return Colors.Red;
         }
 
         private static byte HexCharToByte(char ch1, char ch2)
@@ -314,11 +347,6 @@ namespace Power8.DataProviders
         class PathCacheItem
         {
             public string DisplayName, RootPath;
-        }
-
-        class ServerCacheItem
-        {
-            public string AppUserModelId, ServerId, ExePath;
         }
     }
 }

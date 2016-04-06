@@ -439,6 +439,7 @@ namespace Power8
 								continue; //todo: maybe substitute items from Start?
 							}
 
+							if (!File.Exists(immersiveApp.Logo)) continue;
 							var appIcon = ImageManager.GetImageContainerForIconSync(immersiveApp.Logo, IntPtr.Zero);
 							appIcon.Background = immersiveApp.BackgroundBrush;
 							appIcon.Foreground = immersiveApp.ForegroundBrush;
