@@ -130,6 +130,7 @@ namespace Power8
         /// <returns>ImageContainer with ImageSource`s for the given hIcon</returns>
         public static ImageContainer GetImageContainerForIconSync(string description, IntPtr unmanagedIcon)
         {
+            Log.Raw("Wrapping HICON " + unmanagedIcon, description);
             lock (Cache)
             {
                 if (Cache.ContainsKey(description))
