@@ -14,13 +14,13 @@ namespace Power8.DataProviders
     {
         public const string APPXMANIFEST_XML = "AppxManifest.xml";
         //Main entry point
-        private static List<ImmersiveApp> _cache; 
+        private static List<ImmersiveApp> _cache;
         public static List<ImmersiveApp> GetAppsCache()
         {
             if (_cache == null)
                 lock (APPXMANIFEST_XML)
                     if (_cache == null)
-                        _cache = new List<ImmersiveApp>(GetApps());
+                        _cache = new List<ImmersiveApp>(GetApps().OrderBy(x => x.DisplayName));
             return _cache;
         }
 
@@ -33,7 +33,7 @@ namespace Power8.DataProviders
             //Step 1. Getting initial package deployment info: package ids and related deployment paths and display names
             //This may include non-activateable or non-existing packages
             var pathCache = GetAppPackages();
-            if(pathCache == null || pathCache.Count == 0) yield break;
+            if (pathCache == null || pathCache.Count == 0) yield break;
 
             //Step 2. Scanning activateable classes repo to filter activatable package IDs
             var serverCache = GetExecutablePackages();
@@ -44,29 +44,29 @@ namespace Power8.DataProviders
             var families = GetAppFamilies();
             if (families == null || families.Count == 0) yield break;
 
-			//Step 4. Parse app manifest to get more visual information and corellate deployment and server caches,
-			//and (the most important!) get the AppIds from which we'll construct the AppUserModelIds
-			XNamespace m1 = XNamespace.Get("http://schemas.microsoft.com/appx/2010/manifest"), //W8 old
-					   m2 = XNamespace.Get("http://schemas.microsoft.com/appx/2013/manifest"), //W8 new
-					   m3 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/foundation/windows10"),
-					   m4 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/uap/windows10"),
-					   m0;
+            //Step 4. Parse app manifest to get more visual information and corellate deployment and server caches,
+            //and (the most important!) get the AppIds from which we'll construct the AppUserModelIds
+            XNamespace m1 = XNamespace.Get("http://schemas.microsoft.com/appx/2010/manifest"), //W8 old
+                       m2 = XNamespace.Get("http://schemas.microsoft.com/appx/2013/manifest"), //W8 new
+                       m3 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/foundation/windows10"),
+                       m4 = XNamespace.Get("http://schemas.microsoft.com/appx/manifest/uap/windows10"),
+                       m0;
 
-			foreach (var package in serverCache)// for all the activateable classes
+            foreach (var package in serverCache)// for all the activateable classes
             {
-				PathCacheItem pathCacheItem;
-				if(!pathCache.TryGetValue(package, out pathCacheItem))
-				{
-					Log.Raw("Skipping activateable package (reason: path cache miss)", package);
-					continue;
-				}
+                PathCacheItem pathCacheItem;
+                if (!pathCache.TryGetValue(package, out pathCacheItem))
+                {
+                    Log.Raw("Skipping activateable package (reason: path cache miss)", package);
+                    continue;
+                }
 
-				string family;
-				if(!families.TryGetValue(package, out family))
-				{
-					Log.Raw("Skipping activateable package (reason: family cache miss)", package);
-					continue;
-				}
+                string family;
+                if (!families.TryGetValue(package, out family))
+                {
+                    Log.Raw("Skipping activateable package (reason: family cache miss)", package);
+                    continue;
+                }
 
                 Log.Raw("Loading package data", package);
                 var appxManifestPath = Path.Combine(pathCacheItem.RootPath, APPXMANIFEST_XML);
@@ -80,47 +80,50 @@ namespace Power8.DataProviders
 
                 Log.Raw("Processing manifest " + appxManifestPath);
                 var appManifest = XElement.Load(appxManifestPath);
-				m0 = appManifest.Name.Namespace;
-				var props = appManifest.Element(m0 + "Properties");
+                m0 = appManifest.Name.Namespace;
+                var props = appManifest.Element(m0 + "Properties");
                 if (props != null)
                 {
                     company = props.Element(m0 + "PublisherDisplayName").GetValueOrNull();
                     logoTemplate = props.Element(m0 + "Logo").GetValueOrNull();
                 }
-				// ReSharper disable once PossibleNullReferenceException
-                var appDataItems = appManifest.Element(m0 + "Applications")
-											  .Elements()
-											  .Select(e =>
-                                              {
-												  var visual = e.Element(m1 + "VisualElements") ??
-															   e.Element(m2 + "VisualElements") ??
-															   e.Element(m3 + "VisualElements")??
-											                   e.Element(m4 + "VisualElements");
-												  if (visual == null) return null;
-												  var executable = e.Attribute("Executable") ?? e.Attribute("StartPage");
-                                                  if (executable == null) return null;
-												  return new
-                                                  {
-                                                      Id = e.Attribute("Id").Value,
-                                                      File = executable.Value,
-                                                      Description = visual.GetValueOrNull("Description"),
-                                                      DisplayName = visual.GetValueOrNull("DisplayName"),
-                                                      Logos = visual.Attributes()
-                                                                    .Where(a => a.Name.LocalName.Contains("Logo"))
-                                                                    .Select(a => new
-                                                                    {
-                                                                        Name = a.Name.LocalName,
-                                                                        RelativePath = a.Value
-                                                                    }),
-                                                      //BackgroundColor="#000000" ForegroundText="light" 
-                                                      ForegroundText = ParseColorBoolean(visual.GetValueOrNull("ForegroundText")),
-                                                      BackgroundColor = ParseColor(visual.GetValueOrNull("BackgroundColor"))
-                                                  };
-                                              });
-
+                var apps = appManifest.Element(m0 + "Applications");
+                if (apps == null)
+                {
+                    Log.Raw("Skipping activateable package (reason: no apps in manufest file)", package);
+                    continue;
+                }
+                var appDataItems = apps.Elements()
+                                       .Select(e =>
+                                       {
+                                           var visual = e.Element(m1 + "VisualElements") ??
+                                                        e.Element(m2 + "VisualElements") ??
+                                                        e.Element(m3 + "VisualElements") ??
+                                                        e.Element(m4 + "VisualElements");
+                                           if (visual == null) return null;
+                                           var executable = e.Attribute("Executable") ?? e.Attribute("StartPage");
+                                           if (executable == null) return null;
+                                           return new
+                                           {
+                                               Id = e.Attribute("Id").Value,
+                                               File = executable.Value,
+                                               Description = visual.GetValueOrNull("Description"),
+                                               DisplayName = visual.GetValueOrNull("DisplayName"),
+                                               Logos = visual.Attributes()
+                                                           .Where(a => a.Name.LocalName.Contains("Logo"))
+                                                           .Select(a => new
+                                                           {
+                                                               Name = a.Name.LocalName,
+                                                               RelativePath = a.Value
+                                                           }),
+                                               //BackgroundColor="#000000" ForegroundText="light" 
+                                               ForegroundText = ParseColorBoolean(visual.GetValueOrNull("ForegroundText")),
+                                               BackgroundColor = ParseColor(visual.GetValueOrNull("BackgroundColor"))
+                                           };
+                                       });
                 foreach (var appDataItem in appDataItems)
                 {
-                    if(appDataItem == null) continue;
+                    if (appDataItem == null) continue;
                     if (appDataItem.Id.Equals("Designer.App", StringComparison.OrdinalIgnoreCase))
                     {
                         Log.Raw("Skipping VisualStudio designer-generated app");
@@ -205,11 +208,11 @@ namespace Power8.DataProviders
                     Log.Raw("Processing", package);
                     using (var packageKey = packageRepoKey.OpenSubKey(package))
                     {
-// ReSharper disable once PossibleNullReferenceException
+                        // ReSharper disable once PossibleNullReferenceException
                         pathCache[package] = new PathCacheItem
                         {
-                            DisplayName = (string) packageKey.GetValue("DisplayName"),
-                            RootPath = (string) packageKey.GetValue("PackageRootFolder")
+                            DisplayName = (string)packageKey.GetValue("DisplayName"),
+                            RootPath = (string)packageKey.GetValue("PackageRootFolder")
                         };
 
                     }
@@ -262,8 +265,8 @@ namespace Power8.DataProviders
             if (lastslash == -1 && logoTemplate != null)//just filename - overwritelogo
             {
                 var templateLastSlash = logoTemplate.LastIndexOf('\\');
-				var intermediate = templateLastSlash == -1 ? string.Empty : (logoTemplate.Substring(0, templateLastSlash).Replace('\\', '/') + '/');
-				var actual = ExtractStringFromPackageOptional(prefix + intermediate + logoResourcePath, uriTemplate);
+                var intermediate = templateLastSlash == -1 ? string.Empty : (logoTemplate.Substring(0, templateLastSlash).Replace('\\', '/') + '/');
+                var actual = ExtractStringFromPackageOptional(prefix + intermediate + logoResourcePath, uriTemplate);
                 return string.IsNullOrEmpty(actual) ? fallback : actual;
 
             }
@@ -281,7 +284,10 @@ namespace Power8.DataProviders
                 return Color.FromRgb(HexCharToByte(value[1], value[2]),
                                      HexCharToByte(value[3], value[4]),
                                      HexCharToByte(value[5], value[6]));
-
+            }
+            if ("transparent".Equals(value, StringComparison.OrdinalIgnoreCase) && Util.OsIs.TenOrMore)
+            {
+                return Colors.Black;
             }
             const BindingFlags flags = BindingFlags.IgnoreCase | BindingFlags.Static | BindingFlags.Public;
             return (Color)typeof(Colors).GetProperty(value, flags).GetValue(null, null);
@@ -296,12 +302,12 @@ namespace Power8.DataProviders
                 if (value.Equals("dark", StringComparison.OrdinalIgnoreCase))
                     return Colors.Black;
             }
-            return Colors.Red;
+            return Util.OsIs.TenOrMore ? Colors.White : Colors.Red;
         }
 
         private static byte HexCharToByte(char ch1, char ch2)
         {
-            return (byte) (HexCharToByte(ch1)*16 + HexCharToByte(ch2));
+            return (byte)(HexCharToByte(ch1) * 16 + HexCharToByte(ch2));
         }
 
         private static int HexCharToByte(char ch1)
@@ -309,7 +315,7 @@ namespace Power8.DataProviders
             ch1 -= '0';
             return ch1 > 9 ? (ch1 > 41 ? ch1 - 39 : ch1 - 7) : ch1;
         }
-        
+
         private static string ExtractStringFromPackageOptional(string resourceKey, string uriTemplate)
         {
             if (resourceKey == null) return null;
@@ -341,7 +347,7 @@ namespace Power8.DataProviders
             var attribute = xe.Attribute(nullForValueOrAttributeName);
             return attribute == null ? null : attribute.Value;
         }
-        
+
         //Internal classes 
 
         class PathCacheItem

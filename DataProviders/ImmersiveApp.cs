@@ -32,5 +32,10 @@ namespace Power8.DataProviders
         public Color Foreground { get; set; }
         public Brush BackgroundBrush { get { return new SolidColorBrush(Background); } }
         public Brush ForegroundBrush { get { return new SolidColorBrush(Foreground); } }
+
+        public bool IsSystemApp()
+        {
+            return AppUserModelID.Contains("cw5n1h2txyewy");
+        }
     }
 }
