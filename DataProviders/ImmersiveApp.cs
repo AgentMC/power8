@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
@@ -32,10 +33,12 @@ namespace Power8.DataProviders
         public Color Foreground { get; set; }
         public Brush BackgroundBrush { get { return new SolidColorBrush(Background); } }
         public Brush ForegroundBrush { get { return new SolidColorBrush(Foreground); } }
+        public string DisplayState { get; set; }
 
+        private string[] blackList = { "Windows.ImmersiveControlPanel", "Microsoft.Windows.Cortana" };
         public bool IsSystemApp()
         {
-            return AppUserModelID.Contains("cw5n1h2txyewy");
+            return DisplayState == "none" || blackList.Any(bl => PackageId.StartsWith(bl, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

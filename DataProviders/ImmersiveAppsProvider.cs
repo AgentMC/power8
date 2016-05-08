@@ -13,6 +13,7 @@ namespace Power8.DataProviders
     public static class ImmersiveAppsProvider
     {
         public const string APPXMANIFEST_XML = "AppxManifest.xml";
+
         //Main entry point
         private static List<ImmersiveApp> _cache;
         public static List<ImmersiveApp> GetAppsCache()
@@ -110,6 +111,7 @@ namespace Power8.DataProviders
                                                File = executable.Value,
                                                Description = visual.GetValueOrNull("Description"),
                                                DisplayName = visual.GetValueOrNull("DisplayName"),
+                                               AppListEntry = visual.GetValueOrNull("AppListEntry"),
                                                Logos = visual.Attributes()
                                                            .Where(a => a.Name.LocalName.Contains("Logo"))
                                                            .Select(a => new
@@ -174,6 +176,7 @@ namespace Power8.DataProviders
                         Background = appDataItem.BackgroundColor,
                         Foreground = appDataItem.ForegroundText,
                         ApplicationPath = pathCacheItem.RootPath,
+                        DisplayState = appDataItem.AppListEntry,
                         Logos = appDataItem.Logos
                                            .ToDictionary(l => l.Name,
                                                          l => LocateLogo(logoTemplate,
@@ -194,6 +197,7 @@ namespace Power8.DataProviders
         {
             const string repoPath =
                 "Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Repository\\Families";
+
             var families = new Dictionary<string, string>();
             using (var familiesListKey = Registry.ClassesRoot.OpenSubKey(repoPath))
             {
