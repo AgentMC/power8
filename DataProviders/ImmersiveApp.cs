@@ -35,10 +35,10 @@ namespace Power8.DataProviders
         public Brush ForegroundBrush { get { return new SolidColorBrush(Foreground); } }
         public string DisplayState { get; set; }
 
-        private string[] blackList = { "Windows.ImmersiveControlPanel", "Microsoft.Windows.Cortana" };
+        private readonly string[] _blackList = { "Windows.ImmersiveControlPanel", "Microsoft.Windows.Cortana", "BrowserChoice" };
         public bool IsSystemApp()
         {
-            return DisplayState == "none" || blackList.Any(bl => PackageId.StartsWith(bl, StringComparison.OrdinalIgnoreCase));
+            return DisplayState == "none" || _blackList.Any(bl => PackageId.StartsWith(bl, StringComparison.OrdinalIgnoreCase));
         }
     }
 }
