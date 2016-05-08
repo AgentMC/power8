@@ -578,6 +578,9 @@ namespace Power8.Views
         /// locating w simply in the corner closest to the screenPoint. E.g. to show BtnStch by Alt+Z.</param>
         private static void GetSetWndPosition(Window w, API.POINT screenPoint, bool ignoreTaskbarPosition)
         {
+            //On Windows10 WPF apps are painted with gaps on all sides. The gap at the top is additionaly painted white.
+            var modifier = Util.OsIs.TenOrMore ? 6 : 0;
+           
             var resPoint = new Point();
             var screen = Screen.FromPoint(new System.Drawing.Point(screenPoint.X, screenPoint.Y));
             //We show stack in the corner closest to the mouse
@@ -589,17 +592,17 @@ namespace Power8.Views
             if ((isHideTaskBarOptionOn && screenPoint.X <= screen.WorkingArea.X + screen.WorkingArea.Width/2)
                 || screen.WorkingArea.X > screen.Bounds.X
                 || (screen.WorkingArea.Width == screen.Bounds.Width & !isHideTaskBarOptionOn))
-                resPoint.X = screen.WorkingArea.X;
+                resPoint.X = screen.WorkingArea.X - modifier*SystemScale;
             else //vertical @ right
-                resPoint.X = (screen.WorkingArea.Width + screen.WorkingArea.X - w.Width*SystemScale)/SystemScale;
-            
+                resPoint.X = (screen.WorkingArea.Width + screen.WorkingArea.X - (w.Width-modifier)*SystemScale)/SystemScale;
+
             //taskbar is horizontal @ top or vertical
-            if ((isHideTaskBarOptionOn && screenPoint.Y <= screen.WorkingArea.Y + screen.WorkingArea.Height/2)
+            if ((isHideTaskBarOptionOn && screenPoint.Y <= screen.WorkingArea.Y + screen.WorkingArea.Height / 2)
                 || screen.WorkingArea.Y > screen.Bounds.Y
                 || (screen.WorkingArea.Height == screen.Bounds.Height & !isHideTaskBarOptionOn))
-                resPoint.Y = screen.WorkingArea.Y;
+                resPoint.Y = screen.WorkingArea.Y; //No modification is applied here because windows reneders this white bar.
             else //horizontal @ bottom
-                resPoint.Y = (screen.WorkingArea.Height + screen.WorkingArea.Y - w.Height*SystemScale)/SystemScale;
+                resPoint.Y = (screen.WorkingArea.Height + screen.WorkingArea.Y - (w.Height - modifier) * SystemScale) / SystemScale;
 
             w.Left = resPoint.X;
             w.Top = resPoint.Y;
