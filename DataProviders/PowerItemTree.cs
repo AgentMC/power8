@@ -410,7 +410,8 @@ namespace Power8
 			}
 		}
 
-        public static PowerItem ImmersiveRoot
+		private static readonly string VpnPlugins = Environment.ExpandEnvironmentVariables("%windir%\\vpnplugins\\");       
+		public static PowerItem ImmersiveRoot
 		{
 			get
 			{
@@ -431,7 +432,8 @@ namespace Power8
 						//find out what to do with BrowserChoice background and VS dev apps
 						foreach (var immersiveApp in ImmersiveAppsProvider.GetAppsCache())
 						{
-							if (immersiveApp.IsSystemApp() )
+							if (immersiveApp.IsSystemApp() ||
+								immersiveApp.ApplicationPath.Contains(VpnPlugins))
 							{
 								continue; //todo: maybe substitute items from Start?
 							}
