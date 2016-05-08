@@ -1114,8 +1114,8 @@ namespace Power8
         public static string ExtractStringIndirect(string resDescr)
         {
             var outBuff = new StringBuilder(1024);
-            API.SHLoadIndirectString(resDescr, outBuff, outBuff.Capacity, IntPtr.Zero);
-            return outBuff.ToString();
+            var result = API.SHLoadIndirectString(resDescr, outBuff, outBuff.Capacity, IntPtr.Zero);
+            return result == 0 ? outBuff.ToString() : null;
         }
 
 

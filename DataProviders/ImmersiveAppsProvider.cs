@@ -86,6 +86,7 @@ namespace Power8.DataProviders
                 {
                     company = props.Element(m0 + "PublisherDisplayName").GetValueOrNull();
                     logoTemplate = props.Element(m0 + "Logo").GetValueOrNull();
+                    //there's also display name but we already have it - in pathCacheItem
                 }
                 var apps = appManifest.Element(m0 + "Applications");
                 if (apps == null)
@@ -121,6 +122,35 @@ namespace Power8.DataProviders
                                                BackgroundColor = ParseColor(visual.GetValueOrNull("BackgroundColor"))
                                            };
                                        });
+                var uriTemplates = appDataItems.Where(a=>a!=null)
+                                               .Select(a => a.DisplayName)
+                                               .Where(d => d != null && d.ToLower().Contains("ms-resource://"))
+                                               .Union(new[] { pathCacheItem.DisplayName, "default" })
+                                               .ToArray();
+
+                for (int k = 0; k < uriTemplates.Length; k++)
+                {
+                    if (!uriTemplates[k].StartsWith("@{"))
+                    {
+                        //"@{FileManager_6.3.9600.16384_neutral_neutral_cw5n1h2txyewy?ms-resource://FileManager/Files/Assets/SkyDriveLogo.png}"
+                        if (uriTemplates[k].StartsWith("ms-resource://")) //just wrap in resolvable format
+                        {
+                            uriTemplates[k] = string.Format("@{{{0}?{1}}}", package, uriTemplates[k]);
+                        }
+                        else //construct anew
+                        {
+                            int i = 0, j = package.Length - 1;
+                            while (i < 4)
+                            {
+                                if (package[j] == '_') ++i;
+                                --j;
+                            }
+                            var rootItem = package.Substring(0, j + 1);
+                            uriTemplates[k] = string.Format("@{{{0}?ms-resource://{1}/resources/data}}", package, rootItem);
+                        }
+                    }
+                }
+
                 foreach (var appDataItem in appDataItems)
                 {
                     if (appDataItem == null) continue;
@@ -137,9 +167,9 @@ namespace Power8.DataProviders
                         PackageId = package,
                         File = appDataItem.File,
                         ApplicationName = Util.ExtractStringIndirect(pathCacheItem.DisplayName),
-                        ApplicationDisplayName = ExtractStringFromPackageOptional(appDataItem.DisplayName, pathCacheItem.DisplayName),
-                        ApplicationCompany = ExtractStringFromPackageOptional(company, pathCacheItem.DisplayName),
-                        ApplicationDescription = ExtractStringFromPackageOptional(appDataItem.Description, pathCacheItem.DisplayName),
+                        ApplicationDisplayName = ExtractStringFromPackageOptional(appDataItem.DisplayName, uriTemplates),
+                        ApplicationCompany = ExtractStringFromPackageOptional(company, uriTemplates),
+                        ApplicationDescription = ExtractStringFromPackageOptional(appDataItem.Description, uriTemplates),
                         AppUserModelID = appUserModelId,
                         Background = appDataItem.BackgroundColor,
                         Foreground = appDataItem.ForegroundText,
@@ -148,9 +178,8 @@ namespace Power8.DataProviders
                                            .ToDictionary(l => l.Name,
                                                          l => LocateLogo(logoTemplate,
                                                                          l.RelativePath,
-                                                                         pathCacheItem.DisplayName,
-                                                                         pathCacheItem.RootPath,
-                                                                         package))
+                                                                         uriTemplates,
+                                                                         pathCacheItem.RootPath))
                     };
                 }
             }
@@ -237,28 +266,16 @@ namespace Power8.DataProviders
 
         //Internal helpers
 
-        private static string LocateLogo(string logoTemplate, string logoResourcePath, string uriTemplate, string rootPath, string packageKey)
+        private static string LocateLogo(string logoTemplate, string logoResourcePath, string[] uriTemplates, string rootPath)
         {
             var straightforward = Path.Combine(rootPath, logoResourcePath);
             if (File.Exists(straightforward)) return straightforward;
 
-            if (!uriTemplate.StartsWith("@{"))
-            {
-                //"@{FileManager_6.3.9600.16384_neutral_neutral_cw5n1h2txyewy?ms-resource://FileManager/Files/Assets/SkyDriveLogo.png}"
-                int i = 0, j = packageKey.Length - 1;
-                while (i < 4)
-                {
-                    if (packageKey[j] == '_') ++i;
-                    --j;
-                }
-                var rootItem = packageKey.Substring(0, j + 1);
-                uriTemplate = string.Format("@{{{0}?ms-resource://{1}/resources/data}}", packageKey, rootItem);
-            }
             const string prefix = "ms-resource:Files/";
             string fallback = null;
             if (logoTemplate != null)
             {
-                fallback = ExtractStringFromPackageOptional(prefix + logoTemplate.Replace('\\', '/'), uriTemplate);
+                fallback = ExtractStringFromPackageOptional(prefix + logoTemplate.Replace('\\', '/'), uriTemplates);
             }
 
             var lastslash = logoResourcePath.LastIndexOf('\\');
@@ -266,13 +283,13 @@ namespace Power8.DataProviders
             {
                 var templateLastSlash = logoTemplate.LastIndexOf('\\');
                 var intermediate = templateLastSlash == -1 ? string.Empty : (logoTemplate.Substring(0, templateLastSlash).Replace('\\', '/') + '/');
-                var actual = ExtractStringFromPackageOptional(prefix + intermediate + logoResourcePath, uriTemplate);
+                var actual = ExtractStringFromPackageOptional(prefix + intermediate + logoResourcePath, uriTemplates);
                 return string.IsNullOrEmpty(actual) ? fallback : actual;
 
             }
             else //relative path
             {
-                var actual = ExtractStringFromPackageOptional(prefix + logoResourcePath.Replace('\\', '/'), uriTemplate);
+                var actual = ExtractStringFromPackageOptional(prefix + logoResourcePath.Replace('\\', '/'), uriTemplates);
                 return string.IsNullOrEmpty(actual) ? fallback : actual;
             }
         }
@@ -316,26 +333,30 @@ namespace Power8.DataProviders
             return ch1 > 9 ? (ch1 > 41 ? ch1 - 39 : ch1 - 7) : ch1;
         }
 
-        private static string ExtractStringFromPackageOptional(string resourceKey, string uriTemplate)
+        private static string ExtractStringFromPackageOptional(string resourceKey, string[] uriTemplates)
         {
             if (resourceKey == null) return null;
             if (resourceKey.StartsWith("ms-resource:"))
             {
-                var pair = uriTemplate.Split(new[] { '?' }, 2);
-
-                var uri = new UriBuilder(pair[1].TrimEnd('}'));
-                var uriParts = uri.Path.Split('/').ToList();
-                var localParts = new Uri(resourceKey).LocalPath.Split('/');
-                for (int i = localParts.Length - 1; i >= 0; i--)
+                foreach (var uriTemplate in uriTemplates)
                 {
-                    var targetIdx = uriParts.Count - (localParts.Length - i);
-                    if (targetIdx >= 0) uriParts.RemoveAt(targetIdx);
-                    uriParts.Insert(Math.Max(targetIdx, 0), localParts[i]);
+                    var pair = uriTemplate.Split(new[] { '?' }, 2);
+
+                    var uri = new UriBuilder(pair[1].TrimEnd('}'));
+                    var uriParts = uri.Path.Split('/').ToList();
+                    var localParts = new Uri(resourceKey).LocalPath.Split('/');
+                    for (int i = localParts.Length - 1; i >= 0; i--)
+                    {
+                        var targetIdx = uriParts.Count - (localParts.Length - i);
+                        if (targetIdx >= 0) uriParts.RemoveAt(targetIdx);
+                        uriParts.Insert(Math.Max(targetIdx, 0), localParts[i]);
+                    }
+                    uri.Path = string.Join("/", uriParts);
+
+                    var result = Util.ExtractStringIndirect(pair[0] + "?" + uri + "}");
+                    if (result != null) return result;
                 }
-                uri.Path = string.Join("/", uriParts);
-
-                return Util.ExtractStringIndirect(pair[0] + "?" + uri + "}");
-
+                return null;
             }
             return resourceKey;
         }

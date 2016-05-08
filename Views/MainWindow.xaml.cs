@@ -575,7 +575,7 @@ namespace Power8.Views
         /// <param name="w">Window to locate</param>
         /// <param name="screenPoint">Unmanaged struct containing absolute screen coordinates, in px.</param>
         /// <param name="ignoreTaskbarPosition">Flag instructing method to ignore the location of task bar
-        /// locating w simply in the corner closest to the screenPoint. E.g. to show BtnStch by Alt+Z.</param>
+        /// locating w simply in the corner closest to the screenPoint. E.g. to show BtnStck by Alt+Z.</param>
         private static void GetSetWndPosition(Window w, API.POINT screenPoint, bool ignoreTaskbarPosition)
         {
             //On Windows10 WPF apps are painted with gaps on all sides. The gap at the top is additionaly painted white.
