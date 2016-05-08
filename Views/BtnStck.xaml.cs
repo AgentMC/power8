@@ -567,7 +567,6 @@ namespace Power8.Views
             ((System.Windows.Controls.MenuItem)sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Down));
         }
 
-        
         //------------------------------------------
 
         /// <summary>
@@ -578,6 +577,17 @@ namespace Power8.Views
             SpecialItems.Remove("ControlPanel");
             PowerItemTree.RefreshControlPanelRoot();
             ControlPanel.Item = GetSpecialItems("ControlPanel");
+        }
+
+        private void ButtonAppsMenuClick(object sender, RoutedEventArgs e)
+        {
+            AppsMenuPopup.MaxWidth = Screen.FromHandle(this.GetHandle()).Bounds.Width / 1.5;
+            AppsMenuPopup.IsOpen = true;
+        }
+
+        private void AppButtonClick(object sender, RoutedEventArgs e)
+        {
+            Util.ExtractRelatedPowerItem(e).Invoke();
         }
 
         #endregion
@@ -811,17 +821,10 @@ namespace Power8.Views
             get { return ImmersiveAppsProvider.Any ? Visibility.Visible : Visibility.Collapsed; }
         }
 
+        public System.Windows.Media.Brush PseudoStartButtonColor
+        {
+            get { return Util.OsIs.TenOrMore ? System.Windows.Media.Brushes.Black : System.Windows.Media.Brushes.White; }
+        }
         #endregion
-
-        private void ButtonAppsMenuClick(object sender, RoutedEventArgs e)
-        {
-            AppsMenuPopup.MaxWidth = Screen.FromHandle(this.GetHandle()).Bounds.Width/1.5;
-            AppsMenuPopup.IsOpen = true;
-        }
-
-        private void AppButtonClick(object sender, RoutedEventArgs e)
-        {
-            Util.ExtractRelatedPowerItem(e).Invoke();
-        }
     }
 }

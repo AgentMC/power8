@@ -44,10 +44,10 @@
                         <ColumnDefinition Width="7"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
-                    <Rectangle Fill="White" Grid.Column="1" Grid.Row="1"/>
-                    <Rectangle Fill="White" Grid.Column="1" Grid.Row="3"/>
-                    <Rectangle Fill="White" Grid.Column="3" Grid.Row="1"/>
-                    <Rectangle Fill="White" Grid.Column="3" Grid.Row="3"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="1" Grid.Row="1"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="1" Grid.Row="3"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="3" Grid.Row="1"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="3" Grid.Row="3"/>
                 </Grid>
             </Button>
         </Grid>
