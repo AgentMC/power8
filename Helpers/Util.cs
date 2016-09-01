@@ -352,7 +352,7 @@ namespace Power8
         }
         /// <summary>
         /// Cals ResolveLink() swallowing all exceptions inside. Use when you don't care
-        /// abour the results of such resolution.
+        /// about the results of such resolution.
         /// </summary>
         /// <param name="link">Full path to *.LNK file</param>
         /// <returns>The target of a shell shortcul on success and null if failed</returns>
@@ -748,7 +748,7 @@ namespace Power8
             string appUserModelId;
             try
             {
-// ReSharper disable AssignNullToNotNullAttribute
+                // ReSharper disable AssignNullToNotNullAttribute
                 //First, try locating the manifest that contains identity and ID
                 const string mxml = ImmersiveAppsProvider.APPXMANIFEST_XML;
                 const StringComparison caseless = StringComparison.OrdinalIgnoreCase;
@@ -758,18 +758,25 @@ namespace Power8
                 if (!File.Exists(manifest) && targ.EndsWith(".lnk", caseless))
                 {
                     targ = ResolveLinkSafe(targ);
-                    manifest = Path.Combine(Path.GetDirectoryName(targ), mxml);
+                    if (!string.IsNullOrWhiteSpace(targ) && File.Exists(targ))
+                    {
+                        manifest = Path.Combine(Path.GetDirectoryName(targ), mxml);
+                    }
                 }
-// ReSharper restore AssignNullToNotNullAttribute
+                // ReSharper restore AssignNullToNotNullAttribute
                 if (!File.Exists(manifest))
                 {
                     Log.Raw("No manifest found!", targ);
                     return false;
                 }
 
+                //ReSharper disable PossibleNullReferenceException because targ can't be null. If it is, manifest 
+                //doesn't exist so we've returned from this method already
                 var app = ImmersiveAppsProvider.GetAppsCache()
                                                .Where(a => Path.Combine(a.ApplicationPath, mxml).Equals(manifest, caseless))
                                                .SingleOrDefault(a => targ.EndsWith(a.File, caseless));
+                //ReSharper enable PossibleNullReferenceException
+
                 if (app == null)
                 {
                     Log.Raw("Target app wasn't discovered, defaulting to regular shell launch", targ);
