@@ -31,23 +31,29 @@
                     Click="ButtonAppsMenuClick">
                 <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="4"/>
                         <RowDefinition Height="5"/>
-                        <RowDefinition Height="7"/>
                         <RowDefinition Height="2"/>
-                        <RowDefinition Height="7"/>
+                        <RowDefinition Height="4"/>
+                        <RowDefinition Height="2"/>
                         <RowDefinition Height="5"/>
+                        <RowDefinition Height="4"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4"/>
                         <ColumnDefinition Width="5"/>
-                        <ColumnDefinition Width="7"/>
+                        <ColumnDefinition Width="3"/>
                         <ColumnDefinition Width="2"/>
-                        <ColumnDefinition Width="7"/>
+                        <ColumnDefinition Width="3"/>
                         <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="4"/>
                     </Grid.ColumnDefinitions>
-                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="1" Grid.Row="1"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="5" Grid.Row="1"/>
                     <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="1" Grid.Row="3"/>
-                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="3" Grid.Row="1"/>
-                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="3" Grid.Row="3"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="3" Grid.Row="3" Grid.ColumnSpan="3"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3"/>
+                    <Rectangle Fill="{Binding ElementName=ButtonStack, Path=PseudoStartButtonColor}" Grid.Column="5" Grid.Row="5"/>
                 </Grid>
             </Button>
         </Grid>
