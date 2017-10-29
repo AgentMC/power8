@@ -378,6 +378,7 @@ namespace Power8
                 list.ForEach(m => LastList.Add(m.Clone()));
 
                 lock (StartMfu) //Update the Start MFU
+                lock (MfuSearchRoot) //Do not allow search while updating search root
                 {
                     //Steps 2.1 - 2.4
                     list.ApplyFiltersAndSort();

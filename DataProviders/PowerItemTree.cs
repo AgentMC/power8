@@ -1135,18 +1135,21 @@ namespace Power8
         {
             if(stop.IsCancellationRequested)
                 return;
-            if ((!source.IsFolder || source.Root != StartMenuRootItem) && source.Match(query))
-            {//return ((folders for not StartMenu children) or files) that Match() the query
-                lock (destination)
-                {
-                    if (!stop.IsCancellationRequested && //this item wasn't added before
-                        !destination.Any(d => d.FriendlyName == source.FriendlyName && d.IsFolder == source.IsFolder))
-                            Util.Send(() => { if (!stop.IsCancellationRequested) destination.Add(source); });
+            lock (source)
+            {
+                if ((!source.IsFolder || source.Root != StartMenuRootItem) && source.Match(query))
+                {//return ((folders for not StartMenu children) or files) that Match() the query
+                    lock (destination)
+                    {
+                        if (!stop.IsCancellationRequested && //this item wasn't added before
+                            !destination.Any(d => d.FriendlyName == source.FriendlyName && d.IsFolder == source.IsFolder))
+                                Util.Send(() => { if (!stop.IsCancellationRequested) destination.Add(source); });
+                    }
                 }
+                if (!source.AutoExpandIsPending)
+                    foreach (var powerItem in source.Items)
+                        SearchItems(query, powerItem, destination, stop);
             }
-            if (!source.AutoExpandIsPending)
-                foreach (var powerItem in source.Items)
-                    SearchItems(query, powerItem, destination, stop);
         }
 
         //Proxy for SearchStartMenuSyncFast. Code literally copypasted from SearchItems and simplified.

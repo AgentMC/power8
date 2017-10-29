@@ -26,7 +26,7 @@
             </Grid.ColumnDefinitions>
             <Menu ItemsSource="{Binding ElementName=ButtonStack, Path=Items, Mode=OneWay}" Margin="3" Name="AllItemsMenuRoot"
                   ContextMenuOpening="AllItemsMenuRootContextMenuOpening" MinHeight="26" Style="{StaticResource MenuStyle}" 
-                  ItemContainerStyle="{StaticResource MenuItemStyle}" />
+                  ItemContainerStyle="{StaticResource MenuItemStyle}" IsMainMenu="False" />
             <Button Grid.Column="1" Name="AppsMenu" Padding="0" Margin="3" Visibility="{Binding ElementName=ButtonStack, Path=IsPseudoStartButtonVisible}" 
                     Click="ButtonAppsMenuClick">
                 <Grid>
