@@ -181,8 +181,8 @@
             <Button Click="ButtonLockClick" Name="ButtonLock" Margin="0,0,0,2"/>
         </StackPanel>
         <Popup Grid.Row="0" Grid.Column="0" AllowsTransparency="True" PlacementTarget="{Binding ElementName=AppsMenu}" StaysOpen="False" Name="AppsMenuPopup">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding AppsItems, ElementName=ButtonStack}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Focusable="False">
+                <ItemsControl ItemsSource="{Binding AppsItems, ElementName=ButtonStack}" Name="AppsMenuItems" IsTabStop="False">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
@@ -190,7 +190,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="Power8:PowerItem">
-                            <Button Background="Transparent" Padding="0" Click="AppButtonClick">
+                            <Button Background="Transparent" Padding="0" Click="AppButtonClick" KeyDown="Button_KeyDown">
                                 <Button.Style>
                                     <Style/>
                                 </Button.Style>

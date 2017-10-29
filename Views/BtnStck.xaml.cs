@@ -77,8 +77,7 @@ namespace Power8.Views
         /// property is intended to be binded to something.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
-
-
+        
         #region Load, Unload, Show, Hide
 
         /// <summary>
@@ -579,17 +578,35 @@ namespace Power8.Views
             ControlPanel.Item = GetSpecialItems("ControlPanel");
         }
 
+        //------------------------------------------
+
+        /// <summary>
+        /// Handles the click on Apps button. Shows and focuses the popup.
+        /// </summary>
         private void ButtonAppsMenuClick(object sender, RoutedEventArgs e)
         {
             AppsMenuPopup.MaxWidth = Screen.FromHandle(this.GetHandle()).Bounds.Width / 1.5;
             AppsMenuPopup.IsOpen = true;
+            AppsMenuItems.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
-
+        /// <summary>
+        /// Handles the click on Metro App button (any button in Apps popup)
+        /// </summary>
         private void AppButtonClick(object sender, RoutedEventArgs e)
         {
             Util.ExtractRelatedPowerItem(e).Invoke();
         }
-
+        /// <summary>
+        /// Allows to exit the Apps popup by pressing the Esc button
+        /// </summary>
+        private void Button_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                AppsMenuPopup.IsOpen = false;
+                AppsMenu.Focus();
+            }
+        }
         #endregion
 
         #region Helpers
