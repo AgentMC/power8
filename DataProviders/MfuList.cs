@@ -16,7 +16,7 @@ using Power8.Views;
 namespace Power8
 {
     /// <summary>
-    /// Provides list of Moset Frequently Used applications in the system
+    /// Provides list of Most Frequently Used applications in the system
     /// </summary>
     public static class MfuList
     {

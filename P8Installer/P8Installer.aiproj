@@ -17,11 +17,6 @@
     <AiComPath>C:\Program Files (x86)\Caphyon\Advanced Installer 11.6.3\bin\x86\AdvancedInstaller.com</AiComPath>
     <AdvinstCmdLine>-buildslist DefaultBuild</AdvinstCmdLine>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'All' ">
-    <DebugSymbols>false</DebugSymbols>
-    <OutputPath>msi\</OutputPath>
-    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'DefaultBuild' " />
   <ItemGroup>
     <Compile Include="P8Installer.aip">
@@ -53,4 +48,6 @@
   </Target>
   <Target Name="ResolveAssemblyReferences">
   </Target>
+  <Import Project="$(AdvancedInstallerMSBuildTargets)\AdvInstExtTasks.Targets" Condition="'$(AdvancedInstallerMSBuildTargets)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Caphyon\Advanced Installer\AdvInstExtTasks.Targets" Condition="'$(AdvancedInstallerMSBuildTargets)' == ''" />
 </Project>
