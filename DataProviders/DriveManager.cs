@@ -231,7 +231,7 @@ begin:
             Exception e = null;
             try
             {
-                w.EnableRaisingEvents = true;
+                if (!w.WasDisposed) w.EnableRaisingEvents = true;
             }
             catch (IOException ex) //drive unavailable
             {

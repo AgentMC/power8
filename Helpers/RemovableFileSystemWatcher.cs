@@ -161,7 +161,10 @@ namespace Power8.Helpers
             finally
             {
                 base.Dispose(disposing);
+                WasDisposed = true;
             }
         }
+
+        public bool WasDisposed { get; private set; }
     }
 }
