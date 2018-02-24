@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using Power8.Helpers;
 using Power8.Views;
 using System;
@@ -60,6 +61,8 @@ namespace Power8
             
             DispatcherUnhandledException += (sender, e) => Util.DispatchUnhandledException(e.Exception);
             AppDomain.CurrentDomain.UnhandledException += HandleUnhandled;
+
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType) 3840; //Support for TLS 1.1 and TLS 1.2
 
             var dbRoot = Util.GetSettingsIndependentDbRoot();
             try
