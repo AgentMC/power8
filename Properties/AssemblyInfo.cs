@@ -6,11 +6,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Power8")]
-[assembly: AssemblyDescription("Start menu replacer for Windows 8")]
+[assembly: AssemblyDescription("Start menu replacer for Windows XP, 7, 8 and 10")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Power8 Team")]
 [assembly: AssemblyProduct("Power8")]
-[assembly: AssemblyCopyright("© Power8 Team 2012-2017")]
+[assembly: AssemblyCopyright("© Power8 Team 2012-2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,7 +49,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.6.0.1616")]
-[assembly: AssemblyFileVersion("1.6.0.1616")]
-//7zuri=https://github.com/AgentMC/power8/releases/download/v.1.6.0.1616/Power8_v.1.6.0.1616.7z
-//msuri=https://github.com/AgentMC/power8/releases/download/v.1.6.0.1616/Power8_v.1.6.0.1616.msi
+[assembly: AssemblyVersion("1.6.1.1619")]
+[assembly: AssemblyFileVersion("1.6.1.1619")]
+//7zuri=https://github.com/AgentMC/power8/releases/download/v.1.6.1.1619/Power8_v.1.6.1.1619.7z
+//msuri=https://github.com/AgentMC/power8/releases/download/v.1.6.1.1619/Power8_v.1.6.1.1619.msi
