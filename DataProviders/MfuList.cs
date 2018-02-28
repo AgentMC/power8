@@ -207,6 +207,13 @@ namespace Power8
         // Save data and cleanup on close
         private static void MainDispOnShutdownStarted(object sender, EventArgs eventArgs)
         {
+            if(Util.MainDisp.Thread.ManagedThreadId != Thread.CurrentThread.ManagedThreadId)
+            {
+                Log.Raw("Redirecting Main Dispather shutdown to main thread.");
+                Util.Send(() => MainDispOnShutdownStarted(sender, eventArgs));
+                return;
+            }
+            Log.Raw("Begin Main Dispather shutdown");
             try
             {
                 if (_watchDog != null)
@@ -214,11 +221,14 @@ namespace Power8
                     _watchDog.EventArrived -= WatchDogOnEventArrived;
                     _watchDog.Stop();
                     _watchDog.Dispose();
+                    Log.Raw("Stopped process watchdog.");
                 }
             }
             catch (COMException ex){Log.Raw(ex.Message);} //Well... too bad. We shut down anyway...
             catch (ManagementException ex) { Log.Raw(ex.Message); }
+            catch (InvalidCastException ex) { Log.Raw(ex.Message); } //in case Send doesn't help with RPC_E_WRONG_THREAD
 
+            Log.Raw("DB final sync...");
             Directory.CreateDirectory(DataBaseRoot);
 
             _mfuShutDown = true; //wait while DataSaveThread exits
@@ -229,6 +239,8 @@ namespace Power8
             SavePinList();
             SaveExclusionsList();
             SaveUserList();
+
+            Log.Raw("End Main Dispather shutdown");
         }
 
         private static void SaveLaunchList()
