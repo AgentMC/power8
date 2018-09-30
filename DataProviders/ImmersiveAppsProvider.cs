@@ -242,12 +242,12 @@ namespace Power8.DataProviders
                     using (var packageKey = packageRepoKey.OpenSubKey(package))
                     {
                         // ReSharper disable once PossibleNullReferenceException
-                        pathCache[package] = new PathCacheItem
+                        var pkg = new PathCacheItem
                         {
                             DisplayName = (string)packageKey.GetValue("DisplayName"),
                             RootPath = (string)packageKey.GetValue("PackageRootFolder")
                         };
-
+                        if (pkg.RootPath != null) pathCache[package] = pkg;
                     }
                 }
             }
@@ -344,7 +344,7 @@ namespace Power8.DataProviders
             {
                 foreach (var uriTemplate in uriTemplates)
                 {
-                    var pair = uriTemplate.Split(new[] { '?' }, 2);
+                    var pair = uriTemplate.Split(new[] { '?' }, 2, StringSplitOptions.RemoveEmptyEntries);
 
                     var uri = new UriBuilder(pair[1].TrimEnd('}'));
                     var uriParts = uri.Path.Split('/').ToList();
