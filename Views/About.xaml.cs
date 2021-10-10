@@ -44,10 +44,12 @@ namespace Power8.Views
         {
             get
             {
-                return string.IsNullOrEmpty(Properties.Resources.Str_LocalizerUri)
-                           ? null
-                           : new Uri(Properties.Resources.Str_LocalizerUri);
+                return (!string.IsNullOrEmpty(Properties.Resources.Str_LocalizerUri)) 
+                        && Uri.TryCreate(Properties.Resources.Str_LocalizerUri, UriKind.Absolute, out var u)
+                           ? u
+                           : null;
             }
         }
+
     }
 }
