@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Power8 Team")]
 [assembly: AssemblyProduct("Power8")]
-[assembly: AssemblyCopyright("© Power8 Team 2012-2018")]
+[assembly: AssemblyCopyright("© Power8 Team 2012-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -49,7 +49,7 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.6.1.1619")]
-[assembly: AssemblyFileVersion("1.6.1.1619")]
-//7zuri=https://github.com/AgentMC/power8/releases/download/v.1.6.1.1619/Power8_v.1.6.1.1619.7z
-//msuri=https://github.com/AgentMC/power8/releases/download/v.1.6.1.1619/Power8_v.1.6.1.1619.msi
+[assembly: AssemblyVersion("1.6.2.1628")]
+[assembly: AssemblyFileVersion("1.6.2.1628")]
+//7zuri=https://github.com/AgentMC/power8/releases/download/v.1.6.2.1628/Power8_v.1.6.2.1628.7z
+//msuri=https://github.com/AgentMC/power8/releases/download/v.1.6.2.1628/Power8_v.1.6.2.1628.msi
