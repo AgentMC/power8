@@ -49,5 +49,5 @@
   <Target Name="ResolveAssemblyReferences">
   </Target>
   <Import Project="$(AdvancedInstallerMSBuildTargets)\AdvInstExtTasks.Targets" Condition="'$(AdvancedInstallerMSBuildTargets)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Caphyon\Advanced Installer\AdvInstExtTasks.Targets" Condition="'$(AdvancedInstallerMSBuildTargets)' == ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Caphyon\Advanced Installer\AdvInstExtTasks.Targets" Condition="('$(AdvancedInstallerMSBuildTargets)' == '') And (Exists('$(MSBuildExtensionsPath32)\Caphyon\Advanced Installer\AdvInstExtTasks.Targets'))" />
 </Project>
