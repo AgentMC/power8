@@ -834,6 +834,7 @@ namespace Power8
                 new {Key = Registry.LocalMachine, Path = @"SYSTEM\CurrentControlSet\Control\Session Manager\"},
                 new {Key = Registry.CurrentUser, Path = string.Empty}
             };
+            var aggregator = new Dictionary<string, string>();
             Log.Raw("Starting process");
             foreach (var key in keys)
             {
@@ -847,11 +848,32 @@ namespace Power8
                         if (value == null)
                             continue;
                         var sValue = value.ToString();
-                        if (Environment.GetEnvironmentVariable(valueName) == sValue)
-                            continue;
-                        Environment.SetEnvironmentVariable(valueName, sValue);
-                        Log.Fmt("Updated variable '{0}' to '{1}'", valueName, value);
+                        if (key.Path == string.Empty && valueName.Equals("Path", StringComparison.OrdinalIgnoreCase))
+                        {//User level path override
+                            if (!string.IsNullOrWhiteSpace(sValue)) //if user value empty, do nothing
+                            {
+                                if (aggregator.TryGetValue(valueName, out var pathVarSystem)) //system value exists
+                                {
+                                    if (!pathVarSystem.EndsWith(";")) 
+                                        pathVarSystem += ';';
+                                    sValue = pathVarSystem + sValue;
+                                }
+                                aggregator[valueName] = sValue;
+                            }
+                        }
+                        else if (!valueName.StartsWith("USER")) 
+                        {//System vars or any User level overrides except Path, or system-level "USER" ID vars
+                            aggregator[valueName] = sValue;
+                        }
                     }
+                }
+            }
+            foreach (var kvp in aggregator)
+            {
+                if (Environment.GetEnvironmentVariable(kvp.Key) != kvp.Value)
+                {
+                    Environment.SetEnvironmentVariable(kvp.Key, kvp.Value);
+                    Log.Fmt("Updated variable '{0}' to '{1}'", kvp.Key, kvp.Value);
                 }
             }
             Log.Raw("Done");
