@@ -144,7 +144,7 @@ namespace Power8
             Fork(method, name).Start();
         }
         /// <summary>
-        /// Unkile ForkStart() or simple Fork(), uses thread pool to lower system load when multiple threads are initialized. 
+        /// Unlike ForkStart() or simple Fork(), uses thread pool to lower system load when multiple threads are initialized. 
         /// </summary>
         /// <param name="method">The delegate which can be used as non-parametrized thread start</param>
         /// <param name="name">Optional. Managed name of a Thread being created, default is "P8 forked"</param>
@@ -185,7 +185,7 @@ namespace Power8
         /// </summary>
         /// <param name="thread">Thread variable which holds or will hold the thread reference</param>
         /// <param name="pFunc">Thread delegate. Not required when <paramref name="thread"/> is already
-        /// created byt not started.</param>
+        /// created but not started.</param>
         /// <param name="threadName">Name of newly created thread.</param>
         public static void BgrThreadInit(ref Thread thread, ThreadStart pFunc, string threadName)
         {

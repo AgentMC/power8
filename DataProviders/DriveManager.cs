@@ -159,7 +159,10 @@ begin:
                 Thread.Sleep(5000);
                 goto begin; //just don't want unneeded code nesting here, anyway IL will be same.
             }
-            DriveNames.ForEach(StopWatcher);
+            for (int i = DriveNames.Count - 1; i >= 0; i--)
+            {
+                StopWatcher(DriveNames[i]);
+            }
         }
 
         /// <summary>
