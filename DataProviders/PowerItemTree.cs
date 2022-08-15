@@ -187,7 +187,7 @@ namespace Power8
                                         Argument = API.ShNs.AllControlPanelItems + "\\::" + cplguid,
                                         NonCachedIcon = true,
                                         Parent = _controlPanelRoot,
-                                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true)
+                                        ResourceIdString = Util.GetLocalizedStringResourceIdForClass(cplguid, true) ?? Util.GetDefaultValueForSubkey(k, cplguid)
                                     });
                                 }
                                 else //named items, for example "Internet options" on XP. In general, this block

@@ -1046,6 +1046,28 @@ namespace Power8
                 ns = "{" + ns + "}";
             return ns;
         }
+        /// <summary>
+        /// Returns a (default) value for a given subkey name under an already opened key.
+        /// </summary>
+        /// <param name="activeParent">A <code>RegistryKey</code> which is opened, valid, not null. Not closed upon return.</param>
+        /// <param name="subkeyName">A name of the child subkey ("folder") to retrieve default value.</param>
+        /// <returns>Stringified (default) value or null if retrieval failed OR the value is empty string or whitespace.</returns>
+        public static string GetDefaultValueForSubkey(RegistryKey activeParent, string subkeyName)
+        {
+            string sv;
+            try
+            {
+                using(var sk = activeParent.OpenSubKey(subkeyName))
+                {
+                    sv = (string)sk.GetValue(string.Empty);
+                }
+            }
+            catch 
+            {
+                sv = null;
+            }
+            return string.IsNullOrWhiteSpace(sv) ? null : sv;
+        }
 
         #endregion
 
