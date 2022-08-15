@@ -1,0 +1,525 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CR_AppOpenCommonFolder" xml:space="preserve">
+    <value>Відкрити папку, загальну для всіх користувачів</value>
+  </data>
+  <data name="CR_AppOpenContainer" xml:space="preserve">
+    <value>Відкрити розташування</value>
+  </data>
+  <data name="CR_AppOpenFolder" xml:space="preserve">
+    <value>Відкрити</value>
+  </data>
+  <data name="CR_AppOpenTargetContainer" xml:space="preserve">
+    <value>Відкрити розташування цільового файлу</value>
+  </data>
+  <data name="CR_AppRun" xml:space="preserve">
+    <value>Запустити</value>
+  </data>
+  <data name="CR_AppRunAs" xml:space="preserve">
+    <value>Запустити в режимі Адміністратора</value>
+  </data>
+  <data name="CR_AppShowProperties" xml:space="preserve">
+    <value>Властивості</value>
+  </data>
+  <data name="CR_AppShowTargetProperties" xml:space="preserve">
+    <value>Властивості цільового файлу</value>
+  </data>
+  <data name="CR_ButtonHibernate" xml:space="preserve">
+    <value>Глибокий сон</value>
+  </data>
+  <data name="CR_ButtonLock" xml:space="preserve">
+    <value>Блокувати ПК</value>
+  </data>
+  <data name="CR_ButtonLogOff" xml:space="preserve">
+    <value>Вийти з системи</value>
+  </data>
+  <data name="CR_ButtonRestart" xml:space="preserve">
+    <value>Перезавантажити</value>
+  </data>
+  <data name="CR_ButtonRun" xml:space="preserve">
+    <value>Запуск...</value>
+  </data>
+  <data name="CR_ButtonScreensave" xml:space="preserve">
+    <value>Показати заставку</value>
+  </data>
+  <data name="CR_ButtonShutdown" xml:space="preserve">
+    <value>Завершити роботу</value>
+  </data>
+  <data name="CR_ButtonSleep" xml:space="preserve">
+    <value>Сон</value>
+  </data>
+  <data name="CR_ButtonStack" xml:space="preserve">
+    <value>Power8 - замінює меню Пуск для Windows XP, 7 та 8</value>
+    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
+  </data>
+  <data name="CR_CLCleanerBtn" xml:space="preserve">
+    <value>Очистити</value>
+  </data>
+  <data name="CR_CLWindow" xml:space="preserve">
+    <value>Список комп'ютерів</value>
+  </data>
+  <data name="CR_GroupItemsText" xml:space="preserve">
+    <value> елемент(и,ів)</value>
+    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
+  </data>
+  <data name="CR_MWAutoStart" xml:space="preserve">
+    <value>Запускатися при старті системи</value>
+  </data>
+  <data name="CR_MWBlockMetro" xml:space="preserve">
+    <value>Блокувати функції Metro (W8)</value>
+  </data>
+  <data name="CR_MWCheckForUpdates" xml:space="preserve">
+    <value>Перевіряти наявність оновлень</value>
+  </data>
+  <data name="CR_MWExit" xml:space="preserve">
+    <value>Вийти</value>
+  </data>
+  <data name="CR_SearchBox" xml:space="preserve">
+    <value>Шукати...</value>
+  </data>
+  <data name="CR_SearchMarker" xml:space="preserve">
+    <value>Йде пошук...</value>
+    <comment>Gray text indicating Windows search request was sent</comment>
+  </data>
+  <data name="CR_UNdown7z" xml:space="preserve">
+    <value>Завантажити 7z</value>
+  </data>
+  <data name="CR_UNDownAndUp" xml:space="preserve">
+    <value>Завантажити MSI та встановити оновлення!</value>
+  </data>
+  <data name="CR_UNdownMsi" xml:space="preserve">
+    <value>Завантажити MSI</value>
+  </data>
+  <data name="CR_UNGoWeb" xml:space="preserve">
+    <value>Відкрити веб-сайт проекту</value>
+  </data>
+  <data name="CR_UNIgnore" xml:space="preserve">
+    <value>Більше не нагадувати про цю версію</value>
+  </data>
+  <data name="CR_UNNewVersion" xml:space="preserve">
+    <value>Нова версія:</value>
+  </data>
+  <data name="CR_UNNextTime" xml:space="preserve">
+    <value>Нагадати наступного разу</value>
+  </data>
+  <data name="CR_UNOther" xml:space="preserve">
+    <value>Інші можливості:</value>
+  </data>
+  <data name="CR_UNUpdateAvailableLong" xml:space="preserve">
+    <value>Доступне оновлення для Power8!</value>
+  </data>
+  <data name="CR_UNwnd" xml:space="preserve">
+    <value>Повідомлення про оновлення</value>
+  </data>
+  <data name="CR_UNYourVersion" xml:space="preserve">
+    <value>Ваша версія:</value>
+  </data>
+  <data name="Err_CantCheckUpdates" xml:space="preserve">
+    <value>Не вдається перевірити оновлення.</value>
+  </data>
+  <data name="Err_CantGetTooltip" xml:space="preserve">
+    <value>Не вдається отримати підказку для об'єкта</value>
+  </data>
+  <data name="Err_CantInstanciateClassFormatString" xml:space="preserve">
+    <value>Не вдається інстанціювати клас {0}
+{1}</value>
+  </data>
+  <data name="Err_DownloadCancelled" xml:space="preserve">
+    <value>Завантаження було відмінено.</value>
+  </data>
+  <data name="Err_GotNoFile" xml:space="preserve">
+    <value>Не знайдено файл для </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="Err_GotNoFolder" xml:space="preserve">
+    <value>Не знайдено папку для </value>
+    <comment>Leave trailing space!</comment>
+  </data>
+  <data name="Err_NoPiExtracted" xml:space="preserve">
+    <value>Елемент даних недоступний</value>
+  </data>
+  <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
+    <value>Під час відображення властивостей виникла помилка {0}.
+{1}</value>
+    <comment>Don't drop the second line</comment>
+  </data>
+  <data name="Err_StartAsAdminFailed" xml:space="preserve">
+    <value>Не вдається запустити цей об'єкт з правами адміністратора. Процесс запущений з правами звичайного корисувача.
+</value>
+    <comment>Leave trailling paragraph symbol</comment>
+  </data>
+  <data name="Err_VistaDetected" xml:space="preserve">
+    <value>Windows (R) Vista (R) не призначена для роботи з Power8. Будь ласка, використовуйте нормальну операційну систему.</value>
+  </data>
+  <data name="Str_AllPrograms" xml:space="preserve">
+    <value>Усі програми</value>
+    <comment>Default label instead of "Start menu" extracted automatically. Currently seems useless</comment>
+  </data>
+  <data name="Str_CplElement" xml:space="preserve">
+    <value>Елемент панелі керування</value>
+  </data>
+  <data name="Str_Library" xml:space="preserve">
+    <value> (бібліотека)</value>
+    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
+  </data>
+  <data name="Str_Pin" xml:space="preserve">
+    <value>Закріпити</value>
+    <comment>Tooltip over pin icon</comment>
+  </data>
+  <data name="Str_Recent" xml:space="preserve">
+    <value>Нещодавно запускалися</value>
+    <comment>Name of search category</comment>
+  </data>
+  <data name="Str_SaveDialogDescription" xml:space="preserve">
+    <value>: оберіть куди зберегти файл</value>
+  </data>
+  <data name="Str_SaveDialogFilter" xml:space="preserve">
+    <value> - оновлення|*</value>
+    <comment>Leave starting space. Full line reads "Power8 update"</comment>
+  </data>
+  <data name="Str_ShowMore" xml:space="preserve">
+    <value>Показати всі інші...</value>
+    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
+  </data>
+  <data name="Str_Unpin" xml:space="preserve">
+    <value>Відкріпити</value>
+    <comment>Tooltip over pin icon</comment>
+  </data>
+  <data name="Str_UpdateAvailable" xml:space="preserve">
+    <value>: доступне оновлення!</value>
+  </data>
+  <data name="Str_UpdateAvailableFormat" xml:space="preserve">
+    <value>
+
+Ваша версія: {0}
+Нова версія: {1}
+
+Перейти на веб-сторінку для оновлення?
+
+Так: перейти на веб-сторінку щоб скачати оновлення!
+Ні: нагадати пізніше.
+Відміна: більше не нагадувати про цю версію.</value>
+    <comment>Keep 2 empty lines at the beginning</comment>
+  </data>
+  <data name="Str_WindowsSearchResults" xml:space="preserve">
+    <value>Результати Пошуку Windows</value>
+    <comment>Name of search category</comment>
+  </data>
+  <data name="CR_AbLocalization" xml:space="preserve">
+    <value>Цей переклад зроблено Командою Power8</value>
+    <comment>Put localizer name here!</comment>
+  </data>
+  <data name="CR_AbVersion" xml:space="preserve">
+    <value>Версія:</value>
+  </data>
+  <data name="CR_MWAbout" xml:space="preserve">
+    <value>Про цю програму...</value>
+    <comment>Label in main btn context menu and in About Window</comment>
+  </data>
+  <data name="Str_LocalizerUri" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CR_RE_NoButton" xml:space="preserve">
+    <value>Ні, не треба, дякую.
+Я знаю, що вібувається, і впораюся з цим.</value>
+  </data>
+  <data name="CR_RE_Title" xml:space="preserve">
+    <value>Power8 — Windows Explorer більше не знами</value>
+  </data>
+  <data name="CR_RE_TopLabel" xml:space="preserve">
+    <value>Схоже, процес Провіднику недоступний.
+Power8 може допомогти вам з цією проблемою.
+ 
+Відновити Провідник і перезавантажити Power8?</value>
+  </data>
+  <data name="CR_RE_YesButton" xml:space="preserve">
+    <value>Так!
+Будь ласка, запустіть Провідник та завантажте Power8 знову.</value>
+  </data>
+  <data name="CR_MWSettings" xml:space="preserve">
+    <value>Налаштування...</value>
+  </data>
+  <data name="CR_StgArByDesktop" xml:space="preserve">
+    <value>Авто (як у Робочого столу)</value>
+  </data>
+  <data name="CR_StgBrowseBtn" xml:space="preserve">
+    <value>Обрати...</value>
+  </data>
+  <data name="CR_StgInvertAr" xml:space="preserve">
+    <value>Враховувати орієнтацію Панелі завдань</value>
+  </data>
+  <data name="CR_StgLblAr" xml:space="preserve">
+    <value>Співвідношення сторін:</value>
+  </data>
+  <data name="CR_StgLblChooseImage" xml:space="preserve">
+    <value>Оберіть зображення (клацніть два рази щоб очистити):</value>
+  </data>
+  <data name="CR_StgSquareStart" xml:space="preserve">
+    <value>Налаштувати кнопку Пуск</value>
+  </data>
+  <data name="CR_StgSuggestProblems" xml:space="preserve">
+    <value>Повідомляти про проблеми з налаштуваннями</value>
+  </data>
+  <data name="CR_StgWatchRemovables" xml:space="preserve">
+    <value>Слідкувати за з'ємними носіями</value>
+  </data>
+  <data name="CR_StgWnd" xml:space="preserve">
+    <value>Налаштування Power8</value>
+    <comment>Title of settings window</comment>
+  </data>
+  <data name="Str_PicDialogDescription" xml:space="preserve">
+    <value>: оберіть зображення для меню Пуск</value>
+  </data>
+  <data name="Str_PicDialogFilter" xml:space="preserve">
+    <value>Зображення</value>
+    <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
+  </data>
+  <data name="Str_TipWarn" xml:space="preserve">
+    <value>Деякі налаштування варто змінити, щоб покращити роботу Power8</value>
+  </data>
+  <data name="CR_StgAutoSort" xml:space="preserve">
+    <value>Сортувати меню і списки коли файли і папки створюються або змінюються</value>
+  </data>
+  <data name="CR_StgLblSetStartText" xml:space="preserve">
+    <value>Текст на меню "Програми" (якщо не вказано — береться з системи):</value>
+  </data>
+  <data name="CR_StgTabGeneral" xml:space="preserve">
+    <value>Загальні</value>
+    <comment>"General" tab in settings window</comment>
+  </data>
+  <data name="CR_StgTabMenuBtns" xml:space="preserve">
+    <value>Меню-кнопки</value>
+  </data>
+  <data name="CR_StgTabWSE" xml:space="preserve">
+    <value>Пошукові веб-рушії</value>
+  </data>
+  <data name="CR_StgLblShowMenuButtons" xml:space="preserve">
+    <value>Показувати меню-кнопки:</value>
+  </data>
+  <data name="CR_StgWseColKey" xml:space="preserve">
+    <value>Літера</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
+  </data>
+  <data name="CR_StgWseColVal" xml:space="preserve">
+    <value>Строка запиту</value>
+    <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
+  </data>
+  <data name="CR_StgAutoRestart" xml:space="preserve">
+    <value>Перезапускати Power8 при виникненні фатальних помилок</value>
+  </data>
+  <data name="CR_AbDonate" xml:space="preserve">
+    <value>_____</value>
+  </data>
+  <data name="CR_AppExcludeFromMfu" xml:space="preserve">
+    <value>Сховати цей об'єкт</value>
+  </data>
+  <data name="CR_StgTabMfu" xml:space="preserve">
+    <value>Список найчастішого використання</value>
+  </data>
+  <data name="CR_StgMfuColExcl" xml:space="preserve">
+    <value>Ховати об'єкти, що містять рядки:</value>
+  </data>
+  <data name="CR_StgMfuUseCustom" xml:space="preserve">
+    <value>Використовувати особистий список (створюється вручну)</value>
+  </data>
+  <data name="CR_StgMfuUseP8JL" xml:space="preserve">
+    <value>Використовувати дані, зібрані Power8</value>
+  </data>
+  <data name="CR_StgMfuUseSystem" xml:space="preserve">
+    <value>Використовувати системні дані (UserAssist) для побудови списку</value>
+  </data>
+  <data name="CR_AppExcludeFromCustom" xml:space="preserve">
+    <value>Прибрати з особистого списку</value>
+  </data>
+  <data name="CR_AppIncludeToCustom" xml:space="preserve">
+    <value>Додати до особистого списку</value>
+  </data>
+  <data name="CR_StgShowDonateMenuItem" xml:space="preserve">
+    <value>Показувати пункт меню про підтримку</value>
+  </data>
+  <data name="CR_MWDonate" xml:space="preserve">
+    <value>Підтримати розробників...</value>
+  </data>
+  <data name="CR_ButtonSwitchUser" xml:space="preserve">
+    <value>Змінити користувача</value>
+  </data>
+  <data name="CR_StgCbCtrl" xml:space="preserve">
+    <value>Відкривати Панель керування з видом по категоріям</value>
+  </data>
+  <data name="CR_StgDynamicLayout" xml:space="preserve">
+    <value>Обміняти меню Пуск зі строкою пошуку, якщо це пришвидшить доступ до них</value>
+    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+  </data>
+  <data name="CR_StgLblStretch" xml:space="preserve">
+    <value>Розтягнути зображення:</value>
+  </data>
+  <data name="CR_StgStrFill" xml:space="preserve">
+    <value>Заповнювати усю кнопку</value>
+  </data>
+  <data name="CR_StgStrNone" xml:space="preserve">
+    <value>Первинний розмір</value>
+  </data>
+  <data name="CR_StgStrUniform" xml:space="preserve">
+    <value>Зберігати співвідношення сторін</value>
+  </data>
+  <data name="CR_StgStrUniform2Fill" xml:space="preserve">
+    <value>Зберігати співвідношення і заповнювати</value>
+  </data>
+  <data name="CR_StgAutoCorner" xml:space="preserve">
+    <value>Виводити основне вікно найближче до миші після Alt+Z</value>
+  </data>
+  <data name="CR_StgLblPwr" xml:space="preserve">
+    <value>Живлення (вимкнути, сон,...):</value>
+  </data>
+  <data name="CR_StgPwrConfirm" xml:space="preserve">
+    <value>Вимагати підтвердження</value>
+  </data>
+  <data name="CR_StgPwrForce" xml:space="preserve">
+    <value>Форсувати (стан програм і пристроїв ігнорується)</value>
+  </data>
+  <data name="CR_StgOldLayout" xml:space="preserve">
+    <value>Компактний Пуск (як у Windows'98)</value>
+  </data>
+  <data name="CR_CawCancelButton" xml:space="preserve">
+    <value>Відмінити</value>
+  </data>
+  <data name="CR_CawConfirmButton" xml:space="preserve">
+    <value>Продовжити</value>
+    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+  </data>
+  <data name="CR_CawMessageTextBlock" xml:space="preserve">
+    <value>Ви впевнені, що бажаєте продовжити?</value>
+  </data>
+  <data name="CR_AbUkrPart1" xml:space="preserve">
+    <value>Зроблено в Україні</value>
+  </data>
+  <data name="CR_AbUkrPart2" xml:space="preserve">
+    <value>Детальніше...</value>
+  </data>
+  <data name="CR_StgCbCtfl" xml:space="preserve">
+    <value>Виправити значки, що повторюються (потребує перезапуск)</value>
+  </data>
+  <data name="Err_StartupCrashDetected" xml:space="preserve">
+    <value>Упс, схоже Power8 спіткала помилку під час запуску. Обережно: функція 'Перезапускати при помилках' зараз активна, тому ви можете стикнутися з циклом безкінечних перезапусків Power8. Але можна змінити це налаштування зараз, поки ви бачите це повідомлення (відкрийте вікно налаштувань). Продовжити перезапуск Power8?</value>
+  </data>
+  <data name="CR_AbDonateTitle" xml:space="preserve">
+    <value>Ви можете підтримати нашу команду (але краще киньте на ЗСУ) :)</value>
+  </data>
+</root>
