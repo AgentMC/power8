@@ -46,7 +46,7 @@
                 </Border.Background>
             </Border>
             <Label HorizontalAlignment="Left" x:Name="label5" VerticalAlignment="Top" Padding="0" Margin="0">
-                <Hyperlink NavigateUri="https://www.behance.net/gallery/From-The-Creators-of-Borshch/15795643" Click="Navigate">
+                <Hyperlink NavigateUri="https://euromaidanpress.com/2014/09/04/the-end-of-invisibility-taking-back-ukraine-3/" Click="Navigate">
                     <InlineUIContainer>
                         <TextBlock x:Name="AbUkrPart2" Margin="0" />
                     </InlineUIContainer>
