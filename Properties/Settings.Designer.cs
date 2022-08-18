@@ -61,28 +61,6 @@ namespace Power8.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-8""?>
-<P8SearchProviders>
-  <Provider key=""b"">http://www.bing.com/search?q={0}</Provider>
-  <Provider key=""d"">http://www.baidu.com/s?wd={0}</Provider>
-  <Provider key=""g"">https://google.com/search?q={0}</Provider>
-  <Provider key=""w"">http://en.wikipedia.org/w/index.php?search={0}</Provider>
-  <Provider key=""y"">http://yandex.com/yandsearch?text={0}</Provider>
-  <Provider key=""в"">http://ru.wikipedia.org/w/index.php?search={0}</Provider>
-  <Provider key=""г"">https://google.ru/search?q={0}</Provider>
-  <Provider key=""я"">http://yandex.ru/yandsearch?text={0}</Provider>
-</P8SearchProviders>")]
-        public string SearchProviders {
-            get {
-                return ((string)(this["SearchProviders"]));
-            }
-            set {
-                this["SearchProviders"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool BlockMetro {
             get {
@@ -414,6 +392,26 @@ namespace Power8.Properties {
             }
             set {
                 this["StartMenu98Style"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-8""?>
+<P8SearchProviders>
+	<Provider key=""b"">https://www.bing.com/search?q={0}</Provider>
+	<Provider key=""d"">https://www.baidu.com/s?wd={0}</Provider>
+	<Provider key=""g"">https://google.com/search?q={0}</Provider>
+	<Provider key=""w"">https://en.wikipedia.org/w/index.php?search={0}</Provider>
+	<Provider key=""y"">https://search.yahoo.com/search?p={0}</Provider>
+	<Provider key=""в"">https://ru.wikipedia.org/w/index.php?search={0}</Provider>
+</P8SearchProviders>")]
+        public string SearchProviders {
+            get {
+                return ((string)(this["SearchProviders"]));
+            }
+            set {
+                this["SearchProviders"] = value;
             }
         }
     }
