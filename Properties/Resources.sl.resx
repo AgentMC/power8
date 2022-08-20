@@ -131,7 +131,7 @@ Prekliči: to posodobitev preskočim, nikoli me ne obvesti o tej različici.</va
     <comment>Keep 2 empty lines at the beginning</comment>
   </data>
   <data name="Str_UpdateAvailable" xml:space="preserve">
-    <value>: posodobitev je na voljo!</value>
+    <value>: na voljo je posodobitev!</value>
   </data>
   <data name="Err_ShellExecExErrorFormatString" xml:space="preserve">
     <value>Napaka {0}, ki je nastala med poskusom prikaza lastnosti predmeta
@@ -142,7 +142,7 @@ Prekliči: to posodobitev preskočim, nikoli me ne obvesti o tej različici.</va
   </data>
   <data name="Str_AllPrograms" xml:space="preserve">
     <value>Vsi programi</value>
-    <comment>Default label instead of "Start menu". Currently seems useless</comment>
+    <comment>Privzeta oznaka namesto 'Začetni meni'. Trenutno se zdi neuporabno</comment>
   </data>
   <data name="Err_StartAsAdminFailed" xml:space="preserve">
     <value>Določenega predmeta ni mogoče zagnati kot skrbnik. Proces se je začel z običajnimi uporabniškimi pravicami.
@@ -211,7 +211,7 @@ Prekliči: to posodobitev preskočim, nikoli me ne obvesti o tej različici.</va
   </data>
   <data name="Str_ShowMore" xml:space="preserve">
     <value>Prikaži več...</value>
-    <comment>Last line in the menu-list of computers, means "Show window with all the other computers of a workgroup/domain"</comment>
+    <comment>Zadnja vrstica v menijskem seznamu računalnikov pomeni "Prikaži okno z vsemi drugimi računalniki delovne skupine/domene"</comment>
   </data>
   <data name="CR_CLCleanerBtn" xml:space="preserve">
     <value>Počisti</value>
@@ -227,15 +227,15 @@ Prekliči: to posodobitev preskočim, nikoli me ne obvesti o tej različici.</va
   </data>
   <data name="Err_GotNoFolder" xml:space="preserve">
     <value>Ni najdena mapa za</value>
-    <comment>Leave trailing space!</comment>
+    <comment>Pusti zaostali prostor!</comment>
   </data>
   <data name="Err_GotNoFile" xml:space="preserve">
     <value>Ni najdena datoteka za</value>
-    <comment>Leave trailing space!</comment>
+    <comment>Pusti zaostali prostor!</comment>
   </data>
   <data name="CR_ButtonStack" xml:space="preserve">
     <value>Power8 - Zamenjava Začetnega menija za Windows XP, 7 in 8</value>
-    <comment>Title of ButtonStack. It is possible to catch the title in the 8's TaskManager</comment>
+    <comment>Naslov sklada gumbov. Naslov je mogoče ujeti v TaskManagerju 8</comment>
   </data>
   <data name="Err_DownloadCancelled" xml:space="preserve">
     <value>Prenos je bil preklican.</value>
@@ -245,7 +245,7 @@ Prekliči: to posodobitev preskočim, nikoli me ne obvesti o tej različici.</va
   </data>
   <data name="Str_SaveDialogFilter" xml:space="preserve">
     <value> posodobi|*</value>
-    <comment>Leave starting space</comment>
+    <comment>Pusti začetni prostor</comment>
   </data>
   <data name="CR_UNDownAndUp" xml:space="preserve">
     <value>Prenesi MSI in posodobi zdaj!</value>
@@ -294,15 +294,15 @@ Prekliči: to posodobitev preskočim, nikoli me ne obvesti o tej različici.</va
   </data>
   <data name="CR_SearchMarker" xml:space="preserve">
     <value>Iskanje...</value>
-    <comment>Gray text indicating Windows search request was sent</comment>
+    <comment>Sivo besedilo, ki označuje, da je bila poslana zahteva za iskanje v sistemu Windows</comment>
   </data>
   <data name="Str_Library" xml:space="preserve">
     <value> (knjižnica)</value>
-    <comment>Description after library name in tooltip over library object in search results (leave space at the beginning!)</comment>
+    <comment>Opis za imenom knjižnice v opisu orodja nad predmetom knjižnice v rezultatih iskanja (pustite presledek na začetku!)</comment>
   </data>
   <data name="CR_GroupItemsText" xml:space="preserve">
     <value> Vnosi</value>
-    <comment>Label in the group of search results in the grid (keep starting space!)</comment>
+    <comment>Oznaka v skupini rezultatov iskanja v mreži (ohranite začetni prostor!)</comment>
   </data>
   <data name="CR_MWBlockMetro" xml:space="preserve">
     <value>Onemogoči funkcije Metroja</value>
@@ -329,7 +329,7 @@ Prekliči: to posodobitev preskočim, nikoli me ne obvesti o tej različici.</va
   </data>
   <data name="Str_LocalizerUri" xml:space="preserve">
     <value>mailto:jrudec@gmail.com</value>
-    <comment>Put here the http://-URI to your page/site, or mailto:-address of your email. This will be displayed right under your name in the About window. EX.: http://a1.org OR mailto:a1@test.com</comment>
+    <comment>Tukaj vnesite http://-URI vaše strani/mesta ali mailto:-naslov vašega e-poštnega naslova. To bo prikazano neposredno pod vašim imenom v oknu 'Vizitka'. NPR.: http://a1.org ALI mailto:a1@test.com</comment>
   </data>
   <data name="CR_RE_NoButton" xml:space="preserve">
     <value>Ne, hvala.
@@ -349,7 +349,7 @@ Ali želite obnoviti Windows Raziskovalec in znova zagnati Power8?</value>
 Zaženi Raziskovalca zame in znova zaženi proces Power8.</value>
   </data>
   <data name="CR_MWSettings" xml:space="preserve">
-    <value>Settings...</value>
+    <value>Nastavitve...</value>
   </data>
   <data name="CR_StgArByDesktop" xml:space="preserve">
     <value>Samodejno (z Namizjem)</value>
@@ -380,11 +380,11 @@ Zaženi Raziskovalca zame in znova zaženi proces Power8.</value>
     <comment>Title of settings window</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
-    <value>: izberite sliko začetnega menija</value>
+    <value>: Izberite sliko začetnega menija</value>
   </data>
   <data name="Str_PicDialogFilter" xml:space="preserve">
     <value>Slike</value>
-    <comment>Text in the Choose Picture dialog filter. Full line reads "Images (*.gif;...)"</comment>
+    <comment>Besedilo v filtru pogovornega okna 'Izberi sliko'. Cela vrstica se glasi "Slike (*.gif;...)"</comment>
   </data>
   <data name="Str_TipWarn" xml:space="preserve">
     <value>Morda boste želeli spremeniti nekatere nastavitve, da izboljšate svojo izkušnjo Power8</value>
@@ -397,7 +397,7 @@ Zaženi Raziskovalca zame in znova zaženi proces Power8.</value>
   </data>
   <data name="CR_StgTabGeneral" xml:space="preserve">
     <value>Splošno</value>
-    <comment>"General" tab in settings window</comment>
+    <comment>Zavihek 'Splošno' v oknu z nastavitvami</comment>
   </data>
   <data name="CR_StgTabMenuBtns" xml:space="preserve">
     <value>Meni-gumbi</value>
@@ -409,12 +409,12 @@ Zaženi Raziskovalca zame in znova zaženi proces Power8.</value>
     <value>Prikaži menijske gumbe</value>
   </data>
   <data name="CR_StgWseColKey" xml:space="preserve">
-    <value>Tipka</value>
-    <comment>Settings window -&gt; Web Search Engine -&gt; Key column</comment>
+    <value>Ključ</value>
+    <comment>Okno 'Nastavitve' -&gt; Spletni iskalnik -&gt; Stolpec 'Ključ'</comment>
   </data>
   <data name="CR_StgWseColVal" xml:space="preserve">
     <value>Poizvedbeni niz</value>
-    <comment>Settings window -&gt; Web Search Engine -&gt; Query column</comment>
+    <comment>Okno 'Nastavitve' -&gt; Spletni iskalnik -&gt; Stolpec 'Poizvedba'</comment>
   </data>
   <data name="CR_StgAutoRestart" xml:space="preserve">
     <value>Znova zaženi aplikacijo, ko pride do usodne napake</value>
@@ -460,7 +460,7 @@ Zaženi Raziskovalca zame in znova zaženi proces Power8.</value>
   </data>
   <data name="CR_StgDynamicLayout" xml:space="preserve">
     <value>Za boljšo uporabnost zamenjaj meni 'Vsi programi' in iskalno vrstico</value>
-    <comment>The sense is: exchange locations of StartMenu and Search textbox in buttonstack in case the Start button is located in lower hlf of screen (it minimizes the distance user has to pass with mouse to reach the Start menu)</comment>
+    <comment>Smisel je: zamenjajte lokacije Začetnega menija in besedilnega polja 'Iskanje' v skladu gumbov, če je gumb 'Začetek' v spodnji polovici zaslona (pomanjša razdaljo, ki jo mora uporabnik prehoditi z miško, da doseže Začetni meni)</comment>
   </data>
   <data name="CR_StgLblStretch" xml:space="preserve">
     <value>Preklopi sliko:</value>
@@ -497,7 +497,7 @@ Zaženi Raziskovalca zame in znova zaženi proces Power8.</value>
   </data>
   <data name="CR_CawConfirmButton" xml:space="preserve">
     <value>Nadaljuj</value>
-    <comment>The title of button in confirmation dialog. This line is not actually intended to be shown (real action name will be put there) and is used only in esign-time.</comment>
+    <comment>Naslov gumba v potrditvenem pogovornem oknu. Ta vrstica dejansko ni namenjena prikazovanju (tam bo prikazano pravo dejanje) in se uporablja samo v času prijave.</comment>
   </data>
   <data name="CR_CawMessageTextBlock" xml:space="preserve">
     <value>Ali ste prepričani, da želite nadaljevati?</value>
