@@ -123,7 +123,7 @@
 Vaša različica: {0}
 Nova različica: {1}
 
-Ali želite obiskati spletno mesto in posodobiti?
+Ali želite obiskati spletno stran in posodobiti?
 
 Da: pojdite na spletno stran in posodobite zdaj!
 Ne: spomni me pozneje, prosim.
@@ -377,7 +377,7 @@ Zaženi Raziskovalca zame in znova zaženi proces Power8.</value>
   </data>
   <data name="CR_StgWnd" xml:space="preserve">
     <value>Nastavitve Power8 </value>
-    <comment>Title of settings window</comment>
+    <comment>Naslov nastavitvenega okna</comment>
   </data>
   <data name="Str_PicDialogDescription" xml:space="preserve">
     <value>: Izberite sliko začetnega menija</value>
